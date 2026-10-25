@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:54:35.743Z",
+  "updated": "2026-10-25T04:10:17.176Z",
   "milestones": [
     {
       "id": "M0",
@@ -1034,12 +1034,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "graphics",
-      "status": "backlog",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "graphics",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T03:55:27.706Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:55:27.706Z",
+          "by": "graphics",
+          "text": "backlog -> doing"
+        }
+      ]
     },
     {
       "id": "T-034",
@@ -1060,12 +1066,33 @@
       "desc": "",
       "milestone": "M4",
       "role": "sound",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "sound",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:10:13.036Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:55:55.031Z",
+          "by": "sound",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:09:04.258Z",
+          "by": "sound",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:09:04.776Z",
+          "by": "sound",
+          "text": "Synth/tracker/AudioManager + songs title,travel + 8 SFX; 80+ audio unit tests, e2e audio.spec; main.ts: audioBoot(SCENES)"
+        },
+        {
+          "ts": "2026-10-25T04:10:13.040Z",
+          "by": "sound",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-036",
@@ -1073,12 +1100,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "sound",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:10:17.175Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:10:17.176Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-037",

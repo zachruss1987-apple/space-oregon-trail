@@ -4,35 +4,35 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 
 ## Graphics (owner: graphics)
 ### Systems
-- [ ] palette.standard (16 + phosphor, phosphorHi, panel)
-- [ ] palette.cb
-- [ ] font.proxima (95 glyphs, 6×8)
+- [x] palette.standard (16 + phosphor, phosphorHi, panel)
+- [x] palette.cb
+- [x] font.proxima (95 glyphs, 6×8)
 - [ ] crt pipeline (+ Canvas skip)
-- [ ] atlas builder / sprite parser
+- [x] atlas builder / sprite parser
 
 ### Sprites
-- [ ] ship.hauler
-- [ ] ship.flare.cruise
-- [ ] ship.flare.burn
-- [ ] ship.flare.over
-- [ ] ship.mini
+- [x] ship.hauler
+- [x] ship.flare.cruise
+- [x] ship.flare.burn
+- [x] ship.flare.over
+- [x] ship.mini
 - [ ] ship.dock
-- [ ] tug
+- [x] tug
 - [ ] skiff
-- [ ] drone
-- [ ] grapple.hook
-- [ ] debris.crate
-- [ ] debris.pallet
-- [ ] debris.galley
-- [ ] debris.plate
-- [ ] debris.pump
-- [ ] debris.gyro
-- [ ] debris.scrap.s
-- [ ] debris.scrap.m
-- [ ] debris.scrap.l
-- [ ] debris.tumbler
-- [ ] debris.hot
-- [ ] debris.blip
+- [x] drone
+- [x] grapple.hook
+- [x] debris.crate
+- [x] debris.pallet
+- [x] debris.galley
+- [x] debris.plate
+- [x] debris.pump
+- [x] debris.gyro
+- [x] debris.scrap.s
+- [x] debris.scrap.m
+- [x] debris.scrap.l
+- [x] debris.tumbler
+- [x] debris.hot
+- [x] debris.blip
 - [ ] rock.16
 - [ ] rock.24
 - [ ] rock.32
@@ -61,19 +61,19 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [ ] far.planet
 - [ ] far.ring
 - [ ] far.hazard
-- [ ] beacon
+- [x] beacon
 - [ ] overlay.static
 - [ ] overlay.fog
 - [ ] overlay.streak
-- [ ] portrait.1
-- [ ] portrait.2
-- [ ] portrait.3
-- [ ] portrait.4
-- [ ] portrait.5
-- [ ] ui.panel
-- [ ] ui.cursor
-- [ ] ui.scroll
-- [ ] ui.toggle
+- [x] portrait.1
+- [x] portrait.2
+- [x] portrait.3
+- [x] portrait.4
+- [x] portrait.5
+- [x] ui.panel
+- [x] ui.cursor
+- [x] ui.scroll
+- [x] ui.toggle
 - [ ] ui.icon.hp
 - [ ] ui.icon.charge
 - [ ] ui.icon.haul

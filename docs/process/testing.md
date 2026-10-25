@@ -28,3 +28,6 @@ Unit suite < 30 s; e2e < 3 min; statistical tests gated by `SKIP_SLOW` env var l
 - Test the spec, not the implementation: name tests after rules in `docs/design`.
 - One assertion idea per test; loops over seeds are fine when asserting invariants.
 - E2E: wait for `data-scene`, not timeouts. Use `page.keyboard` for navigation; avoid pixel assertions before M4 baselines.
+
+## Running e2e while other agents work
+Playwright builds to `dist/`, serves on :4173 and writes `test-results/`. Two agents running e2e at once collide (ENOENT in test-results, stale builds). Rules: run `npm test` freely; run `npm run test:e2e` once at the end of your card with `PW_OUT=test-results/<card-id>` set so artifacts do not clash; if it fails with ENOENT or a build race, re-run once before investigating.

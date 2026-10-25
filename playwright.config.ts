@@ -18,5 +18,5 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
-  outputDir: 'test-results',
+  outputDir: process.env.PW_OUT ?? 'test-results',
 });
