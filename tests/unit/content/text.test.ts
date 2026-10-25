@@ -11,7 +11,7 @@ import { FALLBACK } from '../../../src/ui/copy';
 const ALLOWED = new Set([
   '{name}', '{n}', '{item}',
   // UI-only placeholders filled by src/ui/copy.ts callers
-  '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
+  '{give}', '{get}', '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
 ]);
 const CONDITIONS = [
   'space-dysentery', 'hull-mold-fever', 'cryo-fever', 'scurvy',
@@ -258,8 +258,8 @@ describe('stations.json (T-024)', () => {
 
 describe('trades.json (T-024)', () => {
   const personas = Object.entries((trades as { personas: Record<string, Obj> }).personas);
-  it('has 12+ personas with name and 2+ variants per line type', () => {
-    expect(personas.length).toBeGreaterThanOrEqual(12);
+  it('has 20+ personas with name and 2+ variants per line type', () => {
+    expect(personas.length).toBeGreaterThanOrEqual(20);
     for (const [id, p] of personas) {
       expect(typeof p.name, id).toBe('string');
       for (const k of ['offer', 'accept', 'decline']) {
@@ -287,20 +287,24 @@ describe('trades.json (T-024)', () => {
 });
 
 describe('epitaphs.json (T-024)', () => {
-  const canned = (epitaphs as { canned: { name: string; text: string; segment: number }[] }).canned;
-  it('has 24+ canned beacons with names, short text, and segments 1-16', () => {
-    expect(canned.length).toBeGreaterThanOrEqual(24);
+  const canned = (epitaphs as { beacons: { name: string; text: string; segment: number; captain: string; date: string }[] }).beacons;
+  it('has 40+ canned beacons with names, short text, captain, date, and segments 1-15', () => {
+    expect(canned.length).toBeGreaterThanOrEqual(40);
     for (const e of canned) {
       expect(e.name.length, e.name).toBeGreaterThan(0);
       expect(e.name.length, e.name).toBeLessThanOrEqual(12);
       expect(e.text.length, e.text).toBeLessThanOrEqual(40);
-      expect(Number.isInteger(e.segment) && e.segment >= 1 && e.segment <= 16, e.text).toBe(true);
+      expect(e.captain.length, e.text).toBeGreaterThan(0);
+      expect(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(e.date) && e.date < "2184-03-01", e.text).toBe(true);
+      expect(Number.isInteger(e.segment) && e.segment >= 1 && e.segment <= 15, e.text).toBe(true);
     }
   });
   it('texts are unique and cover the hazard segments', () => {
     checkStrings(canned.map((e) => e.text), 40, 'epitaphs');
     const segs = new Set(canned.map((e) => e.segment));
-    for (const h of [1, 2, 7, 9, 13, 15]) expect(segs.has(h), `segment ${h}`).toBe(true);
-    expect(segs.size).toBeGreaterThanOrEqual(10);
+    for (let h = 1; h <= 15; h++) expect(segs.has(h), `segment ${h}`).toBe(true);
+    for (const h of [1, 2, 7, 9, 13, 15]) {
+      expect(canned.filter((e) => e.segment === h).length, `hazard segment ${h}`).toBeGreaterThanOrEqual(3);
+    }
   });
 });

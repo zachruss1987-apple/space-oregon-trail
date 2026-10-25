@@ -50,3 +50,5 @@
 | Coolant strain | The 15% chance shields break the coolant pump. |
 | Gate direct | The route from Titan Refinery that skips Oort Beacon (1,926 Mk total); the Heliopause is worse. |
 | Via Oort | The default route through Oort Beacon (2,040 Mk). |
+| Fork | Titan Refinery's route choice: Via Oort Beacon or Direct to the Shock. |
+| Dome gardener / ice diver / algae farmer | Trader personas at Mars Relay, Europa Outpost and the vats (`trades.json`). |

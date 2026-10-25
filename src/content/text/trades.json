@@ -209,6 +209,126 @@
         "Oh well. Your loss, friend.",
         "No? Then I have not met you."
       ]
+    },
+    "one-glove-belter": {
+      "name": "a Belter with one glove",
+      "offer": [
+        "Got {get}. Want {give}. Not haggling, the other glove did that.",
+        "{give} for {get}. Take it before I remember what it's worth."
+      ],
+      "accept": [
+        "The Belter nods once. That is the whole ceremony.",
+        "'Good.' The Belter pockets the deal and the pocket."
+      ],
+      "decline": [
+        "'Suit yourself.' The Belter does not, in fact, have a spare suit.",
+        "The Belter shrugs with one glove and goes back to staring."
+      ]
+    },
+    "dome-gardener": {
+      "name": "a dome gardener",
+      "offer": [
+        "I can spare {get}. In return, {give}. The beans can wait.",
+        "{get} for {give}. Everything here grows except the budget."
+      ],
+      "accept": [
+        "The gardener beams and wipes her hands on her apron.",
+        "'Lovely.' She hands it over still smelling of soil."
+      ],
+      "decline": [
+        "'Oh, well. The tomatoes will understand.'",
+        "She sighs and goes back to her seedlings."
+      ]
+    },
+    "retired-pilot": {
+      "name": "a retired pilot",
+      "offer": [
+        "Back in my day we traded {give} for {get} and called it Tuesday.",
+        "I'll give you {get} for {give}. Mind the old man's knees."
+      ],
+      "accept": [
+        "'Like old times.' He shakes your hand too long.",
+        "Done. He tells you a story about it anyway."
+      ],
+      "decline": [
+        "'Kids these days.' He means you.",
+        "He waves you off and returns to his crossword."
+      ]
+    },
+    "customs-officer": {
+      "name": "a customs officer",
+      "offer": [
+        "Declare {give}, receive {get}. Strictly informal, so please sign.",
+        "I can see my way to {get} if you see yours to {give}."
+      ],
+      "accept": [
+        "Stamped. It never happened.",
+        "The officer slides the goods over like a library book."
+      ],
+      "decline": [
+        "Denied. The officer looks pleased about it.",
+        "'Regulations.' He does not say which."
+      ]
+    },
+    "ice-diver": {
+      "name": "an ice diver",
+      "offer": [
+        "Pulled up {get} from under the ice. Want {give} for it.",
+        "{get} for {give}. It was cold work and I want it warm."
+      ],
+      "accept": [
+        "The diver grins. Her teeth chatter out of habit.",
+        "'Done.' She shakes your hand with a wet glove."
+      ],
+      "decline": [
+        "'Fine, the fish will buy it.'",
+        "She shrugs, and a little ice falls off."
+      ]
+    },
+    "algae-farmer": {
+      "name": "an algae farmer",
+      "offer": [
+        "Two vats over quota. {get} for {give}, and I never saw you.",
+        "I have {get}. I want {give}. The algae wants nothing, bless it."
+      ],
+      "accept": [
+        "'Pleasure.' He smells faintly of pond.",
+        "Done. Please do not ask what is in the green one."
+      ],
+      "decline": [
+        "'No hard feelings.' He is slightly green.",
+        "He goes back to stirring and hums."
+      ]
+    },
+    "gate-surveyor": {
+      "name": "a gate surveyor",
+      "offer": [
+        "Measured twice. {get} for {give}, give or take a Mk.",
+        "I will trade {get} for {give}. It is within tolerance."
+      ],
+      "accept": [
+        "'Within tolerance.' She writes it down.",
+        "Agreed. She notes it in a very small book."
+      ],
+      "decline": [
+        "'Outside tolerance.' She does not elaborate.",
+        "She shakes her head and re-measures the argument."
+      ]
+    },
+    "bored-guard": {
+      "name": "a bored guard",
+      "offer": [
+        "Nothing happens here. Take {get}, give {give}, make it interesting.",
+        "{give} for {get}. I have a whole shift to fill."
+      ],
+      "accept": [
+        "'Finally.' He seems almost awake.",
+        "Done. The guard has a story to tell at last."
+      ],
+      "decline": [
+        "He yawns, which is a sort of no.",
+        "'Okay.' He goes back to watching the door."
+      ]
     }
   }
 }

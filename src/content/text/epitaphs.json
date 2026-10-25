@@ -1,169 +1,320 @@
 {
-  "canned": [
+  "$schema": "Array of { segment: 1-15, captain, name, text, date }. text <= 40 chars, date before 2184-03-01.",
+  "beacons": [
     {
+      "segment": 1,
+      "captain": "Silas",
       "name": "Obadiah",
       "text": "Trusted the Ring. The Ring noted it.",
-      "segment": 1
+      "date": "2183-01-01"
     },
     {
+      "segment": 1,
+      "captain": "Marguerite",
       "name": "Jemima",
       "text": "Hit the Ring at full burn.",
-      "segment": 1
+      "date": "2183-02-08"
     },
     {
+      "segment": 1,
+      "captain": "Ansel",
       "name": "Silas",
       "text": "Said 'it is only debris.'",
-      "segment": 1
+      "date": "2183-03-15"
     },
     {
+      "segment": 1,
+      "captain": "Odile",
       "name": "Hester",
       "text": "Went to wave. Drifted off.",
-      "segment": 1
+      "date": "2183-04-22"
     },
     {
+      "segment": 2,
+      "captain": "Hamish",
       "name": "Ulysses",
       "text": "Argued with a shoal. Lost.",
-      "segment": 2
+      "date": "2183-05-01"
     },
     {
+      "segment": 2,
+      "captain": "Winifred",
       "name": "Nell",
       "text": "Found the Shoals. Briefly.",
-      "segment": 2
+      "date": "2183-06-08"
     },
     {
+      "segment": 2,
+      "captain": "Tobias",
       "name": "Gideon",
       "text": "Swore the gravel was friendly.",
-      "segment": 2
+      "date": "2183-07-15"
     },
     {
+      "segment": 2,
+      "captain": "Clementine",
       "name": "Cora",
       "text": "Checked her tether. Once.",
-      "segment": 2
+      "date": "2183-08-22"
     },
     {
+      "segment": 3,
+      "captain": "Silas",
       "name": "Eli",
       "text": "Drank the Mars coffee.",
-      "segment": 3
+      "date": "2183-09-01"
     },
     {
+      "segment": 3,
+      "captain": "Marguerite",
+      "name": "Wendell",
+      "text": "Said the tomatoes were fake.",
+      "date": "2183-07-08"
+    },
+    {
+      "segment": 4,
+      "captain": "Marguerite",
       "name": "Prudence",
       "text": "Trusted the recycler.",
-      "segment": 4
+      "date": "2183-01-08"
     },
     {
+      "segment": 4,
+      "captain": "Ansel",
+      "name": "Oriel",
+      "text": "Measured the Spire. Too closely.",
+      "date": "2183-08-15"
+    },
+    {
+      "segment": 4,
+      "captain": "Odile",
+      "name": "Lazarus",
+      "text": "Napped in the Spire's shade.",
+      "date": "2183-08-22"
+    },
+    {
+      "segment": 5,
+      "captain": "Ansel",
       "name": "Kit",
       "text": "Wanted a closer look.",
-      "segment": 5
+      "date": "2183-02-15"
     },
     {
-      "name": "Mordecai",
-      "text": "Threaded the gap. Missed.",
-      "segment": 7
+      "segment": 5,
+      "captain": "Odile",
+      "name": "Barnaby",
+      "text": "Bought a bargain drone charge.",
+      "date": "2183-09-22"
     },
     {
-      "name": "Lavinia",
-      "text": "Left her seals loose.",
-      "segment": 7
-    },
-    {
-      "name": "Zebulon",
-      "text": "Belt Crossing took his hat.",
-      "segment": 7
-    },
-    {
-      "name": "Amos",
-      "text": "Didn't hire the tug.",
-      "segment": 7
-    },
-    {
+      "segment": 6,
+      "captain": "Clementine",
       "name": "Florence",
       "text": "Out of paste at Ceres.",
-      "segment": 6
+      "date": "2183-07-22"
     },
     {
+      "segment": 6,
+      "captain": "Hamish",
+      "name": "Juniper",
+      "text": "Stared at the big red eye.",
+      "date": "2183-01-01"
+    },
+    {
+      "segment": 6,
+      "captain": "Ansel",
+      "name": "Marta",
+      "text": "Counted the moons. Missed one.",
+      "date": "2183-07-15"
+    },
+    {
+      "segment": 7,
+      "captain": "Odile",
+      "name": "Mordecai",
+      "text": "Threaded the gap. Missed.",
+      "date": "2183-03-22"
+    },
+    {
+      "segment": 7,
+      "captain": "Hamish",
+      "name": "Lavinia",
+      "text": "Left her seals loose.",
+      "date": "2183-04-01"
+    },
+    {
+      "segment": 7,
+      "captain": "Winifred",
+      "name": "Zebulon",
+      "text": "Belt Crossing took his hat.",
+      "date": "2183-05-08"
+    },
+    {
+      "segment": 7,
+      "captain": "Tobias",
+      "name": "Amos",
+      "text": "Didn't hire the tug.",
+      "date": "2183-06-15"
+    },
+    {
+      "segment": 8,
+      "captain": "Silas",
       "name": "Bartholomew",
       "text": "Hull mold. Nobody warned him.",
-      "segment": 8
+      "date": "2183-08-01"
     },
     {
+      "segment": 8,
+      "captain": "Winifred",
+      "name": "Cyrus",
+      "text": "Dived the ice. Ice won.",
+      "date": "2183-02-08"
+    },
+    {
+      "segment": 8,
+      "captain": "Hamish",
+      "name": "Philo",
+      "text": "Traded the spare drive.",
+      "date": "2183-09-01"
+    },
+    {
+      "segment": 9,
+      "captain": "Marguerite",
       "name": "Temperance",
       "text": "Saturn's rings went by.",
-      "segment": 9
+      "date": "2183-09-08"
     },
     {
+      "segment": 9,
+      "captain": "Ansel",
       "name": "Delphine",
       "text": "Called the ring pretty.",
-      "segment": 9
+      "date": "2183-01-15"
     },
     {
+      "segment": 9,
+      "captain": "Odile",
       "name": "Ignatius",
       "text": "Rode the plane. Lost the ride.",
-      "segment": 9
+      "date": "2183-02-22"
     },
     {
+      "segment": 9,
+      "captain": "Hamish",
       "name": "Theodora",
       "text": "Flew solo past the rings.",
-      "segment": 9
+      "date": "2183-03-01"
     },
     {
+      "segment": 10,
+      "captain": "Tobias",
+      "name": "Philippa",
+      "text": "Ran the refinery fence.",
+      "date": "2183-03-15"
+    },
+    {
+      "segment": 10,
+      "captain": "Clementine",
+      "name": "Alaric",
+      "text": "Cold fuel. Warm opinions.",
+      "date": "2183-04-22"
+    },
+    {
+      "segment": 11,
+      "captain": "Winifred",
       "name": "Ezra",
       "text": "Left the Gate at dinner.",
-      "segment": 11
+      "date": "2183-04-08"
     },
     {
+      "segment": 11,
+      "captain": "Silas",
+      "name": "Rosalind",
+      "text": "Said the Gate looked easy.",
+      "date": "2183-05-01"
+    },
+    {
+      "segment": 12,
+      "captain": "Tobias",
       "name": "Abigail",
       "text": "Counted rations. Came up short.",
-      "segment": 12
+      "date": "2183-05-15"
     },
     {
-      "name": "Hollis",
-      "text": "The Shock shook him loose.",
-      "segment": 13
-    },
-    {
-      "name": "Lucinda",
-      "text": "Skipped the Shock tug.",
-      "segment": 13
-    },
-    {
-      "name": "Cora",
-      "text": "Sent letters home. Fine.",
-      "segment": 13
-    },
-    {
+      "segment": 12,
+      "captain": "Ansel",
       "name": "Gideon",
       "text": "Logged out at the Beacon.",
-      "segment": 12
+      "date": "2183-09-15"
     },
     {
+      "segment": 13,
+      "captain": "Clementine",
+      "name": "Hollis",
+      "text": "The Shock shook him loose.",
+      "date": "2183-06-22"
+    },
+    {
+      "segment": 13,
+      "captain": "Silas",
+      "name": "Lucinda",
+      "text": "Skipped the Shock tug.",
+      "date": "2183-07-01"
+    },
+    {
+      "segment": 13,
+      "captain": "Marguerite",
+      "name": "Cora",
+      "text": "Sent letters home. Fine.",
+      "date": "2183-08-08"
+    },
+    {
+      "segment": 14,
+      "captain": "Odile",
       "name": "Mordecai",
       "text": "Ate the last paste cake.",
-      "segment": 14
+      "date": "2183-01-22"
     },
     {
+      "segment": 14,
+      "captain": "Hamish",
       "name": "Silas",
       "text": "Bought the lucky bolt.",
-      "segment": 14
+      "date": "2183-02-01"
     },
     {
+      "segment": 14,
+      "captain": "Marguerite",
+      "name": "Thaddeus",
+      "text": "Was almost there. Almost.",
+      "date": "2183-06-08"
+    },
+    {
+      "segment": 15,
+      "captain": "Winifred",
       "name": "Prudence",
       "text": "Rode the flare. Rode it low.",
-      "segment": 15
+      "date": "2183-03-08"
     },
     {
+      "segment": 15,
+      "captain": "Tobias",
       "name": "Jemima",
       "text": "Flare came early.",
-      "segment": 15
+      "date": "2183-04-15"
     },
     {
+      "segment": 15,
+      "captain": "Clementine",
       "name": "Nell",
       "text": "Last leg. Just the last.",
-      "segment": 15
+      "date": "2183-05-22"
     },
     {
+      "segment": 15,
+      "captain": "Silas",
       "name": "Kit",
       "text": "Mud was real. Never saw it.",
-      "segment": 16
+      "date": "2183-06-01"
     }
   ]
 }

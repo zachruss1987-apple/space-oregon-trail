@@ -298,5 +298,154 @@
     "multiplier": "Profession multiplier",
     "total": "Total",
     "rating": "Rating: {rating}"
+  },
+  "hazard": {
+    "title": "How will you cross?",
+    "label": {
+      "density": "Density",
+      "ship": "Ship",
+      "hull": "hull",
+      "pump": "pump",
+      "gyro": "gyro",
+      "drives": "drives",
+      "funds": "Funds",
+      "risk": "Risk",
+      "sound": "sound",
+      "broken": "BROKEN",
+      "working": "working"
+    },
+    "option": {
+      "thread": "Thread it",
+      "shields": "Shields up and push",
+      "tug": "Hire a tug",
+      "pilot": "Wait for a Belter pilot"
+    },
+    "desc": {
+      "thread": "Fly it yourself. Fast, free, and exactly as risky as it looks.",
+      "shields": "Half the risk, and nobody dies. The coolant pump may complain.",
+      "tug": "Pay a professional to tow you through. Safe, and not cheap.",
+      "pilot": "A Belter flies your ship for 10 cr, after some days of waiting."
+    },
+    "thread": [
+      "You line up the gap and hold your breath. The ship holds the rest.",
+      "You thread the needle. The needle has no comment.",
+      "Hands on the stick, eyes on the rocks. Nobody talks."
+    ],
+    "shields": [
+      "You raise the shields and lean on the throttle. The pump hums a worried note.",
+      "Shields up. You push through like a man shouldering a stuck door.",
+      "The shields take the knocks. You take the credit."
+    ],
+    "tug": [
+      "The tug takes your line for {n} cr. The captain does not look up from his crossword.",
+      "{n} cr and a tow. The tug captain calls it a bargain, from experience.",
+      "The tug hooks on for {n} cr and hauls you through, humming."
+    ],
+    "pilotHire": [
+      "You pay 10 cr and wait {n} days for a Belter pilot to turn up. Miners keep their own schedule.",
+      "A pilot is sent for. Expect {n} days. The Belters call that early.",
+      "Ten credits buys a pilot. {n} days buys patience."
+    ],
+    "pilotArrives": [
+      "The Belter pilot climbs aboard, nods at your gyro, and takes the stick.",
+      "A pilot arrives with a thermos and no questions. She takes the helm.",
+      "The Belter docks, sniffs the air, and says 'Move over.'"
+    ],
+    "pilotWait": [
+      "Waiting for the pilot. {n} days left. The coffee is getting worse.",
+      "Still no pilot. {n} days to go. The crew is learning card games.",
+      "{n} days left until the pilot. The Belters are never late, only eventual."
+    ],
+    "pumpStrain": [
+      "The coolant pump coughs, shudders, and gives up. The shields were a lot to ask.",
+      "Under all that strain the coolant pump quits with a small, sad click.",
+      "The shields held. The coolant pump did not. It sends its regrets."
+    ],
+    "density": {
+      "thinner": "thinner than usual",
+      "usual": "usual",
+      "thicker": "thicker than usual"
+    },
+    "risk": {
+      "none": "None",
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "severe": "Severe"
+    },
+    "blocked": {
+      "cantMove": "Your ship cannot move.",
+      "noTug": "You cannot afford a tug.",
+      "noPilot": "You cannot afford a pilot.",
+      "noBelters": "No Belters work this stretch.",
+      "notHere": "Not in this weather.",
+      "chooseFirst": "Choose how to cross first.",
+      "pilotSent": "You already sent for a pilot."
+    }
+  },
+  "route": {
+    "prompt": "Titan Refinery is a fork. Which way past the Kuiper Gate?",
+    "oort": "Via Oort Beacon",
+    "direct": "Direct to the Shock",
+    "oortDesc": "One more station to shop at. {n} Mk from the Gate to the Heliopause.",
+    "directDesc": "No resupply. {n} Mk from the Gate. The Heliopause is worse this way.",
+    "chosen": {
+      "oort": [
+        "You set course via Oort Beacon. The long way has a shop in it.",
+        "Via Oort it is. The buoys are old friends by now."
+      ],
+      "direct": [
+        "You set course straight for the Shock. The map calls it ambitious.",
+        "Direct. No more stops, no more shops, and no more advice."
+      ]
+    },
+    "confirm": "Lock in this route?",
+    "behind": "The branch is behind you.",
+    "notYet": "You have not reached the fork yet."
+  },
+  "station": {
+    "title": "STATION",
+    "menu": [
+      "Outfitters",
+      "Trade",
+      "Talk",
+      "Rest here",
+      "Continue"
+    ],
+    "menuHint": "Choose what to do at the station.",
+    "outfitters": {
+      "header": "Item          Buy     Sell    Held    Room",
+      "none": "—",
+      "noBuy": "They don't sell that here.",
+      "noSell": "They don't buy that here.",
+      "sellHeader": "They buy back at these prices:",
+      "buyPrompt": "Buy how many? (max {n})",
+      "sellPrompt": "Sell how many? (max {n})"
+    },
+    "trade": {
+      "title": "TRADERS",
+      "prompt": "Anyone here want to deal?",
+      "give": "You give:",
+      "get": "You get:",
+      "accept": "Accept",
+      "decline": "Decline",
+      "done": "(done)",
+      "already": "That deal is done.",
+      "nobody": "Nobody here wants to trade.",
+      "gone": "You don't have that anymore.",
+      "back": "Leave the traders"
+    },
+    "talk": {
+      "empty": "The station is quiet. Nobody has anything to say."
+    },
+    "rest": {
+      "prompt": "Rest at the station for how many days? (1-9)",
+      "bonus": "Station beds are better. You recover faster here."
+    },
+    "leave": {
+      "noDrive": "You need at least one ion drive to leave.",
+      "lastDrive": "You need a drive to leave.",
+      "confirm": "Cast off from the station?"
+    }
   }
 }
