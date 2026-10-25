@@ -3,8 +3,17 @@ import { parseSong } from '../tracker';
 import type { ParsedSong, SongDef } from '../types';
 import { title } from './title';
 import { travel } from './travel';
+import { station } from './station';
+import { danger } from './danger';
+import { hazard } from './hazard';
+import { dirge } from './dirge';
+import { fanfare } from './fanfare';
+import { salvage } from './mgSalvage';
+import { thread } from './mgThread';
+import { flare } from './mgFlare';
+import { jingleClean } from './jingleClean';
 
-export const SONG_DEFS: SongDef[] = [title, travel];
+export const SONG_DEFS: SongDef[] = [title, travel, station, danger, hazard, dirge, fanfare, salvage, thread, flare, jingleClean];
 
 export const SONG_IDS: string[] = SONG_DEFS.map((s) => s.id);
 

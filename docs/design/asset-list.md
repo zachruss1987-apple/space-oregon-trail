@@ -97,45 +97,45 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [ ] gfx.title-hero
 
 ## Music (owner: sound)
-- [ ] title
-- [ ] travel
-- [ ] station
-- [ ] danger
-- [ ] hazard
-- [ ] dirge
-- [ ] fanfare
-- [ ] mg.salvage
-- [ ] mg.thread
-- [ ] mg.flare
-- [ ] jingle.clean
+- [x] title
+- [x] travel
+- [x] station
+- [x] danger
+- [x] hazard
+- [x] dirge
+- [x] fanfare
+- [x] mg.salvage
+- [x] mg.thread
+- [x] mg.flare
+- [x] jingle.clean
 
 ## SFX (owner: sound)
-- [ ] ui.move
-- [ ] ui.select
-- [ ] ui.back
-- [ ] ui.deny
-- [ ] text.tick
-- [ ] store.buy
-- [ ] store.sell
-- [ ] trade.accept
-- [ ] drive.hum
-- [ ] alarm
-- [ ] hull.hit
-- [ ] grapple.fire
-- [ ] grapple.attach
-- [ ] grapple.reel
-- [ ] grapple.snap
-- [ ] grapple.empty
-- [ ] collision
-- [ ] flare.warn
-- [ ] flare.hit
-- [ ] crash
-- [ ] beacon.chime
-- [ ] death.toll
-- [ ] arrival.bell
-- [ ] countdown.beep
-- [ ] pause
-- [ ] event.ding
+- [x] ui.move
+- [x] ui.select
+- [x] ui.back
+- [x] ui.deny
+- [x] text.tick
+- [x] store.buy
+- [x] store.sell
+- [x] trade.accept
+- [x] drive.hum
+- [x] alarm
+- [x] hull.hit
+- [x] grapple.fire
+- [x] grapple.attach
+- [x] grapple.reel
+- [x] grapple.snap
+- [x] grapple.empty
+- [x] collision
+- [x] flare.warn
+- [x] flare.hit
+- [x] crash
+- [x] beacon.chime
+- [x] death.toll
+- [x] arrival.bell
+- [x] countdown.beep
+- [x] pause
+- [x] event.ding
 
 ## Audio systems (owner: sound)
 - [ ] synth voices (p12, p25, p50, tri, saw, nzl, nzs)

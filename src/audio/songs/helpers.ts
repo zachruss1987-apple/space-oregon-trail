@@ -31,3 +31,8 @@ export const bassBars = (chords: string[]): string =>
       return `${r}:4 ${f}:4 ${f}:4`;
     }),
   );
+
+/** Repeat a string `n` times, joined by spaces. */
+export const rep = (s: string, n: number): string => Array.from({ length: n }, () => s).join(' ');
+/** Map chord symbols to per-bar strings via a lookup. */
+export const perChord = (chords: string[], table: Record<string, string>): string => bars(chords.map((c) => table[c] as string));

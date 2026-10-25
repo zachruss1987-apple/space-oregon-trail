@@ -16,6 +16,7 @@ export interface SfxNote {
   n2?: number;
   /** 0..1, default 1. */
   vol?: number;
+  vib?: { cents: number; hz: number };
 }
 
 export interface SfxDef {
@@ -26,6 +27,8 @@ export interface SfxDef {
   dur: number;
   /** Minimum ms between plays of this id (rate limit). */
   minGap?: number;
+  /** One cycle of a bed or sweep; the caller retriggers it while active. */
+  loop?: boolean;
   notes: SfxNote[];
 }
 
@@ -44,6 +47,28 @@ const DEFS: SfxDef[] = [
   { id: 'alarm', cls: 'duck', dur: 720, notes: alarmNotes },
   { id: 'grapple.fire', cls: 'duck', dur: 120, notes: [noise(0, 120, 'nzs', 'snare', 8, 3)] },
   { id: 'beacon.chime', cls: 'duck', dur: 900, notes: [tone(0, 300, 'p50', 'toll', 'E6', undefined, 0.8), tone(300, 600, 'p50', 'toll', 'B5', undefined, 0.8)] },
+  { id: 'ui.deny', cls: 'ui', dur: 120, notes: [tone(0, 50, 'p50', 'blip', 'A3'), tone(70, 50, 'p50', 'blip', 'A3')] },
+  { id: 'store.sell', cls: 'ui', dur: 150, notes: [tone(0, 50, 'p25', 'pluck', 'G6'), tone(50, 50, 'p25', 'pluck', 'E6'), tone(100, 50, 'p25', 'pluck', 'C6')] },
+  { id: 'trade.accept', cls: 'duck', dur: 250, notes: [tone(0, 120, 'p50', 'lead', 'C5'), tone(0, 120, 'tri', 'organ', 'G5'), tone(120, 130, 'p50', 'lead', 'C6'), tone(120, 130, 'tri', 'organ', 'C6')] },
+  /** One 1 s cycle of a bed; the caller retriggers it while Travel animates a day. */
+  { id: 'drive.hum', cls: 'ui', dur: 1000, loop: true, notes: [{ ...tone(0, 1000, 'tri', 'organ', 'A1', undefined, 0.7), vib: { cents: 10, hz: 3 } }, noise(0, 1000, 'nzl', 'organ', 2, undefined, 2 / 15)] },
+  { id: 'hull.hit', cls: 'duck', dur: 300, notes: [noise(0, 300, 'nzl', 'kick', 6, 1), tone(0, 300, 'saw', 'kick', 'C3', 'G1', 0.8)] },
+  { id: 'grapple.attach', cls: 'duck', dur: 80, notes: [tone(0, 80, 'p12', 'blip', 'C6'), noise(0, 40, 'nzs', 'hat', 10)] },
+  /** One 0.5 s reel sweep; retriggered per reel cycle. */
+  { id: 'grapple.reel', cls: 'ui', dur: 500, loop: true, notes: [tone(0, 500, 'p12', 'organ', 'C4', 'C5', 0.6)] },
+  { id: 'grapple.snap', cls: 'duck', dur: 90, notes: [noise(0, 90, 'nzs', 'snare', 15, 8)] },
+  { id: 'grapple.empty', cls: 'ui', dur: 40, notes: [tone(0, 40, 'p50', 'blip', 'C3')] },
+  { id: 'collision', cls: 'duck', dur: 220, notes: [noise(0, 220, 'nzl', 'snare', 8, 2), tone(0, 220, 'p50', 'kick', 'E3', 'C3', 0.8)] },
+  { id: 'flare.warn', cls: 'ui', dur: 1200, notes: [noise(0, 1200, 'nzl', 'swell', 3, 6, 5 / 15)] },
+  { id: 'flare.hit', cls: 'duck', dur: 350, notes: [tone(0, 350, 'saw', 'kick', 'E4', 'E2', 0.9), noise(0, 350, 'nzl', 'snare', 12, 4)] },
+  { id: 'crash', cls: 'duck', dur: 1200, notes: [noise(0, 1200, 'nzl', 'toll', 15, 0), tone(0, 1200, 'tri', 'toll', 'C2', 'C1')] },
+  { id: 'death.toll', cls: 'duck', dur: 1800, notes: [tone(0, 1800, 'tri', 'toll', 'A2'), tone(0, 1800, 'p50', 'toll', 'A3', undefined, 0.6)] },
+  { id: 'arrival.bell', cls: 'duck', dur: 1400, notes: [tone(0, 350, 'p50', 'toll', 'C6', undefined, 0.8), tone(350, 350, 'p50', 'toll', 'G5', undefined, 0.8), tone(700, 350, 'p50', 'toll', 'C6', undefined, 0.8), tone(1050, 350, 'p50', 'toll', 'E6', undefined, 0.8)] },
+  { id: 'countdown.beep', cls: 'ui', dur: 120, notes: [tone(0, 120, 'p25', 'blip', 'A4')] },
+  /** The GO beep of the countdown (audio.md: A5 250 ms). */
+  { id: 'countdown.go', cls: 'ui', dur: 250, notes: [tone(0, 250, 'p25', 'blip', 'A5')] },
+  { id: 'pause', cls: 'ui', dur: 100, notes: [tone(0, 50, 'p50', 'blip', 'C5'), tone(50, 50, 'p50', 'blip', 'G4')] },
+  { id: 'event.ding', cls: 'ui', dur: 120, notes: [tone(0, 120, 'p12', 'pluck', 'G5')] },
 ];
 
 export const SFX: Record<string, SfxDef> = Object.fromEntries(DEFS.map((d) => [d.id, d]));
@@ -60,5 +85,6 @@ export function sfxEvents(def: SfxDef, t0: number): NoteEvent[] {
     ...(n.f2 ? { freq2: noteToFreq(n.f2) } : {}),
     ...(n.n !== undefined ? { noise: n.n } : {}),
     ...(n.n2 !== undefined ? { noise2: n.n2 } : {}),
+    ...(n.vib ? { vib: n.vib } : {}),
   }));
 }
