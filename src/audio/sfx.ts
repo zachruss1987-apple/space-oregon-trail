@@ -27,8 +27,10 @@ export interface SfxDef {
   dur: number;
   /** Minimum ms between plays of this id (rate limit). */
   minGap?: number;
-  /** One cycle of a bed or sweep; the caller retriggers it while active. */
+  /** One cycle of a bed or sweep. AudioManager re-triggers it every `dur` ms until `stopSfx(id)`. */
   loop?: boolean;
+  /** Fade-out in ms used when the effect is cut short (`stopSfx`, voice steal); the effect also holds its polyphony slot for this long. `stopSfx` default 40. */
+  fadeOutMs?: number;
   notes: SfxNote[];
 }
 
@@ -50,13 +52,13 @@ const DEFS: SfxDef[] = [
   { id: 'ui.deny', cls: 'ui', dur: 120, notes: [tone(0, 50, 'p50', 'blip', 'A3'), tone(70, 50, 'p50', 'blip', 'A3')] },
   { id: 'store.sell', cls: 'ui', dur: 150, notes: [tone(0, 50, 'p25', 'pluck', 'G6'), tone(50, 50, 'p25', 'pluck', 'E6'), tone(100, 50, 'p25', 'pluck', 'C6')] },
   { id: 'trade.accept', cls: 'duck', dur: 250, notes: [tone(0, 120, 'p50', 'lead', 'C5'), tone(0, 120, 'tri', 'organ', 'G5'), tone(120, 130, 'p50', 'lead', 'C6'), tone(120, 130, 'tri', 'organ', 'C6')] },
-  /** One 1 s cycle of a bed; the caller retriggers it while Travel animates a day. */
+  /** One 1 s cycle of a bed; loops until `stopSfx('drive.hum')`. */
   { id: 'drive.hum', cls: 'ui', dur: 1000, loop: true, notes: [{ ...tone(0, 1000, 'tri', 'organ', 'A1', undefined, 0.7), vib: { cents: 10, hz: 3 } }, noise(0, 1000, 'nzl', 'organ', 2, undefined, 2 / 15)] },
   { id: 'hull.hit', cls: 'duck', dur: 300, notes: [noise(0, 300, 'nzl', 'kick', 6, 1), tone(0, 300, 'saw', 'kick', 'C3', 'G1', 0.8)] },
   { id: 'grapple.attach', cls: 'duck', dur: 80, notes: [tone(0, 80, 'p12', 'blip', 'C6'), noise(0, 40, 'nzs', 'hat', 10)] },
-  /** One 0.5 s reel sweep; retriggered per reel cycle. */
+  /** One 0.5 s reel sweep; loops until `stopSfx('grapple.reel')`. */
   { id: 'grapple.reel', cls: 'ui', dur: 500, loop: true, notes: [tone(0, 500, 'p12', 'organ', 'C4', 'C5', 0.6)] },
-  { id: 'grapple.snap', cls: 'duck', dur: 90, notes: [noise(0, 90, 'nzs', 'snare', 15, 8)] },
+  { id: 'grapple.snap', cls: 'duck', dur: 90, fadeOutMs: 150, notes: [noise(0, 90, 'nzs', 'snare', 15, 8)] },
   { id: 'grapple.empty', cls: 'ui', dur: 40, notes: [tone(0, 40, 'p50', 'blip', 'C3')] },
   { id: 'collision', cls: 'duck', dur: 220, notes: [noise(0, 220, 'nzl', 'snare', 8, 2), tone(0, 220, 'p50', 'kick', 'E3', 'C3', 0.8)] },
   { id: 'flare.warn', cls: 'ui', dur: 1200, notes: [noise(0, 1200, 'nzl', 'swell', 3, 6, 5 / 15)] },

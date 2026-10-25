@@ -116,7 +116,7 @@ Pitch envelope = start → end over the duration. Class `duck` makes music duck;
 | Stings | Music −12 dB while a sting plays |
 | Crossfade | Scene music change: 300 ms equal-power crossfade; same id = no restart |
 | Polyphony | ≤ 8 SFX voices; oldest of the same id is stolen first |
-| Mute | `M` key toggles mute everywhere; mute ramps master to 0 over 30 ms |
+| Mute | `bindGlobalMuteKey(key = 'm', isTextFieldActive, { ignore })` toggles mute (key may be `'ctrl+m'` or `'0'`; Title's `M` auto-resolve hotkey conflicts, so pass `ignore` or rebind); `audio().isMuted`; mute ramps master to 0 over 30 ms |
 | Persistence | localStorage `proxima.settings` (JSON, `v: 1`): `master`, `music`, `sfx`, `muted` alongside the other Options keys (`ui.md`). Bad or missing values fall back to defaults |
 
 ## Autoplay unlock

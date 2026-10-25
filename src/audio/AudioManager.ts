@@ -1,6 +1,6 @@
 /** Game-facing audio API: unlock on first gesture, music with crossfade and look-ahead looping, SFX with ducking, volumes. */
 import { DUCK, crossfadeAt, duckPlan } from './dsp';
-import { SFX, sfxEvents } from './sfx';
+import { SFX, sfxEvents, type SfxDef } from './sfx';
 import { getSong } from './songs';
 import { defaultStorage, loadAudioSettings, saveAudioSettings, type AudioSettings, type StorageLike } from './settings';
 import { Synth, type CtxLike, type GainLike, type Voice } from './synth';
@@ -39,6 +39,7 @@ const LOOKAHEAD = 0.1;
 const MAX_SFX = 8;
 const FADE_STEPS = 12;
 const MUTE_RAMP = 0.03;
+const STOP_FADE_MS = 40;
 
 const defaultTimer: TimerLike = {
   every: (fn, ms) => setInterval(fn, ms),
@@ -64,6 +65,8 @@ export class AudioManager {
   private current: Track | null = null;
   private fading: Track[] = [];
   private pending: string | null = null;
+  private pendingSting: string | null = null;
+  private loops = new Map<string, number>();
   private duckUntil = 0;
   private sfxActive: { id: string; end: number; voices: Voice[] }[] = [];
   private lastSfx = new Map<string, number>();
@@ -86,6 +89,10 @@ export class AudioManager {
   get playing(): string | null {
     if (this.current) return this.current.song.loops || (this.ctx && this.ctx.currentTime < this.current.startTime + this.current.song.lengthSec) ? this.current.id : null;
     return this.pending;
+  }
+
+  get isMuted(): boolean {
+    return this.settings.muted;
   }
 
   get volumes(): AudioSettings {
@@ -120,6 +127,11 @@ export class AudioManager {
       const id = this.pending;
       this.pending = null;
       this.startTrack(id, 0);
+    }
+    if (this.pendingSting) {
+      const id = this.pendingSting;
+      this.pendingSting = null;
+      this.playSting(id);
     }
     return this.ctx.state === 'running';
   }
@@ -169,16 +181,57 @@ export class AudioManager {
     const now = ctx.currentTime;
     if (def.minGap && now - (this.lastSfx.get(id) ?? -1) < def.minGap / 1000) return false;
     this.lastSfx.set(id, now);
-    this.sfxActive = this.sfxActive.filter((s) => s.end > now);
-    while (this.sfxActive.length >= MAX_SFX) {
-      const i = Math.max(0, this.sfxActive.findIndex((s) => s.id === id));
-      const [victim] = this.sfxActive.splice(i, 1);
-      victim?.voices.forEach((v) => v.stop(now));
+    if (def.loop) {
+      if (this.loops.has(id)) return true; // already looping; callers need not retrigger
+      this.loops.set(id, now + def.dur / 1000);
     }
-    const voices = sfxEvents(def, now).map((e) => synth.playNote(synth.sfx, e));
-    this.sfxActive.push({ id, end: now + def.dur / 1000, voices });
+    this.trigger(def, now);
     if (def.cls === 'duck') this.duck(now, def.dur / 1000);
     return true;
+  }
+
+  /** Stop a looping (or still-sounding) effect with a short fade (`fadeOutMs`, default 40 ms). */
+  stopSfx(id: string): void {
+    const ctx = this.ctx;
+    this.loops.delete(id);
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const fade = (SFX[id]?.fadeOutMs ?? STOP_FADE_MS) / 1000;
+    this.sfxActive = this.sfxActive.filter((s) => {
+      if (s.id !== id) return true;
+      s.voices.forEach((v) => v.stop(now, fade));
+      return false;
+    });
+  }
+
+  /**
+   * Play a one-shot song (`danger`, `jingle.clean`, `fanfare` intro) over the current music without changing `playing`.
+   * Music ducks -6 dB for the sting's length. Before unlock it is held (latest wins) and plays on unlock.
+   */
+  playSting(id: string): void {
+    const song = getSong(id); // throws on unknown id
+    const synth = this.synth;
+    const ctx = this.ctx;
+    if (!synth || !ctx) {
+      this.pendingSting = id;
+      return;
+    }
+    const now = ctx.currentTime;
+    const len = song.loops ? song.loopStart : song.lengthSec;
+    for (const e of eventsBetween(song, 0, len)) synth.playNote(synth.music, { ...e, t: now + 0.02 + e.t });
+    this.duck(now, len + 0.02);
+  }
+
+  private trigger(def: SfxDef, at: number): void {
+    const synth = this.synth as Synth;
+    this.sfxActive = this.sfxActive.filter((s) => s.end > at);
+    while (this.sfxActive.length >= MAX_SFX) {
+      const i = Math.max(0, this.sfxActive.findIndex((s) => s.id === def.id));
+      const [victim] = this.sfxActive.splice(i, 1);
+      victim?.voices.forEach((v) => v.stop(at, (def.fadeOutMs ?? 0) / 1000 || undefined));
+    }
+    const voices = sfxEvents(def, at).map((e) => synth.playNote(synth.sfx, e));
+    this.sfxActive.push({ id: def.id, end: at + def.dur / 1000 + (def.fadeOutMs ?? 0) / 1000, voices });
   }
 
   setVolume(bus: Bus, v: number): void {
@@ -213,6 +266,15 @@ export class AudioManager {
     const synth = this.synth;
     if (!ctx || !synth || (typeof document !== 'undefined' && document.hidden)) return;
     const now = ctx.currentTime;
+    for (const [id, next] of this.loops) {
+      const def = SFX[id] as SfxDef;
+      let n = next;
+      while (n < now + LOOKAHEAD) {
+        this.trigger(def, n);
+        n += def.dur / 1000;
+      }
+      this.loops.set(id, n);
+    }
     this.fading = this.fading.filter((t) => {
       if ((t.stopAt as number) < now) {
         t.bus.disconnect();
@@ -303,4 +365,33 @@ export function audio(): AudioManager {
 /** Replace (or clear) the shared instance; tests only. */
 export function setAudioForTests(m: AudioManager | null): void {
   instance = m;
+}
+
+/**
+ * Install a window keydown listener that toggles global mute. `key` is a single key (`'m'`, `'0'`) or `'ctrl+m'`.
+ * Skipped while `isTextFieldActive()` is true or `opts.ignore?.()` is true. Returns an unbind function.
+ *
+ * CONFLICT: Title's auto-resolve hotkey is `M`. With the default key, pass an `ignore` that is true while
+ * Title is the active scene, or bind `'ctrl+m'` / `'0'` instead.
+ */
+export function bindGlobalMuteKey(
+  key = 'm',
+  isTextFieldActive: () => boolean = () => false,
+  opts: { target?: Pick<EventTarget, 'addEventListener' | 'removeEventListener'>; ignore?: () => boolean; manager?: () => AudioManager } = {},
+): () => void {
+  const target = opts.target ?? window;
+  const want = key.toLowerCase();
+  const ctrl = want.startsWith('ctrl+');
+  const base = ctrl ? want.slice(5) : want;
+  const onKey = (ev: Event): void => {
+    const e = ev as KeyboardEvent;
+    if (e.repeat || e.key?.toLowerCase() !== base) return;
+    const mod = !!(e.ctrlKey || e.metaKey);
+    if (ctrl !== mod || e.altKey) return;
+    if (isTextFieldActive() || opts.ignore?.()) return;
+    if (ctrl) e.preventDefault?.();
+    (opts.manager?.() ?? audio()).toggleMute();
+  };
+  target.addEventListener('keydown', onKey);
+  return () => target.removeEventListener('keydown', onKey);
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AudioManager } from '@/audio/AudioManager';
+import { AudioManager, bindGlobalMuteKey } from '@/audio/AudioManager';
 import { SETTINGS_KEY, parseAudioSettings } from '@/audio/settings';
 import { dbToGain } from '@/audio/dsp';
 import { FakeCtx, FakeStorage, noTimer } from './fakes';
@@ -176,5 +176,106 @@ describe('volumes and persistence', () => {
     expect(parseAudioSettings('{{{')).toEqual({ master: 0.8, music: 0.6, sfx: 0.8, muted: false });
     expect(parseAudioSettings(JSON.stringify({ master: 'x', music: 5, sfx: -1, muted: 1 }))).toEqual({ master: 0.8, music: 1, sfx: 0, muted: false });
     expect(parseAudioSettings(null).master).toBe(0.8);
+  });
+});
+
+describe('stings (T-062)', () => {
+  it('plays over music, ducks -6 dB for its length, and does not change playing', async () => {
+    const { ctx, m } = setup();
+    await m.unlock();
+    m.playMusic('travel');
+    ctx.currentTime = 1;
+    const before = ctx.oscs.length + ctx.sources.length;
+    m.playSting('danger');
+    expect(m.playing).toBe('travel');
+    expect(ctx.oscs.length + ctx.sources.length).toBeGreaterThan(before);
+    const duck = ctx.gains.find((g) => g.gain.calls.some((c) => c.fn === 'lin' && c.v !== undefined && Math.abs(c.v - dbToGain(-6)) < 1e-6))!;
+    const calls = duck.gain.calls.filter((c) => c.t >= 1);
+    const hold = calls.filter((c) => c.fn === 'set' && Math.abs((c.v as number) - dbToGain(-6)) < 1e-6).at(-1)!;
+    expect(hold.t).toBeGreaterThan(1 + 3); // danger is 2 bars at 140 BPM = 3.43 s
+    expect(calls.at(-1)).toMatchObject({ fn: 'lin', v: 1 });
+  });
+  it('is held before unlock and plays on unlock; unknown id throws', async () => {
+    const { ctx, m } = setup();
+    m.playSting('jingle.clean');
+    expect(ctx.oscs).toHaveLength(0);
+    expect(m.playing).toBeNull();
+    await m.unlock();
+    expect(ctx.oscs.length + ctx.sources.length).toBeGreaterThan(0);
+    expect(() => m.playSting('nope')).toThrow();
+  });
+  it('a looping song stings only its intro', async () => {
+    const { ctx, m } = setup();
+    await m.unlock();
+    m.playSting('fanfare');
+    expect(ctx.oscs.length + ctx.sources.length).toBeGreaterThan(0);
+  });
+});
+
+describe('looping sfx and fades (T-062)', () => {
+  it('loops until stopSfx, re-triggering each cycle, and a second sfx() call does not double', async () => {
+    const { ctx, m } = setup();
+    await m.unlock();
+    expect(m.sfx('grapple.reel')).toBe(true);
+    const n0 = ctx.oscs.length;
+    m.sfx('grapple.reel');
+    expect(ctx.oscs.length).toBe(n0);
+    ctx.currentTime = 0.45;
+    m.tick();
+    expect(ctx.oscs.length).toBe(n0 * 2);
+    m.stopSfx('grapple.reel');
+    const n1 = ctx.oscs.length;
+    ctx.currentTime = 2;
+    m.tick();
+    expect(ctx.oscs.length).toBe(n1);
+    expect(ctx.oscs.some((o) => o.stopped.length > 1 || o.stopped[0]! < 0.6)).toBe(true);
+  });
+  it('stopSfx fades over 40 ms by default, and grapple.snap uses its 150 ms fadeOutMs', async () => {
+    const { ctx, m } = setup();
+    await m.unlock();
+    m.sfx('drive.hum');
+    m.stopSfx('drive.hum');
+    const env = ctx.gains.filter((g) => g.gain.calls.some((c) => c.fn === 'lin' && c.v === 0 && Math.abs(c.t - 0.04) < 1e-9));
+    expect(env.length).toBeGreaterThan(0);
+    m.sfx('grapple.snap');
+    m.stopSfx('grapple.snap');
+    expect(ctx.gains.some((g) => g.gain.calls.some((c) => c.fn === 'lin' && c.v === 0 && Math.abs(c.t - 0.15) < 1e-9))).toBe(true);
+  });
+});
+
+describe('global mute key (T-062)', () => {
+  const fakeWin = () => {
+    const l: ((e: unknown) => void)[] = [];
+    return { l, addEventListener: (_: string, f: (e: unknown) => void) => l.push(f), removeEventListener: (_: string, f: (e: unknown) => void) => void l.splice(l.indexOf(f), 1), fire: (e: object) => l.slice().forEach((f) => f(e)) };
+  };
+  it('toggles on the key, ignores text fields, repeats, modifiers and ignore(); ctrl+m works; unbind removes', () => {
+    const { m } = setup();
+    const w = fakeWin();
+    let text = false;
+    let own = false;
+    const off = bindGlobalMuteKey('m', () => text, { target: w, manager: () => m, ignore: () => own });
+    w.fire({ key: 'm' });
+    expect(m.isMuted).toBe(true);
+    text = true;
+    w.fire({ key: 'm' });
+    expect(m.isMuted).toBe(true);
+    text = false;
+    own = true;
+    w.fire({ key: 'M' });
+    expect(m.isMuted).toBe(true);
+    own = false;
+    w.fire({ key: 'm', repeat: true });
+    w.fire({ key: 'm', ctrlKey: true });
+    expect(m.isMuted).toBe(true);
+    w.fire({ key: 'M' });
+    expect(m.isMuted).toBe(false);
+    off();
+    expect(w.l).toHaveLength(0);
+    const w2 = fakeWin();
+    bindGlobalMuteKey('ctrl+m', () => false, { target: w2, manager: () => m });
+    w2.fire({ key: 'm' });
+    expect(m.isMuted).toBe(false);
+    w2.fire({ key: 'm', ctrlKey: true, preventDefault() {} });
+    expect(m.isMuted).toBe(true);
   });
 });

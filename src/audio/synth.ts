@@ -57,7 +57,8 @@ const DUTY: Partial<Record<VoiceId, number>> = { p12: 0.125, p25: 0.25, p50: 0.5
 /** A scheduled voice: when it ends, and a way to cut it short. */
 export interface Voice {
   end: number;
-  stop(at: number): void;
+  /** Cut the voice at `at` with a linear fade of `fadeSec` (default 10 ms). */
+  stop(at: number, fadeSec?: number): void;
 }
 
 export class Synth {
@@ -160,14 +161,15 @@ export class Synth {
     this.ends.push(end);
     const voice: Voice = {
       end,
-      stop: (at) => {
+      stop: (at, fadeSec = 0.01) => {
         const a = Math.max(at, ctx.currentTime);
+        const f = Math.max(0.005, fadeSec);
         env.gain.cancelScheduledValues(a);
         env.gain.setValueAtTime(env.gain.value, a);
-        env.gain.linearRampToValueAtTime(0, a + 0.01);
-        voice.end = Math.min(voice.end, a + 0.02);
+        env.gain.linearRampToValueAtTime(0, a + f);
+        voice.end = Math.min(voice.end, a + f + 0.01);
         try {
-          src.stop(a + 0.02);
+          src.stop(a + f + 0.01);
         } catch {
           /* already stopped */
         }
