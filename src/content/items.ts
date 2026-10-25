@@ -44,7 +44,5 @@ export const LOSABLE_KEYS: readonly SupplyKey[] = ['rations', 'suits', 'charges'
 export const SPARE_CAP = 3;
 /** Minimum drives to leave Independence. */
 export const MIN_DRIVES_TO_DEPART = 1;
-/** Buy-back fraction of local price (M2; Independence does not buy). */
-export const SELL_FRACTION = 0.5;
 /** Mattie warns when rations bought are below this. */
 export const RATIONS_WARNING_BELOW = 1000;

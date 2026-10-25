@@ -1,4 +1,4 @@
-/** M1 hazard crossing roll (trail.md "M1 crossing roll"). */
+/** Crossing rolls: the M1 roll (trail.md, still the Flare Belt's "Thread it") and the shared incident/severity/outcome step. */
 import { HAZARD, INJURY_NO_ROOM_DAMAGE, LOSABLE_KEYS, PART_NAMES, WAYPOINTS, WINDOWS, type Waypoint } from '@/content';
 import { damageCrew, gainCondition, killCrew, newDayContext, type DayContext } from './health';
 import type { Rng } from './rng';
@@ -37,17 +37,27 @@ export function outcomeFor(severity: number): Exclude<CrossingOutcome, 'clear'> 
   return 'lost';
 }
 
-/** Resolve the crossing at waypoint `index` (mutates). Sets justCrossedHazard. */
+/** M1 roll at waypoint `index` (mutates): M1 incident chance and severity bonus. Sets justCrossedHazard. */
 export function resolveCrossing(state: GameState, index: number, rng: Rng, out: LogEntry[], ctx: DayContext = newDayContext()): CrossingOutcome {
   const w = WAYPOINTS[index]!;
+  return rollCrossing(state, incidentChance(state, w), severityBonus(state, w), rng, out, ctx);
+}
+
+/**
+ * Incident draw at `pct` percent; on an incident a d100 severity draw + `severityMod` (clamped 1–100), then the
+ * outcome's picks (trail.md severity table). pct ≤ 0 makes no draw (the tug). Logs kind `hazard`, id = outcome. Sets justCrossedHazard (mutates).
+ */
+export function rollCrossing(
+  state: GameState, pct: number, severityMod: number, rng: Rng, out: LogEntry[], ctx: DayContext = newDayContext(),
+): CrossingOutcome {
   state.justCrossedHazard = true;
   const log = (o: CrossingOutcome, vars: TextVars, fallback: string): void =>
     pushLog(state, out, 'hazard', resolveText(rng, 'ui', `crossing.${o}`, vars, fallback), o);
-  if (!rng.chance(incidentChance(state, w) / 100)) {
+  if (pct <= 0 || !rng.chance(pct / 100)) {
     log('clear', {}, 'You made it across.');
     return 'clear';
   }
-  const outcome = outcomeFor(Math.min(100, rng.int(1, 100) + severityBonus(state, w)));
+  const outcome = outcomeFor(Math.max(1, Math.min(100, rng.int(1, 100) + severityMod)));
   const crew = presentCrew(state);
   switch (outcome) {
     case 'scraped':

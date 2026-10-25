@@ -54,16 +54,21 @@ describe('tick (travel.md order of operations)', () => {
     expect(s.offlineDrives).toEqual([]);
   });
 
-  it('arrives at a hazard, rolls the crossing, and the next tick departs', () => {
+  it('arrives at a hazard, pauses for the crossing choice, crosses, and the next tick departs (hazards.md "Flow")', () => {
     const s = travelingState({ distanceInSegment: 101.9 });
     const r = tick(s, constRng(0.99));
     expect(r.state.arrivedAt).toBe(1);
     expect(r.state.segment).toBe(2);
     expect(r.state.distanceInSegment).toBe(0);
     expect(r.state.distanceTotal).toBe(102);
-    expect(r.state.justCrossedHazard).toBe(true);
-    expect(r.entries.map((e) => e.kind)).toEqual(expect.arrayContaining(['arrival', 'hazard']));
-    const next = tick(r.state, constRng(0.99)).state;
+    expect(r.state.crossing).toEqual({ waypoint: 1, density: 3, pilotDaysLeft: null });
+    expect(r.entries.map((e) => e.kind)).toContain('arrival');
+    expect(r.entries.map((e) => e.kind)).not.toContain('hazard');
+    const crossed = applyAction(r.state, { type: 'cross', method: 'thread' }, constRng(0.99));
+    expect(crossed.state.justCrossedHazard).toBe(true);
+    expect(crossed.state.crossing).toBeNull();
+    expect(crossed.state.day).toBe(r.state.day);
+    const next = tick(crossed.state, constRng(0.99)).state;
     expect(next.arrivedAt).toBeNull();
     expect(next.justCrossedHazard).toBe(false);
   });

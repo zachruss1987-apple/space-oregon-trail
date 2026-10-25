@@ -1,7 +1,7 @@
 /** Random-intent fuzzing over many seeds: whatever the player does, the sim's invariants hold. */
 import { describe, expect, it } from 'vitest';
 import {
-  applyAction, buy, createGame, createRng, depart, fromJSON, policyShop, toJSON, type GameState, type Intent, type ProfessionId, type Rng, type Status,
+  applyAction, buy, createGame, createRng, depart, fromJSON, policyCross, policyShop, toJSON, type GameState, type Intent, type ProfessionId, type Rng, type Status,
   type SupplyKey, type WindowId,
 } from '@/sim';
 import { daysBetween } from './spec-helpers';
@@ -30,6 +30,25 @@ function randomIntent(r: Rng): Intent {
   if (x < 0.88) return { type: 'repair', part: r.pick(['hull', 'pump', 'gyro'] as const) };
   if (x < 0.95) return { type: 'scan' };
   return { type: 'rest', days: r.pick([0, 10, 99]) }; // out-of-range on purpose: must be refused
+}
+
+/**
+ * hazards.md "Flow": a hazard arrival now pauses in `state.crossing` until a `cross` intent, so the fuzz must choose a
+ * method (any of the four; blocked ones are refused like other bad intents). economy.md / hazards.md: road-station
+ * buy/sell/trade and the Titan route intents are mixed in too (0 days).
+ */
+function m2Intent(s: GameState, r: Rng, careful: boolean): Intent | null {
+  if (s.crossing && r.chance(careful ? 0.9 : 0.5)) {
+    return { type: 'cross', method: r.pick(careful ? (['thread', 'shields', 'tug', 'pilot'] as const) : (['thread', 'shields', 'tug', 'pilot', 'pilot'] as const)) };
+  }
+  if (s.arrivedAt !== null && r.chance(0.3)) {
+    const x = r.next();
+    if (x < 0.3) return { type: 'buy', item: r.pick(ITEMS), packs: r.int(0, 4) };
+    if (x < 0.55) return { type: 'sell', item: r.pick(ITEMS), packs: r.int(0, 3) };
+    if (x < 0.85) return { type: 'trade', offer: r.int(0, 3) };
+    return { type: 'route', via: r.pick(['oort', 'direct'] as const) };
+  }
+  return null;
 }
 
 /** Shop at random (some purchases are refused on purpose), then depart if possible. */
@@ -99,7 +118,7 @@ function fuzz(seed: number, check: boolean): RunResult {
   if (check) checkState(s, `seed ${seed} after depart`);
   let guard = 0;
   while (s.status === 'traveling' && s.day < MAX_DAYS && guard++ < 2000) {
-    const intent = seed % 2 === 0 ? carefulIntent(choice) : randomIntent(choice);
+    const intent = m2Intent(s, choice, seed % 2 === 0) ?? (seed % 2 === 0 ? carefulIntent(choice) : randomIntent(choice));
     const before = s;
     const r = applyAction(s, intent, rng);
     steps++;
@@ -112,8 +131,12 @@ function fuzz(seed: number, check: boolean): RunResult {
         expect(r.entries, label).toEqual([]);
       } else {
         const dd = s.day - before.day;
-        if (intent.type === 'setThrust' || intent.type === 'setRations') {
+        if (['setThrust', 'setRations', 'buy', 'sell', 'trade', 'route'].includes(intent.type)) {
           expect(dd, label).toBe(0);
+        } else if (intent.type === 'cross') {
+          // hazards.md: resolution costs no day; a pilot runs up to 4 wait days.
+          expect(dd, label).toBeGreaterThanOrEqual(0);
+          expect(dd, label).toBeLessThanOrEqual(4);
         } else if (intent.type === 'rest') {
           expect(dd, label).toBeGreaterThanOrEqual(1);
           expect(dd, label).toBeLessThanOrEqual(intent.days);
@@ -160,10 +183,10 @@ describe('Fuzzed invariants (300 seeds x up to 400 days)', () => {
       const rng = createRng(seed);
       let s = shop(createGame({ profession: 'executive', window: 3 }, rng), createRng(seed + 1000));
       s = depart(s, rng).state;
-      for (let i = 0; i < 600 && s.status === 'traveling'; i++) s = applyAction(s, { type: 'continue' }, rng).state;
+      for (let i = 0; i < 600 && s.status === 'traveling'; i++) s = applyAction(s, s.crossing ? policyCross(s) : { type: 'continue' }, rng).state;
       if (s.status === 'traveling' || s.status === 'store') continue;
       tested++;
-      for (const intent of [{ type: 'continue' }, { type: 'rest', days: 2 }, { type: 'scan' }] as Intent[]) {
+      for (const intent of [{ type: 'continue' }, { type: 'rest', days: 2 }, { type: 'scan' }, { type: 'cross', method: 'tug' }, { type: 'trade', offer: 0 }] as Intent[]) {
         const r = applyAction(s, intent, rng);
         expect(r.error).toBeTruthy();
         expect(r.state).toBe(s);

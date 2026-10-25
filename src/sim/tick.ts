@@ -1,12 +1,14 @@
 /** The daily tick: travel.md "Order of operations", steps 1–11. */
 import { FINAL_WAYPOINT, PASSING_HELP, SUIT_WEAR_CHANCE, WAYPOINTS, WEATHER, isStation } from '@/content';
+import { rollDensity } from './crossing';
 import { eventStep } from './events';
-import { resolveCrossing } from './hazard';
 import { healthStep, missingStep, newDayContext } from './health';
 import { passingHelp, repairBlocker, resolveRepair } from './repair';
 import type { Rng } from './rng';
+import { cumulativeAt, nextWaypoint } from './route';
 import { resolveScan } from './salvage';
 import { resolveText } from './text';
+import { generateOffers } from './trade';
 import { dailyDistance, rationNeed, remainingInSegment } from './travel';
 import type { DayKind, GameState, LogEntry, StepResult } from './types';
 import { addDays, cloneState, livingCrew, presentCrew, pushLog } from './util';
@@ -45,27 +47,35 @@ function spendDay(s: GameState, rng: Rng, day: DayKind, out: LogEntry[]): number
     case 'repair':
       if (repairBlocker(s, day.part) === null) resolveRepair(s, day.part, rng, out);
       return 0;
+    case 'wait': {
+      const c = s.crossing;
+      const left = c?.pilotDaysLeft ?? 0;
+      if (c && left > 0) c.pilotDaysLeft = left - 1;
+      pushLog(s, out, 'crossing', resolveText(rng, 'ui', 'hazard.pilotWait', { n: left }, 'Waiting for the pilot. {n} days left.'), 'pilot-wait');
+      return 0;
+    }
   }
 }
 
-/** Step 10: waypoint arrival (and hazard roll). */
-function arrivalCheck(s: GameState, rng: Rng, out: LogEntry[], ctx: ReturnType<typeof newDayContext>): void {
+/** Step 10: waypoint arrival; a hazard sets the pending crossing (density roll), a road station its trade offers. */
+function arrivalCheck(s: GameState, rng: Rng, out: LogEntry[]): void {
   const target = WAYPOINTS[s.segment]!;
   if (s.distanceInSegment + EPS < target.mk) return;
   s.distanceInSegment = target.mk;
-  s.distanceTotal = target.cumulative;
+  s.distanceTotal = cumulativeAt(target.index, s.route);
   s.arrivedAt = target.index;
   s.scansThisSegment = 0;
   pushLog(s, out, 'arrival', resolveText(rng, 'ui', 'arrival.reached', { name: target.name }, 'You have reached {name}.'), target.id);
-  if (target.hazard) resolveCrossing(s, target.index, rng, out, ctx);
+  if (target.hazard) s.crossing = { waypoint: target.index, density: rollDensity(target, rng), pilotDaysLeft: null };
+  if (target.type === 'station') s.station = { waypoint: target.index, offers: generateOffers(s, target.index, rng) };
   if (target.index < FINAL_WAYPOINT) {
-    s.segment = target.index + 1;
+    s.segment = nextWaypoint(target.index, s.route);
     s.distanceInSegment = 0;
   }
 }
 
-/** Step 11: endings. */
-function gameOverCheck(s: GameState, rng: Rng, out: LogEntry[]): void {
+/** Step 11: endings (also run after a crossing resolves). */
+export function gameOverCheck(s: GameState, rng: Rng, out: LogEntry[]): void {
   const living = livingCrew(s);
   if (living.length > 0 && presentCrew(s).length === 0) {
     for (const c of living) {
@@ -88,7 +98,10 @@ function gameOverCheck(s: GameState, rng: Rng, out: LogEntry[]): void {
 /** Mutating tick used by tick() and applyAction(). */
 export function tickInPlace(s: GameState, rng: Rng, day: DayKind, out: LogEntry[]): void {
   if (s.status !== 'traveling') return;
-  if (day.kind === 'travel' && s.arrivedAt !== null) s.arrivedAt = null;
+  if (day.kind === 'travel' && s.arrivedAt !== null) {
+    s.arrivedAt = null;
+    s.station = null;
+  }
   const parked = s.arrivedAt !== null ? WAYPOINTS[s.arrivedAt]! : null;
   const ctx = newDayContext({ rest: day.kind === 'rest', atStation: parked !== null && isStation(parked) });
 
@@ -129,6 +142,6 @@ export function tickInPlace(s: GameState, rng: Rng, day: DayKind, out: LogEntry[
   eventStep(s, rng, ctx, out);
   if (s.justCrossedHazard && s.arrivedAt === null) s.justCrossedHazard = false;
   // 10–11.
-  if (livingCrew(s).length > 0) arrivalCheck(s, rng, out, ctx);
+  if (livingCrew(s).length > 0) arrivalCheck(s, rng, out);
   gameOverCheck(s, rng, out);
 }

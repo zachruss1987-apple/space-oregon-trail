@@ -1,7 +1,12 @@
-/** docs/design/trail.md: the Lane's waypoints, hazard parameters, and the M1 crossing roll. (hazards.md is still a stub.) */
+/**
+ * docs/design/trail.md: the Lane's waypoints, hazard parameters, and the crossing roll. Since M2 (hazards.md "Flow") a
+ * hazard arrival pauses in `state.crossing`; these tests resolve it with `cross thread`, whose incident chance is
+ * baseline x densityFactor (mean 1.0 over the 25/50/25 density roll, so the M1 rates still hold on average) and whose
+ * severity table is the trail.md one. Ship modifiers are kept at 0 (intact ship, 3 drives).
+ */
 import { describe, expect, it } from 'vitest';
 import { WAYPOINTS } from '@/content';
-import { createRng, tick, type GameState, type LogEntry } from '@/sim';
+import { applyAction, createRng, shipModifier, tick, type CrossMethod, type GameState, type LogEntry } from '@/sim';
 import { allHealth, expectRate, isQuiet, ship } from './spec-helpers';
 
 /** trail.md table: [name, type, Mk from previous, cumulative]. */
@@ -24,9 +29,12 @@ const TRAIL: [string, string, number, number][] = [
   ['The Flare Belt', 'hazard', 120, 1839],
   ['New Willamette', 'end', 201, 2040],
 ];
-/** trail.md hazard parameters: index -> [density, baseline incident %, tug price, pilot wait]. */
+/**
+ * trail.md hazard parameters: index -> [density, baseline incident %, tug price, pilot wait]. Pilot waits changed in
+ * M2: hazards.md "Availability" offers the Belter pilot only at The Belt Crossing (4) and Saturn Ring Plane (3).
+ */
 const HAZ: Record<number, [number, number, number, number | null]> = {
-  1: [2, 15, 25, 2], 2: [2, 15, 35, 2], 7: [4, 35, 80, 4], 9: [3, 25, 60, 3], 13: [4, 35, 90, 4], 15: [5, 45, 120, null],
+  1: [2, 15, 25, null], 2: [2, 15, 35, null], 7: [4, 35, 80, 4], 9: [3, 25, 60, 3], 13: [4, 35, 90, null], 15: [5, 45, 120, null],
 };
 
 describe('The trail (trail.md table)', () => {
@@ -75,18 +83,30 @@ function arrivalState(idx: number, over: Partial<GameState> = {}, health = 100):
 const hazardEntry = (es: readonly LogEntry[]): string | undefined => es.find((e) => e.kind === 'hazard')?.id;
 const arrived = (es: readonly LogEntry[]): boolean => es.some((e) => e.kind === 'arrival');
 
-/** Cross hazard `idx` n times, return outcomes. */
-function crossings(s: GameState, n: number) {
+/** Parked at hazard `idx` with a pending crossing at `density` (hazards.md state). */
+function pending(idx: number, density: number, over: Partial<GameState> = {}, health = 100): GameState {
+  const w = WAYPOINTS[idx]!;
+  return {
+    ...arrivalState(idx, over, health),
+    segment: idx + 1, distanceInSegment: 0, distanceTotal: w.cumulative, arrivedAt: idx,
+    crossing: { waypoint: idx, density, pilotDaysLeft: null },
+  };
+}
+
+/** Arrive at hazard `idx` (tick, density roll) and cross with `method` on the same rng, n seeds; intact ships only. */
+function crossings(s: GameState, n: number, method: CrossMethod = 'thread') {
   const out: { id: string; r: ReturnType<typeof tick>; seed: number }[] = [];
   for (let seed = 1; seed <= n; seed++) {
-    const r = tick(s, createRng(seed * 19 + 3));
-    if (!arrived(r.entries)) continue;
+    const rng = createRng(seed * 19 + 3);
+    const a = tick(s, rng);
+    if (!arrived(a.entries) || a.state.status !== 'traveling' || shipModifier(a.state) !== 0) continue;
+    const r = applyAction(a.state, { type: 'cross', method }, rng);
     out.push({ id: hazardEntry(r.entries) ?? 'none', r, seed });
   }
   return out;
 }
 
-describe('Incident chance (trail.md "M1 crossing roll" step 1)', () => {
+describe('Incident chance (trail.md step 1; hazards.md Thread it = baseline x densityFactor, mean 1.0)', () => {
   const rate = (idx: number, windowId: 1 | 2 | 3 | 4 | 5, date: string, n = 3000): { k: number; n: number } => {
     const res = crossings(arrivalState(idx, { window: windowId, date }), n);
     return { k: res.filter((c) => c.id !== 'clear').length, n: res.length };
@@ -129,10 +149,16 @@ describe('Incident chance (trail.md "M1 crossing roll" step 1)', () => {
 });
 
 describe('Severity bands (trail.md severity table)', () => {
+  // hazards.md: the +5 density bonus uses today's density, so the crossing is pinned at the nominal density here.
   const shares = (idx: number, date: string, n: number) => {
-    const res = crossings(arrivalState(idx, { date, window: 5 }), n).filter((c) => c.id !== 'clear' && c.id !== 'none');
+    const s = pending(idx, WAYPOINTS[idx]!.hazard!.density, { date, window: 5 });
+    const res: string[] = [];
+    for (let seed = 1; seed <= n; seed++) {
+      const id = hazardEntry(applyAction(s, { type: 'cross', method: 'thread' }, createRng(seed * 19 + 3)).entries) ?? 'none';
+      if (id !== 'clear' && id !== 'none') res.push(id);
+    }
     const count: Record<string, number> = {};
-    for (const c of res) count[c.id] = (count[c.id] ?? 0) + 1;
+    for (const c of res) count[c] = (count[c] ?? 0) + 1;
     return { count, total: res.length };
   };
 
@@ -171,38 +197,43 @@ describe('Outcome effects (trail.md)', () => {
   const noise = (es: readonly LogEntry[]): boolean => isQuiet(es, ['arrival', 'hazard', 'death', 'condition']) && !es.some((e) => (e.kind === 'death' && e.id !== 'hazard') || (e.kind === 'condition' && e.id !== 'decompression-injury'));
   const outcomes = (idx: number, id: string, want: number, n = 30000, date = '2184-08-01', health = 100) => {
     const out: ReturnType<typeof crossings> = [];
-    const s = arrivalState(idx, { date, window: 5 }, health);
+    const s = pending(idx, WAYPOINTS[idx]!.hazard!.density, { date, window: 5 }, health);
     for (let seed = 1; seed <= n && out.length < want; seed++) {
-      const r = tick(s, createRng(seed * 23 + 1));
-      if (arrived(r.entries) && hazardEntry(r.entries) === id && noise(r.entries)) out.push({ id, r, seed });
+      const r = applyAction(s, { type: 'cross', method: 'thread' }, createRng(seed * 23 + 1));
+      if (hazardEntry(r.entries) === id && noise(r.entries)) out.push({ id, r, seed });
     }
     return { out, s };
   };
 
-  it('every hazard arrival sets arrivedAt, advances the segment and flags a just-crossed hazard', () => {
+  it('every hazard arrival sets arrivedAt, advances the segment and pends a crossing; crossing flags just-crossed (hazards.md "Flow")', () => {
     for (const [idx] of Object.entries(HAZ)) {
       const i = Number(idx);
       const r = tick(arrivalState(i), createRng(5)).state;
       expect(r.arrivedAt).toBe(i);
       expect(r.segment).toBe(i + 1);
-      expect(r.justCrossedHazard).toBe(true);
+      expect(r.crossing?.waypoint).toBe(i);
+      expect(r.justCrossedHazard).toBe(false);
       expect(r.distanceTotal).toBe(WAYPOINTS[i]!.cumulative);
+      const c = applyAction(r, { type: 'cross', method: 'tug' }, createRng(5)).state;
+      expect(c.justCrossedHazard).toBe(true);
+      expect(c.crossing).toBeNull();
     }
   });
 
-  it('every hazard arrival logs exactly one crossing outcome', () => {
+  it('every crossing logs exactly one crossing outcome', () => {
     for (let seed = 1; seed <= 200; seed++) {
-      const r = tick(arrivalState(7), createRng(seed));
+      const r = applyAction(pending(7, 4), { type: 'cross', method: 'thread' }, createRng(seed));
       expect(r.entries.filter((e) => e.kind === 'hazard')).toHaveLength(1);
       expect(['clear', 'scraped', 'cargo', 'damage', 'injury', 'lost']).toContain(hazardEntry(r.entries));
     }
   });
 
-  it.each([3, 4, 11, 12, 14])('stations, landmarks and the gate (waypoint %i) have no crossing roll', (idx) => {
+  it.each([3, 4, 11, 12, 14])('stations, landmarks and the gate (waypoint %i) have no crossing', (idx) => {
     for (let seed = 1; seed <= 60; seed++) {
       const r = tick(arrivalState(idx), createRng(seed));
       expect(arrived(r.entries)).toBe(true);
       expect(hazardEntry(r.entries)).toBeUndefined();
+      expect(r.state.crossing).toBeNull();
       expect(r.state.justCrossedHazard).toBe(false);
     }
   });
@@ -225,8 +256,7 @@ describe('Outcome effects (trail.md)', () => {
   it('cargo loss: one stocked type loses 10-25% (min 1)', () => {
     const { out, s } = outcomes(7, 'cargo', 120);
     expect(out.length).toBe(120);
-    const need = 10; // half rations, five crew
-    const before: Record<string, number> = { rations: s.supplies.rations - need, suits: 20, charges: 200, plates: 3, pumps: 3, gyros: 3 };
+    const before: Record<string, number> = { rations: s.supplies.rations, suits: 20, charges: 200, plates: 3, pumps: 3, gyros: 3 }; // no tick: crossing costs no day
     const hit = new Set<string>();
     for (const { r } of out) {
       const lost = Object.keys(before).filter((k) => (r.state.supplies as Record<string, number>)[k]! < before[k]!);
@@ -242,8 +272,8 @@ describe('Outcome effects (trail.md)', () => {
   });
 
   it('cargo loss with an empty hold is not an error (the crossing counts as clear)', () => {
-    const s = arrivalState(7, { supplies: { rations: 0, suits: 0, charges: 0, plates: 0, pumps: 0, gyros: 0, drives: 3 } });
-    for (let seed = 1; seed <= 500; seed++) expect(() => tick(s, createRng(seed))).not.toThrow();
+    const s = pending(7, 4, { supplies: { rations: 0, suits: 0, charges: 0, plates: 0, pumps: 0, gyros: 0, drives: 3 } });
+    for (let seed = 1; seed <= 500; seed++) expect(() => applyAction(s, { type: 'cross', method: 'thread' }, createRng(seed))).not.toThrow();
   });
 
   it('damage: hull plate 50%, coolant pump 25%, nav gyro 25%', () => {
@@ -280,11 +310,11 @@ describe('Outcome effects (trail.md)', () => {
       ...s,
       crew: s.crew.map((c) => ({ ...c, conditions: [{ id: 'cryo-fever' as const, remaining: 12, daysActive: 1 }, { id: 'scurvy' as const, remaining: 12, daysActive: 1 }] })),
     });
-    const s = twoEach(arrivalState(7, { date: '2184-08-01', window: 5 }));
+    const s = twoEach(pending(7, 4, { date: '2184-08-01', window: 5 }));
     let seen = 0;
     for (let seed = 1; seed <= 60000 && seen < 20; seed++) {
-      const r = tick(s, createRng(seed * 3 + 1));
-      if (!arrived(r.entries) || hazardEntry(r.entries) !== 'injury' || r.entries.some((e) => e.kind === 'death' || e.kind === 'event')) continue;
+      const r = applyAction(s, { type: 'cross', method: 'thread' }, createRng(seed * 3 + 1));
+      if (hazardEntry(r.entries) !== 'injury' || r.entries.some((e) => e.kind === 'death' || e.kind === 'event')) continue;
       seen++;
       expect(r.state.crew.some((c) => c.conditions.some((x) => x.id === 'decompression-injury'))).toBe(false);
       expect(r.state.crew.filter((c) => c.health <= 85)).toHaveLength(1);

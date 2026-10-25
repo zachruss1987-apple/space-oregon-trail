@@ -62,6 +62,11 @@ export function pctLoss(qty: number, pct: number): number {
   return Math.min(qty, Math.max(1, Math.floor((qty * pct) / 100)));
 }
 
+/** Round half up (positive values), tolerant of float noise (37.5 → 38, 0.45 × 100 → 45). */
+export function roundHalfUp(x: number): number {
+  return Math.floor(x + 0.5 + 1e-9);
+}
+
 /** Inclusive integer from a [min, max] tuple. */
 export function roll(rng: Rng, range: readonly [number, number]): number {
   return rng.int(range[0], range[1]);
@@ -83,5 +88,9 @@ export function cloneState(state: GameState): GameState {
     broken: { ...state.broken },
     offlineDrives: [...state.offlineDrives],
     log: [...state.log],
+    crossing: state.crossing ? { ...state.crossing } : null,
+    station: state.station
+      ? { ...state.station, offers: state.station.offers.map((o) => ({ ...o, give: { ...o.give }, get: { ...o.get } })) }
+      : null,
   };
 }

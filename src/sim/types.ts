@@ -1,10 +1,14 @@
 /** Simulation types. Pure data; JSON-serializable. */
-import type { ConditionId, DeathCause, EventId, PartId, ProfessionId, RationId, SupplyKey, ThrustId, WeatherId, WindowId } from '@/content';
+import type {
+  ConditionId, DeathCause, EventId, FairnessId, PartId, ProfessionId, RationId, RouteId, SupplyKey, ThrustId, TradeGood, WeatherId, WindowId,
+} from '@/content';
 
-export type { ConditionId, DeathCause, EventId, PartId, ProfessionId, RationId, SupplyKey, ThrustId, WeatherId, WindowId };
+export type {
+  ConditionId, DeathCause, EventId, FairnessId, PartId, ProfessionId, RationId, RouteId, SupplyKey, ThrustId, TradeGood, WeatherId, WindowId,
+};
 
 /** Save format version for serialize.ts. */
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 /** One active condition on a crew member. */
 export interface ActiveCondition {
@@ -47,7 +51,7 @@ export type Status = 'store' | 'traveling' | 'arrived' | 'dead' | 'adrift';
 export type LogKind =
   | 'depart' | 'store' | 'travel' | 'weather' | 'help' | 'starving' | 'suit' | 'condition' | 'recover'
   | 'death' | 'rejoin' | 'event' | 'quiet' | 'arrival' | 'hazard' | 'rest' | 'repair' | 'scan' | 'setting'
-  | 'gameover' | 'info';
+  | 'gameover' | 'info' | 'crossing' | 'route' | 'trade';
 
 /** One structured log line. */
 export interface LogEntry {
@@ -59,6 +63,49 @@ export interface LogEntry {
   text: string;
   /** Specific id: event id, condition id, death cause, waypoint id, part, etc. */
   id?: string;
+}
+
+/** Crossing methods (hazards.md). */
+export type CrossMethod = 'thread' | 'shields' | 'tug' | 'pilot';
+
+/** A pending hazard crossing: set on hazard arrival, null once resolved. */
+export interface Crossing {
+  /** Hazard waypoint index. */
+  waypoint: number;
+  /** Today's density 1–5 (rolled on arrival). */
+  density: number;
+  /** Pilot wait days still to run; null until a pilot is sent for. */
+  pilotDaysLeft: number | null;
+}
+
+/** One side of a trade: an item (or credits) and a quantity in units (charges: single charges). */
+export interface TradeLot {
+  /** Supply key or credits. */
+  item: TradeGood;
+  /** Units. */
+  qty: number;
+}
+
+/** An NPC barter offer at a road station (economy.md). */
+export interface TradeOffer {
+  /** Persona id in trades.json. */
+  persona: string;
+  /** What the player hands over. */
+  give: TradeLot;
+  /** What the player receives (never credits). */
+  get: { item: SupplyKey; qty: number };
+  /** Hidden fairness roll (tests only; never shown). */
+  fairness: FairnessId;
+  /** True once accepted (accept-once). */
+  taken: boolean;
+}
+
+/** A road-station visit: set on arrival at a road station, null on departure. */
+export interface StationVisit {
+  /** Station waypoint index. */
+  waypoint: number;
+  /** 0–3 offers, kept for the whole visit. */
+  offers: TradeOffer[];
 }
 
 /** Full game state. */
@@ -119,6 +166,12 @@ export interface GameState {
   log: LogEntry[];
   /** Run status. */
   status: Status;
+  /** Pending hazard crossing (UI must show the Hazard scene while non-null). */
+  crossing: Crossing | null;
+  /** Route past Titan Refinery. */
+  route: RouteId;
+  /** Current road-station visit (Station scene available while non-null). */
+  station: StationVisit | null;
 }
 
 /** Options for createGame. */
@@ -136,7 +189,8 @@ export type DayKind =
   | { kind: 'travel' }
   | { kind: 'rest' }
   | { kind: 'scan' }
-  | { kind: 'repair'; part: PartId };
+  | { kind: 'repair'; part: PartId }
+  | { kind: 'wait' };
 
 /** Player intents for applyAction. */
 export type Intent =
@@ -145,7 +199,12 @@ export type Intent =
   | { type: 'setThrust'; thrust: ThrustId }
   | { type: 'setRations'; rations: RationId }
   | { type: 'repair'; part: PartId }
-  | { type: 'scan' };
+  | { type: 'scan' }
+  | { type: 'cross'; method: CrossMethod }
+  | { type: 'route'; via: RouteId }
+  | { type: 'buy'; item: SupplyKey; packs: number }
+  | { type: 'sell'; item: SupplyKey; packs: number }
+  | { type: 'trade'; offer: number };
 
 /** Result of tick/applyAction: the new state and the entries appended this call. */
 export interface StepResult {

@@ -51,10 +51,12 @@ describe('store (resources.md)', () => {
     expect(buyBlocker(s, 'plates', 1)).toMatch(/at most 3/);
   });
 
-  it('sell price: none at Independence, 50% elsewhere', () => {
+  it('sell price per pack: none at Independence, min(50% local, 90% base) elsewhere (economy.md "Buy-back")', () => {
     expect(sellPrice('drives', 0)).toBeNull();
     expect(sellPrice('drives', 3)).toBe(25);
-    expect(sellPrice('charges', 3)).toBe(0.06);
+    expect(sellPrice('charges', 3)).toBe(1.25);
+    expect(sellPrice('drives', 14)).toBe(36);
+    expect(sellPrice('drives', 12)).toBeNull();
   });
 
   it("Mattie's warnings", () => {

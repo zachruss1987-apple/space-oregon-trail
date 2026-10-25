@@ -1,6 +1,7 @@
-/** The M1 auto-play reference policy (end of travel.md), for the playthrough test and balance harness. */
-import { FINAL_WAYPOINT, ITEMS, PROFESSION_ORDER, WINDOW_ORDER, type ProfessionId, type SupplyKey, type WindowId } from '@/content';
-import { applyAction } from './actions';
+/** Auto-play reference policy: travel.md (M1) plus the hazards.md crossing policy (M2), for the playthrough test and balance harness. */
+import { FINAL_WAYPOINT, ITEMS, PROFESSION_ORDER, WAYPOINTS, WINDOW_ORDER, type ProfessionId, type SupplyKey, type WindowId } from '@/content';
+import { applyAction, intentBlocker } from './actions';
+import { crossBlocker, tugPrice } from './crossing';
 import { createGame } from './game';
 import { brokenParts, sparesFor } from './repair';
 import { createRng, type Rng } from './rng';
@@ -31,7 +32,21 @@ export function policyShop(state: GameState): GameState {
   return s;
 }
 
-/** Next intent: repair if possible, set rations, rest when weak, scan when low, else continue. */
+/**
+ * hazards.md "Reference policy": pilot if offered and affordable (or already sent for); else tug if credits ≥ 2× price;
+ * else shields if a spare pump is held; else thread; if all are blocked, rest a day (passing help). Route: always via Oort.
+ */
+export function policyCross(state: GameState): Intent {
+  const c = state.crossing!;
+  const ok = (m: 'thread' | 'shields' | 'tug' | 'pilot'): boolean => crossBlocker(state, m) === null;
+  if (ok('pilot')) return { type: 'cross', method: 'pilot' };
+  if (ok('tug') && state.credits >= 2 * tugPrice(state, WAYPOINTS[c.waypoint]!)) return { type: 'cross', method: 'tug' };
+  if (ok('shields') && state.supplies.pumps > 0) return { type: 'cross', method: 'shields' };
+  if (ok('thread')) return { type: 'cross', method: 'thread' };
+  return { type: 'rest', days: 1 };
+}
+
+/** Next intent: repair if possible, set rations, cross a pending hazard, rest when weak, scan when low, else continue. */
 export function policyIntent(state: GameState): Intent {
   const fixable = brokenParts(state).find((p) => sparesFor(state, p) > 0);
   if (fixable) return { type: 'repair', part: fixable };
@@ -39,9 +54,14 @@ export function policyIntent(state: GameState): Intent {
   const want = low ? 'paste' : 'half';
   if (state.rations !== want) return { type: 'setRations', rations: want };
   if (state.thrust !== 'cruise') return { type: 'setThrust', thrust: 'cruise' };
+  if (state.crossing) return policyCross(state);
   if (averageHealth(state) < POLICY.restBelowHealth) return { type: 'rest', days: 1 };
   if (low && canScan(state) && state.arrivedAt !== FINAL_WAYPOINT) return { type: 'scan' };
-  return { type: 'continue' };
+  const go: Intent = { type: 'continue' };
+  if (intentBlocker(state, go) === null) return go;
+  // Parked at a station with no drive: buy one if affordable, else rest (passing haulers).
+  if (maxBuyable(state, 'drives') > 0) return { type: 'buy', item: 'drives', packs: 1 };
+  return { type: 'rest', days: 1 };
 }
 
 /** Summary of one auto-played run. */

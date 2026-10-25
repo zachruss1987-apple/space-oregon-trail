@@ -103,3 +103,30 @@ export const SCORE = {
     { min: 0, title: 'Groundling' },
   ],
 } as const;
+
+/** M2 crossing choices (hazards.md). Percentages are whole points; bands are inclusive upper bounds. */
+export const CROSSING = {
+  /** Today's density d100: ≤ thinnerMax → nominal − 1, ≤ usualMax → nominal, else nominal + 1; clamp 1–5. */
+  densityRoll: { thinnerMax: 25, usualMax: 75 },
+  densityMin: 1,
+  densityMax: 5,
+  /** densityFactor = 1 + densityStep × (density − nominal). */
+  densityStep: 0.2,
+  /** +10 each: hull broken, gyro broken, working drives ≤ shipDrivesAtMost. */
+  shipPenalty: 10,
+  shipDrivesAtMost: 1,
+  /** Thread incident cap. */
+  maxIncident: 95,
+  shields: { factor: 0.5, severity: -10, pumpStrain: 0.15 },
+  pilot: { incident: 3, severity: -20, fee: 10 },
+  /** Tug price × this in flare season (round half up). */
+  tugFlareFactor: 1.5,
+  /** Risk word by incident chance: first band with chance ≤ max. */
+  risk: [
+    { max: 0, id: 'none' },
+    { max: 9, id: 'low' },
+    { max: 24, id: 'moderate' },
+    { max: 44, id: 'high' },
+    { max: 100, id: 'severe' },
+  ],
+} as const;

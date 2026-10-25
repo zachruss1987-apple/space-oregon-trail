@@ -7,4 +7,5 @@ export * from './conditions';
 export * from './events';
 export * from './names';
 export * from './rules';
+export * from './economy';
 export * from './text';

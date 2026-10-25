@@ -67,6 +67,9 @@ export function createGame(options: NewGameOptions, rng: Rng): GameState {
     deaths: 0,
     log: [],
     status: 'store',
+    crossing: null,
+    route: 'oort',
+    station: null,
   };
   const text = resolveText(rng, 'ui', 'log.departure', { name: state.crew[0]!.name },
     `Captain {name} and crew make ready at Independence Station, ${window.label}.`);

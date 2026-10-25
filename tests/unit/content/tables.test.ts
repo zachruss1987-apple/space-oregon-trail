@@ -42,8 +42,9 @@ describe('waypoints (trail.md)', () => {
     expect(WAYPOINTS[11]!.type).toBe('gate');
     expect(WAYPOINTS[16]!.type).toBe('end');
     expect(WAYPOINTS.filter(isStation).map((w) => w.index)).toEqual([0, 3, 5, 8, 10, 12, 14]);
-    expect(WAYPOINTS.filter(isStation).every((w) => (w.markup ?? 0) >= 1)).toBe(true);
-    expect(WAYPOINTS[0]!.markup).toBe(1);
+    // economy.md "Markups": per-item maps, every markup in 1.0-2.5; Independence is list price for everything.
+    expect(WAYPOINTS.filter(isStation).every((w) => Object.values(w.markup ?? {}).every((m) => m >= 1 && m <= 2.5))).toBe(true);
+    expect(Object.values(WAYPOINTS[0]!.markup!)).toEqual([1, 1, 1, 1, 1, 1, 1]);
   });
 });
 
