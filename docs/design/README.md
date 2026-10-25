@@ -18,6 +18,7 @@ One topic per file. Numbers in tables are the source of truth; `src/content` mir
 | `ui.md` | Screen flow, layouts, controls, accessibility |
 | `art.md` | Palette, sprite specs, CRT look (M4) |
 | `audio.md` | Synth, songs, SFX list (M4) |
+| `asset-list.md` | Flat checklist of every sprite, song and SFX id with owner (M4) |
 | `writing.md` | Voice, content schemas, glossary pointer |
 | `glossary.md` | In-world terms |
 | `decisions.md` | Append-only log of rule decisions with rationale |

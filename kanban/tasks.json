@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:50:01.531Z",
+  "updated": "2026-10-25T03:54:35.743Z",
   "milestones": [
     {
       "id": "M0",
@@ -1000,16 +1000,31 @@
       "desc": "",
       "milestone": "M4",
       "role": "designer",
-      "status": "doing",
+      "status": "done",
       "assignee": "designer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T03:46:26.135Z",
+      "updated": "2026-10-25T03:54:35.742Z",
       "notes": [
         {
           "ts": "2026-10-25T03:46:26.136Z",
           "by": "designer",
           "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:53:55.233Z",
+          "by": "designer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:53:55.662Z",
+          "by": "designer",
+          "text": "art.md (palette 16+phosphor, CB table, grid format, 70 sprites, travel band, font 6x8, CRT, scaling, no-default-text checklist), audio.md (7 voices, 11 ADSR presets, tracker format, 11 songs, 26 SFX, mixing, unlock, ~ menu, test table), asset-list.md (132 ids by owner), ui.md Options rows, glossary +6, decisions T-032. Docs only; no src/tests touched."
+        },
+        {
+          "ts": "2026-10-25T03:54:35.743Z",
+          "by": "designer",
+          "text": "review -> done"
         }
       ]
     },

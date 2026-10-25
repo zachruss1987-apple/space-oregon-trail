@@ -107,3 +107,25 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - The Flare Belt mini-game uses method `thread` with a flare-kind result; there is no separate `ride` method.
 - Hot-chunk deaths take the health.md dominant cause; flare burn/radiation deaths are cause `hazard`; scorch with empty cargo logs n = 0; radiation on a crew member with no condition room gives a second random crew −10.
 - Crash: cargo halves rounded down; one of each held spare is lost deterministically (no draw); threading health bonus caps at 100.
+
+## 2026-10-24 (T-032, M4 art and audio spec)
+- Palette: 16 colors (black, navy, blue, cyan, plum, brown, red, orange, amber, peach, lime, forest, grey, silver, white, magenta) plus a 2-color phosphor text ramp (#5cff5c, #c8ffc8) and the #001a00 panel fill, which keeps the existing M1–M3 look. Peach and brown double as skin tones, so no skin ramp is needed; existing #ffd75c (amber), #2e8a2e (forest) and #6d2b79 (plum) are kept as indices.
+- Colorblind table swaps toward Okabe–Ito hues (red→vermillion, lime→reddish purple, forest→bluish green); every color-coded meaning also carries a shape cue so the table is a comfort, not a crutch.
+- Sprite grids are hex chars per palette index, frames as `string[][]`, optional `mirrorX` and `recolor` to cut grid typing; `P`/`H` text colors only in `ui` sprites.
+- Hauler damage state derives from the sim: intact / damaged (1 problem) / critical (hull broken or ≥ 2 problems); 3 separate plume sprites by thrust instead of scaling one, since sprite scale is integer-only.
+- Landmark approach grows in tiers (blip 120 Mk, far icon 60 Mk, full art 20 Mk) instead of scaling, keeping pixels square; 4 generic far icons rather than one per waypoint.
+- Hazards get compositions of shared parts (rocks, planets, overlays), not unique sprites: 6 hazard looks for ~0 new grids.
+- Stations: 7 exteriors (all seven stations, M4.md said 6); every waypoint has art.
+- Font: 6×8 cell, sizes ×1 small (tables, log, HUD) and ×2 body (menus, prose, status). Body at ×2 gives a 53-column screen, close to the era's 40-column feel; dense tables keep ×1 so Supplies and the Map still fit.
+- Scaling: integer only when ×2 or more is available (computed in device pixels); below that, fractional nearest-neighbour, because ×1 on a 720p window would be tiny.
+- CRT: on by default on desktop WebGL, off on touch, Canvas or reduced motion; flicker exists only in the sound/debug tools.
+- Audio: 3 tonal channels + noise; two LFSR noise modes for hiss vs metallic; one tempo per song; tie written `-:dur`; loops via `|: :|` with equal loop lengths per channel enforced by the validator.
+- Added a `hazard` loop (uneasy ostinato on the Hazard scene) and `event.ding`, `ui.deny`, `grapple.snap`, `grapple.empty`, `flare.warn` SFX beyond the M4 list, because those scenes already exist and would otherwise be silent.
+- Ducking applies only to `duck`-class SFX (−6 dB); UI blips and the typewriter do not duck, to avoid constant pumping. Stings duck to −12 dB.
+- One settings store, localStorage `proxima.settings` v1, for audio and every Options row; master volume is not a row (mute on `M`).
+- Title theme brief is described by shape (rising arpeggio, fiddle turn, pentatonic lead), never by reference to the original game's tune.
+
+## 2026-10-24 (M4 design, PM rulings)
+- Pixel font is 8×8 at ×1 (80 columns) for body text; 6×8 only for HUD. Rationale: avoid relaying out every scene; period-correct 80-column look.
+- Fractional nearest-neighbour scaling below ×2 is acceptable.
+- Art scope: 7 station exteriors, portraits with healthy/sick/dead frames, 11 songs (adds a hazard loop), 26 SFX.

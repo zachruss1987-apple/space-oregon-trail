@@ -1,6 +1,6 @@
 # UI
 
-Logical canvas 640×400, integer-scaled to fit. All text in the pixel font (M4; monospace before). Phosphor green on black is the default text theme; panels use the 16-color palette.
+Logical canvas 640×400, integer-scaled when the window allows ×2 or more, otherwise fit with nearest-neighbour (`art.md` Scaling). All text in the pixel font (M4; monospace before; sizes in `art.md`). Phosphor green on black is the default text theme; panels use the 16-color palette.
 
 ## Screen flow
 Title → (Travel the Trail) Setup: profession → crew names → launch window → Store → Travel loop { status, action menu, events, waypoint scenes, hazards, station, mini-games } → Death or Arrival → Score → Title.
@@ -89,3 +89,20 @@ On arriving at a hazard (M1): a `Modal` with the hazard description, then one li
 
 ## Accessibility (M5)
 Hidden `aria-live="polite"` region mirrors new log lines and the current menu's items/selection. Reduced-motion disables parallax, CRT, typewriter. Colorblind-safe palette toggle.
+
+## Options screen (M4)
+From Title "4. Options". Up/Down choose a row, Left/Right (or Enter, or tap) change its value, Esc or "Back" saves and returns. Changes apply immediately and persist in localStorage `proxima.settings` (JSON, `v: 1`; garbage or missing keys fall back to defaults). Value words are spelled out; the toggle sprite is decoration, never the only cue.
+
+| # | Row | Values | Default | Key | Effect |
+|---|-----|--------|---------|-----|--------|
+| 1 | CRT effect | On / Off (`n/a` on Canvas) | On desktop WebGL; Off on touch devices or with reduced motion | `crt` | Toggles the shader at runtime (`art.md`) |
+| 2 | Music volume | 0–10 | 6 | `music` | Music bus gain step/10 (`audio.md`) |
+| 3 | Sound effects | 0–10 | 8 | `sfx` | SFX bus gain step/10; a `ui.select` plays at the new level |
+| 4 | Text speed | Slow / Normal / Fast / Instant | Normal | `textSpeed` | 24 / 12 / 6 ms per char; Instant turns the typewriter off |
+| 5 | Touch controls | Auto / On / Off | Auto | `touch` | Auto = on when `pointer: coarse`; shows the pause icon and drag steering hints |
+| 6 | Mini-games | Play / Auto-resolve | Play | `autoResolveMiniGames` | As in the Mini-games section |
+| 7 | Reduced motion | Auto / On / Off | Auto | `reducedMotion` | Auto follows `prefers-reduced-motion`. On: no parallax, no bob, no typewriter, no cursor blink, overlays frozen, CRT forced off |
+| 8 | Colorblind palette | Off / On | Off | `palette` (`standard` / `cb`) | Swaps to the colorblind-safe table (`art.md`) |
+| 9 | Back | — | — | — | Returns to Title |
+
+Master volume and mute are not rows: `M` mutes anywhere (key `muted`), master stays at 0.8 (key `master`, sound test only). Layout: title ×2 "OPTIONS", rows ×2 as `CRT effect ........ On`, a one-line ×1 hint for the selected row at the bottom.

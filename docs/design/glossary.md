@@ -69,3 +69,9 @@
 | Clean thread | A Debris Threading run with zero hits; earns a bonus pick (+2 health all crew or +10 rations). |
 | Crash (Flare Belt) | Five flare hits: the run ends, one crew member is lost, and the hold is halved. |
 | Skip with penalty | Abandoning a mini-game from the pause menu; settled by the statistical roll, a little worse. |
+| Hauler | The crew's second-hand cargo ship; the sprite has intact, damaged and critical looks. |
+| Belter skiff | The lopsided ore-scow a Belter pilot flies out to meet you. |
+| Phosphor | The green text color of the ship's terminal (#5cff5c); the game's default text theme. |
+| Sound test | The hidden `~` debug menu for auditioning songs, SFX and voices (development only). |
+| Sting | A short musical alarm played over the current song (`danger`, `jingle.clean`). |
+| Wheel clack | The soft off-beat hat in the travel loop; the Lane's version of wagon wheels. |
