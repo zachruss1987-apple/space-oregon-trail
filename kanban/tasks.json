@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T08:04:11.259Z",
+  "updated": "2026-10-25T08:04:56.864Z",
   "milestones": [
     {
       "id": "M0",
@@ -681,12 +681,23 @@
       "desc": "docs/reports/M1.md with win-rate table and screenshots list.",
       "milestone": "M1",
       "role": "program-manager",
-      "status": "backlog",
+      "status": "done",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T08:04:56.864Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T08:04:56.816Z",
+          "by": "pm",
+          "text": "backlog -> done"
+        },
+        {
+          "ts": "2026-10-25T08:04:56.863Z",
+          "by": "pm",
+          "text": "Report written at M1 close-out (docs/reports/M1.md); card closed late."
+        }
+      ]
     },
     {
       "id": "T-022",
@@ -1416,7 +1427,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-040",
@@ -1576,7 +1587,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-044",
@@ -1586,7 +1597,7 @@
       "role": "program-manager",
       "status": "done",
       "assignee": "pm",
-      "issue": null,
+      "issue": 65,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T08:04:11.201Z",
       "notes": [
@@ -1605,7 +1616,8 @@
           "by": "pm",
           "text": "v1.0.0 tagged and released; CI and Pages green."
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-045",
@@ -2380,7 +2392,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-067",
