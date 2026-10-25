@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T04:14:42.794Z",
+  "updated": "2026-10-25T04:28:35.148Z",
   "milestones": [
     {
       "id": "M0",
@@ -969,16 +969,21 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "developer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:14:42.739Z",
+      "updated": "2026-10-25T04:15:31.868Z",
       "notes": [
         {
           "ts": "2026-10-25T04:14:42.739Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:15:31.868Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
       ]
     },
@@ -1109,16 +1114,36 @@
       "desc": "",
       "milestone": "M4",
       "role": "graphics",
-      "status": "doing",
+      "status": "done",
       "assignee": "graphics",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:12:28.302Z",
+      "updated": "2026-10-25T04:24:21.142Z",
       "notes": [
         {
           "ts": "2026-10-25T04:12:28.302Z",
           "by": "graphics",
           "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:23:44.206Z",
+          "by": "graphics",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:23:44.654Z",
+          "by": "graphics",
+          "text": "Added 7 stations, 5 landmarks, 6 planets+star, 4 far icons, skiff, ship.dock, 5 rock sprites, 3 overlays, 7 HUD icons; travelArt/travelMath/weatherArt/crt/crtCore modules; preview pages travel+hero, ?crt=1. npm test 1196 pass; gfx-preview e2e 2 pass."
+        },
+        {
+          "ts": "2026-10-25T04:24:21.035Z",
+          "by": "graphics",
+          "text": "review -> done"
+        },
+        {
+          "ts": "2026-10-25T04:24:21.141Z",
+          "by": "graphics",
+          "text": "PM: CRT preview shows moire rings on flat backgrounds; T-037 to tune scanline frequency to the integer scale factor."
         }
       ]
     },
@@ -1162,11 +1187,11 @@
       "desc": "",
       "milestone": "M4",
       "role": "sound",
-      "status": "doing",
+      "status": "done",
       "assignee": "sound",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:11:13.180Z",
+      "updated": "2026-10-25T04:17:25.455Z",
       "notes": [
         {
           "ts": "2026-10-25T04:10:17.176Z",
@@ -1177,6 +1202,21 @@
           "ts": "2026-10-25T04:11:13.181Z",
           "by": "sound",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:17:10.958Z",
+          "by": "sound",
+          "text": "9 songs + 18 SFX added (plus countdown.go); loop SFX are one-cycle with loop flag; death.toll kept 1800 ms per audio.md"
+        },
+        {
+          "ts": "2026-10-25T04:17:11.392Z",
+          "by": "sound",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:17:25.456Z",
+          "by": "sound",
+          "text": "review -> done"
         }
       ]
     },
@@ -1212,12 +1252,43 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "review",
+      "assignee": "developer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:28:35.148Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:25:20.471Z",
+          "by": "developer",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:25:20.912Z",
+          "by": "developer",
+          "text": "harness only; tuning later"
+        },
+        {
+          "ts": "2026-10-25T04:27:46.419Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:27:46.866Z",
+          "by": "developer",
+          "text": "harness: src/sim/balance.ts, scripts/balance.mjs, bands test, docs/reports/balance-baseline.md; PolicyOptions added (defaults unchanged); 1224 tests pass"
+        },
+        {
+          "ts": "2026-10-25T04:28:35.084Z",
+          "by": "developer",
+          "text": "review -> review"
+        },
+        {
+          "ts": "2026-10-25T04:28:35.147Z",
+          "by": "developer",
+          "text": "Harness + baseline done; tuning pass remains (card stays open)."
+        }
+      ]
     },
     {
       "id": "T-040",
@@ -1251,12 +1322,38 @@
       "desc": "",
       "milestone": "M5",
       "role": "writer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "writer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:26:33.785Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:24:21.088Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:24:46.329Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:26:19.549Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:26:19.998Z",
+          "by": "writer",
+          "text": "guide.json 10 pages, highscores.json 10 defaults, ui guide/topTen keys, 3 new tests; guide.body kept for TitleScene until it uses pages"
+        },
+        {
+          "ts": "2026-10-25T04:26:33.786Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-043",
@@ -1759,12 +1856,33 @@
       "desc": "",
       "milestone": "M3",
       "role": "writer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "writer",
       "issue": null,
       "created": "2026-10-25T04:14:42.793Z",
-      "updated": "2026-10-25T04:14:42.794Z",
-      "notes": []
+      "updated": "2026-10-25T04:16:32.012Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:15:44.377Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:16:20.982Z",
+          "by": "writer",
+          "text": "Added 12 keys to ui.json + explicit test; songs.test.ts failures (6) are from another dev's audio work"
+        },
+        {
+          "ts": "2026-10-25T04:16:21.422Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:16:32.012Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }

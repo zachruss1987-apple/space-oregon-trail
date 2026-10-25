@@ -5,7 +5,7 @@
  */
 import Phaser from 'phaser';
 import {
-  CRT_FRAG, CRT_LOGICAL, CRT_UNIFORMS, clampCrt, crtDefaults, crtDefaultOn,
+  CRT_FRAG, CRT_LOGICAL, CRT_UNIFORMS, clampCrt, crtDefaults,
   type CrtEnv, type CrtParams,
 } from './crtCore';
 
