@@ -1,13 +1,14 @@
 /** Dev preview (`?scene=soundtest`): list songs and SFX, number keys play them. Not part of the shipped flow. */
 import Phaser from 'phaser';
 import { markScene } from '../game/contract';
+import { fitCamera } from '../gfx/view';
 import { audio } from './AudioManager';
 import { SFX } from './sfx';
 import { SONG_IDS } from './songs';
 
 export class SoundTestScene extends Phaser.Scene {
   private page: 'songs' | 'sfx' = 'songs';
-  private text!: Phaser.GameObjects.Text;
+  private text!: Phaser.GameObjects.BitmapText;
 
   constructor() {
     super({ key: 'SoundTest' });
@@ -15,8 +16,9 @@ export class SoundTestScene extends Phaser.Scene {
 
   create(): void {
     markScene('SoundTest');
-    this.cameras.main.setBackgroundColor('#000000');
-    this.text = this.add.text(12, 10, '', { fontFamily: 'monospace', fontSize: '14px', color: '#6f6', lineSpacing: 3 });
+    fitCamera(this).setBackgroundColor('#000000');
+    // retro8 is built by the Boot scene, which opens this one for ?scene=soundtest
+    this.text = this.add.bitmapText(12, 10, 'retro8', '', 8).setTint(0x5cff5c).setLineSpacing(4);
     this.input.keyboard?.on('keydown', (e: KeyboardEvent) => this.onKey(e));
     this.render();
   }

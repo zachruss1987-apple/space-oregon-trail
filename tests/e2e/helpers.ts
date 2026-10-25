@@ -125,12 +125,23 @@ export async function approachAndCross(page: Page, row: number): Promise<void> {
   await page.keyboard.press(String(row));
 }
 
-/** All text currently drawn by Phaser Text objects in scene `key` (the canvas is opaque to Playwright; this reads the scene graph). */
+/**
+ * All text currently drawn in scene `key` (the canvas is opaque to Playwright; this reads the scene graph). Reads every
+ * object with a string `text` (Phaser BitmapText since M4, Text before), including children of Containers.
+ */
 export async function sceneTexts(page: Page, key: string): Promise<string[]> {
   return page.evaluate((k) => {
-    const game = window.__PROXIMA__?.game as { scene: { getScene(k: string): { children: { list: { text?: unknown }[] } } } } | undefined;
-    const sc = game?.scene.getScene(k);
-    return (sc?.children.list ?? []).map((o) => o.text).filter((x): x is string => typeof x === 'string');
+    type Node = { text?: unknown; list?: Node[] };
+    const game = window.__PROXIMA__?.game as { scene: { getScene(k: string): { children: { list: Node[] } } } } | undefined;
+    const out: string[] = [];
+    const walk = (nodes: Node[]): void => {
+      for (const o of nodes) {
+        if (typeof o.text === 'string') out.push(o.text);
+        if (Array.isArray(o.list)) walk(o.list);
+      }
+    };
+    walk(game?.scene.getScene(k)?.children.list ?? []);
+    return out;
   }, key);
 }
 

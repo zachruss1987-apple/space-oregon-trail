@@ -8,12 +8,15 @@ import { applyAction, cumulativeAt, type RouteId } from '@/sim';
 import { t } from '@/ui/copy';
 import { KeyRouter } from '@/ui/keys';
 import { Modal, resetModals, type ModalOptions } from '@/ui/Modal';
-import { COLORS, fmt, textStyle } from '@/ui/theme';
+import { audio } from '@/audio/AudioManager';
+import { fitCamera } from '@/gfx/view';
+import { addText } from '@/ui/text';
+import { CHAR_W, COLORS, fmt } from '@/ui/theme';
 
 /** Scene keys (the `data-scene` values). */
 export type SceneKey =
   | 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Hazard' | 'Station' | 'Death' | 'Arrival'
-  | 'Salvage' | 'Threading' | 'Flare';
+  | 'Salvage' | 'Threading' | 'Flare' | 'Options';
 
 /** Mk from the Kuiper Gate (branch + 1) to the Heliopause on a route, for the route prompt. */
 function gateToHeliopause(route: RouteId): number {
@@ -27,12 +30,19 @@ export abstract class BaseScene extends Phaser.Scene {
     super({ key: sceneKey });
   }
 
+  /** Song for this scene (audio.md "Songs"), or null to keep whatever plays. Same id = no restart. */
+  protected music(): string | null {
+    return null;
+  }
+
   /** Call first in create(). */
   protected begin(): void {
     resetModals();
     this.router = new KeyRouter(this);
-    this.cameras.main.setBackgroundColor(COLORS.bg);
+    fitCamera(this).setBackgroundColor(COLORS.bg);
     markScene(this.sceneKey);
+    const song = this.music();
+    if (song) audio().playMusic(song);
   }
 
   protected modal(message: string, opts?: ModalOptions): Modal {
@@ -48,9 +58,10 @@ export abstract class BaseScene extends Phaser.Scene {
     this.go(session.state?.status === 'arrived' ? 'Arrival' : 'Death');
   }
 
-  /** Centered heading line. */
-  protected heading(y: number, text: string, size = 14, color: string = COLORS.bright): Phaser.GameObjects.Text {
-    return this.add.text(GAME_WIDTH / 2, y, text, textStyle(color, undefined, size)).setOrigin(0.5, 0);
+  /** Centered heading line (bitmap font at an integer scale, x2 by default). */
+  protected heading(y: number, text: string, scale = 2, color: number = COLORS.bright): Phaser.GameObjects.BitmapText {
+    const x = Math.floor((GAME_WIDTH - text.length * CHAR_W * scale) / 2);
+    return addText(this, x, y, text, { color, scale });
   }
 
   /**

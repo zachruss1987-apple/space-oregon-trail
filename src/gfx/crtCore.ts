@@ -65,6 +65,9 @@ export const CRT_UNIFORMS: Readonly<Record<keyof CrtParams, string>> = {
 
 export const CRT_LOGICAL = { w: 640, h: 400 } as const;
 
+/** Device rows per logical row for the scanline (1 = no room for a scanline). */
+export const crtRowScale = (deviceHeight: number): number => Math.max(1, Math.floor(deviceHeight / CRT_LOGICAL.h));
+
 export const CRT_FRAG = `#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
 #else
@@ -79,6 +82,7 @@ uniform float uVignette;
 uniform float uGlowRadius;
 uniform float uGlowStrength;
 uniform float uFlicker;
+uniform float uScale;
 varying vec2 outTexCoord;
 
 void main() {
@@ -97,8 +101,10 @@ void main() {
     + texture2D(uMainSampler, uv + vec2(0.0, px.y)).rgb
     + texture2D(uMainSampler, uv - vec2(0.0, px.y)).rgb) / 5.0;
   vec3 col = base.rgb + blur * uGlowStrength;
-  float rowFrac = fract(uv.y * uLogical.y);
-  col *= 1.0 - uScanlines * smoothstep(0.5, 1.0, rowFrac);
+  // One dark device row at the bottom of each logical row, in screen space (gl_FragCoord), so the lines stay
+  // straight and evenly spaced at any integer scale; sampling them through the curved uv made moire rings.
+  float rowInCell = mod(floor(gl_FragCoord.y), max(uScale, 1.0));
+  col *= 1.0 - uScanlines * step(1.0, uScale - 1.0) * step(uScale - 1.0, rowInCell);
   float v = dot(p, p) * 0.5;
   col *= 1.0 - uVignette * v;
   col *= 1.0 + uFlicker * sin(uTime * 60.0);

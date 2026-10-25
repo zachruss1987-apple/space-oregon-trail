@@ -5,7 +5,7 @@
  */
 import Phaser from 'phaser';
 import {
-  CRT_FRAG, CRT_LOGICAL, CRT_UNIFORMS, clampCrt, crtDefaults,
+  CRT_FRAG, CRT_LOGICAL, CRT_UNIFORMS, clampCrt, crtDefaults, crtRowScale,
   type CrtEnv, type CrtParams,
 } from './crtCore';
 
@@ -27,6 +27,7 @@ export class CrtPipeline extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline 
     for (const k of Object.keys(CRT_UNIFORMS) as (keyof CrtParams)[]) this.set1f(CRT_UNIFORMS[k], this.params[k]);
     this.set1f('uTime', this.t);
     this.set2f('uLogical', CRT_LOGICAL.w, CRT_LOGICAL.h);
+    this.set1f('uScale', crtRowScale(this.renderer.height));
   }
 }
 

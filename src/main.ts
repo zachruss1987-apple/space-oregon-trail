@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_HEIGHT, GAME_WIDTH } from './config';
+import { GAME_HEIGHT, GAME_WIDTH, RENDER_SCALE } from './config';
 import './game/contract';
 import { debugLoadState } from './game/debugLoad';
 import { session } from './game/session';
@@ -14,16 +14,17 @@ session.init(window.location.search);
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
-  width: GAME_WIDTH,
-  height: GAME_HEIGHT,
+  width: GAME_WIDTH * RENDER_SCALE,
+  height: GAME_HEIGHT * RENDER_SCALE,
   backgroundColor: '#000000',
-  pixelArt: false,
+  pixelArt: true,
   roundPixels: true,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [...(new URLSearchParams(window.location.search).get('scene') === 'gfxpreview' ? [GfxPreviewScene] : []), ...audioBoot(SCENES)],
+  // BootScene (first) builds fonts and textures, then opens Title or a `?scene=` debug scene.
+  scene: [...audioBoot(SCENES), GfxPreviewScene],
 };
 
 const game = new Phaser.Game(config);

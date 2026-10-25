@@ -9,6 +9,7 @@ import { activeNumbers, PALETTE_KEYS, type PaletteNumbers } from './palette';
 import { ALL_SPRITES, registerAll } from './sprites';
 import { heroPage, travelPage } from './previewPages';
 import { enableCrt } from './crt';
+import { fitCamera } from './view';
 
 const W = 640;
 const H = 400;
@@ -26,7 +27,7 @@ export class GfxPreviewScene extends Phaser.Scene {
     buildFonts(this);
     registerAll(this);
     const pal = activeNumbers();
-    this.cameras.main.setBackgroundColor(pal.navy);
+    fitCamera(this).setBackgroundColor(pal.navy);
     this.pages.push(this.fontPage(pal));
     this.spritePages(pal).forEach((p) => this.pages.push(p));
     this.pages.push(travelPage(this, pal, this.updaters));
