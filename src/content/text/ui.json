@@ -35,7 +35,9 @@
     "rationsPrompt": "Set rations:",
     "scanConfirm": "Spend 5 charges and a day?",
     "cancel": "Cancel",
-    "autoIndicator": "TRAVELING... (any key to stop)"
+    "autoIndicator": "TRAVELING... (any key to stop)",
+    "beaconPrompt": "Leave a memorial beacon for {name}?",
+    "beaconSkip": "Skip (Esc)"
   },
   "setup": {
     "professionPrompt": "Many kinds of people travel the Lane. What will you be?",

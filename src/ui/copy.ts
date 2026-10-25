@@ -111,11 +111,6 @@ export const PENDING: Readonly<Record<string, string>> = {
   'map.branch': 'At Titan Refinery: {oortLabel} {oort} Mk / {directLabel} {direct} Mk',
 };
 
-/** T-053 keys not yet in ui.json (writer: add, then delete). Separate from PENDING so the PENDING-vs-ui.json test stays green meanwhile. */
-export const PENDING_T053: Readonly<Record<string, string>> = {
-  'travel.beaconPrompt': 'Leave a memorial beacon for {name}?',
-  'travel.beaconSkip': 'Skip (Esc)',
-};
 
 /** Cosmetic rng for picking text variants; never the run rng, so UI copy cannot change outcomes. */
 function uiRng(): Rng {
@@ -124,7 +119,7 @@ function uiRng(): Rng {
 
 /** One line of UI copy by dotted key, with {placeholders} filled. */
 export function t(key: string, vars: Readonly<Record<string, string | number>> = {}): string {
-  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key] ?? PENDING[key] ?? PENDING_T053[key]);
+  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key] ?? PENDING[key]);
 }
 
 /** A string list from ui.json (menus, advice). */

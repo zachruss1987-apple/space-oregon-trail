@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:14:18.155Z",
+  "updated": "2026-10-25T03:26:17.090Z",
   "milestones": [
     {
       "id": "M0",
@@ -846,7 +846,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-026",
@@ -886,7 +886,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-027",
@@ -1348,12 +1348,18 @@
       "desc": "",
       "milestone": "M2",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-25T02:56:34.493Z",
-      "updated": "2026-10-25T02:56:34.493Z",
-      "notes": []
+      "updated": "2026-10-25T03:26:17.090Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:26:17.090Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-052",
@@ -1388,7 +1394,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-053",
@@ -1396,12 +1402,34 @@
       "desc": "Keys exist: station.log.bought/sold ({item},{cr}), log.thrustSet/rationsSet ({name}), log.repairStart ({part}), hazard.option.rest. Refusal strings may stay.",
       "milestone": "M2",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 33,
       "created": "2026-10-25T03:01:27.631Z",
-      "updated": "2026-10-25T03:01:27.631Z",
-      "notes": []
+      "updated": "2026-10-25T03:26:17.035Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:15:14.379Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:25:28.228Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:25:28.672Z",
+          "by": "developer",
+          "text": "Log lines keyed (station.log.*, log.*), hazard rest label keyed; per-death beacon prompt in Travel (BeaconPrompt), DeathScene names last deceased; helpers newlyDead/lastDeceased + unit test, e2e death-path assertion; new keys in PENDING_T053; all tests pass"
+        },
+        {
+          "ts": "2026-10-25T03:26:17.036Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-054",
@@ -1409,12 +1437,33 @@
       "desc": "",
       "milestone": "M2",
       "role": "writer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "writer",
       "issue": null,
       "created": "2026-10-25T03:01:27.684Z",
-      "updated": "2026-10-25T03:01:27.685Z",
-      "notes": []
+      "updated": "2026-10-25T03:15:52.598Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:14:51.821Z",
+          "by": "writer",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:15:41.983Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:15:42.416Z",
+          "by": "writer",
+          "text": "Added all 21 PENDING keys to ui.json (voice tweaks on 4 labels); text.test.ts asserts they resolve with same placeholders. copy.ts untouched; PENDING can be deleted."
+        },
+        {
+          "ts": "2026-10-25T03:15:52.599Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }
