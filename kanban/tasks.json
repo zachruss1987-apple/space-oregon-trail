@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:14:02.750Z",
+  "updated": "2026-10-25T01:15:50.477Z",
   "milestones": [
     {
       "id": "M0",
@@ -161,12 +161,18 @@
       "desc": "Read docs/design/*; fix contradictions between trail/travel/events/health; confirm numbers produce ~150-day runs; list open questions; finalize item list and waypoint table.",
       "milestone": "M0",
       "role": "designer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "designer",
       "issue": 8,
       "created": "2026-10-24T20:40:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": [],
+      "updated": "2026-10-25T01:14:37.726Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:14:37.726Z",
+          "by": "designer",
+          "text": "todo -> doing"
+        }
+      ],
       "issueClosed": false
     },
     {
@@ -175,12 +181,33 @@
       "desc": "Run test:all locally; confirm CI green after first push; document test conventions and the seed/scene contract in tests/README.md.",
       "milestone": "M0",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "tester",
       "issue": 9,
       "created": "2026-10-24T20:40:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": [],
+      "updated": "2026-10-25T01:15:50.477Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:14:54.851Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:15:31.253Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:15:31.701Z",
+          "by": "tester",
+          "text": "verified toolchain: test:all green (unit 9 tests/2 files, e2e 1); CI+Deploy green on 86304ce; added tests/README.md, e2e/helpers.ts, rng.distribution test"
+        },
+        {
+          "ts": "2026-10-25T01:15:50.477Z",
+          "by": "tester",
+          "text": "review -> done"
+        }
+      ],
       "issueClosed": false
     },
     {
