@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:35:01.929Z",
+  "updated": "2026-10-25T01:49:26.672Z",
   "milestones": [
     {
       "id": "M0",
@@ -261,16 +261,21 @@
       "desc": "Per docs/design/travel.md and health.md. Arrival detection, death, game over. Unit tests incl. invariants over many seeds.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "developer",
       "issue": 11,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.451Z",
+      "updated": "2026-10-25T01:49:11.269Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.451Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:49:11.269Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
       ],
       "issueClosed": false
@@ -281,16 +286,21 @@
       "desc": "Weighted, conditional events with cooldown guard; conditions with duration/death chance/cure. Per events.md and health.md.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "developer",
       "issue": 12,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.506Z",
+      "updated": "2026-10-25T01:49:11.702Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.506Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:49:11.703Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
       ],
       "issueClosed": false
@@ -301,16 +311,21 @@
       "desc": "Buy with limits/credits, repair attempts with profession bonus, arrival scoring and rating. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "developer",
       "issue": 13,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.559Z",
+      "updated": "2026-10-25T01:49:12.137Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.560Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:49:12.137Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
       ],
       "issueClosed": false
@@ -321,11 +336,11 @@
       "desc": "src/content/*.ts mirroring docs/design tables. Content tests check totals (2,040 Mk, 16 segments).",
       "milestone": "M1",
       "role": "designer",
-      "status": "todo",
-      "assignee": null,
+      "status": "review",
+      "assignee": "developer",
       "issue": 14,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.599Z",
+      "updated": "2026-10-25T01:49:26.672Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.334Z",
@@ -336,6 +351,21 @@
           "ts": "2026-10-25T01:28:05.600Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:49:10.833Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:49:26.242Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:49:26.672Z",
+          "by": "developer",
+          "text": "Content tables: waypoints (17, kebab ids, 2,040 Mk), items, professions, windows+weather rows, conditions, events spec+illness pool, names, rules (travel/hazard/salvage/score numbers), text.ts JSON re-export; 2 content test files, 21 tests"
         }
       ],
       "issueClosed": false
@@ -378,7 +408,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-016",
