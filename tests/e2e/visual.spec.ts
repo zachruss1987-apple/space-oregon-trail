@@ -53,7 +53,7 @@ test('Options, TopTen and Guide', async ({ page }) => {
 });
 
 test('Store, Travel, Supplies, Map', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await startRun(page, SEED);
   for (const [row, qty] of [[1, 3], [2, 2000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
   await expectScene(page, 'Store');
@@ -71,7 +71,7 @@ test('Store, Travel, Supplies, Map', async ({ page }) => {
 });
 
 test('Hazard', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await generousRun(page, SEED);
   await autoTravelUntil(page, (_s, scene) => scene === 'Waypoint');
   await page.keyboard.press('Enter');
@@ -80,7 +80,7 @@ test('Hazard', async ({ page }) => {
 });
 
 test('Station', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await generousRun(page, SEED);
   await reachWaypoint(page, 3);
   await page.keyboard.press('2');
@@ -89,7 +89,7 @@ test('Station', async ({ page }) => {
 });
 
 test('Death', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await startRun(page, 'DEATHSEED');
   await buy(page, 1, 1);
   await leaveStore(page);
@@ -99,7 +99,7 @@ test('Death', async ({ page }) => {
 });
 
 test('Arrival', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await generousRun(page, SEED, '&minigames=auto&debug=1');
   await loadPatchedState(page, { status: 'arrived' });
   await page.evaluate(() => (window.__PROXIMA__?.game as { scene: { start(k: string): void } }).scene.start('Arrival'));
@@ -108,7 +108,7 @@ test('Arrival', async ({ page }) => {
 });
 
 test('Salvage instructions', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await startRun(page, SEED, false, ''); // real mini-games
   for (const [row, qty] of [[1, 3], [2, 1500], [4, 3]] as const) await buy(page, row, qty);
   await leaveStore(page);

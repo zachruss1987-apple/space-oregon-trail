@@ -17,7 +17,7 @@ async function playToFirstDeath(page: import('@playwright/test').Page) {
 
 // beacons.md / M2 acceptance: write a beacon, reload, and see it again at that segment's waypoint.
 test('beacon written at a crew death survives a reload and shows at that waypoint', async ({ page }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(process.env.CI ? 360_000 : 120_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
 

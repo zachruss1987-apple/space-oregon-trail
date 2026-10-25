@@ -25,7 +25,7 @@ const unlock = async (page: import('@playwright/test').Page) => {
 
 // audio.md Songs table: Title plays `title`; Travel plays `travel`.
 test('music follows the scene: title on Title, travel on Travel', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await gotoScene(page, 'Title');

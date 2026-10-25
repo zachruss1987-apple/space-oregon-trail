@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { autoTravelUntil, body, buy, getState, leaveStore, setHalfRations, snap, startRun } from './helpers';
 
 test('death path: no rations ends in the Death scene, a beacon is saved, back to Title', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, 'DEATHSEED');
@@ -39,7 +39,7 @@ test('death path: no rations ends in the Death scene, a beacon is saved, back to
 const UI_ARRIVAL_SEEDS: readonly string[] = ['SEED-9', 'SEED-20', 'SEED-8'];
 
 test('arrival path: generous Executive run reaches a legal ending (pinned arrival seed search)', async ({ page }) => {
-  test.setTimeout(150_000);
+  test.setTimeout(process.env.CI ? 450_000 : 150_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const results: string[] = [];

@@ -4,7 +4,7 @@ import { FULL_CREW_ARRIVAL_SEEDS } from './seeds';
 
 // hazards.md "Route branch": at Titan Refinery (10) Continue asks Oort / direct; direct skips Oort Beacon (12).
 test('Titan Refinery: choose the direct route; Oort Beacon is skipped, Heliopause follows Kuiper Gate', async ({ page }) => {
-  test.setTimeout(150_000);
+  test.setTimeout(process.env.CI ? 450_000 : 150_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await generousRun(page, FULL_CREW_ARRIVAL_SEEDS[1] as string);

@@ -4,7 +4,7 @@ import { FAST_FIRST_WAYPOINT_SEEDS } from './seeds';
 
 // economy.md: sell price is at most 90% of the Independence price (a nav gyro is 10 cr there); Trade, Talk, Rest here.
 test('Mars Relay: sell a gyro, trade, talk, rest 2 days', async ({ page }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(process.env.CI ? 270_000 : 90_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await generousRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);

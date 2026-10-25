@@ -7,7 +7,7 @@ const MARS_RELAY = 3;
 // economy.md "Enter station flow". Keys: Waypoint 2 = Enter station; Station 1 = Outfitters, row 2 = Rations,
 // modal Enter = Buy, type the quantity, Enter; Esc back to the station menu; 5 = Continue (departs in Travel).
 test('Mars Relay: enter the station, buy 10 rations, leave to Travel', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);

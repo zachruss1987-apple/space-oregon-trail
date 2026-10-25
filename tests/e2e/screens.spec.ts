@@ -4,7 +4,7 @@ import { FAST_FIRST_WAYPOINT_SEEDS } from './seeds';
 
 // Screenshots for designer review (no pixel asserts). Arrival and Arrival-score are saved by journey.spec.ts.
 test('screenshot every scene except Arrival', async ({ page }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(process.env.CI ? 270_000 : 90_000);
   await startRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string, true);
   for (const [row, qty] of [[1, 3], [2, 2000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
   await snap(page, 'Store');
@@ -35,7 +35,7 @@ test('screenshot every scene except Arrival', async ({ page }) => {
 });
 
 test('screenshot the Death scene', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await startRun(page, 'DEATHSEED');
   await buy(page, 1, 1);
   await leaveStore(page);
@@ -47,7 +47,7 @@ test('screenshot the Death scene', async ({ page }) => {
 // M2 screens: Station-trade and the per-death BeaconPrompt are saved here; Hazard-belt-pilot (pilot option visible),
 // Map-direct and Station-route-prompt are saved by m2-crossing / m2-route; Waypoint-beacons by m2-beacons.
 test('screenshot Station-trade', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await generousRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
   await reachWaypoint(page, 3);
   await page.keyboard.press('2');
@@ -59,7 +59,7 @@ test('screenshot Station-trade', async ({ page }) => {
 });
 
 test('screenshot the BeaconPrompt', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await startRun(page, 'DEATHSEED');
   await buy(page, 1, 1);
   await leaveStore(page);

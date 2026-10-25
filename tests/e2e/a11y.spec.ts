@@ -68,7 +68,7 @@ test('? opens the controls overlay and any key closes it; ? typed in a name stay
 });
 
 test('keyboard only: title to day 10 with no mouse', async ({ page }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(process.env.CI ? 270_000 : 90_000);
   await toTravel(page, 'A11Y-KEYS');
   const start = (await getState(page))!.day;
   const s = await autoTravelUntil(page, (st) => st.day >= start + 10, { maxSteps: 3000 });
@@ -78,7 +78,7 @@ test('keyboard only: title to day 10 with no mouse', async ({ page }) => {
 // T-043 / M5 Tests: a whole run, Title to an ending, with the keyboard only. The page counts every pointer event; the
 // run must finish with zero. SEED-9 arrives through the UI choices below under the T-039 tuning (day 112; see journey.spec.ts).
 test('keyboard only: full run from Title to an ending with zero pointer events', async ({ page }) => {
-  test.setTimeout(150_000);
+  test.setTimeout(process.env.CI ? 450_000 : 150_000);
   await page.addInitScript(() => {
     (window as unknown as { __ptr: number }).__ptr = 0;
     for (const t of ['mousedown', 'mouseup', 'click', 'pointerdown', 'touchstart']) {

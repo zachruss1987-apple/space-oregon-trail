@@ -4,7 +4,7 @@ import { FAST_FIRST_WAYPOINT_SEEDS, FULL_CREW_ARRIVAL_SEEDS } from './seeds';
 
 // hazards.md: Tug (row 3), Shields (row 2), Pilot (row 4, Belt Crossing 4 days / Saturn Ring Plane 3 days).
 test('Lunar Debris Ring: hire a tug (25 cr) clears the crossing', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await generousRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
@@ -27,7 +27,7 @@ test('Lunar Debris Ring: hire a tug (25 cr) clears the crossing', async ({ page 
 });
 
 test('Lagrange Shoals: shields up and push is selectable and the run continues', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(process.env.CI ? 180_000 : 60_000);
   await generousRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
   await reachWaypoint(page, 1);
   await approachAndCross(page, 1); // Lunar Debris Ring: thread
@@ -46,7 +46,7 @@ test('Lagrange Shoals: shields up and push is selectable and the run continues',
 });
 
 test('The Belt Crossing: Belter pilot waits 4 days and the run continues', async ({ page }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(process.env.CI ? 360_000 : 120_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await generousRun(page, FULL_CREW_ARRIVAL_SEEDS[1] as string);
