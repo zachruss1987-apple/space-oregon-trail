@@ -1,5 +1,7 @@
 /** Scene registry; the first entry starts on boot. */
+import { FlareScene } from '@/minigames/FlareScene';
 import { SalvageRunScene } from '@/minigames/SalvageRunScene';
+import { ThreadingScene } from '@/minigames/ThreadingScene';
 import { ArrivalScene } from './ArrivalScene';
 import { DeathScene } from './DeathScene';
 import { HazardScene } from './HazardScene';
@@ -12,4 +14,4 @@ import { TitleScene } from './TitleScene';
 import { TravelScene } from './TravelScene';
 import { WaypointScene } from './WaypointScene';
 
-export const SCENES = [TitleScene, SetupScene, StoreScene, TravelScene, SuppliesScene, MapScene, WaypointScene, HazardScene, StationScene, DeathScene, ArrivalScene, SalvageRunScene];
+export const SCENES = [TitleScene, SetupScene, StoreScene, TravelScene, SuppliesScene, MapScene, WaypointScene, HazardScene, StationScene, DeathScene, ArrivalScene, SalvageRunScene, ThreadingScene, FlareScene];

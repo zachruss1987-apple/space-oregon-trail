@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from './config';
 import './game/contract';
+import { debugLoadState } from './game/debugLoad';
 import { session } from './game/session';
 import { audioBoot } from './audio/boot';
 import { SCENES } from './scenes';
@@ -34,6 +35,7 @@ window.__PROXIMA__ = {
     return session.state;
   },
   minigame: null,
+  ...(session.debug ? { loadState: (json: string) => debugLoadState(game, json) } : {}),
 };
 
 // Keys are read from window, so they work on load; still give the canvas focus on load and first click.

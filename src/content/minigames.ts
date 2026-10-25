@@ -76,3 +76,55 @@ export const SALVAGE_RUN = {
     fog: { blipRange: 150 },
   } as Partial<Record<WeatherId, { tumbler?: number; hot?: number; drift?: number; blipRange?: number }>>,
 } as const;
+
+/** Debris Threading arena (minigames.md section 2). Field is y 24..400; the ship's center stays in `shipY`. */
+export const THREADING_RUN = {
+  durationS: 25,
+  field: { left: 0, right: 640, top: 24, bottom: 400 },
+  shipX: 96,
+  shipY: [32, 368] as const,
+  ship: { maxSpeed: 200, accel: 1200, drag: 1500, w: 20, h: 10, invulnS: 1.0 },
+  /** Touch steering: desired speed = gain × distance to the steer point (capped at maxSpeed). */
+  steerGain: 8,
+  rocks: {
+    /** R = clamp(round(T / perRock), min, max) from the option's incident chance T. */
+    perRock: 3, min: 4, max: 32,
+    /** Spawn times spread evenly over [from, to] s, each ± jitter. */
+    from: 1, to: 24, jitterS: 0.3,
+    /** Radius = base + perDensity × density ± jitter. */
+    radiusBase: 10, radiusPerDensity: 2, radiusJitter: 4,
+    /** Scroll = base + perDensity × density (px/s). */
+    scrollBase: 150, scrollPerDensity: 15,
+    /** Any `windowPx` of x holds at most `maxPerWindow` rocks and leaves a vertical gap ≥ `minGap`. */
+    windowPx: 120, maxPerWindow: 2, minGap: 60,
+    /** Rocks enter at this y range (uniform). */
+    yMin: 40, yMax: 384,
+  },
+  /** Harmless parallax specks: count = perDensity × density. */
+  dustPerDensity: 20,
+} as const;
+
+/** Flare Belt Finale arena (minigames.md section 3). */
+export const FLARE_RUN = {
+  durationS: 45,
+  field: { left: 0, right: 640, top: 24, bottom: 400 },
+  ship: { maxSpeed: 170, accel: 900, drag: 1100, radius: 7, invulnS: 1.0, start: { x: 320, y: 212 } },
+  steerGain: 6,
+  arc: {
+    /** Band thickness (px); a hit is ship-center distance to the curve < thickness / 2 + ship radius. */
+    thickness: 24,
+    telegraphS: 1.0, activeS: 0.5, fadeS: 0.3,
+    /** Spawn interval: linear from `intervalStart` (t = 0) to `intervalEnd` (t = duration). */
+    intervalStart: 2.0, intervalEnd: 1.0,
+    /** First telegraph starts at this time. */
+    firstS: 0.5,
+    /** Arcs overlapping in time leave a safe circle of this diameter. */
+    minGap: 64,
+    /** Curve samples for drawing and collision. */
+    samples: 24,
+  },
+  /** Flare season (≥ 15 Sep 2184): interval × factor, telegraph shorter. */
+  season: { intervalFactor: 0.8, telegraphS: 0.8 },
+  /** Flare weather today: arcs stay active longer. */
+  flareWeatherActiveS: 0.7,
+} as const;

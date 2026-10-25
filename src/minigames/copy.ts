@@ -17,6 +17,12 @@ export const UNWRITTEN: Readonly<Record<string, string>> = {
   'minigame.salvage.hit': 'Tumbler hit!',
   'minigame.salvage.hot': 'Something warm in the hold.',
   'minigame.salvage.blip': '?',
+  'minigame.threading.hit': 'Rock! The hull rang like a bell.',
+  'minigame.flare.hit': 'Flare hit! That took the paint off.',
+  'minigame.flare.resultHits': 'Flare strikes: {hits} of 5.',
+  'hazard.option.ride': 'Ride the solar wind',
+  'hazard.option.payTug': 'Pay the tug',
+  'hazard.desc.ride': 'Fly the flares yourself. Five hits and the Belt wins.',
   'title.miniAuto': 'Mini-games: Auto-resolve. (M to switch)',
   'title.miniPlay': 'Mini-games: Play. (M to switch)',
 };

@@ -1,6 +1,7 @@
 /** Pure view helpers for HazardScene: the readout lines and option rows (hazards.md "Readout"). Sim helpers only. */
-import { CROSSING } from '@/content';
-import { crossingOptions, densityTrend, workingDrives, type CrossMethod, type GameState, type LogEntry } from '@/sim';
+import { CROSSING, WAYPOINTS } from '@/content';
+import { mt } from '@/minigames/copy';
+import { crossingOptions, densityTrend, isFlareBelt, workingDrives, type CrossMethod, type GameState, type LogEntry } from '@/sim';
 import { t } from '@/ui/copy';
 import type { MenuItem } from '@/ui/Menu';
 import { col, money } from '@/ui/theme';
@@ -28,11 +29,27 @@ export interface HazardRow {
   method: CrossMethod;
 }
 
-/** The four options: label with terms, then the risk word, or the blocker (dimmed) instead. */
+/** True when the pending crossing is the Flare Belt finale (minigames.md section 3). */
+export function atFlareBelt(s: GameState): boolean {
+  return s.crossing !== null && isFlareBelt(WAYPOINTS[s.crossing.waypoint]!);
+}
+
+/** ui text key for an option's label / description (the Flare Belt lists Ride the solar wind / Pay the tug). */
+export function optionKey(s: GameState, method: CrossMethod, part: 'option' | 'desc'): string {
+  if (!atFlareBelt(s)) return `hazard.${part}.${method}`;
+  if (method === 'thread') return `hazard.${part}.ride`;
+  return part === 'option' && method === 'tug' ? 'hazard.option.payTug' : `hazard.${part}.${method}`;
+}
+
+/**
+ * The options: label with terms, then the risk word, or the blocker (dimmed) instead. Four at the hazards; at the
+ * Flare Belt only Ride the solar wind (thread) and Pay the tug (minigames.md section 3).
+ */
 export function optionRows(s: GameState): HazardRow[] {
   const pilotDays = s.crossing?.pilotDaysLeft ?? null;
-  return crossingOptions(s).map((o) => {
-    const name = t(`hazard.option.${o.method}`);
+  const flare = atFlareBelt(s);
+  return crossingOptions(s).filter((o) => !flare || o.method === 'thread' || o.method === 'tug').map((o) => {
+    const name = mt(optionKey(s, o.method, 'option'));
     let label = name;
     if (o.method === 'tug' && o.price !== undefined) label = t('hazard.tugTerms', { label: name, n: money(o.price) });
     if (o.method === 'pilot' && o.waitDays !== undefined) {
@@ -50,7 +67,7 @@ export function outcomeLines(entries: readonly LogEntry[]): string[] {
   return entries
     .filter((e) => {
       if (e.kind === 'crossing') return e.id !== 'pilot' && e.id !== 'pilot-wait';
-      return e.kind === 'hazard' || e.kind === 'death' || e.kind === 'event' || e.kind === 'condition';
+      return ['hazard', 'death', 'event', 'condition', 'threading', 'flare', 'info'].includes(e.kind);
     })
     .map((e) => e.text);
 }

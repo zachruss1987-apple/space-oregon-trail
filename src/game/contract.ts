@@ -28,6 +28,8 @@ export interface ProximaDebug {
   readonly state: GameState | null;
   /** Live mini-game hooks, or null outside the mini-game scenes. */
   minigame: MiniGameDebug | null;
+  /** `?debug=1` / dev builds only: replace the run with a `toJSON` state and open Hazard (crossing pending) or Travel. */
+  loadState?: (json: string) => string | null;
 }
 
 declare global {

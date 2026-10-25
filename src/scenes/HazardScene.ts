@@ -2,18 +2,22 @@
  * Hazard crossing (hazards.md "Flow"): shown while `state.crossing !== null`. Readout, the four options with risk words
  * or blockers, Rest, and a way to the travel menu (repairs). Choosing dispatches `cross`; pilot waits and rests replay
  * day by day; the outcome shows in a modal, then Travel (or the ending; or this scene again if the crossing is pending).
+ * Thread it opens Debris Threading (Ride the solar wind: the Flare Belt) unless mini-games auto-resolve; the mini-game
+ * returns here with `session.pendingDay`, which is replayed like a crossing.
  */
 import Phaser from 'phaser';
 import { REST, WAYPOINTS } from '@/content';
 import { session } from '@/game/session';
-import { applyAction, type Intent, type LogEntry } from '@/sim';
+import { mt } from '@/minigames/copy';
+import { MINIGAME_SCENES } from '@/minigames/outcome';
+import { applyAction, intentBlocker, type Intent, type LogEntry } from '@/sim';
 import { t } from '@/ui/copy';
 import { DayLog } from '@/ui/DayLog';
 import { Menu, type MenuItem } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
 import { COLORS, panel, textStyle } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
-import { optionRows, outcomeLines, readoutLines, type HazardRow } from './hazardView';
+import { atFlareBelt, optionKey, optionRows, outcomeLines, readoutLines, type HazardRow } from './hazardView';
 import { MODAL_KINDS } from './travelView';
 
 const MENU_Y = 150;
@@ -32,6 +36,11 @@ export class HazardScene extends BaseScene {
     this.begin();
     const s = session.state;
     if (!s) return this.go('Title');
+    const back = session.pendingDay;
+    if (back) {
+      session.pendingDay = null;
+      return this.replay(back.entries);
+    }
     if (s.status !== 'traveling') return this.ending();
     if (!s.crossing) return this.go('Travel');
     const w = WAYPOINTS[s.crossing.waypoint]!;
@@ -61,11 +70,23 @@ export class HazardScene extends BaseScene {
 
   private describe(i: number): void {
     const row = this.rows[i];
-    this.desc.setText(row ? t(`hazard.desc.${row.method}`) : '');
+    this.desc.setText(row ? mt(optionKey(session.state!, row.method, 'desc')) : '');
+  }
+
+  /** Back from a mini-game: its crossing already ran in the sim; play the entries, then the outcome modal and routing. */
+  private replay(entries: LogEntry[]): void {
+    const s = session.state!;
+    const w = WAYPOINTS[s.arrivedAt ?? s.segment];
+    panel(this, 4, 4, 632, 52, true);
+    this.heading(12, (w?.name ?? '').toUpperCase(), 18);
+    panel(this, 4, 324, 632, 72, true);
+    this.log = new DayLog(this, 14, 330, 612, 3);
+    this.log.play(entries, () => this.after(entries, true));
   }
 
   private select(i: number): void {
     const row = this.rows[i];
+    if (row?.method === 'thread' && !session.autoResolveMiniGames) return this.launchMiniGame();
     if (row) return this.dispatch({ type: 'cross', method: row.method });
     if (i === this.rows.length) {
       return promptNumber(this, this.router, t('travel.restPrompt'), { min: REST.minDays, max: REST.maxDays }, (days) => {
@@ -73,6 +94,14 @@ export class HazardScene extends BaseScene {
       });
     }
     this.go('Travel');
+  }
+
+  /** Thread it as a mini-game: Debris Threading, or the Flare Belt Finale at waypoint 15. */
+  private launchMiniGame(): void {
+    const s = session.state!;
+    const error = intentBlocker(s, { type: 'cross', method: 'thread' });
+    if (error) return this.menu.say(error);
+    this.scene.start(MINIGAME_SCENES[atFlareBelt(s) ? 'flare' : 'threading'], { returnTo: 'Hazard' });
   }
 
   private dispatch(intent: Intent): void {

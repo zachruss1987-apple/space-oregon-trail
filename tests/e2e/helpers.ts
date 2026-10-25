@@ -1,8 +1,15 @@
 import { expect, type Page } from '@playwright/test';
 
-/** Navigate to the game with a fixed seed and wait for the given scene key. */
-export async function gotoScene(page: Page, sceneKey: string, seed: string | number = 'test'): Promise<void> {
-  await page.goto(`/?seed=${encodeURIComponent(String(seed))}`);
+/**
+ * URL suffix that makes mini-games auto-resolve for the page load. The run helpers below default to it because their
+ * hazard choreography (Enter on Thread it, T auto-travel) expects the statistical crossing, not a Threading / Flare
+ * scene (minigames.md "Options flag"). Specs that play the real mini-games pass `''`.
+ */
+export const AUTO_MINIGAMES = '&minigames=auto';
+
+/** Navigate to the game with a fixed seed (plus `query`, e.g. AUTO_MINIGAMES) and wait for the given scene key. */
+export async function gotoScene(page: Page, sceneKey: string, seed: string | number = 'test', query = ''): Promise<void> {
+  await page.goto(`/?seed=${encodeURIComponent(String(seed))}${query}`);
   await expect(page.locator('body')).toHaveAttribute('data-scene', sceneKey);
 }
 
@@ -20,9 +27,9 @@ export async function idle(page: Page): Promise<void> {
   await expect(body(page)).not.toHaveAttribute('data-busy', '1');
 }
 
-/** Title -> Setup -> Store with defaults (Corporate Executive, default names, first launch window). */
-export async function startRun(page: Page, seed: string, snapSteps = false): Promise<void> {
-  await gotoScene(page, 'Title', seed);
+/** Title -> Setup -> Store with defaults (Corporate Executive, default names, first launch window). Auto-resolve by default. */
+export async function startRun(page: Page, seed: string, snapSteps = false, query = AUTO_MINIGAMES): Promise<void> {
+  await gotoScene(page, 'Title', seed, query);
   if (snapSteps) await snap(page, 'Title');
   await page.keyboard.press('Enter');
   await expect(body(page)).toHaveAttribute('data-scene', 'Setup');
@@ -94,8 +101,8 @@ export async function autoTravelUntil(
 type RunState = NonNullable<Awaited<ReturnType<typeof getState>>>;
 
 /** Standard generous Executive shopping (4 drives, 3000 rations, 10 suits, 5 boxes, 1 of each part), then leave to Travel. */
-export async function generousRun(page: Page, seed: string): Promise<void> {
-  await startRun(page, seed);
+export async function generousRun(page: Page, seed: string, query = AUTO_MINIGAMES): Promise<void> {
+  await startRun(page, seed, false, query);
   for (const [row, qty] of [[1, 4], [2, 3000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
   await leaveStore(page);
 }
@@ -132,3 +139,26 @@ export async function settle(page: Page): Promise<void> {
   await idle(page);
   await expect(body(page)).not.toHaveAttribute('data-modal', '1');
 }
+
+/** Save-format version for `__PROXIMA__.loadState` (STATE_VERSION in src/sim/types.ts). */
+const SAVE_VERSION = 3;
+
+/**
+ * `?debug=1` runs only: copy the live state, apply `patch` (e.g. park the ship at a crossing), and load it with
+ * `__PROXIMA__.loadState`, which opens Hazard (crossing pending) or Travel.
+ */
+export async function loadPatchedState(page: Page, patch: Record<string, unknown>): Promise<void> {
+  const error = await page.evaluate(([p, version]) => {
+    const live = window.__PROXIMA__?.state;
+    if (!live || !window.__PROXIMA__?.loadState) return 'no state or no loadState (needs ?debug=1)';
+    const state = { ...JSON.parse(JSON.stringify(live)), ...p };
+    return window.__PROXIMA__.loadState(JSON.stringify({ version, state }));
+  }, [patch, SAVE_VERSION] as const);
+  expect(error).toBeNull();
+}
+
+/** Read `__PROXIMA__.minigame` as plain data (null outside the mini-game scenes). */
+export const minigameOf = (page: Page) => page.evaluate(() => {
+  const m = window.__PROXIMA__?.minigame;
+  return m ? { kind: m.kind, elapsed: m.elapsed, result: m.result ?? null, skipped: m.skipped ?? false } : null;
+});

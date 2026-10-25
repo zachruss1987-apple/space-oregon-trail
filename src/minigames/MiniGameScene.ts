@@ -45,6 +45,8 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   private acc = 0;
   private countdown = 0;
   private doneAt = 0;
+  /** True once the outcome was dispatched (the result panel may be left). */
+  private settled = false;
   private returnTo: SceneKey = 'Travel';
   private readonly held = new Set<string>();
   private fireEdge: { at: TouchPoint | null } | null = null;
@@ -66,6 +68,14 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   /** Panel lines describing a result (also used for `finishWith`). */
   protected abstract resultLines(result: R): PanelLine[];
 
+  /**
+   * Last word before dispatch, after a played run ends (not for `finishWith`): e.g. Threading's clean-run bonus pick.
+   * Call `done` once with the final result. Keys go to whatever the override pushes on `this.router`.
+   */
+  protected finalize(result: R, done: (result: R) => void): void {
+    done(result);
+  }
+
   /** Seconds of fixed-step play so far. */
   protected get elapsed(): number {
     return this.steps * STEP_S;
@@ -75,7 +85,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.begin();
     const s = session.state;
     if (!s) return this.go('Title');
-    Object.assign(this, { phase: 'intro', paused: false, steps: 0, acc: 0, panel: null, fireEdge: null });
+    Object.assign(this, { phase: 'intro', paused: false, steps: 0, acc: 0, panel: null, fireEdge: null, settled: false });
     this.held.clear();
     this.returnTo = data?.returnTo ?? 'Travel';
     document.body.dataset['minigame'] = this.kind;
@@ -184,23 +194,32 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     });
   }
 
-  /** End the run: build (or take) the result, dispatch it, show the panel. */
+  /** End the run: build (or take) the result, let the game finalize it, dispatch it, show the panel. */
   private end(forced?: R): void {
     if (this.phase === 'done') return;
     this.phase = 'done';
     this.doneAt = this.time.now;
     this.panel?.destroy();
+    this.panel = null;
     this.hudView.big(null);
     this.touch.clear();
     const { result, notes = [] }: { result: R; notes?: PanelLine[] } = forced ? { result: forced } : this.result();
-    this.hook.result = result;
-    const error = dispatchOutcome(this.kind, { result });
-    this.panel = resultPanel(this, [...this.resultLines(result), ...notes], error);
+    const finish = (final: R): void => {
+      if (this.settled) return;
+      this.settled = true;
+      this.doneAt = this.time.now;
+      this.hook.result = final;
+      const error = dispatchOutcome(this.kind, { result: final });
+      this.panel = resultPanel(this, [...this.resultLines(final), ...notes], error);
+    };
+    if (forced) finish(forced);
+    else this.finalize(result, finish);
   }
 
   /** Skip from the pause menu: no result, the sim's penalty auto-resolve, straight back. */
   private skip(): void {
     this.phase = 'done';
+    this.settled = true;
     this.hook.skipped = true;
     const error = dispatchOutcome(this.kind, { skipped: true });
     if (error) {
@@ -211,7 +230,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
 
   /** Leave the result panel (ignores the confirm for 0.4 s so a held fire key does not skip it). */
   private leaveIfReady(): void {
-    if (this.time.now - this.doneAt > 400) this.leave();
+    if (this.settled && this.time.now - this.doneAt > 400) this.leave();
   }
 
   private leave(): void {

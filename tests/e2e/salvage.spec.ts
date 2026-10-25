@@ -13,7 +13,7 @@ async function runWithCharges(page: Page, seed: string, query = ''): Promise<voi
     await expect(body(page)).toHaveAttribute('data-scene', 'Setup');
     for (let i = 0; i < 7; i++) await page.keyboard.press('Enter');
     await expect(body(page)).toHaveAttribute('data-scene', 'Store');
-  } else await startRun(page, seed);
+  } else await startRun(page, seed, false, ''); // real mini-games (startRun defaults to ?minigames=auto)
   for (const [row, qty] of [[1, 3], [2, 1500], [4, 3]] as const) await buy(page, row, qty);
   await leaveStore(page);
   await idle(page);
