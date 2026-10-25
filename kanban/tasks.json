@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T02:29:54.669Z",
+  "updated": "2026-10-25T02:56:34.536Z",
   "milestones": [
     {
       "id": "M0",
@@ -726,7 +726,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-023",
@@ -734,18 +734,39 @@
       "desc": "Per economy.md and hazards.md. Statistical tests on outcome distributions.",
       "milestone": "M2",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 28,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:29:54.668Z",
+      "updated": "2026-10-25T02:56:34.315Z",
       "notes": [
         {
           "ts": "2026-10-25T02:29:54.669Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:30:48.103Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:53:49.993Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:53:50.417Z",
+          "by": "developer",
+          "text": "Sim M2: per-item markups, road buy/sell (min 50% local/90% base), station visits with 2-3 NPC offers + trade intent, pending hazard crossings (cross thread/shields/tug/pilot, density roll, risk words, pilot wait ticks, Flare Belt M1 thread), Titan route branch (1,926 Mk direct), beacon helpers, STATE_VERSION 2 + v1 migration, policyCross; interim Thread/Tug menu in WaypointScene. Unit 658 pass (+59), e2e 7/7, coverage 98.4% stmts. Playthrough 1000 seeds: 43.3% win, 182 d."
+        },
+        {
+          "ts": "2026-10-25T02:56:34.315Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-024",
@@ -793,12 +814,18 @@
       "desc": "Menus per M2.md; beacons persisted in localStorage.",
       "milestone": "M2",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:56:34.368Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:56:34.368Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-026",
@@ -806,12 +833,18 @@
       "desc": "",
       "milestone": "M2",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:56:34.432Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:56:34.433Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-027",
@@ -1115,7 +1148,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-047",
@@ -1238,11 +1271,59 @@
       "desc": "",
       "milestone": "M2",
       "role": "writer",
+      "status": "done",
+      "assignee": "writer",
+      "issue": 29,
+      "created": "2026-10-25T02:29:54.607Z",
+      "updated": "2026-10-25T02:33:58.284Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:31:07.495Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:33:29.839Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:33:30.638Z",
+          "by": "writer",
+          "text": "ui.json: +hazard (~45 keys), route, station blocks. trades 14->22 personas. epitaphs 33->45 (key renamed canned->beacons, captain/date added, seg16 -> 15). tests 599 pass."
+        },
+        {
+          "ts": "2026-10-25T02:33:58.285Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
+    },
+    {
+      "id": "T-051",
+      "title": "Tests: M2 e2e (station buy/sell/trade, tug hire, pilot wait, route choice, beacon round-trip across reloads) + refreshed seeds",
+      "desc": "",
+      "milestone": "M2",
+      "role": "tester",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T02:56:34.493Z",
+      "updated": "2026-10-25T02:56:34.493Z",
+      "notes": []
+    },
+    {
+      "id": "T-052",
+      "title": "Writer: stations.json keeper/greeting lines; ui keys for buy/sell/trade log lines and interim labels",
+      "desc": "",
+      "milestone": "M2",
+      "role": "writer",
       "status": "todo",
       "assignee": null,
       "issue": null,
-      "created": "2026-10-25T02:29:54.607Z",
-      "updated": "2026-10-25T02:29:54.608Z",
+      "created": "2026-10-25T02:56:34.535Z",
+      "updated": "2026-10-25T02:56:34.536Z",
       "notes": []
     }
   ]

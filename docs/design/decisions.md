@@ -72,3 +72,11 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Route: direct skips waypoint 12; segment 13 stays 160 Mk from the Gate (total 1,926); Heliopause +10. Route can be changed until leaving Titan; default via Oort.
 - Beacons: one optional epitaph per crew death (not only the last), segment = `arrivedAt ?? segment`, last 200 kept; up to 3 shown per waypoint, player beacons first, canned fill at most 2 slots (1 once the player has ≥ 10 beacons) so canned ones fade as real ones accumulate.
 - Reference auto-play crossing policy: pilot > tug if credits ≥ 2× price > shields if a spare pump > thread; route always via Oort.
+
+## 2026-10-24 (M2 sim implementation, developer, logged by PM)
+- Pilot log entries: `crossing/pilot` on hire, `crossing/pilot-wait` per day with {n} days left (counting today), `crossing/pilot-arrives`.
+- Shields pump-strain uses exactly one RNG draw; an already-broken pump cannot break again. Tugs make no incident draw.
+- Trade generation: fairness is drawn on each retry of the "get" item; a dropped slot still consumes its persona. Credit asks are whole cr; quantities are units (charges, not boxes).
+- Refusals: "They don't buy that here.", "You don't have that many.", "No such offer." Continue with 0 drives is refused only while parked at a station.
+- Reference policy does not shop or trade on the road; at a station with 0 drives it buys one if affordable, else rests.
+- Playthrough after M2 (1,000 seeds): 43.3% win, mean 182 days; Executive 62%, Engineer 64%, Farmer 3%. Top deaths: radiation, starvation, cryo-fever. M5 target bands unchanged.
