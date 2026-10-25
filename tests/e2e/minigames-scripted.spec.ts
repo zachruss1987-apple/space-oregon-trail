@@ -138,7 +138,13 @@ test.describe('(e) touch device', () => {
     await startSalvage(page);
     const texts = await sceneTexts(page, 'Salvage');
     expect(texts).toContain('FIRE');
-    expect(texts).toContain('II');
+    // The pause control is the `ui.icon.pause` sprite since T-037 (art.md), so there is no 'II' text.
+    const hasPauseSprite = await page.evaluate(() => {
+      const g = (window as unknown as { __PROXIMA__?: { game?: { scene: { getScene(k: string): { children: { list: { texture?: { key: string } }[] } } } } } }).__PROXIMA__?.game;
+      const scene = g?.scene.getScene('Salvage');
+      return !!scene?.children.list.some((o) => o.texture?.key === 'ui.icon.pause');
+    });
+    expect(hasPauseSprite).toBe(true);
   });
 });
 

@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T05:02:49.807Z",
+  "updated": "2026-10-25T05:20:11.159Z",
   "milestones": [
     {
       "id": "M0",
@@ -1274,11 +1274,11 @@
       "desc": "",
       "milestone": "M4",
       "role": "developer",
-      "status": "doing",
+      "status": "done",
       "assignee": "developer",
       "issue": 48,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:43:06.393Z",
+      "updated": "2026-10-25T05:20:10.983Z",
       "notes": [
         {
           "ts": "2026-10-25T04:41:37.547Z",
@@ -1289,6 +1289,21 @@
           "ts": "2026-10-25T04:43:06.394Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:16:24.852Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:16:25.300Z",
+          "by": "developer",
+          "text": "Boot scene (fonts+atlas once, palette/CRT/volumes from proxima.options), 2x backing store + screen-space CRT scanlines (no moire), all text BitmapText retro8/retro6 with ui.panel/ui.cursor chrome, Title hero+theme, Travel band (stars/hauler damage+flares/approach/weather/phase), Station/Hazard/Waypoint art bands, portraits, per-scene music + SFX, mini-game sprites/pools/loops/jingle, Options scene (9 rows + Back). Unit 1351 pass; e2e 38/39 (minigames-scripted touch test expects 'II' text, pause is now ui.icon.pause sprite); bundle load ~0.5 s."
+        },
+        {
+          "ts": "2026-10-25T05:20:10.983Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -1357,12 +1372,18 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T05:20:11.158Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:20:11.159Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-041",
@@ -2016,6 +2037,32 @@
           "text": "review -> done"
         }
       ]
+    },
+    {
+      "id": "T-061",
+      "title": "Writer: ui.json for OPTIONS_PENDING keys (33 options.* keys) and retire the table",
+      "desc": "",
+      "milestone": "M4",
+      "role": "writer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T05:20:11.049Z",
+      "updated": "2026-10-25T05:20:11.049Z",
+      "notes": []
+    },
+    {
+      "id": "T-062",
+      "title": "Sound: danger sting API in AudioManager; global mute key (skips text fields); grapple-snap fade",
+      "desc": "",
+      "milestone": "M4",
+      "role": "sound",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T05:20:11.103Z",
+      "updated": "2026-10-25T05:20:11.104Z",
+      "notes": []
     }
   ]
 }
