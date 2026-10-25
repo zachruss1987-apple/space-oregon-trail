@@ -13,7 +13,7 @@
         "Also debts. Mostly debts.",
         "A crew is five: you, as captain, and four friends or relatives.",
         "  > Pick people you can stand. It is a long way to be wrong.",
-        "The trip takes about 140 to 150 days. Plan for 150."
+        "The trip takes about 155 to 185 days. Plan for 175."
       ]
     },
     {
@@ -22,14 +22,14 @@
         "Three kinds of people are licensed to fly the Lane.",
         "CORPORATE EXECUTIVE. 1,600 cr, no useful skills. Score x1.",
         "  Money solves most problems. Spend it before they find you.",
-        "SHIP ENGINEER. 800 cr. Score x2. Repairs succeed 95% of the",
+        "SHIP ENGINEER. 650 cr. Score x2. Repairs succeed 95% of the",
         "  time (not 80%), waste fewer spares, and drives fail half as",
         "  often.",
-        "HYDROPONICS FARMER. 400 cr. Score x3. Rations go 15% further.",
-        "  Algae blooms are kinder to you.",
+        "HYDROPONICS FARMER. 400 cr. Score x3. Rations go half again",
+        "  as far. Algae blooms are kinder to you.",
         "  > The Farmer scores most and survives least. Roughly one",
-        "  > in five makes it. Bring a hobby that pays.",
-        "  > The Executive wins nearly every time, for less glory."
+        "  > in three makes it. Bring a hobby that pays.",
+        "  > The Executive wins three times in five, for less glory."
       ]
     },
     {
@@ -42,7 +42,7 @@
         "FLARE SEASON begins 15 September 2184. After that the last",
         "three segments are mostly plasma, and the Flare Belt is worse.",
         "Arrive before 15 September and the Authority adds 200 points.",
-        "  > Most trips take 140 days. March and April are safe.",
+        "  > Most trips take 170 days. March and April are safer.",
         "  > May is a coin flip. June and July are a lesson.",
         "  > Leave early. Burn hard when it counts.",
         "  > A late start is for people who like weather reports."
@@ -68,9 +68,9 @@
       "title": "Thrust and Rations",
       "body": [
         "THRUST sets your pace. The flight computer calls it cruising.",
-        "  Cruise: 20 Mk a day. No strain on the crew.",
-        "  Hard burn: 25 Mk a day. Costs 2 health a day.",
-        "  Overburn: 30 Mk a day. Costs 5, and drives fail twice as",
+        "  Cruise: 22 Mk a day. No strain on the crew.",
+        "  Hard burn: 27 Mk a day. Costs 2 health a day.",
+        "  Overburn: 33 Mk a day. Costs 5, and drives fail twice as",
         "  often. Five days in a row and someone is exhausted.",
         "RATIONS set how well you eat, per crew member per day.",
         "  Full: 3 rations, +2 health. Half: 2, no change.",
@@ -91,7 +91,7 @@
         "  Flare: speed x0.5, and only near the end of the Lane.",
         "Suits protect the crew. Fewer suits than crew means the",
         "captain is suited first, then the rest in order.",
-        "  > A storm costs about one suit in five. Count them.",
+        "  > A storm costs about one suit in four. Count them.",
         "  > Flares hurt unsuited crew five points a day. Suited, two.",
         "  > Bring spare suits, and forgive yourself the rest."
       ]

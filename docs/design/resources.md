@@ -28,9 +28,9 @@ Starting credits by profession: `world.md`. Spending all credits is allowed; Mat
 Warnings (shown once each in the store): 0 drives ("You will not get far."), rations below 1,000, suits below the crew count, credits spent to 0.
 
 ## Consumption and wear
-- Rations: per present crew member per day, Full 3, Half 2, Paste 1; Farmer `floor(need × 0.85)` (`travel.md`).
+- Rations: per present crew member per day, Full 3, Half 2, Paste 1; Farmer `floor(need × 0.65)` (`travel.md`).
 - Drone charges: 5 per Scan for salvage (M1); 1 per grapple fire in Salvage Run (M3).
-- EVA suits: on each Solar storm or Flare day, 20% chance one suit is ruined. Also lost to hull_fire, pirates, cargo_shift, hazards.
+- EVA suits: on each Solar storm or Flare day, 25% chance one suit is ruined. Also lost to hull_fire, pirates, cargo_shift, hazards.
 - Spare parts: consumed by Attempt repair (`travel.md`).
 
 ## Weight and speed

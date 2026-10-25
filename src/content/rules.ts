@@ -7,9 +7,9 @@ export type RationId = 'full' | 'half' | 'paste';
 
 /** Thrust table (travel.md). Health applies on moving days only. */
 export const THRUST: Readonly<Record<ThrustId, { name: string; mkPerDay: number; health: number }>> = {
-  cruise: { name: 'Cruise', mkPerDay: 20, health: 0 },
-  hard: { name: 'Hard burn', mkPerDay: 25, health: -2 },
-  overburn: { name: 'Overburn', mkPerDay: 30, health: -5 },
+  cruise: { name: 'Cruise', mkPerDay: 22, health: 0 },
+  hard: { name: 'Hard burn', mkPerDay: 27, health: -2 },
+  overburn: { name: 'Overburn', mkPerDay: 33, health: -5 },
 };
 
 /** Ration table (travel.md): per present crew per day, health per day. */
@@ -45,16 +45,16 @@ export const PART_SPARE = { hull: 'plates', pump: 'pumps', gyro: 'gyros' } as co
 export const PART_NAMES: Readonly<Record<PartId, string>> = { hull: 'hull plate', pump: 'coolant pump', gyro: 'nav gyro' };
 
 /** Suit wear on storm/flare days. */
-export const SUIT_WEAR_CHANCE = 0.2;
+export const SUIT_WEAR_CHANCE = 0.25;
 
 /** Scan for salvage (M1 auto-resolve). d100 bands are upper bounds, inclusive. */
 export const SALVAGE = {
   charges: 5,
   nothingMax: 25,
   smallMax: 70,
-  smallRange: [15, 40] as const,
+  smallRange: [25, 60] as const,
   largeMax: 95,
-  largeRange: [40, 80] as const,
+  largeRange: [60, 120] as const,
   /** 96–100: one random spare (at cap → largeRange rations). */
   halveFromScan: 3,
 } as const;

@@ -143,3 +143,14 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Difficulty score line: greenhorn ×0.75, pathfinder ×1.25, shown after the profession multiplier when non-zero.
 - Saves (v4) do not store the RNG position; a resumed run is re-seeded from seed + day, so it will not replay the original run exactly. Accepted for v1.0.
 - Balance by difficulty (balanced policy): greenhorn 62% win, spacer 42%, pathfinder 20%. Farmer remains the M5 tuning target.
+
+## 2026-10-25 (T-039, M5 balance tuning, developer with designer authority)
+Measured with `npm run balance` (balanced policy, 300 seeds × 5 windows per profession); before/after in `docs/reports/balance-tuned.md`. Losses were decided on the last three segments: suits gone, Flare days, crew health run to zero. Starvation sank the Farmer (633 rations for ~1,300 needed) and runs took 176–203 days because ~40 of them were rest days.
+- Thrust base 20/25/30 → 22/27/33 Mk/day: real runs averaged 183 days (the M1 sketch ignored ~40 rest days); 22 brings the pooled mean to ~170 and keeps Hard burn at about +25% and Overburn at +50%.
+- Suit wear 20% → 25% per Solar storm or Flare day: faster trips made everyone safer; suits running out before the Flare Belt is the game's main late risk, so this dial gives back the difficulty without adding days.
+- Engineer starting credits 800 → 650: the Engineer (65% win) beat the Executive (60%); repairs stay its identity, and 1,300 rations after the reference kit means Paste and scans near the end.
+- Farmer ration need `floor(need × 0.85)` → `floor(need × 0.65)` (Half for five crew: 8 → 6 a day); perk text "Rations go half again as far": the Farmer won 4%; the fix belongs to its own perk, so 400 cr (the original's homage) stays.
+- Scan for salvage (auto-resolve) yields 15–40 / 40–80 → 25–60 / 60–120 rations (EV ≈ 27 → ≈ 42): the Farmer's lifeline was worth less than the day it cost. The mini-game calibration table now compares against ≈ 42.
+- Reference policy buys 8 EVA suits for the Farmer (was 5): with five crew and five suits the first ruined suit exposed someone, and radiation was 31% of deaths; 8 brings it under 30% and teaches a habit the Guide can mention.
+- Not changed: mass penalty, event chance, condition death chances, difficulty multipliers. Tested and rejected: event chance 15% → 20% (adds ~13 days), higher illness death chances (little effect on wins: runs end on health, not on rolls), Executive credits 1,600 → 1,200 (no effect; the 3,000-ration cap binds), a steeper mass penalty (9 days for 5 points).
+- Result (spacer): Executive 63.3%, Engineer 51.1%, Farmer 31.7%, mean 170.5 days, top cause radiation sickness 29.8%. Greenhorn 78.3% (+29.6), Pathfinder 21.2% (−27.5).

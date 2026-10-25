@@ -35,14 +35,14 @@ export const PROFESSIONS: Readonly<Record<ProfessionId, Profession>> = {
     repairSuccess: 0.8, spareLossOnFail: 0.3, driveFailureWeight: 1, rationFactor: 1, algaeFactor: 1,
   },
   engineer: {
-    id: 'engineer', name: 'Ship Engineer', credits: 800, multiplier: 2,
+    id: 'engineer', name: 'Ship Engineer', credits: 650, multiplier: 2,
     perk: 'Repairs succeed more often and consume fewer parts; drive failures are rarer.',
     repairSuccess: 0.95, spareLossOnFail: 0.1, driveFailureWeight: 0.5, rationFactor: 1, algaeFactor: 1,
   },
   farmer: {
     id: 'farmer', name: 'Hydroponics Farmer', credits: 400, multiplier: 3,
-    perk: 'Rations go 15% further; "found algae bloom" events yield more.',
-    repairSuccess: 0.8, spareLossOnFail: 0.3, driveFailureWeight: 1, rationFactor: 0.85, algaeFactor: 1.5,
+    perk: 'Rations go half again as far; "found algae bloom" events yield more.',
+    repairSuccess: 0.8, spareLossOnFail: 0.3, driveFailureWeight: 1, rationFactor: 0.65, algaeFactor: 1.5,
   },
 };
 

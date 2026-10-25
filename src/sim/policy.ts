@@ -36,7 +36,7 @@ export const DEFAULT_POLICY: PolicyOptions = {
 
 /** The reference shopping list in packs (rations: the remainder, capped by the buy limit). */
 export function policyKit(profession: ProfessionId, extra: Partial<Record<SupplyKey, number>> = {}): Partial<Record<SupplyKey, number>> {
-  const kit: Partial<Record<SupplyKey, number>> = { drives: 3, suits: profession === 'farmer' ? 5 : 10, plates: 1, pumps: 1, gyros: 1, charges: 5 };
+  const kit: Partial<Record<SupplyKey, number>> = { drives: 3, suits: profession === 'farmer' ? 8 : 10, plates: 1, pumps: 1, gyros: 1, charges: 5 };
   for (const [k, n] of Object.entries(extra) as [SupplyKey, number][]) kit[k] = (kit[k] ?? 0) + n;
   return kit;
 }

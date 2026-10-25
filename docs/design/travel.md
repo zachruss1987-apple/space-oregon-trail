@@ -8,7 +8,7 @@ One tick = one day. Terms: **segment n** is the leg from waypoint n−1 to waypo
 3. Passing help: if a part is broken with no matching spare, 10% chance a passing crew fixes one broken part (pump first, then hull plate, then gyro). If the ship has 0 drives (stranded), 10% chance a passing hauler gives 1 drive; otherwise `strandedDays += 1`.
 4. Distance (see Distance). If the day is a delay, rest, scan, or repair day, distance is 0. Clamp to the remaining segment distance; overflow is lost.
 5. Consume rations (see Rations). Shortfall → starving day.
-6. Suit wear: on a Solar storm or Flare day, 20% chance to lose 1 EVA suit (if any).
+6. Suit wear: on a Solar storm or Flare day, 25% chance to lose 1 EVA suit (if any).
 7. Health update for every present crew member (`health.md`), then condition death rolls and progression.
 8. Missing crew: decrement `awayDays`; at 0 they rejoin.
 9. Random event roll (`events.md`): 15% (7.5% on rest days); at most one per day.
@@ -20,9 +20,9 @@ Day-consuming actions (Rest, Scan for salvage, Attempt repair, delay days from e
 ## Thrust (pace)
 | Setting | Homage | Base Mk/day | Health effect/day (moving days only) | Other |
 |---------|--------|-------------|--------------------------------------|-------|
-| Cruise | Steady | 20 | 0 | |
-| Hard burn | Strenuous | 25 | −2 | |
-| Overburn | Grueling | 30 | −5 | drive_failure weight ×2; 5 consecutive moving days → Exhaustion |
+| Cruise | Steady | 22 | 0 | |
+| Hard burn | Strenuous | 27 | −2 | |
+| Overburn | Grueling | 33 | −5 | drive_failure weight ×2; 5 consecutive moving days → Exhaustion |
 
 ## Distance
 `distance = base × driveFactor × weatherFactor × massFactor × damageFactor`, not rounded internally; display `floor`.
@@ -41,7 +41,7 @@ Day-consuming actions (Rest, Scan for salvage, Attempt repair, delay days from e
 | Half | Meager | 2 | 0 |
 | Paste | Bare bones | 1 | −2 |
 
-Daily need = present crew × per-crew amount; Farmer: `floor(need × 0.85)`, minimum 1. Rations are integers. If `rations < need`, eat what is left (rations → 0); it is a **starving day**: every present crew member takes −10 instead of the ration effect. Missing crew eat nothing.
+Daily need = present crew × per-crew amount; Farmer: `floor(need × 0.65)`, minimum 1 (five crew: Full 9, Half 6, Paste 3). Rations are integers. If `rations < need`, eat what is left (rations → 0); it is a **starving day**: every present crew member takes −10 instead of the ration effect. Missing crew eat nothing.
 
 ## Weather
 | Weather | Speed factor | Health/day unsuited (suited) | Side effects |
@@ -49,7 +49,7 @@ Daily need = present crew × per-crew amount; Farmer: `floor(need × 0.85)`, min
 | Calm | 1.0 | 0 | none (flavor) |
 | Fair | 1.0 | 0 | none |
 | Unsettled | 0.9 | −1 (−1) | hull_puncture weight ×1.5; micrometeorite puncture eligible |
-| Solar storm | 0.6 | −3 (−1) | 20% suit loss (step 6); each unsuited crew 15% radiation sickness |
+| Solar storm | 0.6 | −3 (−1) | 25% suit loss (step 6); each unsuited crew 15% radiation sickness |
 | Ion fog | 0.7 | 0 | lost_lane and gyro_failure weights ×2 |
 | Flare | 0.5 | −5 (−2) | as Solar storm; only in segments 14–16 |
 
@@ -92,30 +92,30 @@ Available when drone charges ≥ 5 and the ship is not at New Willamette. Takes 
 | d100 | Yield |
 |------|-------|
 | 01–25 | Nothing |
-| 26–70 | 15–40 rations |
-| 71–95 | 40–80 rations |
-| 96–00 | 1 random spare part (plate/pump/gyro); if that type is at its cap of 3, 40–80 rations instead |
+| 26–70 | 25–60 rations |
+| 71–95 | 60–120 rations |
+| 96–00 | 1 random spare part (plate/pump/gyro); if that type is at its cap of 3, 60–120 rations instead |
 
-Diminishing returns: the 3rd and later scans in the same segment halve ration yields (floor). Expected yield ≈ 27 rations per scan (first two per segment). M3: the Salvage Run mini-game (`minigames.md`) replaces this in play; this roll stays as its auto-resolve and the reference policy's scan.
+Diminishing returns: the 3rd and later scans in the same segment halve ration yields (floor). Expected yield ≈ 42 rations per scan (first two per segment). M3: the Salvage Run mini-game (`minigames.md`) replaces this in play; this roll stays as its auto-resolve and the reference policy's scan.
 
 ## Worked example (typical budgets and day counts)
-Numbers from a rough design-side simulation of these rules (500 runs per cell, all windows); the developer's playthrough test is the authority once it exists.
+The M1 design-side sketch, kept for its budget arithmetic; the measured numbers live in `docs/reports/balance-tuned.md` (T-039), which is the authority. Since T-039 the Engineer starts with 650 cr (1,300 rations after the reference kit) and the Farmer eats `× 0.65`.
 
-| | Executive (1,600) | Engineer (800) | Farmer (400) |
+| | Executive (1,600) | Engineer (650) | Farmer (400) |
 |--|-------------------|----------------|--------------|
 | Ion drives | 4 = 160 | 3 = 120 | 3 = 120 |
 | EVA suits | 10 = 100 | 10 = 100 | 5 = 50 |
 | Spare parts | 2 each = 60 | 1 each = 30 | 1 each = 30 |
 | Drone charges | 5 boxes = 10 | 5 boxes = 10 | 10 boxes = 20 |
-| Rations at 0.30 | 3,000 = 900 | 1,800 = 540 | 600 = 180 |
+| Rations at 0.30 | 3,000 = 900 | 1,300 = 390 | 600 = 180 |
 | Credits left | 370 | 0 | 0 |
 | Plan | Full, Cruise | Full while surplus, else Half | Half + ~20 scans |
-| Full for whole trip? | yes (15/day × 150 = 2,250) | no (needs 2,250, has 1,800) | no |
-| Typical days | ~135 | ~150 | ~190 |
-| Win rate (sensible play) | ~97% | ~80% | ~20% |
+| Full for whole trip? | yes (15/day × 150 = 2,250) | no (needs 2,250, has 1,300) | no (Half needs 6/day) |
+| Typical days (reference policy, T-039) | ~184 | ~157 | ~171 |
+| Win rate (reference policy, T-039) | ~63% | ~51% | ~32% |
 
-Day count, Cruise, 3 drives, mid-trail weather: 20 × 1.0 × 0.91 × ~0.97 mass ≈ 17.7 Mk/day → 2,040 / 17.7 ≈ 115 moving days, plus ~8 days lost to arrival overflow, ~4 repair days, ~6 delay days, and rests/scans → **140–155 days**. Hard burn saves ~25 days at −2 health/day; Overburn is a sprint, not a policy.
+Day count, Cruise, 3 drives, mid-trail weather: 22 × 1.0 × 0.91 × ~0.95 mass ≈ 19 Mk/day → 2,040 / 19 ≈ 107 moving days, plus ~8 days lost to arrival overflow, ~4 repair days, ~6 delay days, and 30–45 rest/scan days → **150–185 days** (measured, reference policy: Engineer ~157, Farmer ~171, Executive ~184, slowed by 3,000 rations of mass). Hard burn saves ~20 days at −2 health/day; Overburn is a sprint, not a policy.
 
-Windows vs flare season at ~140 days: Window 1 arrives ~mid-July, Window 2 ~mid-August (safe), Window 3 ~mid-September (a coin flip: Hard burn makes it), Windows 4–5 always meet flare season.
+Windows vs flare season at ~170 days: Window 1 arrives ~mid-August (safe), Window 2 ~mid-September (a race: Hard burn makes it), Window 3 meets the first flares on the last segments, Windows 4–5 always meet flare season.
 
-**M1 playthrough reference policy** (for `playthrough.test.ts`): uniform random profession and window; buy 3 drives, 10 suits (5 if Farmer), 1 of each part, 5 boxes of charges, rations with the remainder (cap 3,000); Cruise; Half rations (Paste when < 10 days left); rest 1 day whenever general health is below 50; scan whenever rations < 10 days and charges ≥ 5. Simulated: ~48% win (Executive ~71%, Engineer ~70%, Farmer ~1%), mean ~165 days.
+**M1 playthrough reference policy** (for `playthrough.test.ts`): uniform random profession and window; buy 3 drives, 10 suits (8 if Farmer; 5 before T-039), 1 of each part, 5 boxes of charges, rations with the remainder (cap 3,000); Cruise; Half rations (Paste when < 10 days left); rest 1 day whenever general health is below 50; scan whenever rations < 10 days and charges ≥ 5. Measured after T-039 (300 seeds × 5 windows per profession): 48.7% win (Executive 63.3%, Engineer 51.1%, Farmer 31.7%), mean 170.5 days.

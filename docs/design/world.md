@@ -28,8 +28,8 @@ Pool (20): Abigail, Bartholomew, Cora, Delphine, Eli, Florence, Gideon, Hester, 
 | Profession | Credits | Score multiplier | Perk | Rule (exact) |
 |------------|---------|------------------|------|--------------|
 | Corporate Executive | 1,600 | ×1 | None. Money solves most problems. | none |
-| Ship Engineer | 800 | ×2 | Repairs succeed more often and consume fewer parts; drive failures are rarer. | Repair 95% (not 80%); spare lost on failure 10% (not 30%); drive_failure weight ×0.5 |
-| Hydroponics Farmer | 400 | ×3 | Rations go 15% further; "found algae bloom" events yield more. | Daily ration need `floor(need × 0.85)`, min 1; algae_bloom ×1.5 |
+| Ship Engineer | 650 | ×2 | Repairs succeed more often and consume fewer parts; drive failures are rarer. | Repair 95% (not 80%); spare lost on failure 10% (not 30%); drive_failure weight ×0.5 |
+| Hydroponics Farmer | 400 | ×3 | Rations go half again as far; "found algae bloom" events yield more. | Daily ration need `floor(need × 0.65)`, min 1; algae_bloom ×1.5 |
 
 ## Launch windows
 Five windows (homage: March–July). Earlier is colder near Earth (more solar storms early in the cycle, "mud season" equivalent: slower transit through the Lunar Debris Ring) but arrives before Proxima's **flare season**. Later is calmer at the start but risks arriving during flare season, which raises hazard severity and health loss in the last three segments.
@@ -51,7 +51,7 @@ Five windows (homage: March–July). Earlier is colder near Earth (more solar st
 |-------|---------------|
 | `profession`, `window` | as chosen |
 | `crew` | 5 × `{ name, health: 100, conditions: [], awayDays: 0, alive: true }`; crew[0] is the captain |
-| `credits` | 1,600 / 800 / 400 by profession |
+| `credits` | 1,600 / 650 / 400 by profession |
 | `supplies` | all 0: drives, rations, suits, charges, plates, pumps, gyros (bought in the store next) |
 | `broken` | `{ hull: false, pump: false, gyro: false }`; `offlineDrives: []` |
 | `date` / `day` | window start date (1st of Mar–Jul 2184) / 0 |

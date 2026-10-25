@@ -88,11 +88,11 @@ Intent `{ type: 'salvage', result }` → `applySalvageResult(state, result, rng)
 Auto-resolve = the `travel.md` scan (5 charges, d100). Skip: same with d100 − 10 (clamp 1); with fewer than 5 charges it spends them all and finds nothing.
 
 ### Expected yield (calibration targets, for playtest)
-| Player | Shots | Hooked | Typical haul | vs auto (27 rations, 5 charges) |
+| Player | Shots | Hooked | Typical haul | vs auto (≈42 rations since T-039, was 27; 5 charges) |
 |--------|-------|--------|--------------|---------------------------------|
-| Novice | 8–12 | 3–5 | 15–30 rations | worse or equal |
-| Average | 10–14 | 6–8 | 35–50 rations, ~25% a part | ~1.5× per day, ~1× per charge |
-| Skilled | 15–20 | 12+ | 100 (cap), or a part + 60–90 | carry cap binds; ~3.5× |
+| Novice | 8–12 | 3–5 | 15–30 rations | worse |
+| Average | 10–14 | 6–8 | 35–50 rations, ~25% a part | ~1× per day, below per charge |
+| Skilled | 15–20 | 12+ | 100 (cap), or a part + 60–90 | carry cap binds; ~2.4× |
 
 Aimed shots favour big targets: mean ration yield over ration items is (30×5 + 15×15 + 5×30) / 50 = 10.5, so 4 ration hooks ≈ 42. Charges cost 0.1 cr each; the day and the cap are the real limits.
 

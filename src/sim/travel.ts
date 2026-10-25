@@ -36,7 +36,7 @@ export function remainingInSegment(state: GameState): number {
   return Math.max(0, WAYPOINTS[state.segment]!.mk - state.distanceInSegment);
 }
 
-/** Daily ration need for present crew at a setting (Farmer: floor ×0.85, min 1). */
+/** Daily ration need for present crew at a setting (Farmer: floor × rationFactor, min 1). */
 export function rationNeed(state: GameState, setting: RationId = state.rations): number {
   const present = presentCrew(state).length;
   if (present === 0) return 0;
