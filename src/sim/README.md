@@ -239,3 +239,21 @@ For e2e tests (src/game/contract.ts); keep stable.
   with the new row highlighted (`scene.start('TopTen', { highlight: index })`). Deaths never enter the list.
 - Guide (`Guide` scene, Title item "Learn about the Trail"): pages `guide.json` (`GUIDE_PAGES`), Left/Right (A/D,
   PageUp/PageDown, Enter/Space next, click halves) with `guide.pageOf`; Esc back.
+- Accessibility (T-041, src/game/a11y.ts): two visually hidden (1x1 clipped) nodes on `body`, readable by assistive tech
+  and Playwright role locators. `#proxima-live` (`role="log"`, `aria-live="polite"`) gets one `<p>` per line: every new
+  `LogEntry.text` (the `session.state` setter diffs the log; a fresh or resumed state reads none), modal text, mini-game
+  instruction / result / pause panels, menu notices (`Menu.say`), the `?` overlay and mute changes; the newest 40 lines
+  stay. `#proxima-menu` (`role="listbox"`) mirrors the newest live `Menu` (a modal's covers the scene's): one
+  `role="option"` per row, text `"<n>. <label>"`, the cursor row `aria-selected="true"` (also `aria-activedescendant`),
+  disabled rows `aria-disabled="true"` and `" (unavailable: <reason>)"`. Cleared on every scene start.
+- Keys: Menus also move with Tab / Shift+Tab. `?` (not while typing) opens the controls overlay (`help.*` copy,
+  `body[data-help="1"]`); any key or click closes it. Travel stops auto-travel and a running mini-game pauses before it
+  opens. `M` toggles mute anywhere except Title and while a NameInput / NumberInput / export-import box takes input
+  (`bindGlobalMuteKey('m', textEntryActive, { ignore: Title })`, src/game/muteKey.ts); `__PROXIMA__.audio.volumes.muted`
+  reflects it and `ui.icon.mute` shows in the corner on Title and Travel while muted.
+- Display flags: `body[data-crt]` `on` / `off`, `body[data-reduced]` `1` / `0` (reduced motion in effect: no parallax,
+  bob, blink or typewriter, overlays frozen, CRT off; mini-game instructions add `minigame.common.autoAvailable`), and
+  `body[data-palette]` `standard` / `cb` (colorblind palette: sprites re-rasterize, scenes re-read `activePalette()`).
+- Audio cues (T-063): Travel loops `drive.hum` while a day runs (stopped when it ends, on sleep and shutdown); Salvage
+  loops `grapple.reel` while reeling; `playSting('danger')` on loss events, crossing damage, deaths and hazard arrival;
+  `playSting('jingle.clean')` on clean mini-game runs.

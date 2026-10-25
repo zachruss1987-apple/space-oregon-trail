@@ -8,8 +8,8 @@ import { activeNumbers } from '@/gfx/palette';
 export const COLORS = {
   /** Default text (phosphor). */
   get text(): number { return activeNumbers().phosphor; },
-  /** Hints, disabled rows, panel borders (forest). */
-  get dim(): number { return activeNumbers().forest; },
+  /** Hints and disabled rows (phosphorDim: forest misses 4.5:1 on the panel fill; borders keep forest). */
+  get dim(): number { return activeNumbers().phosphorDim; },
   /** Selected rows and headings (phosphorHi). */
   get bright(): number { return activeNumbers().phosphorHi; },
   /** Warnings (amber). */

@@ -1,5 +1,6 @@
 /** The test/debug surface on window (see src/sim/README.md "UI contract"). */
 import type { GameState, MiniGameKind, MiniGameResult } from '@/sim';
+import { clearMenus } from './a11y';
 
 /** `window.__PROXIMA__.minigame` while a mini-game scene runs (minigames.md "Debug hooks"). */
 export interface MiniGameDebug {
@@ -46,14 +47,16 @@ export function markScene(key: string): void {
   markFlag('busy', false);
   markFlag('beacon', false);
   markFlag('paused', false);
+  markFlag('help', false);
   delete document.body.dataset['minigame'];
+  clearMenus();
 }
 
 /**
  * Flag UI states e2e tests wait on: `data-modal="1"` while a modal is open, `data-busy="1"` while a day animates,
- * `data-paused="1"` while a mini-game is paused.
+ * `data-paused="1"` while a mini-game is paused, `data-help="1"` while the `?` controls overlay is open.
  */
-export function markFlag(name: 'modal' | 'busy' | 'beacon' | 'paused', on: boolean): void {
+export function markFlag(name: 'modal' | 'busy' | 'beacon' | 'paused' | 'help', on: boolean): void {
   if (on) document.body.dataset[name] = '1';
   else delete document.body.dataset[name];
 }

@@ -31,7 +31,7 @@ Text theme (outside the 16; text and UI chrome only, never in world sprites):
 | phosphor | P | #5cff5c | Default text, focused panel border |
 | phosphorHi | H | #c8ffc8 | Selected menu item, headings |
 | panel | — | #001a00 | Panel fill (Graphics only) |
-| (dim text) | B | forest | Hints, disabled rows |
+| phosphorDim | — | #38a838 | Hints, disabled rows (T-041: forest is 4.2:1 on the panel fill; every text color is ≥ 4.5:1 on black and panel in both palettes, `tests/unit/ui/contrast.test.ts`) |
 
 ### Colorblind-safe variant (same keys)
 Swaps red/green/orange/lime pairs toward Okabe–Ito hues. Meaning is never color-only anyway: damage adds smoke pixels, sick adds a sweat drop, hot chunks pulse a ring, telegraphed arcs are dashed.

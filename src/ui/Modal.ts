@@ -1,5 +1,6 @@
 /** Centered dialog: prose plus a vertical button list. Blocks input beneath it until closed. */
 import Phaser from 'phaser';
+import { announce } from '@/game/a11y';
 import { markFlag } from '@/game/contract';
 import { t } from './copy';
 import type { KeyRouter } from './keys';
@@ -51,6 +52,7 @@ export class Modal {
       onSelect: close,
       onBack: opts.escCloses === false ? undefined : () => close(buttons.length - 1),
     });
+    announce(message, true);
     // Enter while the typewriter runs reveals the rest and acts on the button at once.
     this.router.push(this.handler);
     openCount += 1;

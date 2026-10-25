@@ -14,12 +14,16 @@ import { session } from './session';
 /** CRT row value: is the shader available at all (WebGL)? */
 export const crtAvailable = (game: Phaser.Game): boolean => isWebGL(game);
 
-/** Turn the CRT on/off from the options (art.md defaults when never chosen); `body[data-crt]` mirrors it. */
+/**
+ * Turn the CRT on/off from the options (art.md defaults when never chosen; reduced motion forces it off).
+ * `body[data-crt]` mirrors it (`on` / `off`) and `body[data-reduced]` the reduced-motion setting (`1` / `0`).
+ */
 export function applyCrt(game: Phaser.Game): boolean {
   const reduced = session.settings.reducedMotion;
   const want = crtWanted(session.options, crtDefaultOn(detectCrtEnv(game, reduced)), reduced);
   const on = enableCrt(game, want, undefined, reduced);
   document.body.dataset['crt'] = on ? 'on' : 'off';
+  document.body.dataset['reduced'] = reduced ? '1' : '0';
   return on;
 }
 
@@ -29,9 +33,13 @@ export function crtShown(game: Phaser.Game): boolean {
   return crtWanted(session.options, crtDefaultOn(detectCrtEnv(game, reduced)), reduced);
 }
 
-/** Switch palette tables and re-rasterize every sprite (Graphics and text re-tint when redrawn). */
+/**
+ * Switch palette tables and re-rasterize every sprite (Graphics and text re-tint when redrawn: scenes read
+ * `activePalette()` on create, and Options restarts itself). `body[data-palette]` = `standard` / `cb`.
+ */
 export function applyPalette(scene: Phaser.Scene): void {
   setColorblind(session.options.palette === 'cb');
+  document.body.dataset['palette'] = session.options.palette;
   registerAll(scene);
   addChromeFrames(scene);
 }

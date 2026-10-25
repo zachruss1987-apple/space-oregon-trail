@@ -1,9 +1,11 @@
 /**
- * Vertical cursor menu: arrows/WASD, Enter/Space, number keys, Esc, mouse hover/click, disabled items with reasons.
- * Rows are bitmap text; the `ui.cursor` ship marks the selected row. UI sounds: move, select, back, deny.
+ * Vertical cursor menu: arrows/WASD (and Tab / Shift+Tab), Enter/Space, number keys, Esc, mouse hover/click, disabled
+ * items with reasons. Rows are bitmap text; the `ui.cursor` ship marks the selected row. UI sounds: move, select, back,
+ * deny. The newest live menu is mirrored in the hidden `#proxima-menu` listbox (src/game/a11y.ts).
  */
 import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
+import { announce, pushMenu, removeMenu, syncMenu, type A11yMenu } from '@/game/a11y';
 import { session } from '@/game/session';
 import { cursor } from './chrome';
 import { isBack, isConfirm, isDown, isUp, type KeyHandler } from './keys';
@@ -53,7 +55,17 @@ export class Menu implements KeyHandler {
     this.reason = addText(scene, opts.x, opts.y, '', { color: COLORS.warn, depth: opts.depth ?? 0 });
     this.mark = cursor(scene, opts.depth ?? 0, session.settings.reducedMotion).setScale(opts.scale ?? 1);
     this.build();
+    pushMenu(this.a11y);
   }
+
+  /** The listbox's view of this menu. */
+  private readonly a11y: A11yMenu = ((m: Menu): A11yMenu => ({
+    items: () => m.items,
+    get cursor(): number {
+      return m.cursor;
+    },
+    alive: () => !!m.mark.scene,
+  }))(this);
 
   /** Replace the rows (keeps the cursor where possible). */
   setItems(items: MenuItem[]): void {
@@ -70,11 +82,12 @@ export class Menu implements KeyHandler {
   /** Show a message under the menu (cleared on the next move). */
   say(message: string): void {
     this.reason.setText(message);
+    if (message) announce(message);
   }
 
   onKey(e: KeyboardEvent): void {
-    if (isUp(e)) this.move(-1);
-    else if (isDown(e)) this.move(1);
+    if (isUp(e) || (e.key === 'Tab' && e.shiftKey)) this.move(-1);
+    else if (isDown(e) || e.key === 'Tab') this.move(1);
     else if (isConfirm(e)) {
       if (!e.repeat) this.choose(this.cursor);
     } else if (isBack(e)) {
@@ -116,6 +129,7 @@ export class Menu implements KeyHandler {
   }
 
   destroy(): void {
+    removeMenu(this.a11y);
     this.rows.forEach((r) => r.destroy());
     this.rows.length = 0;
     this.reason.destroy();
@@ -156,5 +170,6 @@ export class Menu implements KeyHandler {
     const row = this.rows[this.cursor];
     this.mark.setVisible(row !== undefined);
     if (row) this.mark.setPosition(row.x, row.y);
+    syncMenu();
   }
 }

@@ -664,3 +664,31 @@ describe('ui.json M5 feature keys (T-040)', () => {
     expect((ui.guide as Record<string, unknown>)['body']).toBeUndefined();
   });
 });
+
+describe('ui.json accessibility keys (T-041)', () => {
+  // key -> its placeholders, sorted
+  const KEYS: Record<string, string[]> = {
+    'help.title': [],
+    'help.close': [],
+    'a11y.muted': [],
+    'a11y.unmuted': [],
+    'minigame.common.autoAvailable': [],
+  };
+  const get = (k: string): unknown => k.split('.').reduce<unknown>((a, p) => (a as Record<string, unknown> | undefined)?.[p], ui);
+  it('resolves every key as a short string with exactly its placeholders', () => {
+    for (const [k, ph] of Object.entries(KEYS)) {
+      const v = get(k);
+      expect(typeof v, k).toBe('string');
+      expect(((v as string).match(/{[^}]*}/g) ?? []).sort(), k).toEqual(ph);
+      expect((v as string).length, k).toBeLessThanOrEqual(90);
+    }
+  });
+  it('help.lines lists the controls in lines that fit the overlay (60 columns)', () => {
+    const lines = get('help.lines') as string[];
+    expect(Array.isArray(lines)).toBe(true);
+    expect(lines.length).toBeGreaterThanOrEqual(6);
+    for (const l of lines) expect(l.length, l).toBeLessThanOrEqual(60);
+    const all = lines.join(' ');
+    for (const word of ['Enter', 'Esc', 'Tab', 'M:', '?']) expect(all).toContain(word);
+  });
+});

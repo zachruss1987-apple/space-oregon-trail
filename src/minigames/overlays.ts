@@ -2,7 +2,9 @@
 import Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
+import { announce } from '@/game/a11y';
 import { markFlag } from '@/game/contract';
+import { session } from '@/game/session';
 import { panel } from '@/ui/chrome';
 import type { KeyRouter } from '@/ui/keys';
 import { Menu } from '@/ui/Menu';
@@ -13,6 +15,8 @@ import { t } from '@/ui/copy';
 import { addAnchored } from './pool';
 
 const DEPTH = 80;
+/** Paragraph break: each panel line is its own live-region line. */
+const PARA = '\n\n';
 const W = 520;
 
 /** One panel line (`scale` 2 for titles). */
@@ -39,6 +43,7 @@ export class Panel {
       this.objects.push(addText(scene, lx, y, l.text, { color: l.color ?? COLORS.text, scale, wrap, align: oneLine ? 0 : 1, depth: DEPTH + 2 }));
       y += (heights[i] ?? 0) + 6;
     });
+    announce(lines.map((l) => l.text).filter((s) => s.trim()).join(PARA), true);
   }
 
   destroy(): void {
@@ -47,12 +52,16 @@ export class Panel {
   }
 }
 
-/** Instruction screen: `minigame.<kind>.title / howto / start`. */
+/**
+ * Instruction screen: `minigame.<kind>.title / howto / start`. With reduced motion on, a line notes that Options can
+ * auto-resolve mini-games (the games themselves are unchanged).
+ */
 export function introPanel(scene: Phaser.Scene, kind: string): Panel {
   const k = `minigame.${kind}`;
   return new Panel(scene, [
     { text: t(`${k}.title`), color: COLORS.bright, scale: 2 },
     ...mlist(`${k}.howto`).map((text) => ({ text })),
+    ...(session.settings.reducedMotion ? [{ text: t('minigame.common.autoAvailable'), color: COLORS.dim }] : []),
     { text: t(`${k}.start`), color: COLORS.warn },
   ]);
 }

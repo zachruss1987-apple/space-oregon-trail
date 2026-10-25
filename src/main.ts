@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH, RENDER_SCALE } from './config';
 import './game/contract';
 import { debugLoadState } from './game/debugLoad';
+import { initA11y } from './game/a11y';
 import { session } from './game/session';
 import { audioBoot } from './audio/boot';
 import { SCENES } from './scenes';
@@ -9,6 +10,8 @@ import { GfxPreviewScene } from './gfx/previewScene';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
 session.init(window.location.search);
+// Hidden live region + listbox mirroring the canvas for screen readers (src/game/a11y.ts).
+initA11y();
 
 // The game is rendered at a fixed retro resolution and scaled to fit.
 const config: Phaser.Types.Core.GameConfig = {

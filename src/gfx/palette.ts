@@ -9,7 +9,8 @@ export const PALETTE_KEYS = [
   'amber', 'peach', 'lime', 'forest', 'grey', 'silver', 'white', 'magenta',
 ] as const;
 export type WorldColorKey = (typeof PALETTE_KEYS)[number];
-export const TEXT_KEYS = ['phosphor', 'phosphorHi', 'panel'] as const;
+/** Text roles: body, highlight, dim (hints / disabled rows; 4.5:1 on panel, unlike forest), panel fill. */
+export const TEXT_KEYS = ['phosphor', 'phosphorHi', 'phosphorDim', 'panel'] as const;
 export type TextColorKey = (typeof TEXT_KEYS)[number];
 export type PaletteKey = WorldColorKey | TextColorKey;
 export type PaletteTable = Record<PaletteKey, string>;
@@ -24,7 +25,7 @@ export const STANDARD: Readonly<PaletteTable> = {
   plum: '#6d2b79', brown: '#8a4a24', red: '#d83a2a', orange: '#f08a24',
   amber: '#ffd75c', peach: '#f0b890', lime: '#a8e040', forest: '#2e8a2e',
   grey: '#6e7080', silver: '#b8bcc8', white: '#ffffff', magenta: '#c04fa0',
-  phosphor: '#5cff5c', phosphorHi: '#c8ffc8', panel: '#001a00',
+  phosphor: '#5cff5c', phosphorHi: '#c8ffc8', phosphorDim: '#38a838', panel: '#001a00',
 };
 
 export const COLORBLIND: Readonly<PaletteTable> = {
@@ -32,7 +33,7 @@ export const COLORBLIND: Readonly<PaletteTable> = {
   plum: '#5a3a8a', brown: '#8c5a3c', red: '#d55e00', orange: '#e69f00',
   amber: '#f0e442', peach: '#f0b890', lime: '#cc79a7', forest: '#009e73',
   grey: '#6e7080', silver: '#b8bcc8', white: '#ffffff', magenta: '#f5b0d8',
-  phosphor: '#5cff5c', phosphorHi: '#c8ffc8', panel: '#001a00',
+  phosphor: '#5cff5c', phosphorHi: '#c8ffc8', phosphorDim: '#38a838', panel: '#001a00',
 };
 
 export const hexToNumber = (hex: string): number => parseInt(hex.slice(1), 16);

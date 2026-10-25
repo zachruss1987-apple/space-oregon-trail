@@ -1,13 +1,19 @@
 /**
  * Keyboard routing. One window-level listener per scene; the top handler on the stack gets each key.
  * Window listeners work without the canvas having focus, so keys are live on page load.
+ * `?` opens the controls overlay anywhere a text field is not taking input (any key closes it).
  */
 import type Phaser from 'phaser';
+import { openHelp as showHelp, type HelpOverlay } from './HelpOverlay';
 
 /** Anything that consumes keys (Menu, Modal, NumberInput, NameInput, scene-level handlers). */
 export interface KeyHandler {
   onKey(e: KeyboardEvent): void;
   onKeyUp?(e: KeyboardEvent): void;
+  /** True for typing fields (NameInput, NumberInput): `?` and the mute key are left to them. */
+  readonly textEntry?: boolean;
+  /** Called before the `?` overlay opens (e.g. Travel stops auto-travel, a mini-game pauses). */
+  onHelp?(): void;
 }
 
 /** A key typed into a DOM text field (TextArea): leave Backspace, Space and arrows to the field. */
@@ -18,13 +24,41 @@ const inTextField = (e: KeyboardEvent): boolean => {
 
 const NO_SCROLL = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Tab', 'Backspace', 'PageUp', 'PageDown']);
 
+/** The router of the scene that took input last (one scene runs at a time). */
+const current: { router: KeyRouter | null } = { router: null };
+
+/** DOM save-string boxes (Options export / import) count as text fields while they exist. */
+const SAVE_BOXES = ['proxima-export', 'proxima-import'];
+
+/**
+ * True while typing goes to a field: a NameInput / NumberInput on top of the active router, a focused DOM input or
+ * textarea, or an open export/import box. The global mute key and `?` stay out of the way then.
+ */
+export function textEntryActive(): boolean {
+  if (current.router?.top?.textEntry) return true;
+  if (typeof document === 'undefined') return false;
+  const el = document.activeElement as HTMLElement | null;
+  if (el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT')) return true;
+  return SAVE_BOXES.some((id) => document.getElementById(id) !== null);
+}
+
 export class KeyRouter {
   private readonly stack: KeyHandler[] = [];
+  private help: HelpOverlay | null = null;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(private readonly scene: Phaser.Scene) {
+    current.router = this;
     const down = (e: KeyboardEvent): void => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (NO_SCROLL.has(e.key) && !inTextField(e)) e.preventDefault();
+      if (this.help) {
+        if (e.key !== 'Shift') this.closeHelp();
+        return;
+      }
+      if (e.key === '?' && !e.repeat && !textEntryActive()) {
+        this.openHelp();
+        return;
+      }
       this.stack[this.stack.length - 1]?.onKey(e);
     };
     const up = (e: KeyboardEvent): void => this.stack[this.stack.length - 1]?.onKeyUp?.(e);
@@ -34,7 +68,31 @@ export class KeyRouter {
       window.removeEventListener('keydown', down);
       window.removeEventListener('keyup', up);
       this.stack.length = 0;
+      this.help = null;
+      if (current.router === this) current.router = null;
     });
+  }
+
+  /** The handler that gets keys now. */
+  get top(): KeyHandler | undefined {
+    return this.stack[this.stack.length - 1];
+  }
+
+  /** True while the `?` overlay is open. */
+  get helpOpen(): boolean {
+    return this.help !== null;
+  }
+
+  /** Show the controls overlay (the top handler hears `onHelp` first). */
+  openHelp(): void {
+    if (this.help) return;
+    this.top?.onHelp?.();
+    this.help = showHelp(this.scene, () => this.closeHelp());
+  }
+
+  closeHelp(): void {
+    this.help?.destroy();
+    this.help = null;
   }
 
   push(h: KeyHandler): void {

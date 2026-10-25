@@ -7,6 +7,7 @@ import { createRng, resumeSeed, seedFromString, type GameState, type LogEntry, t
 import {
   DEFAULT_OPTIONS, OPTIONS_KEY, parseOptions, reducedMotionOn, serializeOptions, TEXT_SPEED_MS, touchUiOn, type Options,
 } from './options';
+import { announce } from './a11y';
 import { syncAutosave } from './saveStore';
 
 /** Player-adjustable UI settings (derived from the persisted Options plus fixed timings). */
@@ -45,6 +46,9 @@ function loadOptions(): Options {
 const media = (q: string): boolean => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(q).matches;
 const touchScreen = (): boolean => typeof window !== 'undefined' && ('ontouchstart' in window || (navigator.maxTouchPoints ?? 0) > 0);
 
+/** New log lines read out per state write at most (a debug load can jump far). */
+const MAX_ANNOUNCED = 12;
+
 /** Choices made in SetupScene before createGame. */
 export interface SetupDraft {
   profession: ProfessionId;
@@ -73,13 +77,20 @@ class Session {
   /** Cosmetic rng for text variants and bulletins. */
   uiRng: Rng = createRng(1);
   private current: GameState | null = null;
-  /** Current run, or null on the title screen. Setting it keeps `localStorage['proxima.autosave']` in step (saveStore). */
+  /**
+   * Current run, or null on the title screen. Setting it keeps `localStorage['proxima.autosave']` in step (saveStore)
+   * and reads the new log lines into the screen-reader live region (a11y.ts; a first or resumed state reads none).
+   */
   get state(): GameState | null {
     return this.current;
   }
   set state(s: GameState | null) {
+    const prev = this.current;
     this.current = s;
     syncAutosave(s, this.seedLabel, Date.now());
+    if (prev && s && s.log.length > prev.log.length) {
+      for (const e of s.log.slice(Math.max(prev.log.length, s.log.length - MAX_ANNOUNCED))) announce(e.text);
+    }
   }
   /** Setup choices. */
   draft: SetupDraft = { profession: 'executive', names: [...DEFAULT_CREW_NAMES], window: 1 };

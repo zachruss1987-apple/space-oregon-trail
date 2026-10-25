@@ -16,6 +16,7 @@ export interface NameInputOptions {
 }
 
 export class NameInput implements KeyHandler {
+  readonly textEntry = true;
   private value = '';
   private readonly text: Phaser.GameObjects.BitmapText;
   private readonly max: number;

@@ -566,7 +566,8 @@
       "controlsBody": "Move: arrows or WASD. Esc pauses. Touch: drag to steer, tap the pause icon.",
       "fire": "FIRE",
       "pauseIcon": "II",
-      "countdownN": "{n}"
+      "countdownN": "{n}",
+      "autoAvailable": "Rather not fly it? Options > Mini-games > Auto-resolve lets the crew handle it."
     },
     "salvage": {
       "title": "SALVAGE RUN",
@@ -644,5 +645,23 @@
     "imported": "Save loaded. Continue journey from the title.",
     "invalid": "That save will not load.",
     "over": "That journey is already over. Nothing to continue."
+  },
+  "help": {
+    "title": "CONTROLS",
+    "lines": [
+      "Arrows or WASD (Tab, Shift+Tab): move the cursor.",
+      "Enter or Space: choose. Number keys: pick a row at once.",
+      "Esc: back, cancel, or pause a mini-game.",
+      "Left / Right: change an Options value or turn a Guide page.",
+      "Travel: hold Enter or press T to keep going; any key stops.",
+      "Typing a name: letters, Backspace, Enter. Tab: random names.",
+      "M: sound on or off (not on the title or while typing).",
+      "?: this list. Nothing outside the mini-games is timed."
+    ],
+    "close": "Press any key to close."
+  },
+  "a11y": {
+    "muted": "Sound off.",
+    "unmuted": "Sound on."
   }
 }
