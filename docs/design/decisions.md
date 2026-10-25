@@ -43,3 +43,8 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Hazard injury falls back to −15 health if the victim already gained a condition that day; cargo loss with an empty hold counts as clear; damage to an already-broken part has no extra effect.
 - Credits keep cents (rations cost 0.30 cr).
 - Playthrough (200 seeds): 49.5% win overall, Executive 66%, Engineer 72%, Farmer 5%, mean 177 days. Accepted for M1; M5 balances Farmer and Executive mass penalty.
+
+## 2026-10-24 (tester)
+- A condition caught today (radiation sickness, illness, injury) does not tick down on the day it is caught, so its first full duration is the rolled 5–9 / table range: health.md steps 4–5 were ambiguous; the code's reading is reasonable and now asserted by `tests/unit/spec/health.spec.test.ts`.
+- Scurvy becomes eligible on the 10th consecutive Half/Paste day (the counter is compared after that day's increment): events.md "after 10+ consecutive days" was ambiguous; asserted in `events.spec.test.ts`.
+- Policy-run finding (not a rule change): in 1,000 seeds (SEED-0..999) no reference-policy run dies before day 40 (earliest Executive death is day 111), so e2e "early death" seeds are the earliest deaths, not under-40 ones; see `tests/e2e/seeds.ts`.
