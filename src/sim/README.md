@@ -254,6 +254,9 @@ For e2e tests (src/game/contract.ts); keep stable.
 - Display flags: `body[data-crt]` `on` / `off`, `body[data-reduced]` `1` / `0` (reduced motion in effect: no parallax,
   bob, blink or typewriter, overlays frozen, CRT off; mini-game instructions add `minigame.common.autoAvailable`), and
   `body[data-palette]` `standard` / `cb` (colorblind palette: sprites re-rasterize, scenes re-read `activePalette()`).
+- Key hints (T-069, `docs/design/keyhints.md`): the canvas is 640x416; the bottom 16 px band shows the top key handler's
+  hint set. `body[data-hints]` is the set id (`menu`, `modal`, `travel`, ... ; absent while hidden by the Key hints option
+  or on touch platforms) and `body[data-platform]` is `windows` / `mac` / `linux` / `touch`; `?platform=` overrides detection.
 - Audio cues (T-063): Travel loops `drive.hum` while a day runs (stopped when it ends, on sleep and shutdown); Salvage
   loops `grapple.reel` while reeling; `playSting('danger')` on loss events, crossing damage, deaths and hazard arrival;
   `playSting('jingle.clean')` on clean mini-game runs.
