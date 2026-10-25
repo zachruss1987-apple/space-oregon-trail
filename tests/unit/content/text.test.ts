@@ -23,6 +23,17 @@ const WAYPOINTS = [
   'oort-beacon', 'proxima-heliopause-shock', 'lane-terminus-station',
   'the-flare-belt', 'new-willamette',
 ];
+// Keys the sim requests via resolveText (events table). Fallbacks must never fire in play.
+const WEATHER_IDS = ['calm', 'fair', 'unsettled', 'storm', 'fog', 'flare']; // src/sim/tick.ts weather.${id}
+const SIM_EVENT_KEYS: Record<string, number> = {
+  'scan.nothing': 2, 'scan.part': 2, 'scan.rations': 2, // src/sim/salvage.ts
+  'repair.success': 2, 'repair.fail': 2, 'repair.failLost': 2, 'help.part': 2, 'help.drive': 2, // src/sim/repair.ts
+  rejoin: 2, delay: 2, stuck: 2, starving: 2, suit_wear: 2, rest: 2, // src/sim/tick.ts, health.ts
+  ...Object.fromEntries(WEATHER_IDS.map((w) => [`weather.${w}`, 3])), // src/sim/tick.ts
+  ...Object.fromEntries(CONDITIONS.map((c) => [`recover.${c}`, 2])), // src/sim/health.ts recover.${cond.id}
+};
+// ui table keys: src/sim/tick.ts (arrival.*, death.allDead), src/sim/game.ts + store.ts (log.*)
+const SIM_UI_KEYS = ['arrival.reached', 'arrival.final', 'death.allDead', 'log.departure', 'log.launch'];
 const LOSS_WITH_QTY = ['pirates', 'cargo_shift', 'hull_fire'];
 
 type Obj = Record<string, unknown>;
@@ -82,6 +93,33 @@ describe('events.json', () => {
     for (const c of CONDITIONS) {
       for (const s of (events as Obj)[`illness.${c}`] as string[]) expect(s).toContain('{name}');
     }
+  });
+});
+
+describe('sim-requested keys', () => {
+  const get = (root: unknown, key: string): unknown =>
+    (root as Obj)[key] ?? key.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], root);
+  it('events.json covers every key the sim asks for', () => {
+    for (const [k, min] of Object.entries(SIM_EVENT_KEYS)) {
+      const v = get(events, k);
+      expect(Array.isArray(v), k).toBe(true);
+      expect((v as string[]).length, k).toBeGreaterThanOrEqual(min);
+      if (k.startsWith('weather.')) for (const s of v as string[]) expect(s.length, s).toBeLessThanOrEqual(90);
+      if (k.startsWith('recover.')) for (const s of v as string[]) expect(s).toContain('{name}');
+    }
+  });
+  it('ui.json covers every key the sim asks for', () => {
+    for (const k of SIM_UI_KEYS) {
+      const v = get(ui, k);
+      expect(typeof v === 'string' || Array.isArray(v), k).toBe(true);
+    }
+    for (const k of ['arrival.reached', 'log.departure']) {
+      for (const s of get(ui, k) as string[]) expect(s).toContain('{name}');
+    }
+    expect((get(ui, 'arrival.reached') as string[]).length).toBeGreaterThanOrEqual(2);
+    expect((get(ui, 'arrival.final') as string[]).length).toBeGreaterThanOrEqual(2);
+    expect((get(ui, 'log.launch') as string[]).length).toBeGreaterThanOrEqual(2);
+    expect((get(ui, 'log.departure') as string[]).length).toBeGreaterThanOrEqual(2);
   });
 });
 

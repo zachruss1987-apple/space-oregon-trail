@@ -1,7 +1,27 @@
 {
   "$schema": "UI copy. Keys are stable identifiers used by scenes; see docs/design/ui.md for canonical menu labels. Placeholders: {name} crew member, {n} number, {item} supply name.",
-  "title": { "name": "THE PROXIMA TRAIL", "tagline": "You have died of space dysentery.", "menu": ["Travel the Trail", "Learn about the Trail", "See the Top Ten", "Options"] },
-  "travel": { "menu": ["Continue on the Lane", "Check supplies", "Look at the map", "Change thrust", "Change rations", "Rest", "Attempt repair", "Scan for salvage"] },
+  "title": {
+    "name": "THE PROXIMA TRAIL",
+    "tagline": "You have died of space dysentery.",
+    "menu": [
+      "Travel the Trail",
+      "Learn about the Trail",
+      "See the Top Ten",
+      "Options"
+    ]
+  },
+  "travel": {
+    "menu": [
+      "Continue on the Lane",
+      "Check supplies",
+      "Look at the map",
+      "Change thrust",
+      "Change rations",
+      "Rest",
+      "Attempt repair",
+      "Scan for salvage"
+    ]
+  },
   "setup": {
     "professionPrompt": "Many kinds of people travel the Lane. What will you be?",
     "professions": {
@@ -61,11 +81,40 @@
     "cantAfford": "You haven't the credits for that. I don't run a charity, though I have been tempted."
   },
   "status": {
-    "thrust": { "Cruise": "Cruise", "Hard burn": "Hard burn", "Overburn": "Overburn" },
-    "rations": { "Full": "Full", "Half": "Half", "Paste": "Paste" },
-    "weather": { "Calm": "Calm", "Fair": "Fair", "Unsettled": "Unsettled", "Solar storm": "Solar storm", "Ion fog": "Ion fog", "Flare": "Flare" },
-    "health": { "Good": "Good", "Fair": "Fair", "Poor": "Poor", "Very poor": "Very poor" },
-    "labels": { "date": "Date", "weather": "Weather", "health": "Health", "thrust": "Thrust", "rations": "Rations", "credits": "Credits", "next": "Next", "traveled": "Traveled" }
+    "thrust": {
+      "Cruise": "Cruise",
+      "Hard burn": "Hard burn",
+      "Overburn": "Overburn"
+    },
+    "rations": {
+      "Full": "Full",
+      "Half": "Half",
+      "Paste": "Paste"
+    },
+    "weather": {
+      "Calm": "Calm",
+      "Fair": "Fair",
+      "Unsettled": "Unsettled",
+      "Solar storm": "Solar storm",
+      "Ion fog": "Ion fog",
+      "Flare": "Flare"
+    },
+    "health": {
+      "Good": "Good",
+      "Fair": "Fair",
+      "Poor": "Poor",
+      "Very poor": "Very poor"
+    },
+    "labels": {
+      "date": "Date",
+      "weather": "Weather",
+      "health": "Health",
+      "thrust": "Thrust",
+      "rations": "Rations",
+      "credits": "Credits",
+      "next": "Next",
+      "traveled": "Traveled"
+    }
   },
   "crossing": {
     "clear": [
@@ -97,11 +146,30 @@
     "title": "New Willamette",
     "intro": "You have reached New Willamette. The sky is the wrong color and the ground is the right kind.",
     "ratings": {
-      "Pathfinder": { "title": "Pathfinder", "line": "You crossed the Lane with skill and luck in equal parts. The colony will name a street after you." },
-      "Spacer": { "title": "Spacer", "line": "You made it, and you did it competently. The Lane Authority has stamped your papers." },
-      "Groundling": { "title": "Groundling", "line": "You made it, which is more than the odds suggested. The colony has a place for you." }
+      "Pathfinder": {
+        "title": "Pathfinder",
+        "line": "You crossed the Lane with skill and luck in equal parts. The colony will name a street after you."
+      },
+      "Spacer": {
+        "title": "Spacer",
+        "line": "You made it, and you did it competently. The Lane Authority has stamped your papers."
+      },
+      "Groundling": {
+        "title": "Groundling",
+        "line": "You made it, which is more than the odds suggested. The colony has a place for you."
+      }
     },
-    "continue": "See your score"
+    "continue": "See your score",
+    "reached": [
+      "You have reached {name}. The ship, remarkably, is still in one piece.",
+      "Arrival at {name}. The crew exhales for the first time in days.",
+      "{name} ahead, then beside, then behind schedule. You are here."
+    ],
+    "final": [
+      "You have arrived at New Willamette. The sky is the wrong color.",
+      "New Willamette. You made it, and the paperwork is next.",
+      "Landfall at New Willamette. The ground is solid and slightly rude."
+    ]
   },
   "death": {
     "title": "Your journey ends here.",
@@ -113,5 +181,17 @@
   "guide": {
     "title": "Learn about the Trail",
     "body": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close."
+  },
+  "log": {
+    "departure": [
+      "Captain {name} and crew make ready at Independence Station.",
+      "Captain {name} signs the last form and checks the airlock twice.",
+      "Captain {name} counts the crew, the crates, and the courage. Close enough."
+    ],
+    "launch": [
+      "You cast off from Independence Station. The Lane is two thousand Mk long.",
+      "The tether drops and Independence Station shrinks behind you.",
+      "Drives lit, hatches sealed. Independence Station recedes."
+    ]
   }
 }

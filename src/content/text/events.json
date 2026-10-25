@@ -157,5 +157,156 @@
     "The cargo shifted coming out of the crossing. {n} {item} went missing in the hold.",
     "Loose lashing. You lost {n} {item} to the crossing and a bad knot.",
     "The crossing shook the hold, and {n} {item} did not survive the shaking."
+  ],
+  "scan.nothing": [
+    "The drones swept the wreckage and returned with a tin of regret.",
+    "Nothing worth hauling. The drones sound almost apologetic.",
+    "Three hours of scanning, one dented bolt. You leave the bolt.",
+    "The wreck was picked clean by someone with better drones."
+  ],
+  "scan.part": [
+    "The drones hauled in a spare {item}, only slightly haunted.",
+    "A spare {item} was bobbing in the debris. The drones were thrilled.",
+    "Salvage report: one {item}, in working order, previous owner unknown."
+  ],
+  "scan.rations": [
+    "The drones salvaged {n} rations. Nobody asked whose they were.",
+    "Good scan: {n} rations, sealed and mostly not expired.",
+    "The drones came back with {n} rations and a smug beep.",
+    "A cargo crate yielded {n} rations. The label was in a language of hope."
+  ],
+  "repair.success": [
+    "You repaired the {item}. It sounds almost cheerful.",
+    "The {item} is fixed. The manual may take credit.",
+    "New part in, old part out. The {item} works again.",
+    "The {item} holds. You decline to ask why."
+  ],
+  "repair.fail": [
+    "The repair failed. The {item} is still broken, but now it is also insulted.",
+    "No luck. The {item} remains broken, and you remain hopeful.",
+    "You tried. The {item} did not, so try again or pray.",
+    "The {item} refused the repair. It had its reasons."
+  ],
+  "repair.failLost": [
+    "The repair failed and the spare {item} is ruined. A bad day for hardware.",
+    "You ruined the spare {item} and fixed nothing. A full set of losses.",
+    "The spare {item} did not survive your attempt. Neither did the repair."
+  ],
+  "help.part": [
+    "A passing crew fixed your {item} and declined payment. They left a note.",
+    "Strangers in a patched tug repaired your {item} and drifted on.",
+    "A kind hauler lent a wrench and fixed the {item}. Lane manners still exist."
+  ],
+  "help.drive": [
+    "A passing hauler spared you an ion drive. You owe them a story.",
+    "A convoy captain tossed you a spare drive. 'Pay it forward,' he said.",
+    "Strangers gave you an ion drive and refused thanks. Space is odd that way."
+  ],
+  "weather.calm": [
+    "Calm skies. The ship hums, and nobody suspects a thing.",
+    "Calm today. Even the dust is lying low.",
+    "A quiet stretch of nothing. You make the most of it.",
+    "The void behaves. Enjoy it while it lasts."
+  ],
+  "weather.fair": [
+    "Fair skies. The Lane lies open and the buoys blink along.",
+    "A fair day, by Lane standards, which is a low bar.",
+    "Fair weather. Radiation is within what the pamphlet promised.",
+    "Fair. The sensors are bored, and that is the best sign."
+  ],
+  "weather.unsettled": [
+    "Unsettled skies. The sensors twitch at things that are not there.",
+    "Unsettled. The hull creaks a little, in the way hulls do.",
+    "Dust and static ahead. Nothing serious, probably.",
+    "The sky is unsettled. So is the crew, mildly."
+  ],
+  "weather.storm": [
+    "Solar storm. Suits on, and no one makes jokes about sunbathing.",
+    "A solar storm rolls in. The hull ticks like an angry clock.",
+    "Storm warning: the sun is in a mood. Stay inside if you can.",
+    "Charged particles by the bucket. The suits earn their keep."
+  ],
+  "weather.fog": [
+    "Ion fog. The buoys are rumors, and the compass is a suggestion.",
+    "Thick ion fog. You steer by faith and a blinking light.",
+    "Fog on the Lane. Every shadow turns out to be another shadow.",
+    "The ion fog slows you to a careful crawl."
+  ],
+  "weather.flare": [
+    "Flare. Proxima is throwing a tantrum, and you are in the way.",
+    "A flare lights the sky. The shielding makes a worrying noise.",
+    "Flare overhead. Everyone finds a reason to be near the suits.",
+    "Proxima flares. The ship ticks and prays."
+  ],
+  "rejoin": [
+    "{name} drifted back aboard, looking sheepish and slightly sunburned.",
+    "{name} climbed back through the airlock. The tether was, in fact, optional.",
+    "{name} is back aboard. Nobody mentions the drifting."
+  ],
+  "delay": [
+    "A lost day. The ship holds position and the crew holds its breath.",
+    "The ship waits out the day, going nowhere in the most careful way.",
+    "Another day lost to drifting. The Lane is patient, and you are less so."
+  ],
+  "stuck": [
+    "The ship cannot move today. It has run out of reasons to try.",
+    "No drives, no motion. The ship sits and thinks about it.",
+    "You are going nowhere. The silence is thorough."
+  ],
+  "starving": [
+    "The crew is starving. The paste jokes have stopped.",
+    "Empty lockers, empty stomachs. The crew's patience thins.",
+    "Nobody has eaten, and everybody has noticed."
+  ],
+  "suit_wear": [
+    "An EVA suit was ruined by the radiation. It will not be missed, but it will be needed.",
+    "Radiation chewed through a suit seam. One suit fewer between you and the sun.",
+    "A suit gave up the ghost today. The lining went first."
+  ],
+  "rest": [
+    "The crew rests. Some even sleep, which is the point.",
+    "A day of rest. The ship drifts and the crew mends.",
+    "The crew takes a day off, as the manual allows once a month.",
+    "Rest day. Boots off, coffee on, hull still holding."
+  ],
+  "recover.space-dysentery": [
+    "{name} has recovered from space dysentery. The recycler is still blamed.",
+    "{name} is over the space dysentery, and back on solid food.",
+    "The space dysentery has let {name} go. Nobody is sure why."
+  ],
+  "recover.hull-mold-fever": [
+    "{name} has shaken off the hull mold fever. The walls are still suspected.",
+    "{name} is clear of hull mold fever, and sleeping away from the bulkhead.",
+    "The hull mold fever has passed. {name} is pale but opinionated."
+  ],
+  "recover.cryo-fever": [
+    "{name} has recovered from the cryo-fever and is warm again.",
+    "The cryo-fever broke overnight. {name} asks for soup.",
+    "{name} is through the cryo-fever, a little thinner and a lot wiser."
+  ],
+  "recover.scurvy": [
+    "{name} has recovered from scurvy. The algae finally did its job.",
+    "The scurvy has lifted. {name} can smile without wincing.",
+    "{name} is rid of the scurvy and has a new respect for greens."
+  ],
+  "recover.radiation-sickness": [
+    "{name} has recovered from radiation sickness. The glow has faded.",
+    "{name} is past the radiation sickness, and holding the suit a little closer.",
+    "The radiation sickness is gone. {name} counts it as a lesson."
+  ],
+  "recover.exhaustion": [
+    "{name} has recovered from exhaustion and asks for no more overburn.",
+    "{name} slept for ten hours straight. The exhaustion has lifted.",
+    "The exhaustion is gone. {name} has opinions about thrust settings."
+  ],
+  "recover.decompression-injury": [
+    "{name} has recovered from the decompression injury. The bones knit and the pride too.",
+    "{name} is healed of the decompression injury, and checks every seal twice.",
+    "The decompression injury is mended. {name} still avoids the airlock."
+  ],
+  "recover.micrometeorite-puncture": [
+    "{name} has recovered from the micrometeorite puncture. A scar remains for stories.",
+    "The micrometeorite puncture has closed. {name} counts it a lucky hole.",
+    "{name} is over the micrometeorite puncture and wants a bigger suit."
   ]
 }

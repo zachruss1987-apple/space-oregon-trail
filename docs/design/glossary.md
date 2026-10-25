@@ -29,3 +29,5 @@
 | EVA drift | A crew member lost outside the ship on a spacewalk (`crew_eva_drift`, death cause `drift`). |
 | Hull mold fever | The Lane's version of cholera; walls are suspected. |
 | Derelict | An abandoned wreck that may hold rations, a spare, or suits. |
+| Drones | Salvage drones; they sweep wrecks on a scan and come back smug or sorry. |
+| Hold position | A lost day when the ship waits in place (`delay`). |
