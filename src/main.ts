@@ -22,7 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: audioBoot(SCENES),
+  scene: [...(new URLSearchParams(window.location.search).get('scene') === 'gfxpreview' ? [GfxPreviewScene] : []), ...audioBoot(SCENES)],
 };
 
 const game = new Phaser.Game(config);

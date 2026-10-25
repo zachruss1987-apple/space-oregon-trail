@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T04:10:17.176Z",
+  "updated": "2026-10-25T04:14:42.794Z",
   "milestones": [
     {
       "id": "M0",
@@ -929,11 +929,11 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "doing",
+      "status": "done",
       "assignee": "developer",
       "issue": 37,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T03:45:52.072Z",
+      "updated": "2026-10-25T04:14:42.630Z",
       "notes": [
         {
           "ts": "2026-10-25T03:44:50.348Z",
@@ -944,6 +944,21 @@
           "ts": "2026-10-25T03:45:52.073Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:13:06.901Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:13:18.270Z",
+          "by": "developer",
+          "text": "MiniGameScene base (fixed 60 Hz, pause/skip, hooks finishNow/finishWith, touch layer) + Salvage Run (pure salvageLogic/salvageHaul, content/minigames.ts) + sim salvage skipped intent (d100-10, info/skipped) + Travel launch, seed to createGame; unit 21 new (979 total), e2e salvage.spec 2 tests; full e2e green (rerun of concurrency flakes)"
+        },
+        {
+          "ts": "2026-10-25T04:14:42.630Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -954,12 +969,18 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:14:42.739Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:14:42.739Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-030",
@@ -967,16 +988,36 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "developer",
       "issue": 38,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T03:44:50.395Z",
+      "updated": "2026-10-25T04:14:42.684Z",
       "notes": [
         {
           "ts": "2026-10-25T03:44:50.396Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:13:07.347Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:14:09.083Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:14:09.523Z",
+          "by": "developer",
+          "text": "Settings autoResolveMiniGames/touchControls (localStorage proxima.options), ?minigames=auto, Title hidden M toggle, Travel scan auto path (statistical scan, no scene), FIRE button on touch or touchControls; e2e salvage.spec +2 (4 total); unit 979 green"
+        },
+        {
+          "ts": "2026-10-25T04:14:42.684Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -1034,16 +1075,31 @@
       "desc": "",
       "milestone": "M4",
       "role": "graphics",
-      "status": "doing",
+      "status": "done",
       "assignee": "graphics",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T03:55:27.706Z",
+      "updated": "2026-10-25T04:12:31.217Z",
       "notes": [
         {
           "ts": "2026-10-25T03:55:27.706Z",
           "by": "graphics",
           "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:11:30.441Z",
+          "by": "graphics",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:11:30.985Z",
+          "by": "graphics",
+          "text": "palette(16+cb+text), spriteParse/sprites factory, 30 sprites (hauler 6f, 3 flares, mini, tug, drone, hook, beacon, 12 debris, ui panel/cursor/scroll/toggle, 5 portraits x3), retro8 95 glyphs + retro6 HUD 43, GfxPreview scene. 49 new unit tests + 1 e2e; test:all green (3 e2e timeouts under shared load passed on rerun)."
+        },
+        {
+          "ts": "2026-10-25T04:12:31.218Z",
+          "by": "graphics",
+          "text": "review -> done"
         }
       ]
     },
@@ -1053,12 +1109,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "graphics",
-      "status": "backlog",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "graphics",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:12:28.302Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:12:28.302Z",
+          "by": "graphics",
+          "text": "backlog -> doing"
+        }
+      ]
     },
     {
       "id": "T-035",
@@ -1100,16 +1162,21 @@
       "desc": "",
       "milestone": "M4",
       "role": "sound",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "sound",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:10:17.175Z",
+      "updated": "2026-10-25T04:11:13.180Z",
       "notes": [
         {
           "ts": "2026-10-25T04:10:17.176Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:11:13.181Z",
+          "by": "sound",
+          "text": "todo -> doing"
         }
       ]
     },
@@ -1685,6 +1752,19 @@
           "text": "review -> done"
         }
       ]
+    },
+    {
+      "id": "T-058",
+      "title": "Writer: ui.json entries for UNWRITTEN mini-game keys in src/minigames/copy.ts (+ Threading/Flare keys the next dev adds)",
+      "desc": "",
+      "milestone": "M3",
+      "role": "writer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T04:14:42.793Z",
+      "updated": "2026-10-25T04:14:42.794Z",
+      "notes": []
     }
   ]
 }
