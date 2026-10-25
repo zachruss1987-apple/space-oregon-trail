@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+.vite/
+*.log
+.DS_Store
+Thumbs.db
+# Scratch output from local-LLM brainstorming (curated output is committed under src/content)
+scratch/
