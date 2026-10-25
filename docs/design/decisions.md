@@ -32,3 +32,14 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Default crew names Ezra, Temperance, Amos, Lucinda, Hollis plus a 20-name pool: period-flavored, all ≤ 12 characters.
 - Score bonuses are added before the multiplier; drift losses count as deaths for the +300: as written, now unambiguous.
 - M1 always routes via Oort Beacon: the Titan branch is an M2 choice.
+
+## 2026-10-24 (sim implementation, developer, logged by PM)
+- Station price markups are placeholders until `economy.md` exists: Mars Relay 1.25, +0.25 per station, Lane Terminus 2.5.
+- Auto-play policy also repairs whenever a broken part has a spare; "days left" is counted at Half rations.
+- Exhaustion counter builds only on Overburn days with movement and decays 1 per tick off Overburn (rest days included).
+- Scans and repairs resolve at tick step 4 (distance step) as zero-distance days.
+- A stalled drive stays offline for the rolled days, counted after that day's distance.
+- Zero-health deaths without an active condition take the dominant cause per health.md (bad_recycler / hazard hits included).
+- Hazard injury falls back to −15 health if the victim already gained a condition that day; cargo loss with an empty hold counts as clear; damage to an already-broken part has no extra effect.
+- Credits keep cents (rations cost 0.30 cr).
+- Playthrough (200 seeds): 49.5% win overall, Executive 66%, Engineer 72%, Farmer 5%, mean 177 days. Accepted for M1; M5 balances Farmer and Executive mass penalty.
