@@ -23,8 +23,15 @@ export { brokenParts, repairBlocker, repairChance, sparesFor } from './repair';
 export { canScan } from './salvage';
 export { computeScore, ratingFor, type ScoreBreakdown, type ScoreLine } from './score';
 export { fromJSON, toJSON } from './serialize';
+export {
+  HIGHSCORE_MAX, HIGHSCORE_NAME_MAX, HIGHSCORES_KEY, defaultHighScores, insertHighScore, loadHighScores, qualifies, serializeHighScores, toHighScore,
+  type HighScore, type Insertion,
+} from './highscores';
+export {
+  AUTOSAVE_KEY, EXPORT_PREFIX, describeSave, exportSave, importSave, makeSave, parseSave, resumeSeed, type ParsedSave, type SaveSlot,
+} from './saves';
 export { dailyDistance, daysOfRations, rationNeed, remainingInSegment } from './travel';
-export { averageHealth, generalHealth, healthLabel, isFlareSeason, presentCrew, workingDrives } from './util';
+export { averageHealth, difficultySpec, generalHealth, healthLabel, isFlareSeason, presentCrew, workingDrives } from './util';
 export { isSuited } from './health';
 export { DEFAULT_POLICY, policyCross, policyIntent, policyShop, runPolicy, type PolicyOptions, type RunSummary } from './policy';
 export { resolveText, textLine } from './text';

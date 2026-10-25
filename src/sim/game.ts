@@ -1,10 +1,11 @@
 /** New game creation (docs/design/world.md "New game (initial state)"). */
 import {
-  CREW_SIZE, DEFAULT_CREW_NAMES, INITIAL_WEATHER, NAME_MAX_LENGTH, NAME_MIN_LENGTH, NAME_POOL, PROFESSIONS, WINDOWS,
+  CREW_SIZE, DEFAULT_CREW_NAMES, DEFAULT_DIFFICULTY, DIFFICULTIES, INITIAL_WEATHER, NAME_MAX_LENGTH, NAME_MIN_LENGTH, NAME_POOL, PROFESSIONS, WINDOWS,
 } from '@/content';
 import type { Rng } from './rng';
 import { resolveText } from './text';
 import { STATE_VERSION, type Crew, type GameState, type NewGameOptions } from './types';
+import { difficultySpec } from './util';
 
 /** True for 1–12 printable ASCII characters (after trimming). */
 export function isValidName(name: string): boolean {
@@ -38,12 +39,14 @@ export function createGame(options: NewGameOptions, rng: Rng): GameState {
   const window = WINDOWS[options.window];
   if (!profession) throw new Error(`Unknown profession: ${String(options.profession)}`);
   if (!window) throw new Error(`Unknown window: ${String(options.window)}`);
+  const difficulty = options.difficulty ?? DEFAULT_DIFFICULTY;
+  if (!(difficulty in DIFFICULTIES)) throw new Error(`Unknown difficulty: ${String(options.difficulty)}`);
   const state: GameState = {
     version: STATE_VERSION,
     profession: profession.id,
     window: window.id,
     crew: normalizeCrewNames(options.crewNames).map(newCrew),
-    credits: profession.credits,
+    credits: Math.round(profession.credits * difficultySpec(difficulty).credits),
     supplies: { drives: 0, rations: 0, suits: 0, charges: 0, plates: 0, pumps: 0, gyros: 0 },
     broken: { hull: false, pump: false, gyro: false },
     offlineDrives: [],
@@ -72,6 +75,7 @@ export function createGame(options: NewGameOptions, rng: Rng): GameState {
     station: null,
     seed: typeof options.seed === 'string' ? options.seed : '',
     rodeTheWind: false,
+    difficulty,
   };
   const text = resolveText(rng, 'ui', 'log.departure', { name: state.crew[0]!.name },
     `Captain {name} and crew make ready at Independence Station, ${window.label}.`);

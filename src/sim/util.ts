@@ -1,7 +1,12 @@
 /** Small pure helpers shared by sim modules. */
-import { FLARE_SEASON_START, HEALTH_BANDS, MAX_CONDITIONS, type HealthLabel } from '@/content';
+import { DIFFICULTIES, FLARE_SEASON_START, HEALTH_BANDS, MAX_CONDITIONS, type DifficultySpec, type HealthLabel } from '@/content';
 import type { Rng } from './rng';
-import type { Crew, GameState, LogEntry, LogKind } from './types';
+import type { Crew, Difficulty, GameState, LogEntry, LogKind } from './types';
+
+/** Difficulty multipliers for a level (unknown or missing = spacer, all 1). */
+export function difficultySpec(d: Difficulty | undefined): DifficultySpec {
+  return (d !== undefined && DIFFICULTIES[d]) || DIFFICULTIES.spacer;
+}
 
 /** ISO date + n days (UTC, no wall clock involved). */
 export function addDays(iso: string, n: number): string {

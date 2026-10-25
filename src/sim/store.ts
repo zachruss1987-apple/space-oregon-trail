@@ -4,8 +4,8 @@ import {
 } from '@/content';
 import type { Rng } from './rng';
 import { resolveText } from './text';
-import type { GameState, LogEntry, StepResult } from './types';
-import { cloneState, pushLog, roundHalfUp } from './util';
+import type { Difficulty, GameState, LogEntry, StepResult } from './types';
+import { cloneState, difficultySpec, pushLog, roundHalfUp } from './util';
 
 /** Round to whole cents, half up, to avoid float drift (0.30 cr rations, 1.5 markups). */
 export function cents(x: number): number {
@@ -17,22 +17,22 @@ export function centsDown(x: number): number {
   return Math.floor(x * 100 + 1e-6) / 100;
 }
 
-/** Price per pack at a waypoint, or null if that store does not sell the item (or there is no store). */
-export function localPrice(item: SupplyKey, waypointIndex: number): number | null {
+/** Price per pack at a waypoint (base × markup × difficulty prices), or null if that store does not sell the item (or there is no store). */
+export function localPrice(item: SupplyKey, waypointIndex: number, difficulty?: Difficulty): number | null {
   const m = WAYPOINTS[waypointIndex]?.markup?.[item];
-  return m === undefined ? null : cents(ITEMS[item].basePrice * m);
+  return m === undefined ? null : cents(ITEMS[item].basePrice * m * difficultySpec(difficulty).prices);
 }
 
 /** Price per pack at a waypoint: base × markup. Throws where the item is not sold. */
-export function priceAt(item: SupplyKey, waypointIndex = 0): number {
-  const p = localPrice(item, waypointIndex);
+export function priceAt(item: SupplyKey, waypointIndex = 0, difficulty?: Difficulty): number {
+  const p = localPrice(item, waypointIndex, difficulty);
   if (p === null) throw new Error(`${item} is not sold at waypoint ${waypointIndex}`);
   return p;
 }
 
 /** Cost of `packs` packs at a waypoint. */
-export function costOf(item: SupplyKey, packs: number, waypointIndex = 0): number {
-  return cents(priceAt(item, waypointIndex) * packs);
+export function costOf(item: SupplyKey, packs: number, waypointIndex = 0, difficulty?: Difficulty): number {
+  return cents(priceAt(item, waypointIndex, difficulty) * packs);
 }
 
 /** Buy-back price per pack: min(50% local, 90% base), floored to the cent. Null at Independence or if not sold. */
@@ -58,7 +58,7 @@ export function packsHeld(state: GameState, item: SupplyKey): number {
 /** Most packs the player may still buy here: min(limit room, cap room, affordable); 0 if not sold. */
 export function maxBuyable(state: GameState, item: SupplyKey, waypointIndex = storeIndex(state) ?? 0): number {
   const def = ITEMS[item];
-  const price = localPrice(item, waypointIndex);
+  const price = localPrice(item, waypointIndex, state.difficulty);
   if (price === null) return 0;
   const limitRoom = def.buyLimit - packsHeld(state, item);
   const capRoom = def.cap === null ? Infinity : Math.floor((def.cap - state.supplies[item]) / def.packSize);
@@ -76,7 +76,7 @@ export function buyBlocker(state: GameState, item: SupplyKey, packs: number): st
   const def = ITEMS[item];
   if (packsHeld(state, item) + packs > def.buyLimit) return `You can carry at most ${def.buyLimit}.`;
   if (def.cap !== null && state.supplies[item] + packs * def.packSize > def.cap) return `You can carry at most ${def.cap}.`;
-  if (costOf(item, packs, at) > state.credits + 1e-9) return 'You cannot afford that.';
+  if (costOf(item, packs, at, state.difficulty) > state.credits + 1e-9) return 'You cannot afford that.';
   return null;
 }
 
@@ -85,7 +85,7 @@ export function buy(state: GameState, item: SupplyKey, packs: number): StepResul
   const error = buyBlocker(state, item, packs);
   if (error) return { state, entries: [], error };
   const next = cloneState(state);
-  next.credits = Math.max(0, cents(next.credits - costOf(item, packs, storeIndex(state)!)));
+  next.credits = Math.max(0, cents(next.credits - costOf(item, packs, storeIndex(state)!, state.difficulty)));
   next.supplies[item] += packs * ITEMS[item].packSize;
   return { state: next, entries: [] };
 }

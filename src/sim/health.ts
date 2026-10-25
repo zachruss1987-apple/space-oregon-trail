@@ -6,7 +6,7 @@ import {
 import type { Rng } from './rng';
 import { resolveText } from './text';
 import type { Crew, GameState, LogEntry } from './types';
-import { hasRoom, isPresent, pushLog, roll } from './util';
+import { difficultySpec, hasRoom, isPresent, pushLog, roll } from './util';
 
 /** Per-tick facts the health step needs. */
 export interface DayContext {
@@ -96,14 +96,15 @@ export function dailyDelta(state: GameState, c: Crew, ctx: DayContext): number {
   return delta;
 }
 
-function deathChanceToday(state: GameState, c: Crew, cond: Crew['conditions'][number]): number {
+/** Daily death chance from one condition (base × health multiplier × difficulty). Exported for tests. */
+export function deathChanceToday(state: GameState, c: Crew, cond: Crew['conditions'][number]): number {
   const def = CONDITIONS[cond.id];
   let p = def.deathChance;
   if (def.deathDays !== undefined) {
     if (cond.daysActive >= def.deathDays) return 0;
     if (def.deathChanceSuited !== undefined && isSuited(state, c)) p = def.deathChanceSuited;
   }
-  return p * deathMultiplier(c.health);
+  return p * deathMultiplier(c.health) * difficultySpec(state.difficulty).illnessDeath;
 }
 
 function progress(state: GameState, c: Crew, ctx: DayContext, rng: Rng, out: LogEntry[]): void {

@@ -1,6 +1,6 @@
 /** Simulation types. Pure data; JSON-serializable. */
 import type {
-  ConditionId, DeathCause, EventId, FairnessId, PartId, ProfessionId, RationId, RouteId, SupplyKey, ThrustId, TradeGood, WeatherId, WindowId,
+  ConditionId, DeathCause, DifficultyId, EventId, FairnessId, PartId, ProfessionId, RationId, RouteId, SupplyKey, ThrustId, TradeGood, WeatherId, WindowId,
 } from '@/content';
 
 export type {
@@ -8,7 +8,10 @@ export type {
 };
 
 /** Save format version for serialize.ts. */
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 4;
+
+/** Difficulty level (content table `DIFFICULTIES`); `spacer` is the baseline. */
+export type Difficulty = DifficultyId;
 
 /** One active condition on a crew member. */
 export interface ActiveCondition {
@@ -176,6 +179,8 @@ export interface GameState {
   seed: string;
   /** True after a clean Flare Belt mini-game ("Rode the wind" score bonus). */
   rodeTheWind: boolean;
+  /** Difficulty level (v4; older saves migrate to spacer). */
+  difficulty: Difficulty;
 }
 
 /** Options for createGame. */
@@ -188,6 +193,8 @@ export interface NewGameOptions {
   window: WindowId;
   /** Run seed label stored as `state.seed` (default ''). */
   seed?: string;
+  /** Difficulty (default spacer). */
+  difficulty?: Difficulty;
 }
 
 /** Mini-game ids (also the `minigameSeed` kind). */

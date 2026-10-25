@@ -18,7 +18,7 @@ describe.skipIf(!process.env.BALANCE)('balance harness', () => {
   it('runs the matrix', () => {
     const a = JSON.parse(process.env.BALANCE_ARGS ?? '{}');
     const cells = runMatrix(a);
-    write(process.env.BALANCE_OUT, formatMarkdown(cells, { seeds: a.seeds }) + '\n');
+    write(process.env.BALANCE_OUT, formatMarkdown(cells, { seeds: a.seeds, difficulty: a.difficulty }) + '\n');
     write(process.env.BALANCE_JSON, JSON.stringify(cells, null, 2));
   }, 3_600_000);
 });

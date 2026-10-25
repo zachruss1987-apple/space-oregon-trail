@@ -1,11 +1,14 @@
-/** Arrival scoring (docs/design/scoring.md). */
+/** Arrival scoring (docs/design/scoring.md), plus the difficulty adjustment (M5). */
 import { FLARE_SEASON_START, PROFESSIONS, SCORE, SPARE_CAP, SPARE_KEYS } from '@/content';
 import type { GameState } from './types';
+import { difficultySpec } from './util';
 
 /** One scoring line. */
 export interface ScoreLine {
   /** Stable key for UI labels. */
-  key: 'crew' | 'ship' | 'drives' | 'spares' | 'suits' | 'charges' | 'rations' | 'credits' | 'flareBonus' | 'noDeathsBonus' | 'rodeTheWind';
+  key:
+    | 'crew' | 'ship' | 'drives' | 'spares' | 'suits' | 'charges' | 'rations' | 'credits' | 'flareBonus' | 'noDeathsBonus' | 'rodeTheWind'
+    | 'difficulty';
   /** Floored points. */
   points: number;
 }
@@ -18,9 +21,16 @@ export interface ScoreBreakdown {
   subtotal: number;
   /** Profession multiplier. */
   multiplier: number;
-  /** Final score. */
+  /**
+   * Final line after the multiplier: key `difficulty`, points = floor(subtotal × multiplier × difficulty score) −
+   * subtotal × multiplier (negative on greenhorn, positive on pathfinder, 0 on spacer: hide it when 0).
+   */
+  difficulty: ScoreLine;
+  /** Difficulty score multiplier (0.75 / 1 / 1.25). */
+  difficultyMultiplier: number;
+  /** Final score (subtotal × multiplier + difficulty points). */
   total: number;
-  /** Rating title. */
+  /** Rating title (by the final score). */
   rating: string;
 }
 
@@ -39,7 +49,10 @@ export function computeScore(state: GameState): ScoreBreakdown {
   const living = state.crew.filter((c) => c.alive);
   const s = state.supplies;
   const multiplier = PROFESSIONS[state.profession].multiplier;
-  if (living.length === 0) return { lines: [], subtotal: 0, multiplier, total: 0, rating: ratingFor(0) };
+  const difficultyMultiplier = difficultySpec(state.difficulty).score;
+  if (living.length === 0) {
+    return { lines: [], subtotal: 0, multiplier, difficulty: { key: 'difficulty', points: 0 }, difficultyMultiplier, total: 0, rating: ratingFor(0) };
+  }
   const lines: ScoreLine[] = [
     { key: 'crew', points: living.reduce((sum, c) => sum + crewPoints(c.health), 0) },
     { key: 'ship', points: SCORE.ship },
@@ -54,6 +67,7 @@ export function computeScore(state: GameState): ScoreBreakdown {
     { key: 'rodeTheWind', points: state.rodeTheWind ? SCORE.rodeTheWindBonus : 0 },
   ];
   const subtotal = lines.reduce((sum, l) => sum + l.points, 0);
-  const total = subtotal * multiplier;
-  return { lines, subtotal, multiplier, total, rating: ratingFor(total) };
+  const base = subtotal * multiplier;
+  const total = Math.floor(base * difficultyMultiplier);
+  return { lines, subtotal, multiplier, difficulty: { key: 'difficulty', points: total - base }, difficultyMultiplier, total, rating: ratingFor(total) };
 }

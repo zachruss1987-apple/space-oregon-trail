@@ -3,6 +3,7 @@ import bulletinsJson from './text/bulletins.json';
 import deathsJson from './text/deaths.json';
 import epitaphsJson from './text/epitaphs.json';
 import eventsJson from './text/events.json';
+import highscoresJson from './text/highscores.json';
 import stationsJson from './text/stations.json';
 import tradesJson from './text/trades.json';
 import uiJson from './text/ui.json';
@@ -21,3 +22,5 @@ export const STATION_TEXT = stationsJson as unknown as Readonly<Record<string, u
 export const TRADE_TEXT = tradesJson as unknown as Readonly<Record<string, unknown>>;
 /** Canned memorial beacons: `{ beacons: [{ segment, captain, name, text, date }] }`. */
 export const EPITAPH_TEXT = epitaphsJson as unknown as Readonly<Record<string, unknown>>;
+/** Seeded high scores: `{ defaults: [{ name, profession, score, days, date }] }`. */
+export const HIGHSCORE_TEXT = highscoresJson as unknown as Readonly<Record<string, unknown>>;

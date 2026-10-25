@@ -20,7 +20,7 @@ describe('M1 -> M2 save migration', () => {
     expect(loaded.crossing).toBeNull();
     expect(loaded.route).toBe('oort');
     expect(loaded.station).toBeNull();
-    expect(loaded.version).toBe(3);
+    expect(loaded.version).toBe(4);
     expect(loaded.seed).toBe('');
     expect(loaded.rodeTheWind).toBe(false);
   });
@@ -56,7 +56,7 @@ describe('M1 -> M2 save migration', () => {
     const s = ship();
     const v2 = { ...strip(s), crossing: null, route: 'direct', station: null, version: 2 };
     const loaded = fromJSON(JSON.stringify({ version: 2, state: v2 }));
-    expect(loaded).toMatchObject({ version: 3, seed: '', rodeTheWind: false, route: 'direct' });
+    expect(loaded).toMatchObject({ version: 4, seed: '', rodeTheWind: false, route: 'direct', difficulty: 'spacer' });
     const kept = fromJSON(JSON.stringify({ version: 2, state: { ...v2, seed: 'ABC', rodeTheWind: true } }));
     expect(kept).toMatchObject({ seed: 'ABC', rodeTheWind: true });
   });

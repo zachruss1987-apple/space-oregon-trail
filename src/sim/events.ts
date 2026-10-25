@@ -9,7 +9,7 @@ import type { Rng } from './rng';
 import { randomSpareFind, supplyLabel } from './salvage';
 import { resolveText, type TextVars } from './text';
 import type { GameState, LogEntry } from './types';
-import { generalHealth, hasRoom, pctLoss, presentCrew, pushLog, roll, workingDrives } from './util';
+import { difficultySpec, generalHealth, hasRoom, pctLoss, presentCrew, pushLog, roll, workingDrives } from './util';
 
 function anyQty(state: GameState, keys: readonly SupplyKey[]): boolean {
   return keys.some((k) => state.supplies[k] > 0);
@@ -41,6 +41,7 @@ export function eventWeight(spec: EventSpec, state: GameState, ctx: DayContext):
   if (!meetsRequirement(spec, state, ctx)) return 0;
   if (spec.category === 'loss' && state.day < state.eventCooldownUntilDay && state.thrust !== 'overburn' && state.rations !== 'paste') return 0;
   let w = spec.id === 'illness' ? ILLNESS_WEIGHT_BY_HEALTH[generalHealth(state)] : spec.weight;
+  if (spec.category === 'loss') w *= difficultySpec(state.difficulty).lossWeight;
   w *= spec.weatherMult?.[state.weather] ?? 1;
   if (spec.id === 'lost_lane' && state.broken.gyro) w *= EVENT_MODS.lostLaneGyroBroken;
   if (spec.id === 'drive_failure') {
@@ -168,7 +169,7 @@ function derelict(state: GameState, rng: Rng, out: LogEntry[]): void {
 /** Travel step 9: at most one event; loss events start the cooldown; else maybe a quiet line. */
 export function eventStep(state: GameState, rng: Rng, ctx: DayContext, out: LogEntry[]): EventId | null {
   if (presentCrew(state).length === 0) return null;
-  if (!rng.chance(ctx.rest ? EVENT_CHANCE_REST : EVENT_CHANCE)) {
+  if (!rng.chance((ctx.rest ? EVENT_CHANCE_REST : EVENT_CHANCE) * difficultySpec(state.difficulty).eventChance)) {
     if (rng.chance(QUIET_DAY_CHANCE)) quiet(state, rng, out);
     return null;
   }

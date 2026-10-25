@@ -35,7 +35,13 @@ function migrateV2(state: Record<string, unknown>): void {
   state['version'] = 3;
 }
 
-const MIGRATIONS: Readonly<Record<number, (s: Record<string, unknown>) => void>> = { 1: migrateV1, 2: migrateV2 };
+/** v3 (M3/M4) → v4 (M5): difficulty did not exist, so the run was spacer (the baseline numbers). */
+function migrateV3(state: Record<string, unknown>): void {
+  state['difficulty'] ??= 'spacer';
+  state['version'] = 4;
+}
+
+const MIGRATIONS: Readonly<Record<number, (s: Record<string, unknown>) => void>> = { 1: migrateV1, 2: migrateV2, 3: migrateV3 };
 
 /** Parse a save string. Migrates older versions; throws on bad JSON, unknown version, or missing fields. */
 export function fromJSON(json: string): GameState {

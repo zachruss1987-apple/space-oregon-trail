@@ -1,5 +1,5 @@
 /** Monte Carlo balance harness (pure): runs seeded auto-played games per profession x window x policy and tabulates them. */
-import { PROFESSION_ORDER, WINDOW_ORDER, type ProfessionId, type WindowId } from '@/content';
+import { PROFESSION_ORDER, WINDOW_ORDER, type DifficultyId, type ProfessionId, type WindowId } from '@/content';
 import { DEFAULT_POLICY, runPolicy, type PolicyOptions } from './policy';
 
 /** Policy names, in report order. */
@@ -19,6 +19,8 @@ export interface MatrixSpec {
   professions?: readonly ProfessionId[];
   windows?: readonly WindowId[];
   policies?: readonly PolicyName[];
+  /** Difficulty for every run (default spacer). */
+  difficulty?: DifficultyId;
 }
 
 /** Percentiles of a distribution. */
@@ -53,14 +55,14 @@ export function percentile(sorted: number[], p: number): number {
 }
 
 /** Play `seeds` games (seeds 1..N) for one cell. */
-export function runCell(profession: ProfessionId, window: WindowId, policy: PolicyName, seeds: number): CellResult {
+export function runCell(profession: ProfessionId, window: WindowId, policy: PolicyName, seeds: number, difficulty: DifficultyId = 'spacer'): CellResult {
   const days: number[] = [];
   const scores: number[] = [];
   const credits: number[] = [];
   const causes: Record<string, number> = {};
   let arrived = 0, dead = 0, adrift = 0;
   for (let seed = 1; seed <= seeds; seed++) {
-    const r = runPolicy(seed, { profession, window, policy: POLICIES[policy] });
+    const r = runPolicy(seed, { profession, window, policy: POLICIES[policy], difficulty });
     days.push(r.days);
     for (const c of r.causes) causes[c] = (causes[c] ?? 0) + 1;
     if (r.status === 'arrived') {
@@ -84,7 +86,7 @@ export function runMatrix(spec: MatrixSpec): CellResult[] {
   const out: CellResult[] = [];
   for (const policy of spec.policies ?? POLICY_ORDER)
     for (const profession of spec.professions ?? PROFESSION_ORDER)
-      for (const window of spec.windows ?? WINDOW_ORDER) out.push(runCell(profession, window, policy, spec.seeds));
+      for (const window of spec.windows ?? WINDOW_ORDER) out.push(runCell(profession, window, policy, spec.seeds, spec.difficulty));
   return out;
 }
 
@@ -107,11 +109,12 @@ const table = (head: string[], rows: (string | number)[][]): string =>
   [row(head), row(head.map(() => '---')), ...rows.map(row)].join('\n');
 
 /** Markdown report: per policy, by profession, by window, and death causes. */
-export function formatMarkdown(cells: CellResult[], meta: { seeds?: number } = {}): string {
+export function formatMarkdown(cells: CellResult[], meta: { seeds?: number; difficulty?: DifficultyId } = {}): string {
   const policies = [...new Set(cells.map((c) => c.policy))];
   const professions = [...new Set(cells.map((c) => c.profession))];
   const windows = [...new Set(cells.map((c) => c.window))];
   const parts: string[] = ['# Balance report', ''];
+  if (meta.difficulty && meta.difficulty !== 'spacer') parts.push(`Difficulty: ${meta.difficulty}.`, '');
   if (meta.seeds) {
     parts.push(`${meta.seeds} seeded games per cell (seeds 1..${meta.seeds}). Targets (M5): farmer ~30%, executive ~60%, mean 130-170 days, no death cause > 35%.`, '');
   }

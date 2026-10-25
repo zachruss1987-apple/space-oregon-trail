@@ -9,7 +9,7 @@ import { canScan } from './salvage';
 import { computeScore } from './score';
 import { buy, depart, maxBuyable } from './store';
 import { daysOfRations } from './travel';
-import type { DeathCause, GameState, Intent, Status } from './types';
+import type { DeathCause, Difficulty, GameState, Intent, Status } from './types';
 import { averageHealth } from './util';
 
 /** Policy thresholds. */
@@ -99,12 +99,15 @@ export interface RunSummary {
   final: GameState;
 }
 
-/** Auto-play one run. Profession/window are uniform random unless given. */
-export function runPolicy(seed: number, opts: { profession?: ProfessionId; window?: WindowId; policy?: Partial<PolicyOptions> } = {}): RunSummary {
+/** Auto-play one run. Profession/window are uniform random unless given; difficulty defaults to spacer (no extra draws). */
+export function runPolicy(
+  seed: number,
+  opts: { profession?: ProfessionId; window?: WindowId; policy?: Partial<PolicyOptions>; difficulty?: Difficulty } = {},
+): RunSummary {
   const rng: Rng = createRng(seed);
   const profession = opts.profession ?? rng.pick(PROFESSION_ORDER);
   const window = opts.window ?? rng.pick(WINDOW_ORDER);
-  let s = policyShop(createGame({ profession, window }, rng), opts.policy);
+  let s = policyShop(createGame({ profession, window, difficulty: opts.difficulty }, rng), opts.policy);
   s = depart(s, rng).state;
   while (s.status === 'traveling' && s.day < POLICY.maxDays) {
     const r = applyAction(s, policyIntent(s, opts.policy), rng);

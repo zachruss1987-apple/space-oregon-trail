@@ -14,14 +14,14 @@ Text variants also draw exactly one number per line, so writer edits never chang
 
 ## Lifecycle
 ```ts
-createGame({ profession, crewNames?, window, seed? }, rng): GameState // status 'store', day 0; seed label -> state.seed ('' default)
+createGame({ profession, crewNames?, window, seed?, difficulty? }, rng): GameState // status 'store', day 0; seed label -> state.seed ('' default); difficulty 'spacer' default
 buy(state, item, packs): StepResult                                  // Independence store (status 'store'); road stations: `buy` intent
 maxBuyable(state, item) / buyBlocker(state, item, packs) / priceAt(item, waypointIndex) / storeWarnings(state)
 depart(state, rng): StepResult                                       // needs >= 1 drive; status -> 'traveling'
 applyAction(state, intent, rng): StepResult                          // the Travel menu (below)
 tick(state, rng, dayKind?): StepResult                               // one raw day; applyAction wraps it
-computeScore(state): ScoreBreakdown                                  // lines[], subtotal, multiplier, total, rating
-toJSON(state): string / fromJSON(json): GameState                    // versioned (STATE_VERSION 3; v1/v2 saves migrate), throws on bad input
+computeScore(state): ScoreBreakdown                                  // lines[], subtotal, multiplier, difficulty (line), difficultyMultiplier, total, rating
+toJSON(state): string / fromJSON(json): GameState                    // versioned (STATE_VERSION 4; v1-v3 saves migrate, v3 -> difficulty 'spacer'), throws on bad input
 ```
 `StepResult = { state, entries: LogEntry[], error?: string }`. On refusal `error` is set, `state` is the
 input unchanged and no day passes (show `error` as the dimmed-item message, e.g. "No spare.").
@@ -72,7 +72,7 @@ Display distances with `Math.floor`; the sim keeps fractions.
 `deaths` counts drift losses. `date` is ISO `YYYY-MM-DD`.
 
 ## Auto-play
-`runPolicy(seed, { profession?, window? }): RunSummary` plays the travel.md reference policy plus the hazards.md
+`runPolicy(seed, { profession?, window?, policy?, difficulty? }): RunSummary` plays the travel.md reference policy plus the hazards.md
 crossing policy (`policyCross`); route always via Oort; no station shopping or trading (a 0-drive station stop buys a
 drive if affordable, else rests). `policyShop(state)` and `policyIntent(state)` are exposed for the balance harness and e2e seed finders.
 
@@ -138,6 +138,39 @@ Map data: `routeWaypoints(route)` returns the active waypoint list with route-co
 `parseBeacons(raw)` (defensive; missing captain -> ""), `appendBeacon(list, b)` (keeps 200), `cannedBeacons()`,
 `beaconsForSegment(playerList, segment, textRng)` (<= 3; player first; canned fill), `formatBeacon(b)`; `BEACONS.key`.
 
+## Difficulty (M5)
+`state.difficulty: 'greenhorn' | 'spacer' | 'pathfinder'` (type `Difficulty`; content `DIFFICULTIES`, `DIFFICULTY_ORDER`,
+`DEFAULT_DIFFICULTY`; `difficultySpec(d)` returns the multipliers, unknown = spacer). Spacer is today's numbers exactly
+(the policy-50 snapshot is unchanged; no new RNG draws on any level). Multipliers apply only to:
+| | greenhorn | pathfinder | where |
+|---|---|---|---|
+| Daily event chance (travel and rest) | x0.75 | x1.25 | `eventStep` |
+| Loss-category event weights | x0.75 | x1.25 | `eventWeight` |
+| Buy prices per pack, every store | x0.9 | x1.15 | `localPrice/priceAt/costOf(item, wp, difficulty?)`; state-aware helpers (`buy`, `maxBuyable`, `buyBlocker`, road `buy`) use `state.difficulty` |
+| Starting credits (rounded) | x1.15 | x0.9 | `createGame` |
+| Condition death chance | x0.5 | x1.5 | `deathChanceToday` |
+| Final score | x0.75 | x1.25 | `computeScore().difficulty` line |
+
+Not scaled: sell-back prices, tug fees, pilot fee, trade asks, crossing odds, mini-games. Balance:
+`npm run balance -- --difficulty greenhorn` (`MatrixSpec.difficulty`, `runCell(..., difficulty)`).
+
+## High scores (M5; pure, storage in the UI)
+`HighScore = { name, profession, score, days, date, difficulty }` (`date` = in-game arrival date). Storage key
+**`HIGHSCORES_KEY` = `'proxima.highscores'`** (a JSON array). `loadHighScores(raw | null)` = stored rows + the writer's
+defaults (`highscores.json`, as spacer), deduplicated, sorted (score desc, ties by earlier date, then existing first), top
+ten; bad JSON/rows are ignored. `insertHighScore(list, entry) -> { list, index }` (index -1 = did not place; never
+mutates), `qualifies(list, score, date?)` (0 never qualifies), `serializeHighScores(list)`, `toHighScore(raw)`.
+
+## Saves (M5; pure, storage in the UI)
+`SaveSlot = { version, savedAt, seed, day, segment, profession, difficulty, captain, state }` (`state` = `toJSON` string;
+`segment` = waypoint parked at or heading for; `captain` = crew[0] name). `makeSave(state, seed, nowMs)`,
+`parseSave(json | null) -> { ok: true, slot, state } | { ok: false, error }` (validates, migrates through `fromJSON`,
+rebuilds metadata from the migrated state), `describeSave(slot)` -> `"Ezra's crew, day 42, near Ceres Depot, Engineer"`
+(writer key `ui.saves.describe` with `{owner} {captain} {day} {place} {profession}` overrides the fallback),
+`resumeSeed(slot)` (the Rng position is not saved: seed the resumed run's main Rng with `createRng(resumeSeed(slot))`),
+`exportSave(slot)` -> `PROXIMA1.<base64 slot JSON>.<8-hex checksum>`, `importSave(text)` (whitespace ignored; rejects a
+wrong prefix, checksum mismatch, bad base64 or bad save, with an `error` message).
+
 ## UI contract
 For e2e tests (src/game/contract.ts); keep stable.
 - `?seed=<text|digits>`: digits are used as the number, other text is hashed with `seedFromString`. No param = random 6-char seed, shown on the title.
@@ -180,3 +213,13 @@ For e2e tests (src/game/contract.ts); keep stable.
   no mini-game scene opens, no penalty. Off: Scan needs 1 charge and opens the scene. On-screen FIRE button (and the
   `II` pause icon, always drawn) show on touch devices or when `touchControls` is true.
 - Beacon epitaphs: `localStorage['proxima.beacons']` = `[{ segment, captain, name, text, date }]` (beacons.md; read with `parseBeacons`).
+- Difficulty (Options): persist the choice in the scene layer and pass it to `createGame({ ..., difficulty })`; a run keeps
+  its level (`state.difficulty`). StoreScene/station views must pass `state.difficulty` to `priceAt/costOf/localPrice` for
+  displayed prices (the sim's buy/limits already use it). Arrival: show `score.difficulty` as a final row after the
+  profession multiplier when `points !== 0` (label `score.labels.difficulty`), and rate by `total`.
+- Autosave: `localStorage['proxima.autosave'] = JSON.stringify(makeSave(state, seedLabel, Date.now()))` after every applied
+  action while `state.status === 'traveling'`; remove the key on any ending (arrived / dead / adrift). Title shows
+  "Continue journey" when `parseSave(localStorage.getItem('proxima.autosave'))` is ok and its state is traveling, labelled
+  with `describeSave(slot)`. Export/import: `exportSave(slot)` / `importSave(text)`.
+- High scores: `localStorage['proxima.highscores']`; on arrival `insertHighScore(loadHighScores(raw), { name: crew[0].name,
+  profession, score: total, days: state.day, date: state.date, difficulty })`, save `serializeHighScores(list)`, highlight `index`.

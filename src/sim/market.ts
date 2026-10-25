@@ -68,7 +68,7 @@ export function sellBlocker(state: GameState, item: SupplyKey, packs: number): s
 export function roadBuy(state: GameState, item: SupplyKey, packs: number): StepResult {
   const error = roadBuyBlocker(state, item, packs);
   if (error) return { state, entries: [], error };
-  const cost = costOf(item, packs, storeIndex(state)!);
+  const cost = costOf(item, packs, storeIndex(state)!, state.difficulty);
   const r = buy(state, item, packs);
   const entries: LogEntry[] = [];
   pushLog(r.state, entries, 'store', textLine('ui', 'station.log.bought', 'Bought {item} for {cr} cr.', { item: itemPhrase(item, packs * ITEMS[item].packSize), cr: formatCr(cost) }), item);
