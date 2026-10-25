@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T05:44:03.314Z",
+  "updated": "2026-10-25T06:06:49.640Z",
   "milestones": [
     {
       "id": "M0",
@@ -1314,18 +1314,44 @@
       "desc": "",
       "milestone": "M4",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "tester",
+      "issue": 57,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T05:44:03.266Z",
+      "updated": "2026-10-25T05:56:52.287Z",
       "notes": [
         {
           "ts": "2026-10-25T05:44:03.266Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T05:45:29.772Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:56:19.048Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:56:19.498Z",
+          "by": "tester",
+          "text": "tests: art.spec 131 + audio.spec 53 + bundle 1 unit, text.test +2; visual.spec 9 tests/14 baselines (win32, stable over 3 reruns); audio.spec +3 e2e. Bugs: T-064 (TextArea off-palette colors/font), T-065 (mute key, dup of T-063). Bundle 443 KB gzip of 1800. Baselines must be regenerated after the a11y pass lands."
+        },
+        {
+          "ts": "2026-10-25T05:56:35.879Z",
+          "by": "tester",
+          "text": "Correction: unit counts are art.spec 132, audio.spec 46, bundle 1."
+        },
+        {
+          "ts": "2026-10-25T05:56:52.288Z",
+          "by": "tester",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-039",
@@ -1410,7 +1436,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-041",
@@ -1418,18 +1444,39 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 58,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T05:44:03.205Z",
+      "updated": "2026-10-25T06:06:49.342Z",
       "notes": [
         {
           "ts": "2026-10-25T05:44:03.206Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T05:45:01.291Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T06:05:59.249Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T06:05:59.694Z",
+          "by": "developer",
+          "text": "a11y.ts: hidden #proxima-live (role=log, polite) + #proxima-menu (listbox, aria-selected/aria-disabled+reason) mirroring log entries, modals, mini-game panels, menus; ? controls overlay (help.* keys, data-help); Tab in menus; data-reduced/data-palette; reduced-motion note on mini-game intros; phosphorDim text color (forest 4.2:1 on panel); contrast test all text roles both palettes. Unit 1565 pass, e2e 62 pass (a11y.spec 6 new). data-crt stays on/off (not 0/1)."
+        },
+        {
+          "ts": "2026-10-25T06:06:49.343Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-042",
@@ -1477,12 +1524,18 @@
       "desc": "",
       "milestone": "M5",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T06:06:49.640Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T06:06:49.640Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-044",
@@ -2105,7 +2158,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-062",
@@ -2115,7 +2168,7 @@
       "role": "sound",
       "status": "done",
       "assignee": "sound",
-      "issue": null,
+      "issue": 59,
       "created": "2026-10-25T05:20:11.103Z",
       "updated": "2026-10-25T05:23:44.866Z",
       "notes": [
@@ -2139,7 +2192,8 @@
           "by": "sound",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-063",
@@ -2147,18 +2201,105 @@
       "desc": "",
       "milestone": "M4",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 60,
       "created": "2026-10-25T05:23:44.922Z",
-      "updated": "2026-10-25T05:44:03.314Z",
+      "updated": "2026-10-25T06:06:49.405Z",
       "notes": [
         {
           "ts": "2026-10-25T05:44:03.314Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T05:45:01.744Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T06:06:00.149Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T06:06:00.590Z",
+          "by": "developer",
+          "text": "M mute via bindGlobalMuteKey('m', textEntryActive, {ignore: Title}) at boot + live announce; ui.icon.mute on Title/Travel while muted; drive.hum loop per Travel day (stop on day end/sleep/shutdown); grapple.reel loop while reeling (MiniGameScene.silence on pause/end/skip/shutdown); playSting('danger') on loss events, crossing damage, deaths, hazard arrival; jingle.clean via playSting. stings unit test; a11y.spec mute test. Tester's audio.spec fixme uses Control+m: binding is plain m."
+        },
+        {
+          "ts": "2026-10-25T06:06:49.406Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
+    },
+    {
+      "id": "T-064",
+      "title": "Bug: TextArea DOM input uses off-palette hex colors (#7dff9a, #3a7a4a)",
+      "desc": "src/ui/TextArea.ts line ~33 styles the epitaph/name input with hex literals that are not palette keys (phosphor is #5cff5c, forest #2e8a2e). art.md: every color read from palette.ts by key. Repro: grep -n '#[0-9a-f]{6}' src/ui/TextArea.ts. Expected: colors from activePalette(). Test exemption in tests/unit/ui/text.test.ts (T-038) to be removed on fix.",
+      "milestone": "M4",
+      "role": "developer",
+      "status": "done",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T05:48:40.517Z",
+      "updated": "2026-10-25T06:06:49.566Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T06:06:49.524Z",
+          "by": "pm",
+          "text": "todo -> done"
+        },
+        {
+          "ts": "2026-10-25T06:06:49.566Z",
+          "by": "pm",
+          "text": "Folded into T-066."
         }
       ]
+    },
+    {
+      "id": "T-065",
+      "title": "Bug: global mute key never bound (bindGlobalMuteKey unused in src/)",
+      "desc": "audio.md Mixing/Mute: a global key toggles audio().isMuted. grep shows bindGlobalMuteKey/toggleMute used only in soundTestScene; no scene or main.ts installs it, so players cannot mute from the game. Repro: load /, press Shift, press ctrl+m or m (Options scene): __PROXIMA__.audio.volumes.muted stays false. Expected: true, persisted in proxima.settings. Test: tests/e2e/audio.spec.ts test.fixme (T-038).",
+      "milestone": "M4",
+      "role": "developer",
+      "status": "done",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T05:50:21.646Z",
+      "updated": "2026-10-25T05:56:52.396Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:56:12.520Z",
+          "by": "tester",
+          "text": "Likely duplicate of T-063 (src/game/muteKey.ts now binds M); tests/e2e/audio.spec.ts mute test passes against the in-flight build. PM: close once T-063 is reviewed."
+        },
+        {
+          "ts": "2026-10-25T05:56:52.335Z",
+          "by": "pm",
+          "text": "todo -> done"
+        },
+        {
+          "ts": "2026-10-25T05:56:52.396Z",
+          "by": "pm",
+          "text": "Duplicate of T-063 (in progress)."
+        }
+      ]
+    },
+    {
+      "id": "T-066",
+      "title": "Dev: a11y follow-ups: text marker for disabled rows, read-aloud for Guide/TopTen/Map/Supplies, Options rows 10-12 via number keys, debugLoadState uses resumeScene, TextArea palette styling (T-064)",
+      "desc": "",
+      "milestone": "M5",
+      "role": "developer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T06:06:49.463Z",
+      "updated": "2026-10-25T06:06:49.464Z",
+      "notes": []
     }
   ]
 }
