@@ -65,3 +65,13 @@ Display distances with `Math.floor`; the sim keeps fractions.
 ## Auto-play
 `runPolicy(seed, { profession?, window? }): RunSummary` plays the travel.md reference policy;
 `policyShop(state)` and `policyIntent(state)` are exposed for the balance harness and e2e seed finders.
+
+## UI contract
+For e2e tests (src/game/contract.ts); keep stable.
+- `?seed=<text|digits>`: digits are used as the number, other text is hashed with `seedFromString`. No param = random 6-char seed, shown on the title.
+- `window.__PROXIMA__ = { game, version, seed, state }`; `state` is a getter for the live `GameState` (null on the title/setup).
+- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Death Arrival`, set in each scene's create().
+- `body[data-modal="1"]` while a modal or number prompt is open; `body[data-busy="1"]` while a Travel day is animating (input ignored).
+- In the store, `state` updates live as quantities change (status stays `store` until "Leave the store" confirms `depart`).
+- Keys are read from `window` (no canvas focus needed). Keys pressed during a scene change can be lost: wait for `data-scene` first.
+- Beacon epitaphs: `localStorage['proxima.beacons']` = `[{ segment, name, text, date }]`.
