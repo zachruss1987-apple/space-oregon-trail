@@ -3,7 +3,9 @@ export * from './types';
 export { createRng, seedFromString, type Rng } from './rng';
 export { createGame, isValidName, normalizeCrewNames, randomCrewNames } from './game';
 export { tick } from './tick';
-export { applyAction, intentBlocker } from './actions';
+export { applyAction, applyFlareResult, applySalvageResult, applyThreadingResult, intentBlocker } from './actions';
+export { haulUnits, minigameSeed, partsPhrase, resultError, salvageResultBlocker } from './minigame';
+export { crossResultBlocker } from './minicross';
 export {
   CROSS_METHODS, baseIncident, blockedText, crossBlocker, crossChance, crossingOptions, densityFactor, densityTrend,
   isFlareBelt, riskLabel, riskWord, shipModifier, tugPrice, type CrossOption, type DensityTrend, type RiskId,

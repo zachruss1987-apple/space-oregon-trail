@@ -67,13 +67,25 @@ describe('save migration', () => {
     expect(loaded.route).toBe('oort');
     expect(loaded.station).toBeNull();
     expect(loaded.version).toBe(STATE_VERSION);
-    expect(STATE_VERSION).toBe(2);
+    expect(STATE_VERSION).toBe(3);
   });
 
-  it('round-trips v2 state with a crossing and offers; rejects unknown versions', () => {
+  it('a v2 (M2) save loads with the M3 defaults: seed "", rodeTheWind false (minigames.md "State additions")', () => {
+    const v2 = JSON.parse(toJSON(travelingState())) as { version: number; state: Record<string, unknown> };
+    v2.version = 2;
+    delete v2.state['seed'];
+    delete v2.state['rodeTheWind'];
+    v2.state['version'] = 2;
+    const loaded = fromJSON(JSON.stringify(v2));
+    expect(loaded.seed).toBe('');
+    expect(loaded.rodeTheWind).toBe(false);
+    expect(loaded.version).toBe(3);
+  });
+
+  it('round-trips v3 state with a crossing and offers; rejects unknown versions', () => {
     const s = travelingState({ crossing: { waypoint: 7, density: 5, pilotDaysLeft: 2 }, route: 'direct' });
     expect(fromJSON(toJSON(s))).toEqual(s);
-    expect(() => fromJSON(JSON.stringify({ version: 3, state: s }))).toThrow(/version/);
+    expect(() => fromJSON(JSON.stringify({ version: 4, state: s }))).toThrow(/version/);
     expect(() => fromJSON(JSON.stringify({ version: 0, state: s }))).toThrow(/version/);
   });
 });

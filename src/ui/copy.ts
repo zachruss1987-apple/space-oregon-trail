@@ -77,6 +77,7 @@ export const FALLBACK: Readonly<Record<string, string>> = {
   'score.labels.credits': 'Credits',
   'score.labels.flareBonus': 'Beat the flare season',
   'score.labels.noDeathsBonus': 'Nobody died',
+  'score.labels.rodeTheWind': 'Rode the wind',
   'score.subtotal': 'Subtotal',
   'score.multiplier': 'Profession multiplier',
   'score.total': 'Total',

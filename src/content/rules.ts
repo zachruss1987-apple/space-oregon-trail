@@ -97,6 +97,8 @@ export const SCORE = {
   creditsPerPoint: 5,
   flareBonus: 200,
   noDeathsBonus: 300,
+  /** "Rode the wind": clean Flare Belt mini-game (minigames.md). */
+  rodeTheWindBonus: 200,
   ratings: [
     { min: 6000, title: 'Pathfinder' },
     { min: 3000, title: 'Spacer' },
@@ -129,4 +131,47 @@ export const CROSSING = {
     { max: 44, id: 'high' },
     { max: 100, id: 'severe' },
   ],
+} as const;
+
+/** M3 mini-game result application (minigames.md). The scenes' own tuning stays in the scenes. */
+export const MINIGAME = {
+  salvage: {
+    /** Charges a run may spend at most (and the schema maximum). */
+    maxCharges: 20,
+    /** Carry limit in units: 1 per ration, `partUnits` per plate / pump / gyro. */
+    carryLimit: 100,
+    partUnits: 10,
+    /** Health lost per hot chunk (random present crew, one draw each). */
+    hotDamage: 5,
+    maxCrewHurt: 3,
+  },
+  threading: {
+    /** Severity rolls at most (hits beyond this have no extra effect). */
+    maxRolls: 4,
+    /** The first `cappedRolls` rolls are capped at `cap` (never Lost). */
+    cappedRolls: 2,
+    cap: 95,
+    maxHits: 99,
+    /** Clean-run bonus picks. */
+    bonusHealth: 2,
+    bonusRations: 10,
+  },
+  flare: {
+    /** Hits that make a crash. */
+    crashHits: 5,
+    /** d100 + this per hit in flare season (cap 100). */
+    seasonBonus: 10,
+    /** Hit table upper bounds (inclusive). */
+    scorchMax: 35,
+    burnMax: 65,
+    damageMax: 85,
+    scorchPct: [10, 25] as const,
+    burnDamage: 10,
+    burnDamageSuited: 5,
+    radiationFallbackDamage: 10,
+    /** Crash: these lose 50% (floor of the loss). */
+    crashLossKeys: ['rations', 'suits', 'charges'] as const,
+    /** Scorch candidates (qty > 0). */
+    scorchKeys: ['rations', 'suits', 'charges'] as const,
+  },
 } as const;

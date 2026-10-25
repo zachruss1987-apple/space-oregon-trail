@@ -6,6 +6,7 @@ import { healthStep, missingStep, newDayContext } from './health';
 import { passingHelp, repairBlocker, resolveRepair } from './repair';
 import type { Rng } from './rng';
 import { cumulativeAt, nextWaypoint } from './route';
+import { applySalvage } from './minigame';
 import { resolveScan } from './salvage';
 import { resolveText } from './text';
 import { generateOffers } from './trade';
@@ -43,6 +44,9 @@ function spendDay(s: GameState, rng: Rng, day: DayKind, out: LogEntry[]): number
       return 0;
     case 'scan':
       resolveScan(s, rng, out);
+      return 0;
+    case 'salvage':
+      applySalvage(s, day.result, rng, out);
       return 0;
     case 'repair':
       if (repairBlocker(s, day.part) === null) resolveRepair(s, day.part, rng, out);

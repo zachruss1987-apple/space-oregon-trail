@@ -70,6 +70,8 @@ export function createGame(options: NewGameOptions, rng: Rng): GameState {
     crossing: null,
     route: 'oort',
     station: null,
+    seed: typeof options.seed === 'string' ? options.seed : '',
+    rodeTheWind: false,
   };
   const text = resolveText(rng, 'ui', 'log.departure', { name: state.crew[0]!.name },
     `Captain {name} and crew make ready at Independence Station, ${window.label}.`);

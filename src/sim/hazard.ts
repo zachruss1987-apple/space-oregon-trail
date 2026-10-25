@@ -51,13 +51,22 @@ export function rollCrossing(
   state: GameState, pct: number, severityMod: number, rng: Rng, out: LogEntry[], ctx: DayContext = newDayContext(),
 ): CrossingOutcome {
   state.justCrossedHazard = true;
+  if (pct <= 0 || !rng.chance(pct / 100)) return logClear(state, rng, out);
+  return applyOutcome(state, outcomeFor(Math.max(1, Math.min(100, rng.int(1, 100) + severityMod))), rng, out, ctx);
+}
+
+/** Log `hazard` / `clear` ("You made it across."). */
+export function logClear(state: GameState, rng: Rng, out: LogEntry[]): 'clear' {
+  pushLog(state, out, 'hazard', resolveText(rng, 'ui', 'crossing.clear', {}, 'You made it across.'), 'clear');
+  return 'clear';
+}
+
+/** Apply one severity outcome's effects and picks (trail.md); cargo with nothing to lose logs `clear`. Logs kind `hazard`. */
+export function applyOutcome(
+  state: GameState, outcome: Exclude<CrossingOutcome, 'clear'>, rng: Rng, out: LogEntry[], ctx: DayContext = newDayContext(),
+): CrossingOutcome {
   const log = (o: CrossingOutcome, vars: TextVars, fallback: string): void =>
     pushLog(state, out, 'hazard', resolveText(rng, 'ui', `crossing.${o}`, vars, fallback), o);
-  if (pct <= 0 || !rng.chance(pct / 100)) {
-    log('clear', {}, 'You made it across.');
-    return 'clear';
-  }
-  const outcome = outcomeFor(Math.max(1, Math.min(100, rng.int(1, 100) + severityMod)));
   const crew = presentCrew(state);
   switch (outcome) {
     case 'scraped':
@@ -66,10 +75,7 @@ export function rollCrossing(
       break;
     case 'cargo': {
       const keys = LOSABLE_KEYS.filter((k) => state.supplies[k] > 0);
-      if (keys.length === 0) {
-        log('clear', {}, 'You made it across.');
-        return 'clear';
-      }
+      if (keys.length === 0) return logClear(state, rng, out);
       const key = rng.pick(keys);
       const n = pctLoss(state.supplies[key], roll(rng, HAZARD.cargoPct));
       state.supplies[key] -= n;

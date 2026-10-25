@@ -14,14 +14,14 @@ Text variants also draw exactly one number per line, so writer edits never chang
 
 ## Lifecycle
 ```ts
-createGame({ profession, crewNames?, window }, rng): GameState      // status 'store', day 0, credits by profession
+createGame({ profession, crewNames?, window, seed? }, rng): GameState // status 'store', day 0; seed label -> state.seed ('' default)
 buy(state, item, packs): StepResult                                  // Independence store (status 'store'); road stations: `buy` intent
 maxBuyable(state, item) / buyBlocker(state, item, packs) / priceAt(item, waypointIndex) / storeWarnings(state)
 depart(state, rng): StepResult                                       // needs >= 1 drive; status -> 'traveling'
 applyAction(state, intent, rng): StepResult                          // the Travel menu (below)
 tick(state, rng, dayKind?): StepResult                               // one raw day; applyAction wraps it
 computeScore(state): ScoreBreakdown                                  // lines[], subtotal, multiplier, total, rating
-toJSON(state): string / fromJSON(json): GameState                    // versioned (STATE_VERSION 2; v1 saves migrate), throws on bad input
+toJSON(state): string / fromJSON(json): GameState                    // versioned (STATE_VERSION 3; v1/v2 saves migrate), throws on bad input
 ```
 `StepResult = { state, entries: LogEntry[], error?: string }`. On refusal `error` is set, `state` is the
 input unchanged and no day passes (show `error` as the dimmed-item message, e.g. "No spare.").
@@ -35,7 +35,8 @@ input unchanged and no day passes (show `error` as the dimmed-item message, e.g.
 | `{ type: 'setRations', rations: 'full' \| 'half' \| 'paste' }` | 0 | |
 | `{ type: 'repair', part: 'hull' \| 'pump' \| 'gyro' }` | 1 | Needs a broken part and its spare. |
 | `{ type: 'scan' }` | 1 | Needs 5 charges; M1 auto-resolve. |
-| `{ type: 'cross', method: 'thread' \| 'shields' \| 'tug' \| 'pilot' }` | 0 / pilot n | Resolves the pending crossing (hazards.md). Pilot: first call pays 10 cr and runs the wait days as ticks (stops early on a death; call again to resume, no second fee), then resolves. |
+| `{ type: 'salvage', result? }` | 1 | Salvage Run. No `result` = exactly `scan` (auto-resolve). With a `SalvageResult`: needs >= 1 charge, see "Mini-games". |
+| `{ type: 'cross', method: 'thread' \| 'shields' \| 'tug' \| 'pilot', result? }` | 0 / pilot n | Resolves the pending crossing (hazards.md). Pilot: first call pays 10 cr and runs the wait days as ticks (stops early on a death; call again to resume, no second fee), then resolves. `result` (thread only): a `ThreadingResult` at the five hazards, a `FlareResult` at the Flare Belt ("Ride the solar wind" keeps method `thread`); without it the M2 statistical roll runs unchanged. |
 | `{ type: 'route', via: 'oort' \| 'direct' }` | 0 | Only while parked at Titan Refinery (10); changeable until departing. |
 | `{ type: 'buy', item, packs }` | 0 | Road stations only (Independence keeps `buy()`). Limits/caps on holdings; never partial; credits never negative. |
 | `{ type: 'sell', item, packs }` | 0 | Road stations only; only items the station sells; never the last drive. |
@@ -51,7 +52,7 @@ if (r.state.arrivedAt !== null) showWaypoint(WAYPOINTS[r.state.arrivedAt]);
 if (r.state.status !== 'traveling') gotoEnding(r.state.status);   // 'arrived' | 'dead' | 'adrift'
 ```
 `LogEntry = { day, kind, text, id? }`. Kinds: `depart store travel weather help starving suit condition
-recover death rejoin event quiet arrival hazard rest repair scan setting gameover info crossing route trade`. `id` carries the
+recover death rejoin event quiet arrival hazard rest repair scan setting gameover info crossing route trade salvage threading flare`. `id` carries the
 specific key: event id (`pirates`), condition id (`space-dysentery`), death cause, waypoint id,
 crossing outcome (`clear scraped cargo damage injury lost pump-strain`), crossing method, persona, route,
 item, part, or ending (`arrived dead adrift`).
@@ -97,6 +98,34 @@ qty }, get: { item, qty }, fairness, taken }` (qty in units; charges are single 
 `formatCr`. Talk: `shuffledTalk(stationId, textRng)` (show in order, reshuffle when exhausted), `stationTalk`,
 `stationKeeper`, `stationGreeting(textRng, state, wp)`. Log kinds: `store` (id = item), `trade` (id = persona).
 
+## Mini-games (minigames.md)
+Scenes play with their own Rng, `createRng(minigameSeed(state, kind))` = `seedFromString(`${state.seed}:${kind}:${state.day}`)`
+(`kind` = `salvage | threading | flare`, `day` at launch); the main Rng is only used when the result is applied.
+Result objects (all integers >= 0, no extra keys; `resultError(result, kind)` checks the schema):
+```ts
+SalvageResult   = { kind: 'salvage', rations: 0..100, plates/pumps/gyros: 0..3, chargesUsed: 0..20, crewHurt: 0..3, droneWrecked? }
+ThreadingResult = { kind: 'threading', hits: 0..99, bonus: 'health' | 'rations' | null }   // bonus only when hits === 0
+FlareResult     = { kind: 'flare', hits: 0..5 }                                              // 5 = crash
+```
+Dispatch: `applyAction(s, { type: 'salvage', result })` / `{ type: 'cross', method: 'thread', result }`, or the wrappers
+`applySalvageResult`, `applyThreadingResult`, `applyFlareResult`. Refused with `error` (no day, state unchanged): bad
+shape, `rations + 10 x parts > 100` (`haulUnits`), a bonus with hits, `chargesUsed > min(charges, 20)`, 0 charges, a
+result on a method other than thread, or the wrong kind for the place (`salvageResultBlocker`, `crossResultBlocker`).
+- **Salvage** (1 tick, day kind `salvage`): charges -= chargesUsed; `scansThisSegment += 1` (shared with scan; 3rd+ halves
+  rations, floor); parts clamped to the hold cap of 3; one victim draw per `crewHurt` (-5 health). Logs `salvage`:
+  `wrecked` (first, when droneWrecked), `haul` (text `salvage.haul` / `haulRations` / `haulParts`, `{n}` `{parts}` via
+  `partsPhrase`) or `nothing`, then `hot` per hurt crew.
+- **Threading** (no day): replaces the incident draw. Logs `crossing/thread`, `threading/clean` (bonus: +2 health all
+  present crew or +10 rations; then `hazard/clear`) or `threading/hit` (`{hits}`), then per hit (max 4) a severity d100
+  (+5 at density >= 4; rolls 1-2 capped at 95) and its `hazard/<outcome>` picks. Several Scraped = one delay day.
+- **Flare Belt** (no day): logs `crossing/thread` then `flare/clean` (`rodeTheWind = true`, score line `rodeTheWind`
+  +200 before the multiplier), per hit (1-4) a d100 (+10 flare season) -> `scorch` (1-35) / `burn` (36-65) /
+  `damage` (66-85) / `radiation` (86-100), or `crash` (5: a present crew dies, cause `hazard`; rations/suits/charges
+  lose floor(50%); one of each spare held; hull breaks).
+- `runPolicy` never sends a result, so its outputs are unchanged (pinned by a 50-seed fixture in `minigames.test.ts`).
+- Not in the sim yet: skip-with-penalty variants (scan d100 - 10, thread `T + 10`, Flare incident +10) and the
+  `info/skipped` log line; scenes need them before Skip ships.
+
 ## Route (hazards.md "Route branch")
 `state.route` (`'oort'` default). Direct skips waypoint 12 (next after 11 is 13; total 1,926 Mk; Heliopause +10).
 Map data: `routeWaypoints(route)` returns the active waypoint list with route-correct `cumulative`; also `totalMk(route)`,
@@ -116,4 +145,11 @@ For e2e tests (src/game/contract.ts); keep stable.
 - `body[data-modal="1"]` while a modal or number prompt is open; `body[data-busy="1"]` while a Travel day is animating (input ignored).
 - In the store, `state` updates live as quantities change (status stays `store` until "Leave the store" confirms `depart`).
 - Keys are read from `window` (no canvas focus needed). Keys pressed during a scene change can be lost: wait for `data-scene` first.
+- M3 (minigames.md; **scene developer implements**, not the sim): `createGame` must receive `seed: __PROXIMA__.seed`
+  so `state.seed` is set; `body[data-scene]` adds `Salvage Threading Flare`; `body[data-paused="1"]` while paused;
+  `window.__PROXIMA__.minigame` is `null` outside the scenes, else `{ kind, elapsed, result? }` (`elapsed` = fixed-step play
+  seconds excluding countdown/pause; `result` set when the run ends, before the panel closes); while a run is live
+  `finishNow()` ends it as if time ran out, and `finishWith(result)` (test builds / `?debug=1` only) ends it with that
+  result. Both go through `resultError` and the same intent as normal play. Options flag `autoResolveMiniGames`
+  (`localStorage['proxima.options']`, `?minigames=auto`) dispatches the intents without a result.
 - Beacon epitaphs: `localStorage['proxima.beacons']` = `[{ segment, captain, name, text, date }]` (beacons.md; read with `parseBeacons`).

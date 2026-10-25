@@ -28,7 +28,14 @@ function migrateV1(state: Record<string, unknown>): void {
   state['version'] = 2;
 }
 
-const MIGRATIONS: Readonly<Record<number, (s: Record<string, unknown>) => void>> = { 1: migrateV1 };
+/** v2 (M2) → v3 (M3): empty seed label (mini-game RNGs still deterministic), no Flare Belt bonus. */
+function migrateV2(state: Record<string, unknown>): void {
+  state['seed'] ??= '';
+  state['rodeTheWind'] ??= false;
+  state['version'] = 3;
+}
+
+const MIGRATIONS: Readonly<Record<number, (s: Record<string, unknown>) => void>> = { 1: migrateV1, 2: migrateV2 };
 
 /** Parse a save string. Migrates older versions; throws on bad JSON, unknown version, or missing fields. */
 export function fromJSON(json: string): GameState {

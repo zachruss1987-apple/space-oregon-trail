@@ -8,7 +8,7 @@ export type {
 };
 
 /** Save format version for serialize.ts. */
-export const STATE_VERSION = 2;
+export const STATE_VERSION = 3;
 
 /** One active condition on a crew member. */
 export interface ActiveCondition {
@@ -51,7 +51,7 @@ export type Status = 'store' | 'traveling' | 'arrived' | 'dead' | 'adrift';
 export type LogKind =
   | 'depart' | 'store' | 'travel' | 'weather' | 'help' | 'starving' | 'suit' | 'condition' | 'recover'
   | 'death' | 'rejoin' | 'event' | 'quiet' | 'arrival' | 'hazard' | 'rest' | 'repair' | 'scan' | 'setting'
-  | 'gameover' | 'info' | 'crossing' | 'route' | 'trade';
+  | 'gameover' | 'info' | 'crossing' | 'route' | 'trade' | 'salvage' | 'threading' | 'flare';
 
 /** One structured log line. */
 export interface LogEntry {
@@ -172,6 +172,10 @@ export interface GameState {
   route: RouteId;
   /** Current road-station visit (Station scene available while non-null). */
   station: StationVisit | null;
+  /** Run seed label (the UI's `?seed=`); only feeds mini-game RNGs (`minigameSeed`), never the main Rng. */
+  seed: string;
+  /** True after a clean Flare Belt mini-game ("Rode the wind" score bonus). */
+  rodeTheWind: boolean;
 }
 
 /** Options for createGame. */
@@ -182,13 +186,57 @@ export interface NewGameOptions {
   crewNames?: readonly string[];
   /** Launch window. */
   window: WindowId;
+  /** Run seed label stored as `state.seed` (default ''). */
+  seed?: string;
 }
+
+/** Mini-game ids (also the `minigameSeed` kind). */
+export type MiniGameKind = 'salvage' | 'threading' | 'flare';
+
+/** Salvage Run result: counts after the wreck halving and the carry clamp (minigames.md). */
+export interface SalvageResult {
+  kind: 'salvage';
+  /** 0–100 rations towed in. */
+  rations: number;
+  /** 0–3 hull plates. */
+  plates: number;
+  /** 0–3 coolant pumps. */
+  pumps: number;
+  /** 0–3 nav gyros. */
+  gyros: number;
+  /** Charges spent (1 per shot), 0..min(charges, 20). */
+  chargesUsed: number;
+  /** Hot chunks handled, 0–3 (each: random present crew −5 health). */
+  crewHurt: number;
+  /** Drone reached 0 HP (counts already halved). */
+  droneWrecked?: boolean;
+}
+
+/** Debris Threading result. `bonus` is non-null only when `hits === 0`. */
+export interface ThreadingResult {
+  kind: 'threading';
+  /** Rocks hit, 0–99 (at most 4 severity rolls). */
+  hits: number;
+  /** Clean-run pick. */
+  bonus: 'health' | 'rations' | null;
+}
+
+/** Flare Belt Finale result: hits 0–5 (5 = crash). */
+export interface FlareResult {
+  kind: 'flare';
+  /** Arc hits. */
+  hits: number;
+}
+
+/** Any mini-game result object. */
+export type MiniGameResult = SalvageResult | ThreadingResult | FlareResult;
 
 /** What a day is spent on. */
 export type DayKind =
   | { kind: 'travel' }
   | { kind: 'rest' }
   | { kind: 'scan' }
+  | { kind: 'salvage'; result: SalvageResult }
   | { kind: 'repair'; part: PartId }
   | { kind: 'wait' };
 
@@ -200,7 +248,8 @@ export type Intent =
   | { type: 'setRations'; rations: RationId }
   | { type: 'repair'; part: PartId }
   | { type: 'scan' }
-  | { type: 'cross'; method: CrossMethod }
+  | { type: 'salvage'; result?: SalvageResult }
+  | { type: 'cross'; method: CrossMethod; result?: ThreadingResult | FlareResult }
   | { type: 'route'; via: RouteId }
   | { type: 'buy'; item: SupplyKey; packs: number }
   | { type: 'sell'; item: SupplyKey; packs: number }

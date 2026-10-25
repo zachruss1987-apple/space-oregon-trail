@@ -1,6 +1,8 @@
 /** Player intents → state changes (Travel, Hazard and Station menus). Refusals return `error` and consume no day. */
 import { CROSSING, FINAL_WAYPOINT, PART_NAMES, RATIONS, REST, THRUST, WAYPOINTS } from '@/content';
 import { blockedText, crossBlocker, finishCrossing } from './crossing';
+import { applyFlare, applyThreading, crossResultBlocker } from './minicross';
+import { salvageResultBlocker } from './minigame';
 import { roadBuy, roadBuyBlocker, sell, sellBlocker } from './market';
 import { repairBlocker } from './repair';
 import type { Rng } from './rng';
@@ -9,7 +11,7 @@ import { canScan } from './salvage';
 import { resolveText, textLine } from './text';
 import { gameOverCheck, tickInPlace } from './tick';
 import { acceptTrade, tradeBlocker } from './trade';
-import type { GameState, Intent, LogEntry, StepResult } from './types';
+import type { FlareResult, GameState, Intent, LogEntry, SalvageResult, StepResult, ThreadingResult } from './types';
 import { cloneState, pushLog } from './util';
 
 function refuse(state: GameState, error: string): StepResult {
@@ -44,8 +46,12 @@ export function intentBlocker(state: GameState, intent: Intent): string | null {
     case 'scan':
       if (state.arrivedAt === FINAL_WAYPOINT) return 'Nothing left to salvage.';
       return canScan(state) ? null : 'No drone charges.';
+    case 'salvage':
+      if (state.arrivedAt === FINAL_WAYPOINT) return 'Nothing left to salvage.';
+      if (intent.result === undefined) return canScan(state) ? null : 'No drone charges.';
+      return salvageResultBlocker(state, intent.result);
     case 'cross':
-      return crossBlocker(state, intent.method);
+      return crossBlocker(state, intent.method) ?? (intent.result === undefined ? null : crossResultBlocker(state, intent.method, intent.result));
     case 'route':
       return routeBlocker(state);
     case 'buy':
@@ -72,6 +78,14 @@ function crossWithPilot(s: GameState, rng: Rng, out: LogEntry[]): void {
     if (s.deaths > deathsBefore || s.status !== 'traveling') return;
   }
   finishCrossing(s, 'pilot', rng, out);
+}
+
+/** `cross thread` with a mini-game result: narrate the thread, apply the result instead of the roll, clear `crossing`. */
+function crossWithResult(s: GameState, result: ThreadingResult | FlareResult, rng: Rng, out: LogEntry[]): void {
+  pushLog(s, out, 'crossing', resolveText(rng, 'ui', 'hazard.thread', {}, 'You thread the gap.'), 'thread');
+  if (result.kind === 'flare') applyFlare(s, result, rng, out);
+  else applyThreading(s, result, rng, out);
+  s.crossing = null;
 }
 
 /** Apply a player intent. Day-consuming intents run ordinary ticks (rest and pilot waits stop early on a death). */
@@ -113,11 +127,30 @@ export function applyAction(state: GameState, intent: Intent, rng: Rng): StepRes
     case 'scan':
       tickInPlace(s, rng, { kind: 'scan' }, out);
       break;
+    case 'salvage':
+      tickInPlace(s, rng, intent.result ? { kind: 'salvage', result: intent.result } : { kind: 'scan' }, out);
+      break;
     case 'cross':
-      if (intent.method === 'pilot') crossWithPilot(s, rng, out);
+      if (intent.result) crossWithResult(s, intent.result, rng, out);
+      else if (intent.method === 'pilot') crossWithPilot(s, rng, out);
       else finishCrossing(s, intent.method, rng, out);
       if (s.crossing === null && s.status === 'traveling') gameOverCheck(s, rng, out);
       break;
   }
   return { state: s, entries: out };
+}
+
+/** Salvage Run result → `{ type: 'salvage', result }` (one day, validated). */
+export function applySalvageResult(state: GameState, result: SalvageResult, rng: Rng): StepResult {
+  return applyAction(state, { type: 'salvage', result }, rng);
+}
+
+/** Debris Threading result → `{ type: 'cross', method: 'thread', result }` (no day). */
+export function applyThreadingResult(state: GameState, result: ThreadingResult, rng: Rng): StepResult {
+  return applyAction(state, { type: 'cross', method: 'thread', result }, rng);
+}
+
+/** Flare Belt result → `{ type: 'cross', method: 'thread', result }` at the Flare Belt (no day). */
+export function applyFlareResult(state: GameState, result: FlareResult, rng: Rng): StepResult {
+  return applyAction(state, { type: 'cross', method: 'thread', result }, rng);
 }

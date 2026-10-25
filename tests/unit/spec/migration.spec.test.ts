@@ -1,4 +1,4 @@
-/** serialize.ts / hazards.md "State and intents summary": an M1 (version 1) save loads with the M2 defaults. */
+/** serialize.ts / hazards.md "State and intents summary": an M1 (version 1) save loads with the M2 defaults (and M3's, minigames.md). */
 import { describe, expect, it } from 'vitest';
 import { applyAction, createRng, fromJSON, toJSON, type GameState } from '@/sim';
 import { ship } from './spec-helpers';
@@ -6,7 +6,7 @@ import { ship } from './spec-helpers';
 /** What an M1 build wrote: no crossing, route or station fields, envelope version 1. */
 function strip<T extends object>(s: T): Record<string, unknown> {
   const o = { ...s } as Record<string, unknown>;
-  for (const k of ['crossing', 'route', 'station', 'version']) delete o[k];
+  for (const k of ['crossing', 'route', 'station', 'version', 'seed', 'rodeTheWind']) delete o[k];
   return o;
 }
 function m1Save(state: GameState): string {
@@ -20,7 +20,9 @@ describe('M1 -> M2 save migration', () => {
     expect(loaded.crossing).toBeNull();
     expect(loaded.route).toBe('oort');
     expect(loaded.station).toBeNull();
-    expect(loaded.version).toBe(2);
+    expect(loaded.version).toBe(3);
+    expect(loaded.seed).toBe('');
+    expect(loaded.rodeTheWind).toBe(false);
   });
 
   it('keeps every M1 field untouched', () => {
@@ -48,6 +50,15 @@ describe('M1 -> M2 save migration', () => {
     const loaded = fromJSON(m1Save(ship({ arrivedAt: 3, segment: 3 })));
     expect(loaded.station).toBeNull();
     expect(applyAction(loaded, { type: 'trade', offer: 0 }, createRng(1)).error).toBeTruthy();
+  });
+
+  it('M2 -> M3 (minigames.md "State additions"): a v2 save gets seed "" and rodeTheWind false; present values kept', () => {
+    const s = ship();
+    const v2 = { ...strip(s), crossing: null, route: 'direct', station: null, version: 2 };
+    const loaded = fromJSON(JSON.stringify({ version: 2, state: v2 }));
+    expect(loaded).toMatchObject({ version: 3, seed: '', rodeTheWind: false, route: 'direct' });
+    const kept = fromJSON(JSON.stringify({ version: 2, state: { ...v2, seed: 'ABC', rodeTheWind: true } }));
+    expect(kept).toMatchObject({ seed: 'ABC', rodeTheWind: true });
   });
 
   it('rejects unknown versions, bad JSON and missing fields', () => {

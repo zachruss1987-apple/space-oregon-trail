@@ -5,7 +5,7 @@ import type { GameState } from './types';
 /** One scoring line. */
 export interface ScoreLine {
   /** Stable key for UI labels. */
-  key: 'crew' | 'ship' | 'drives' | 'spares' | 'suits' | 'charges' | 'rations' | 'credits' | 'flareBonus' | 'noDeathsBonus';
+  key: 'crew' | 'ship' | 'drives' | 'spares' | 'suits' | 'charges' | 'rations' | 'credits' | 'flareBonus' | 'noDeathsBonus' | 'rodeTheWind';
   /** Floored points. */
   points: number;
 }
@@ -51,6 +51,7 @@ export function computeScore(state: GameState): ScoreBreakdown {
     { key: 'credits', points: Math.floor(state.credits / SCORE.creditsPerPoint) },
     { key: 'flareBonus', points: state.date < FLARE_SEASON_START ? SCORE.flareBonus : 0 },
     { key: 'noDeathsBonus', points: state.deaths === 0 ? SCORE.noDeathsBonus : 0 },
+    { key: 'rodeTheWind', points: state.rodeTheWind ? SCORE.rodeTheWindBonus : 0 },
   ];
   const subtotal = lines.reduce((sum, l) => sum + l.points, 0);
   const total = subtotal * multiplier;
