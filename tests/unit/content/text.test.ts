@@ -552,3 +552,27 @@ describe('guide.json and highscores.json (T-042)', () => {
     expect((t.header as string).length).toBeLessThanOrEqual(72);
   });
 });
+
+describe('ui.json vs mini-game copy requests (T-059)', () => {
+  // Every key src/minigames/copy.ts (mt/mlist) is asked for, formerly the UNWRITTEN table.
+  const REQUESTED: Record<string, string[]> = {
+    'minigame.common.fire': [], 'minigame.common.pauseIcon': [], 'minigame.common.countdownN': ['{n}'],
+    'minigame.salvage.resultRations': ['{n}'], 'minigame.salvage.resultParts': ['{parts}'],
+    'minigame.salvage.scrap': [], 'minigame.salvage.snap': [], 'minigame.salvage.hit': [],
+    'minigame.salvage.hot': [], 'minigame.salvage.blip': [],
+    'minigame.threading.hit': [], 'minigame.flare.hit': [], 'minigame.flare.resultHits': ['{hits}'],
+    'hazard.option.ride': [], 'hazard.option.payTug': [], 'hazard.desc.ride': [],
+    'title.miniAuto': [], 'title.miniPlay': [],
+  };
+  it('resolves every requested key in ui.json with matching placeholders', () => {
+    for (const [k, want] of Object.entries(REQUESTED)) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Record<string, unknown> | undefined)?.[p], ui);
+      expect(typeof v, k).toBe('string');
+      expect([...new Set((v as string).match(/{[^}]*}/g) ?? [])].sort(), k).toEqual(want);
+    }
+    for (const k of ['hazard.option.ride', 'hazard.option.payTug']) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Record<string, unknown>)[p], ui) as string;
+      expect(v.length, k).toBeLessThanOrEqual(24);
+    }
+  });
+});

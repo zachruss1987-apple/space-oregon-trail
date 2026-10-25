@@ -334,13 +334,16 @@
       "shields": "Shields up and push",
       "tug": "Hire a tug",
       "pilot": "Wait for a Belter pilot",
-      "rest": "Rest a day"
+      "rest": "Rest a day",
+      "ride": "Ride the solar wind",
+      "payTug": "Pay the tug"
     },
     "desc": {
       "thread": "Fly it yourself. Fast, free, and exactly as risky as it looks.",
       "shields": "Half the risk, and nobody dies. The coolant pump may complain.",
       "tug": "Pay a professional to tow you through. Safe, and not cheap.",
-      "pilot": "A Belter flies your ship for 10 cr, after some days of waiting."
+      "pilot": "A Belter flies your ship for 10 cr, after some days of waiting.",
+      "ride": "Fly the flares yourself. Five hits and the Belt wins."
     },
     "thread": [
       "You line up the gap and hold your breath. The ship holds the rest.",
@@ -554,7 +557,8 @@
       "resultClean": "Clean run. Not a scratch.",
       "resultHits": "Hull strikes: {hits}.",
       "bonusHealth": "+2 health, all crew",
-      "bonusRations": "+10 rations"
+      "bonusRations": "+10 rations",
+      "hit": "Rock! The hull rang like a bell."
     },
     "flare": {
       "title": "FLARE BELT",
@@ -570,7 +574,9 @@
       "rodeTheWindLog": [
         "You rode the wind through the Flare Belt without a scratch. The crew will talk about it for years.",
         "A clean ride through the Flare Belt. The ship was fine. Some of the crew were not, from the excitement."
-      ]
+      ],
+      "hit": "Flare hit! That took the paint off.",
+      "resultHits": "Flare strikes: {hits} of 5."
     }
   },
   "topTen": {
