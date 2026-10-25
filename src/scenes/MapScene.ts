@@ -77,6 +77,7 @@ export class MapScene extends BaseScene {
     }
     announceScreen(spoken);
     this.router.push({
+      hints: 'table',
       onKey: (e) => {
         if ((e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') && !e.repeat) this.go('Travel');
       },

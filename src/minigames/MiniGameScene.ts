@@ -113,6 +113,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.touch = new TouchLayer(this, regions, { live: () => !this.paused, pause: () => this.pause(), tap: (at) => this.onTap(at) });
     // `?` pauses a running game before the controls overlay opens (the clock never runs behind it).
     this.router.push({
+      hints: () => this.hintSet(),
       onKey: (e) => this.onKey(e),
       onKeyUp: (e) => this.held.delete(e.key.toLowerCase()),
       onHelp: () => (this.phase === 'play' || this.phase === 'countdown') && this.pause(),
@@ -143,6 +144,11 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   /** Show a short message under the HUD for ~1.2 s (e.g. "Hold full."). */
   protected flash(text: string, color: number = COLORS.warn): void {
     this.hudView.flash(text, color);
+  }
+
+  /** Key hints by phase (keyhints.md): intro, steering (with Fire when the game has an action key), done. */
+  private hintSet(): string {
+    return this.phase === 'intro' ? 'minigameIntro' : this.phase === 'done' ? 'minigameDone' : this.actionKey ? 'minigameFire' : 'minigamePlay';
   }
 
   private onKey(e: KeyboardEvent): void {
@@ -178,6 +184,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.panel?.destroy();
     this.panel = null;
     this.phase = 'countdown';
+    this.router.refreshHints();
     this.countdown = MINIGAME_SCENE.countdownS;
     this.lastBeep = 0;
     this.tickCountdown(0);
@@ -228,6 +235,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   private end(forced?: R): void {
     if (this.phase === 'done') return;
     this.phase = 'done';
+    this.router.refreshHints();
     this.silence();
     this.doneAt = this.time.now;
     this.panel?.destroy();
@@ -251,6 +259,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   /** Skip from the pause menu: no result, the sim's penalty auto-resolve, straight back. */
   private skip(): void {
     this.phase = 'done';
+    this.router.refreshHints();
     this.silence();
     this.settled = true;
     this.hook.skipped = true;

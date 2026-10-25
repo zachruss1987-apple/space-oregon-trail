@@ -27,11 +27,13 @@ export class Modal {
   private readonly objects: Phaser.GameObjects.GameObject[] = [];
   private readonly body: TextBox;
   private readonly menu: Menu;
+  private readonly choice: boolean;
 
   constructor(scene: Phaser.Scene, private readonly router: KeyRouter, message: string, opts: ModalOptions = {}) {
     const w = opts.width ?? 480;
     const x = (GAME_W - w) / 2;
     const buttons = (opts.buttons ?? [t('common.ok')]).map((b) => (typeof b === 'string' ? { label: b } : b));
+    this.choice = buttons.length > 1;
     const blocker = scene.add.rectangle(0, 0, GAME_W, GAME_H, 0x000000, 0.6).setOrigin(0, 0).setDepth(DEPTH).setInteractive();
     this.objects.push(blocker);
     this.body = new TextBox(scene, x + 16, 0, w - 32, message, { depth: DEPTH + 2, typewriter: false });
@@ -60,6 +62,8 @@ export class Modal {
   }
 
   private readonly handler = {
+    /** `modal` (Enter OK) for a lone button, `modalChoice` for a choice (keyhints.md). */
+    hints: (): string => (this.choice ? 'modalChoice' : 'modal'),
     onKey: (e: KeyboardEvent): void => {
       if (this.body.typing) this.body.finish();
       this.menu.onKey(e);

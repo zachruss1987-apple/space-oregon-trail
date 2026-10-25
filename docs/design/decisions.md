@@ -154,3 +154,14 @@ Measured with `npm run balance` (balanced policy, 300 seeds × 5 windows per pro
 - Reference policy buys 8 EVA suits for the Farmer (was 5): with five crew and five suits the first ruined suit exposed someone, and radiation was 31% of deaths; 8 brings it under 30% and teaches a habit the Guide can mention.
 - Not changed: mass penalty, event chance, condition death chances, difficulty multipliers. Tested and rejected: event chance 15% → 20% (adds ~13 days), higher illness death chances (little effect on wins: runs end on health, not on rolls), Executive credits 1,600 → 1,200 (no effect; the 3,000-ration cap binds), a steeper mass penalty (9 days for 5 points).
 - Result (spacer): Executive 63.3%, Engineer 51.1%, Farmer 31.7%, mean 170.5 days, top cause radiation sickness 29.8%. Greenhorn 78.3% (+29.6), Pathfinder 21.2% (−27.5).
+
+## 2026-10-25 (T-069 key hints, developer)
+- `CRT_LOGICAL.h` 400 → 416 (the shader reads `uLogical` for the glow offset); `crtRowScale(832)` stays 2.
+- CRT fragment output is now `vec4(col * base.a, base.a)` instead of opaque: the KeyHints scene's camera gets the CRT post-pipeline too, and an opaque output would have blacked out the scene beneath it. Scene cameras fill their background (alpha 1), so their output is unchanged; the band is warped and scanlined with the same tube geometry as the view.
+- Handlers forward hints: Menu exposes `hintSet` (`menuBack` with `onBack`, else `menu`) and `hints`; Hazard, Station and Waypoint wrappers use `hints: () => menu.hintSet`. Modal's handler picks `modal` / `modalChoice` by button count. Mini-game phases call `router.refreshHints()` on countdown, end and skip; Travel on every auto-travel toggle; Options after any change (Key hints row).
+- Extra set `hints.nameEntry` (A-Z Type · Backspace Erase · Enter OK) for NameInputs without Tab (beacon prompt, Death / Top Ten name): the spec's single `name` set promised a Tab that does nothing there. Setup names keep `name`.
+- `title` set label is `M|Auto-resolve`: the spec's "Mini-games auto" breaks its own 12-character label limit; "Auto-resolve" matches the Options value word.
+- `[?] Help` is also left off for the `help` set (the overlay is already open) and `none`; the mini-game pause "Controls" panel shows `help` (any key closes it); the Options save boxes show `none`.
+- `detectPlatform` matches `uaPlatform` case-insensitively: Chrome's `userAgentData.platform` is "macOS", which the literal "contains Mac" rule misses.
+- KeyHints also sets `body[data-platform]` (the detected platform) for tests; nothing new on `window`.
+- Options rows are 20 px apart (was 22) so 13 x2 rows, the reason line and the hint still fit above the band. `help.lines` gains a line: "Rows 10-13: 0, Shift+1, Shift+2, Shift+3." plus the disabled-row note on its own line (both did not fit the 60-column limit on one).

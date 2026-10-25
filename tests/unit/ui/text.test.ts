@@ -22,8 +22,10 @@ describe('wrapLines (mirrors Phaser BitmapText word wrap)', () => {
 
 describe('CRT scanline scale', () => {
   it('one device row per logical row has no room for a scanline; 2x and up get one per row', () => {
-    expect(crtRowScale(400)).toBe(1);
-    expect(crtRowScale(800)).toBe(2);
+    // Logical height is 416 since the key hints band (keyhints.md "Placement"): 1280x832 keeps scale 2.
+    expect(crtRowScale(416)).toBe(1);
+    expect(crtRowScale(800)).toBe(1);
+    expect(crtRowScale(832)).toBe(2);
     expect(crtRowScale(1300)).toBe(3);
   });
 });

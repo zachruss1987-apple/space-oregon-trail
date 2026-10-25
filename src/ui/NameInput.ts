@@ -18,11 +18,14 @@ export interface NameInputOptions {
 export class NameInput implements KeyHandler {
   readonly textEntry = true;
   private value = '';
+  /** `name` with Tab (random names) when the owner handles extra keys, else `nameEntry` (keyhints.md, decisions.md). */
+  readonly hints: string;
   private readonly text: Phaser.GameObjects.BitmapText;
   private readonly max: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, private readonly opts: NameInputOptions) {
     this.max = opts.maxLength ?? 12;
+    this.hints = opts.onOtherKey ? 'name' : 'nameEntry';
     this.text = addText(scene, x, y, '', { depth: opts.depth ?? 0 });
     this.paint();
   }

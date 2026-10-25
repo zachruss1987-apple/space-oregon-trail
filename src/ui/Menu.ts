@@ -40,9 +40,13 @@ export interface MenuOptions {
   quiet?: boolean;
 }
 
-/** Row a number key picks: 1-9 -> rows 1-9, 0 -> row 10, Shift+1 / Shift+2 -> rows 11 / 12 (by physical key, any layout). */
+/**
+ * Row a number key picks: 1-9 -> rows 1-9, 0 -> row 10, Shift+1 / Shift+2 / Shift+3 -> rows 11 / 12 / 13 (by physical
+ * key, any layout; Shift+3 since Options has 13 rows, keyhints.md).
+ */
+const SHIFT_ROWS: Readonly<Record<string, number>> = { Digit1: 10, Digit2: 11, Digit3: 12 };
 export function numberRow(e: Pick<KeyboardEvent, 'key' | 'code' | 'shiftKey'>): number | null {
-  if (e.shiftKey) return e.code === 'Digit1' ? 10 : e.code === 'Digit2' ? 11 : null;
+  if (e.shiftKey) return SHIFT_ROWS[e.code] ?? null;
   if (e.key === '0') return 9;
   return /^[1-9]$/.test(e.key) ? Number(e.key) - 1 : null;
 }
@@ -79,6 +83,15 @@ export class Menu implements KeyHandler {
     this.items = items;
     this.cursor = Math.min(this.cursor, Math.max(0, items.length - 1));
     this.build();
+  }
+
+  /** Key hints set (keyhints.md): `menuBack` when Esc does something, else `menu`. Wrapping handlers forward it. */
+  get hintSet(): string {
+    return this.opts.onBack ? 'menuBack' : 'menu';
+  }
+
+  get hints(): string {
+    return this.hintSet;
   }
 
   /** Height in pixels of the rows. */

@@ -36,7 +36,9 @@ function overlay(scene: Phaser.Scene, router: KeyRouter, title: string, help: st
     markFlag('modal', false);
     onClose();
   };
+  // The DOM save box takes the typing: the bar shows nothing (keyhints.md `none`).
   const handler = {
+    hints: 'none',
     onKey: (e: KeyboardEvent): void => {
       if (isBack(e)) close();
       else onKey(e, close);

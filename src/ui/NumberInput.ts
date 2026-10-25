@@ -17,6 +17,7 @@ export interface NumberInputOptions {
 
 export class NumberInput implements KeyHandler {
   readonly textEntry = true;
+  readonly hints = 'number';
   private value: number;
   /** True until the first digit is typed: typing replaces the starting value. */
   private fresh = true;

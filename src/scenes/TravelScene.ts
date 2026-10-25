@@ -74,7 +74,7 @@ export class TravelScene extends BaseScene {
     this.hint = addText(this, 12, GAME_HEIGHT - 18, t('travel.auto'), { color: COLORS.dim });
     this.mute = muteIcon(this, 6, 6, 9);
     // `?` (controls overlay) stops auto-travel first: nothing outside the mini-games runs on a timer behind an overlay.
-    this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e), onHelp: () => this.auto && this.setAuto(false) });
+    this.router.push({ hints: () => (this.auto ? 'travelAuto' : 'travel'), onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e), onHelp: () => this.auto && this.setAuto(false) });
     this.events.off('sleep', this.stopHum, this).on('sleep', this.stopHum, this);
     this.events.once('shutdown', () => {
       this.stopHum();
@@ -131,6 +131,7 @@ export class TravelScene extends BaseScene {
     this.auto = on;
     if (!on) this.holding = false;
     setText(this.hint, on ? t('travel.autoIndicator') : t('travel.auto'));
+    this.router.refreshHints();
     if (on && !this.busy) this.travelDay();
   }
 

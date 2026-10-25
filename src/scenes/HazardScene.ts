@@ -72,7 +72,7 @@ export class HazardScene extends BaseScene {
     panel(this, 0, 336, 640, 64);
     this.log = new DayLog(this, 14, 346, 612, 3);
     this.log.show(s.log.slice(-3).map((e) => e.text));
-    this.router.push({ onKey: (e) => !this.log.busy && this.menu.onKey(e) });
+    this.router.push({ hints: () => this.menu.hintSet, onKey: (e) => !this.log.busy && this.menu.onKey(e) });
     this.describe(first);
   }
 

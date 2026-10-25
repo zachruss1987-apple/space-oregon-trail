@@ -80,7 +80,7 @@ On arriving at a hazard (M1): a `Modal` with the hazard description, then one li
 | Touch | Drag to steer, tap to fire (Salvage), pause icon top-right; no on-screen buttons needed. |
 
 ## Controls
-- Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items (1-9; `0` picks row 10, Shift+1 / Shift+2 rows 11 / 12, so Options rows 10-12 are reachable), disabled rows are dimmed and start with `x ` (also in the screen-reader listbox), `?` shows controls. Typing fields accept printable ASCII up to 12 chars.
+- Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items (1-9; `0` picks row 10, Shift+1 / Shift+2 / Shift+3 rows 11 / 12 / 13, so Options rows 10-13 are reachable), disabled rows are dimmed and start with `x ` (also in the screen-reader listbox), `?` shows controls. The key hints bar under the view always names the keys that work right now (`keyhints.md`). Typing fields accept printable ASCII up to 12 chars.
 - Mouse/touch: click or tap any menu item; mini-games have on-screen controls on touch devices.
 - Every input path must be reachable by keyboard alone (tested in M5).
 
@@ -100,9 +100,13 @@ From Title "4. Options". Up/Down choose a row, Left/Right (or Enter, or tap) cha
 | 3 | Sound effects | 0–10 | 8 | `sfx` | SFX bus gain step/10; a `ui.select` plays at the new level |
 | 4 | Text speed | Slow / Normal / Fast / Instant | Normal | `textSpeed` | 24 / 12 / 6 ms per char; Instant turns the typewriter off |
 | 5 | Touch controls | Auto / On / Off | Auto | `touch` | Auto = on when `pointer: coarse`; shows the pause icon and drag steering hints |
-| 6 | Mini-games | Play / Auto-resolve | Play | `autoResolveMiniGames` | As in the Mini-games section |
-| 7 | Reduced motion | Auto / On / Off | Auto | `reducedMotion` | Auto follows `prefers-reduced-motion`. On: no parallax, no bob, no typewriter, no cursor blink, overlays frozen, CRT forced off |
-| 8 | Colorblind palette | Off / On | Off | `palette` (`standard` / `cb`) | Swaps to the colorblind-safe table (`art.md`) |
-| 9 | Back | — | — | — | Returns to Title |
+| 6 | Key hints | Auto / On / Off | Auto | `keyHints` | The hints bar under the view (`keyhints.md`); Auto = hidden on touch platforms, Off leaves the band empty |
+| 7 | Mini-games | Play / Auto-resolve | Play | `autoResolveMiniGames` | As in the Mini-games section |
+| 8 | Reduced motion | Auto / On / Off | Auto | `reducedMotion` | Auto follows `prefers-reduced-motion`. On: no parallax, no bob, no typewriter, no cursor blink, overlays frozen, CRT forced off |
+| 9 | Colorblind palette | Off / On | Off | `palette` (`standard` / `cb`) | Swaps to the colorblind-safe table (`art.md`) |
+| 10 | Difficulty | Greenhorn / Spacer / Pathfinder | Spacer | `difficulty` | Applies to new runs |
+| 11 | Export save | — | — | — | Shows the autosave as a string (disabled with no journey) |
+| 12 | Import save | — | — | — | Paste a save string to continue it |
+| 13 | Back | — | — | — | Returns to Title |
 
 Master volume and mute are not rows: `M` mutes anywhere (key `muted`), master stays at 0.8 (key `master`, sound test only). Layout: title ×2 "OPTIONS", rows ×2 as `CRT effect ........ On`, a one-line ×1 hint for the selected row at the bottom.

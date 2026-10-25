@@ -35,6 +35,7 @@ export class TopTenScene extends BaseScene {
     announceScreen([t('topTen.title'), ...(lines.length ? lines : [t('topTen.empty')])]);
     addText(this, LEFT, 372, t('common.back'), { color: COLORS.dim });
     this.router.set({
+      hints: 'table',
       onKey: (e) => {
         if (isBack(e) || isConfirm(e)) this.go('Title');
       },

@@ -63,7 +63,8 @@ export const CRT_UNIFORMS: Readonly<Record<keyof CrtParams, string>> = {
   flicker: 'uFlicker',
 };
 
-export const CRT_LOGICAL = { w: 640, h: 400 } as const;
+/** Logical canvas the tube covers: the 640x400 view plus the 16 px key hints band (keyhints.md). */
+export const CRT_LOGICAL = { w: 640, h: 416 } as const;
 
 /** Device rows per logical row for the scanline (1 = no room for a scanline). */
 export const crtRowScale = (deviceHeight: number): number => Math.max(1, Math.floor(deviceHeight / CRT_LOGICAL.h));
@@ -108,6 +109,8 @@ void main() {
   float v = dot(p, p) * 0.5;
   col *= 1.0 - uVignette * v;
   col *= 1.0 + uFlicker * sin(uTime * 60.0);
-  gl_FragColor = vec4(col, 1.0);
+  // Alpha passes through (premultiplied) so an overlay camera (the KeyHints band) only covers what it draws;
+  // scene cameras fill their background, so for them this is the old opaque output.
+  gl_FragColor = vec4(col * base.a, base.a);
 }
 `;

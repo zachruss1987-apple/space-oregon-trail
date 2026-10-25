@@ -67,6 +67,7 @@ export class TitleScene extends BaseScene {
       setText(note, msg).setX(centerX(msg, 1));
     }
     this.router.push({
+      hints: 'title',
       onKey: (e) => {
         if (e.key !== 'm' && e.key !== 'M') return menu.onKey(e);
         session.setOption('autoResolveMiniGames', !session.options.autoResolveMiniGames);

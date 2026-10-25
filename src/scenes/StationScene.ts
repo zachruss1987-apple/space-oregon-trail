@@ -69,6 +69,7 @@ export class StationScene extends BaseScene {
     panel(this, 0, 336, 640, 64);
     this.log = new DayLog(this, 14, 346, 612, 3);
     this.router.push({
+      hints: () => this.menu.hintSet,
       onKey: (e) => {
         if (this.log.busy) return;
         if (this.speech.typing) this.speech.finish();

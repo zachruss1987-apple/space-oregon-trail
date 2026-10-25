@@ -64,6 +64,7 @@ export class WaypointScene extends BaseScene {
       onBack: () => this.go(s.crossing ? 'Hazard' : 'Travel'),
     });
     this.router.push({
+      hints: () => menu.hintSet,
       onKey: (e) => {
         if (body.typing) body.finish();
         menu.onKey(e);

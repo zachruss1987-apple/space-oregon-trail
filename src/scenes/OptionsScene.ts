@@ -18,14 +18,16 @@ import { COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
 import { openExport, openImport } from './saveTransfer';
 
-type RowId = 'crt' | 'music' | 'sfx' | 'textSpeed' | 'touch' | 'minigames' | 'reducedMotion' | 'palette' | 'difficulty' | 'export' | 'import' | 'back';
-const ROWS: readonly RowId[] = ['crt', 'music', 'sfx', 'textSpeed', 'touch', 'minigames', 'reducedMotion', 'palette', 'difficulty', 'export', 'import', 'back'];
+type RowId = 'crt' | 'music' | 'sfx' | 'textSpeed' | 'touch' | 'keyHints' | 'minigames' | 'reducedMotion' | 'palette' | 'difficulty' | 'export' | 'import' | 'back';
+/** 13 rows since Key hints (keyhints.md); rows 11-13 are Shift+1..3. */
+const ROWS: readonly RowId[] = ['crt', 'music', 'sfx', 'textSpeed', 'touch', 'keyHints', 'minigames', 'reducedMotion', 'palette', 'difficulty', 'export', 'import', 'back'];
 /** Rows that are actions, not values (no dotted leader). */
 const ACTIONS = new Set<RowId>(['export', 'import', 'back']);
 const LABEL_W = 19;
 const MENU_X = 24;
 const MENU_Y = 56;
-const ROW_H = 22;
+/** 13 rows x2 fit above the reason line and the hint (was 22 with 12 rows). */
+const ROW_H = 20;
 
 /** "6 ###..": the step and a 5-cell bar (one cell per two steps). */
 const bar = (n: number): string => `${String(n).padStart(2)} ${'#'.repeat(Math.round(n / 2))}${'.'.repeat(5 - Math.round(n / 2))}`;
@@ -54,6 +56,7 @@ export class OptionsScene extends BaseScene {
     });
     this.hint = addText(this, MENU_X, 352, '', { color: COLORS.dim, wrap: 592 });
     this.router.push({
+      hints: 'options',
       onKey: (e) => {
         if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') this.change(this.menu.cursor, -1);
         else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') this.change(this.menu.cursor, 1);
@@ -74,6 +77,7 @@ export class OptionsScene extends BaseScene {
       case 'sfx': return bar(o.sfx);
       case 'textSpeed': return v(o.textSpeed);
       case 'touch': return v(o.touch);
+      case 'keyHints': return v(o.keyHints);
       case 'minigames': return v(o.autoResolveMiniGames ? 'autoResolve' : 'play');
       case 'reducedMotion': return v(o.reducedMotion);
       case 'palette': return v(o.palette === 'cb' ? 'on' : 'off');
@@ -134,6 +138,10 @@ export class OptionsScene extends BaseScene {
         break;
       case 'textSpeed': this.set('textSpeed', cycle(TEXT_SPEEDS, o.textSpeed, dir)); break;
       case 'touch': this.set('touch', cycle(TRI_STATES, o.touch, dir)); break;
+      case 'keyHints':
+        this.set('keyHints', cycle(TRI_STATES, o.keyHints, dir));
+        this.router.refreshHints();
+        break;
       case 'minigames': this.set('autoResolveMiniGames', !o.autoResolveMiniGames); break;
       case 'reducedMotion':
         this.set('reducedMotion', cycle(TRI_STATES, o.reducedMotion, dir));

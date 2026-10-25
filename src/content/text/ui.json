@@ -7,6 +7,7 @@
     "sfx": "Sound effects",
     "textSpeed": "Text speed",
     "touch": "Touch controls",
+    "keyHints": "Key hints",
     "minigames": "Mini-games",
     "reducedMotion": "Reduced motion",
     "palette": "Colorblind palette",
@@ -36,6 +37,7 @@
       "sfx": "Sound effects volume, 0 to 10.",
       "textSpeed": "How fast the prose types out. Instant skips the typewriter.",
       "touch": "Pause icon and FIRE button in mini-games. Auto: touch screens.",
+      "keyHints": "Keys that work now, in a strip under the screen. Auto: not on touch.",
       "minigames": "Auto-resolve skips the arcade parts, no penalty.",
       "reducedMotion": "No drifting stars, blinking or typewriter. The CRT stays off.",
       "palette": "Reds and greens swapped for colors that stay apart.",
@@ -651,7 +653,8 @@
     "lines": [
       "Arrows or WASD (Tab, Shift+Tab): move the cursor.",
       "Enter or Space: choose. Number keys: pick a row.",
-      "Rows 10-12: 0, Shift+1, Shift+2. Disabled rows start x.",
+      "Rows 10-13: 0, Shift+1, Shift+2, Shift+3.",
+      "Disabled rows start x; choosing one says why.",
       "Esc: back, cancel, or pause a mini-game.",
       "Left / Right: change an Options value or Guide page.",
       "Travel: hold Enter or T to keep going; any key stops.",
@@ -664,5 +667,94 @@
   "a11y": {
     "muted": "Sound off.",
     "unmuted": "Sound on."
+  },
+  "hints": {
+    "menu": [
+      "Arrows|Move",
+      "Enter|Choose",
+      "1-9|Pick"
+    ],
+    "menuBack": [
+      "Arrows|Move",
+      "Enter|Choose",
+      "1-9|Pick",
+      "Esc|Back"
+    ],
+    "modal": [
+      "Enter|OK"
+    ],
+    "modalChoice": [
+      "Arrows|Move",
+      "Enter|Choose",
+      "Esc|Cancel"
+    ],
+    "number": [
+      "0-9|Type",
+      "Arrows|Adjust",
+      "Enter|OK",
+      "Esc|Cancel"
+    ],
+    "name": [
+      "A-Z|Type",
+      "Backspace|Erase",
+      "Tab|Random",
+      "Enter|OK"
+    ],
+    "nameEntry": [
+      "A-Z|Type",
+      "Backspace|Erase",
+      "Enter|OK"
+    ],
+    "title": [
+      "Arrows|Move",
+      "Enter|Choose",
+      "1-9|Pick",
+      "M|Auto-resolve"
+    ],
+    "travel": [
+      "Arrows|Move",
+      "Enter|Choose",
+      "T|Travel on",
+      "M|Mute"
+    ],
+    "travelAuto": [
+      "Any key|Stop"
+    ],
+    "table": [
+      "Enter|Back",
+      "Esc|Back"
+    ],
+    "guide": [
+      "Arrows|Page",
+      "Enter|Next",
+      "Esc|Back"
+    ],
+    "options": [
+      "Up/Down|Move",
+      "Left/Right|Change",
+      "Enter|Change",
+      "Esc|Back"
+    ],
+    "minigameIntro": [
+      "Enter|Start",
+      "Esc|Pause"
+    ],
+    "minigamePlay": [
+      "Arrows|Steer",
+      "Esc|Pause"
+    ],
+    "minigameFire": [
+      "Arrows|Steer",
+      "Space|Fire",
+      "Esc|Pause"
+    ],
+    "minigameDone": [
+      "Enter|Continue"
+    ],
+    "help": [
+      "Any key|Close"
+    ],
+    "none": [],
+    "helpKey": "?|Help"
   }
 }

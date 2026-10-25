@@ -210,6 +210,7 @@ describe('ui.json', () => {
     delete rest.status;
     delete rest.guide;
     delete rest.options; // labels repeat by design (Spacer); lengths checked in the T-061 block
+    delete rest.hints; // key hint sets share pairs by design (keyhints.md); checked in tests/unit/ui/keyHints.test.ts
     for (const k of [...Object.keys(FALLBACK), ...Object.keys(PENDING)]) {
       const parts = k.split('.');
       const parent = parts.slice(0, -1).reduce<Obj | undefined>((a, p) => a?.[p] as Obj | undefined, rest);

@@ -15,6 +15,9 @@ import { CHAR_W, COLORS, LINE_HEIGHT } from './theme';
 const DEPTH = 200;
 const W = 560;
 
+/** Key hints set while the overlay is open (keyhints.md): any key closes it. */
+export const HELP_HINTS = 'help';
+
 export interface HelpOverlay {
   destroy(): void;
 }

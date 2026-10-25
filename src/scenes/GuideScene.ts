@@ -30,6 +30,7 @@ export class GuideScene extends BaseScene {
     this.heading(16, t('guide.title').toUpperCase());
     addText(this, LEFT, 376, t('guide.hint'), { color: COLORS.dim });
     this.router.set({
+      hints: 'guide',
       onKey: (e) => {
         if (isBack(e)) this.go('Title');
         else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A' || e.key === 'PageUp') this.turn(-1);

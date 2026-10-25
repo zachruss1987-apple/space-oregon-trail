@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_HEIGHT, GAME_WIDTH, RENDER_SCALE } from './config';
+import { CANVAS_HEIGHT, GAME_WIDTH, RENDER_SCALE } from './config';
 import './game/contract';
 import { debugLoadState } from './game/debugLoad';
 import { initA11y } from './game/a11y';
@@ -8,6 +8,7 @@ import { audioBoot } from './audio/boot';
 import { bindMuteKey } from './game/muteKey';
 import { SCENES } from './scenes';
 import { GfxPreviewScene } from './gfx/previewScene';
+import { KeyHintsScene } from './ui/KeyHintsScene';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
 session.init(window.location.search);
@@ -21,7 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
   width: GAME_WIDTH * RENDER_SCALE,
-  height: GAME_HEIGHT * RENDER_SCALE,
+  height: CANVAS_HEIGHT * RENDER_SCALE,
   backgroundColor: '#000000',
   pixelArt: true,
   roundPixels: true,
@@ -30,7 +31,8 @@ const config: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   // BootScene (first) builds fonts and textures, then opens Title or a `?scene=` debug scene.
-  scene: [...audioBoot(SCENES), GfxPreviewScene],
+  // KeyHints (last, so it draws above every scene) is launched by Boot once fonts exist.
+  scene: [...audioBoot(SCENES), GfxPreviewScene, KeyHintsScene],
 };
 
 const game = new Phaser.Game(config);

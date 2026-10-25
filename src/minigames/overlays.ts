@@ -111,7 +111,7 @@ export class PauseMenu {
       this.controls?.destroy();
       this.controls = null;
     };
-    const handler = { onKey: back };
+    const handler = { onKey: back, hints: 'help' };
     this.router.push(handler);
     // Registered next tick so the tap that chose "Controls" does not close it at once.
     this.scene.time.delayedCall(50, () => this.controls && this.scene.input.once('pointerdown', back));

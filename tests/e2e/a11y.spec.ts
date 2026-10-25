@@ -98,10 +98,10 @@ test('keyboard only: full run from Title to an ending with zero pointer events',
 test('reduced motion sets data-reduced and turns the CRT off', async ({ page }) => {
   await toOptions(page);
   await expect(body(page)).toHaveAttribute('data-reduced', '0');
-  await page.keyboard.press('7'); // Reduced motion: Auto -> On
+  await page.keyboard.press('8'); // Reduced motion (row 8 since Key hints, keyhints.md): Auto -> On
   await expect(body(page)).toHaveAttribute('data-reduced', '1');
   await expect(body(page)).toHaveAttribute('data-crt', 'off');
-  await expect(listbox(page).getByRole('option').nth(6)).toHaveText(/Reduced motion.*On/);
+  await expect(listbox(page).getByRole('option').nth(7)).toHaveText(/Reduced motion.*On/);
   await page.reload();
   await expect(body(page)).toHaveAttribute('data-scene', 'Title');
   await expect(body(page)).toHaveAttribute('data-reduced', '1');
@@ -111,10 +111,10 @@ test('reduced motion sets data-reduced and turns the CRT off', async ({ page }) 
 test('colorblind toggle switches data-palette and back', async ({ page }) => {
   await toOptions(page);
   await expect(body(page)).toHaveAttribute('data-palette', 'standard');
-  await page.keyboard.press('8');
+  await page.keyboard.press('9'); // Colorblind palette (row 9 since Key hints, keyhints.md)
   await expect(body(page)).toHaveAttribute('data-palette', 'cb');
   await expect(body(page)).toHaveAttribute('data-scene', 'Options');
-  await expect(listbox(page).getByRole('option').nth(7)).toHaveAttribute('aria-selected', 'true');
+  await expect(listbox(page).getByRole('option').nth(8)).toHaveAttribute('aria-selected', 'true');
   await page.keyboard.press('Enter');
   await expect(body(page)).toHaveAttribute('data-palette', 'standard');
 });
@@ -152,9 +152,9 @@ test('Guide page text is read into the log region', async ({ page }) => {
   await expect(live(page).getByText(/Page 1 of|1 of \d+/).first()).toBeVisible();
 });
 
-test('Options row 10 is reachable with the 0 key', async ({ page }) => {
+test('Options row 11 is reachable with Shift+1', async ({ page }) => {
   await toOptions(page);
-  await page.keyboard.press('0'); // row 10 (Export save): disabled with no journey, so it explains itself
+  await page.keyboard.press('Shift+Digit1'); // row 11 (Export save since Key hints, keyhints.md): disabled with no journey, so it explains itself
   await expect(live(page).getByText('No journey in progress to export.')).toBeVisible();
 });
 

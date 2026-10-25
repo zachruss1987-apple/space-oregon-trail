@@ -18,6 +18,8 @@ export interface Options {
   textSpeed: TextSpeed;
   /** On-screen mini-game controls: auto = on touch screens. */
   touch: TriState;
+  /** Key hints bar under the view (keyhints.md): auto = hidden on touch platforms. */
+  keyHints: TriState;
   autoResolveMiniGames: boolean;
   /** Auto follows `prefers-reduced-motion`. */
   reducedMotion: TriState;
@@ -29,7 +31,7 @@ export interface Options {
 export const OPTIONS_KEY = 'proxima.options';
 
 export const DEFAULT_OPTIONS: Readonly<Options> = {
-  crt: null, music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard', difficulty: DEFAULT_DIFFICULTY,
+  crt: null, music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', keyHints: 'auto', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard', difficulty: DEFAULT_DIFFICULTY,
 };
 
 /** ms per character for each text speed (Instant = no typewriter). */
@@ -57,6 +59,7 @@ export function parseOptions(raw: string | null | undefined): Options {
     sfx: step(o['sfx'], d.sfx),
     textSpeed: pick(o['textSpeed'], TEXT_SPEEDS, d.textSpeed),
     touch: pick(o['touch'], TRI_STATES, legacyTouch),
+    keyHints: pick(o['keyHints'], TRI_STATES, d.keyHints),
     autoResolveMiniGames: typeof o['autoResolveMiniGames'] === 'boolean' ? o['autoResolveMiniGames'] : d.autoResolveMiniGames,
     reducedMotion: pick(o['reducedMotion'], TRI_STATES, d.reducedMotion),
     palette: pick(o['palette'], ['standard', 'cb'] as const, d.palette),

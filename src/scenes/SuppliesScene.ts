@@ -73,6 +73,7 @@ export class SuppliesScene extends BaseScene {
     announceScreen(spoken);
     addText(this, 16, 376, t('supplies.return'), { color: COLORS.dim });
     this.router.push({
+      hints: 'table',
       onKey: (e) => {
         if ((e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') && !e.repeat) this.go('Travel');
       },

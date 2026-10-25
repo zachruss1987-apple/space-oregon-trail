@@ -144,7 +144,7 @@ test('difficulty cycles in Options, persists, shows on Setup and reaches the run
   await gotoScene(page, 'Title', 'M5DIFF');
   await page.keyboard.press('4');
   await expect(body(page)).toHaveAttribute('data-scene', 'Options');
-  await page.keyboard.press('9'); // Difficulty: Spacer -> Pathfinder
+  await page.keyboard.press('0'); // Difficulty (row 10 since Key hints, keyhints.md): Spacer -> Pathfinder
   await expect.poll(() => texts(page, 'Options')).toContain('Pathfinder');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('proxima.options') ?? '{}').difficulty)).toBe('pathfinder');
   await page.keyboard.press('ArrowRight'); // Pathfinder -> Greenhorn

@@ -226,7 +226,7 @@ Sizes never scale (integer only); the tier change is the "growth".
 Default On for desktop WebGL; Off when `pointer: coarse`, on Canvas, or with reduced motion. Canvas fallback: no pipeline at all, the Options row reads "CRT  n/a". Toggle applies at runtime without a scene restart.
 
 ## Scaling
-Phaser `pixelArt: true`, `roundPixels: true`. Scale s computed in device pixels: `s = floor(min(W/640, H/400))`; if s ≥ 2 use it, else fit fractionally with nearest-neighbour (`image-rendering: pixelated`). Letterbox black, centred. Sprite scale is always an integer (title ship ×2, logo ×4); all positions are integers.
+Phaser `pixelArt: true`, `roundPixels: true`. Scale s computed in device pixels over the 640×416 canvas (the 640×400 view plus the 16 px key hints band, `keyhints.md`; 40:26): `s = floor(min(W/640, H/416))`; if s ≥ 2 use it, else fit fractionally with nearest-neighbour (`image-rendering: pixelated`). Letterbox black, centred. Sprite scale is always an integer (title ship ×2, logo ×4); all positions are integers.
 
 ## "No default Phaser text remains" checklist
 Global: no `this.add.text(` in `src/` (a unit grep test enforces it), no font-family strings, every color read from `palette.ts` by key, every panel drawn with `ui.panel`.

@@ -2,9 +2,11 @@
  * Keyboard routing. One window-level listener per scene; the top handler on the stack gets each key.
  * Window listeners work without the canvas having focus, so keys are live on page load.
  * `?` opens the controls overlay anywhere a text field is not taking input (any key closes it).
+ * The router also publishes the top handler's key hints set (keyhints.md "Which hints show") to the KeyHints bar.
  */
 import type Phaser from 'phaser';
-import { openHelp as showHelp, type HelpOverlay } from './HelpOverlay';
+import { HELP_HINTS, openHelp as showHelp, type HelpOverlay } from './HelpOverlay';
+import { publishHints } from './keyHints';
 
 /** Anything that consumes keys (Menu, Modal, NumberInput, NameInput, scene-level handlers). */
 export interface KeyHandler {
@@ -14,6 +16,14 @@ export interface KeyHandler {
   readonly textEntry?: boolean;
   /** Called before the `?` overlay opens (e.g. Travel stops auto-travel, a mini-game pauses). */
   onHelp?(): void;
+  /** Key hints set id (`hints.<id>` in ui.json) while this handler is on top; a function is re-read on every publish. */
+  readonly hints?: string | (() => string | null);
+}
+
+/** The set id a handler shows (`none` without one). */
+export function hintSetOf(h: KeyHandler | undefined): string {
+  const v = typeof h?.hints === 'function' ? h.hints() : h?.hints;
+  return v || 'none';
 }
 
 /** A key typed into a DOM text field (TextArea): leave Backspace, Space and arrows to the field. */
@@ -71,6 +81,14 @@ export class KeyRouter {
       this.help = null;
       if (current.router === this) current.router = null;
     });
+    this.refreshHints();
+  }
+
+  /** Publish the hint set of the top handler (or `help` while the overlay is open). Handlers call it when their set changes. */
+  refreshHints(): void {
+    if (current.router !== this) return;
+    const top = this.top;
+    publishHints(this.help ? HELP_HINTS : hintSetOf(top), !this.help && !!top?.textEntry);
   }
 
   /** The handler that gets keys now. */
@@ -88,27 +106,32 @@ export class KeyRouter {
     if (this.help) return;
     this.top?.onHelp?.();
     this.help = showHelp(this.scene, () => this.closeHelp());
+    this.refreshHints();
   }
 
   closeHelp(): void {
     this.help?.destroy();
     this.help = null;
+    this.refreshHints();
   }
 
   push(h: KeyHandler): void {
     this.stack.push(h);
+    this.refreshHints();
   }
 
   /** Remove a handler wherever it is in the stack. */
   remove(h: KeyHandler): void {
     const i = this.stack.lastIndexOf(h);
     if (i >= 0) this.stack.splice(i, 1);
+    this.refreshHints();
   }
 
   /** Replace the whole stack with one handler (used when a scene swaps sub-steps). */
   set(h: KeyHandler): void {
     this.stack.length = 0;
     this.stack.push(h);
+    this.refreshHints();
   }
 }
 
