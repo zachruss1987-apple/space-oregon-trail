@@ -4,6 +4,7 @@
  * the result panel, dispatching the outcome to the sim, and the `__PROXIMA__.minigame` debug hooks.
  * A game supplies `kind`, `durationS`, and the hooks `setup / step / draw / hud / result / resultLines`.
  */
+import { audio } from '@/audio/AudioManager';
 import { MINIGAME_SCENE } from '@/content';
 import type { MiniGameDebug } from '@/game/contract';
 import { session } from '@/game/session';
@@ -15,7 +16,7 @@ import { mt } from './copy';
 import { MiniGameHud } from './hud';
 import { dispatchOutcome } from './outcome';
 import { confirmSkip, introPanel, PauseMenu, resultPanel, touchButtons, type Panel, type PanelLine } from './overlays';
-import { isTouchDevice, TouchLayer, type TouchPoint } from './touch';
+import { TouchLayer, type TouchPoint } from './touch';
 
 /** One fixed simulation step in seconds. */
 export const STEP_S = 1 / MINIGAME_SCENE.stepHz;
@@ -44,6 +45,8 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   private steps = 0;
   private acc = 0;
   private countdown = 0;
+  private lastBeep = 0;
+  private readyLine = '';
   private doneAt = 0;
   /** True once the outcome was dispatched (the result panel may be left). */
   private settled = false;
@@ -67,6 +70,14 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   protected abstract result(): { result: R; notes?: PanelLine[] };
   /** Panel lines describing a result (also used for `finishWith`). */
   protected abstract resultLines(result: R): PanelLine[];
+  /** `ui.icon.*` texture per HUD slot (null = none). */
+  protected hudIcons(): (string | null)[] {
+    return [];
+  }
+  /** A clean run plays `jingle.clean` when the result panel opens. */
+  protected isClean(_result: R): boolean {
+    return false;
+  }
 
   /**
    * Last word before dispatch, after a played run ends (not for `finishWith`): e.g. Threading's clean-run bonus pick.
@@ -91,8 +102,8 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     document.body.dataset['minigame'] = this.kind;
     this.rng = createRng(minigameSeed(s, this.kind));
     this.setup(s);
-    this.hudView = new MiniGameHud(this, this.hud().length);
-    const buttons = isTouchDevice() || session.settings.touchControls;
+    this.hudView = new MiniGameHud(this, this.hud().length, this.hudIcons());
+    const buttons = session.settings.touchControls;
     const regions = touchButtons(this, MINIGAME_SCENE.pauseIcon, buttons && this.actionKey ? mt(this.actionKey) : null);
     this.touch = new TouchLayer(this, regions, { live: () => !this.paused, pause: () => this.pause(), tap: (at) => this.onTap(at) });
     this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.held.delete(e.key.toLowerCase()) });
@@ -119,7 +130,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   }
 
   /** Show a short message under the HUD for ~1.2 s (e.g. "Hold full."). */
-  protected flash(text: string, color: string = COLORS.warn): void {
+  protected flash(text: string, color: number = COLORS.warn): void {
     this.hudView.flash(text, color);
   }
 
@@ -157,6 +168,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.panel = null;
     this.phase = 'countdown';
     this.countdown = MINIGAME_SCENE.countdownS;
+    this.lastBeep = 0;
     this.tickCountdown(0);
   }
 
@@ -164,10 +176,16 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.countdown -= dt;
     if (this.countdown > 0) {
       const n = Math.ceil((this.countdown / MINIGAME_SCENE.countdownS) * 3);
-      this.hudView.big(`${t('minigame.countdown')}\n${mt('minigame.common.countdownN', { n })}`);
+      if (n !== this.lastBeep) {
+        if (this.lastBeep === 0) this.readyLine = t('minigame.countdown');
+        this.lastBeep = n;
+        audio().sfx('countdown.beep');
+      }
+      this.hudView.big(mt('minigame.common.countdownN', { n }), this.readyLine);
       return;
     }
     this.phase = 'play';
+    audio().sfx('countdown.go');
     this.hudView.big(t('minigame.common.go'));
     this.time.delayedCall(500, () => this.phase === 'play' && this.hudView.big(null));
   }
@@ -211,6 +229,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
       this.hook.result = final;
       const error = dispatchOutcome(this.kind, { result: final });
       this.panel = resultPanel(this, [...this.resultLines(final), ...notes], error);
+      if (!error && this.isClean(final)) audio().playMusic('jingle.clean');
     };
     if (forced) finish(forced);
     else this.finalize(result, finish);

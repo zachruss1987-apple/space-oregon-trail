@@ -40,21 +40,21 @@ export class TouchLayer {
 
   private press(p: Phaser.Input.Pointer): void {
     if (!this.on.live()) return;
-    if (this.regions.pause.contains(p.x, p.y)) return this.on.pause();
-    if (this.regions.action?.contains(p.x, p.y)) return this.on.tap(null);
-    this.down = { x: p.x, y: p.y, at: p.downTime, moved: false };
+    if (this.regions.pause.contains(p.worldX, p.worldY)) return this.on.pause();
+    if (this.regions.action?.contains(p.worldX, p.worldY)) return this.on.tap(null);
+    this.down = { x: p.worldX, y: p.worldY, at: p.downTime, moved: false };
   }
 
   private move(p: Phaser.Input.Pointer): void {
     if (!this.down || !p.isDown || !this.on.live()) return;
-    if (Math.hypot(p.x - this.down.x, p.y - this.down.y) >= MINIGAME_SCENE.tapMovePx) this.down.moved = true;
-    if (this.down.moved) this.target = { x: p.x, y: p.y - MINIGAME_SCENE.touchOffsetY };
+    if (Math.hypot(p.worldX - this.down.x, p.worldY - this.down.y) >= MINIGAME_SCENE.tapMovePx) this.down.moved = true;
+    if (this.down.moved) this.target = { x: p.worldX, y: p.worldY - MINIGAME_SCENE.touchOffsetY };
   }
 
   private release(p: Phaser.Input.Pointer): void {
     const d = this.down;
     this.clear();
     if (!d || !this.on.live()) return;
-    if (!d.moved && p.upTime - d.at < MINIGAME_SCENE.tapMs) this.on.tap({ x: p.x, y: p.y });
+    if (!d.moved && p.upTime - d.at < MINIGAME_SCENE.tapMs) this.on.tap({ x: p.worldX, y: p.worldY });
   }
 }

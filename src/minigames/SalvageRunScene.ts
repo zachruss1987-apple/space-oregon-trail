@@ -1,22 +1,18 @@
 /** Salvage Run (minigames.md section 1): the drone, the drifting field, the grapple. Rules live in salvageLogic. */
-import Phaser from 'phaser';
-import { SALVAGE_RUN } from '@/content';
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
+import { SALVAGE_RUN, type DebrisId } from '@/content';
+import { activeNumbers } from '@/gfx/palette';
 import { haulUnits, partsPhrase, type GameState, type SalvageResult } from '@/sim';
 import { t } from '@/ui/copy';
 import { COLORS } from '@/ui/theme';
 import { eventLine, mt } from './copy';
 import { MiniGameScene, type MiniGameInput } from './MiniGameScene';
 import type { PanelLine } from './overlays';
+import { addAnchored, SpritePool } from './pool';
 import { createSalvageWorld, salvageOutcome, salvageOver, stepSalvage, type Debris, type SalvageEvent, type SalvageWorld } from './salvageLogic';
 
-const GREEN = 0x5cff5c;
-const DIM = 0x2e8a2e;
-const BRIGHT = 0xc8ffc8;
-const AMBER = 0xffd75c;
-const GREY = 0x6b6b6b;
-const HOT = 0x9dff3c;
-
-/** Flash line per logic event (others are silent until audio lands in M4). */
+/** Flash line per logic event. */
 const FLASH: Partial<Record<SalvageEvent, () => string>> = {
   holdFull: () => t('minigame.holdFull'),
   click: () => t('minigame.outOfCharges'),
@@ -26,26 +22,67 @@ const FLASH: Partial<Record<SalvageEvent, () => string>> = {
   hot: () => mt('minigame.salvage.hot'),
 };
 
+/** Sound per logic event (audio.md "SFX"). */
+const SOUND: Partial<Record<SalvageEvent, string>> = {
+  fire: 'grapple.fire', hook: 'grapple.attach', snap: 'grapple.snap', click: 'grapple.empty', hit: 'collision',
+  hot: 'hull.hit', wrecked: 'crash', collect: 'store.buy', scrap: 'event.ding',
+};
+
+/** Steps between `grapple.reel` retriggers (0.5 s at 60 Hz). */
+const REEL_STEPS = 30;
+
+/** Sprite name and frame for a debris piece at step `steps`. */
+function debrisSprite(p: Debris, steps: number): [string, number] {
+  const type: DebrisId = p.type;
+  switch (type) {
+    case 'scrap': return [p.r * 2 <= 10 ? 'debris.scrap.s' : p.r * 2 <= 16 ? 'debris.scrap.m' : 'debris.scrap.l', 0];
+    case 'tumbler': return ['debris.tumbler', Math.floor(Math.abs(p.spin * steps * 0.08) / (Math.PI / 2)) % 4];
+    case 'hot': return ['debris.hot', Math.floor(steps / 15) % 2];
+    case 'galley': return ['debris.galley', Math.floor(steps / 30) % 2];
+    case 'gyro': return ['debris.gyro', Math.floor(steps / 10) % 2];
+    default: return [`debris.${type}`, 0];
+  }
+}
+
 export class SalvageRunScene extends MiniGameScene<SalvageResult> {
   protected readonly kind = 'salvage' as const;
   protected readonly durationS = SALVAGE_RUN.durationS;
   protected override readonly actionKey = 'minigame.common.fire';
   private world!: SalvageWorld;
   private gfx!: Phaser.GameObjects.Graphics;
+  private pool!: SpritePool;
+  private drone!: Phaser.GameObjects.Image;
+  private hookImg!: Phaser.GameObjects.Image;
+  private reelAt = 0;
 
   constructor() {
     super('Salvage');
   }
 
+  protected override music(): string {
+    return 'mg.salvage';
+  }
+
+  protected override hudIcons(): (string | null)[] {
+    return ['ui.icon.charge', 'ui.icon.hp', 'ui.icon.haul'];
+  }
+
+  protected override isClean(r: SalvageResult): boolean {
+    return haulUnits(r) >= 100;
+  }
+
   protected setup(state: GameState): void {
     this.world = createSalvageWorld(state);
+    this.reelAt = 0;
     const f = SALVAGE_RUN.field;
+    const pal = activeNumbers();
     const g = this.add.graphics();
-    for (let i = 0; i < 50; i++) g.fillStyle(this.rng.chance(0.2) ? DIM : 0x123d12).fillRect(this.rng.int(0, f.right), this.rng.int(f.top, f.bottom), 1, 1);
-    g.fillStyle(0x0a2a0a).fillRect(0, f.top, SALVAGE_RUN.shipW, f.bottom - f.top);
-    g.lineStyle(1, DIM).strokeRect(0, f.top, SALVAGE_RUN.shipW, f.bottom - f.top);
-    g.lineStyle(1, GREEN).strokeRect(8, 180, 24, 40);
-    this.gfx = this.add.graphics().setDepth(10);
+    for (let i = 0; i < 50; i++) g.fillStyle(this.rng.chance(0.2) ? pal.silver : pal.grey).fillRect(this.rng.int(0, f.right), this.rng.int(f.top, f.bottom), 1, 1);
+    addAnchored(this, 0, Math.floor((f.top + f.bottom) / 2), 'ship.dock');
+    this.gfx = this.add.graphics().setDepth(11);
+    this.pool = new SpritePool(this, 10);
+    this.hookImg = addAnchored(this, 0, 0, 'grapple.hook').setDepth(12).setVisible(false);
+    this.drone = addAnchored(this, 0, 0, 'drone').setDepth(13);
   }
 
   protected step(input: MiniGameInput): boolean {
@@ -53,7 +90,14 @@ export class SalvageRunScene extends MiniGameScene<SalvageResult> {
     for (const e of this.world.events) {
       const line = FLASH[e];
       if (line) this.flash(line(), e === 'scrap' ? COLORS.dim : COLORS.warn);
+      const sound = SOUND[e];
+      if (sound) audio().sfx(sound);
     }
+    const gr = this.world.grapple;
+    if (gr?.phase === 'reeling' && this.world.steps >= this.reelAt) {
+      audio().sfx('grapple.reel');
+      this.reelAt = this.world.steps + REEL_STEPS;
+    } else if (!gr || gr.phase !== 'reeling') this.reelAt = 0;
     return salvageOver(this.world);
   }
 
@@ -87,46 +131,48 @@ export class SalvageRunScene extends MiniGameScene<SalvageResult> {
   }
 
   protected draw(): void {
-    const g = this.gfx.clear();
     const w = this.world;
     const d = w.drone;
     const blip = w.params.blipRange;
+    this.pool.begin();
     for (const p of w.debris) {
-      if (blip !== null && !p.hooked && Math.hypot(p.x - d.x, p.y - d.y) > blip) g.fillStyle(GREY).fillCircle(p.x, p.y, 2);
-      else this.drawDebris(g, p);
+      if (blip !== null && !p.hooked && Math.hypot(p.x - d.x, p.y - d.y) > blip) {
+        this.pool.get('debris.blip').setPosition(Math.round(p.x), Math.round(p.y));
+        continue;
+      }
+      const [name, frame] = debrisSprite(p, w.steps);
+      this.pool.get(name).setFrame(frame).setPosition(Math.round(p.x), Math.round(p.y));
     }
-    const gr = w.grapple;
-    if (gr) {
-      const tip = gr.phase === 'flying' ? { x: gr.origin.x + gr.dir.x * gr.dist, y: gr.origin.y + gr.dir.y * gr.dist } : gr.target!;
-      g.lineStyle(1, BRIGHT).lineBetween(d.x, d.y, tip.x, tip.y);
-    }
+    this.pool.end();
+    this.drawGrapple();
     const blink = d.invuln > 0 && Math.floor(d.invuln * 10) % 2 === 0;
-    if (!blink) {
-      const r = SALVAGE_RUN.drone.radius;
-      const { x: fx, y: fy } = d.facing;
-      g.fillStyle(w.wrecked ? GREY : GREEN).fillTriangle(d.x + fx * r * 1.6, d.y + fy * r * 1.6, d.x - fx * r - fy * r, d.y - fy * r + fx * r, d.x - fx * r + fy * r, d.y - fy * r - fx * r);
-      g.lineStyle(1, BRIGHT).strokeCircle(d.x, d.y, r);
-    }
+    this.drone.setPosition(Math.round(d.x), Math.round(d.y)).setAlpha(blink ? 0.25 : 1);
+    this.drone.setFrame(Math.floor(w.steps / 15) % 2);
+    if (w.wrecked) this.drone.setTint(activeNumbers().grey);
+    else this.drone.clearTint();
   }
 
-  private drawDebris(g: Phaser.GameObjects.Graphics, p: Debris): void {
-    const { x, y, r } = p;
-    switch (p.type) {
-      case 'crate': g.lineStyle(1, GREEN).strokeRect(x - r, y - r, 2 * r, 2 * r); break;
-      case 'pallet': g.lineStyle(1, GREEN).strokeRect(x - r, y - r, 2 * r, r).strokeRect(x - r, y, 2 * r, r); break;
-      case 'galley': g.lineStyle(1, GREEN).strokeCircle(x, y, r).strokeCircle(x, y, r / 2); break;
-      case 'plate': g.fillStyle(BRIGHT).fillRect(x - r, y - r * 0.3, 2 * r, r * 0.6); break;
-      case 'pump': g.lineStyle(1, BRIGHT).strokeRect(x - r * 0.6, y - r, r * 1.2, 2 * r); break;
-      case 'gyro': g.lineStyle(1, BRIGHT).strokeCircle(x, y, r).strokeEllipse(x, y, r * 3.2, r); break;
-      case 'scrap': g.fillStyle(GREY).fillTriangle(x - r, y + r * 0.6, x + r * 0.4, y - r, x + r, y + r * 0.8); break;
-      case 'tumbler': {
-        const a = p.spin * this.world.steps * 0.08;
-        const pts = [0, 1, 2, 3].map((i) => new Phaser.Math.Vector2(x + Math.cos(a + (i * Math.PI) / 2) * r, y + Math.sin(a + (i * Math.PI) / 2) * r));
-        g.lineStyle(2, AMBER).strokePoints(pts, true);
-        break;
-      }
-      case 'hot': g.fillStyle(HOT, 0.25).fillCircle(x, y, r * 1.6).fillStyle(HOT).fillCircle(x, y, r * 0.7); break;
+  /** art.md grapple line: flying = silver dashed (every 4th pixel black); reeling = solid silver + a travelling amber pixel. */
+  private drawGrapple(): void {
+    const g = this.gfx.clear();
+    const gr = this.world.grapple;
+    const d = this.world.drone;
+    if (!gr) {
+      this.hookImg.setVisible(false);
+      return;
     }
+    const pal = activeNumbers();
+    const tip = gr.phase === 'flying' ? { x: gr.origin.x + gr.dir.x * gr.dist, y: gr.origin.y + gr.dir.y * gr.dist } : gr.target ?? gr.from;
+    const len = Math.max(1, Math.round(Math.hypot(tip.x - d.x, tip.y - d.y)));
+    for (let i = 0; i <= len; i++) {
+      const x = Math.round(d.x + ((tip.x - d.x) * i) / len);
+      const y = Math.round(d.y + ((tip.y - d.y) * i) / len);
+      g.fillStyle(gr.phase === 'flying' && i % 4 === 3 ? pal.black : pal.silver, 1).fillRect(x, y, 1, 1);
+    }
+    if (gr.phase === 'reeling') {
+      const k = 1 - ((this.world.steps % 20) / 20);
+      g.fillStyle(pal.amber, 1).fillRect(Math.round(d.x + (tip.x - d.x) * k), Math.round(d.y + (tip.y - d.y) * k), 1, 1);
+    }
+    this.hookImg.setVisible(true).setPosition(Math.round(tip.x), Math.round(tip.y)).setFrame(gr.phase === 'flying' ? 0 : 1);
   }
 }
-
