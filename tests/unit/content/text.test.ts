@@ -484,6 +484,26 @@ describe('mini-game text keys (T-056, minigames.md "Log kinds (new)" text keys)'
     }
     expect(variants(ui, 'minigame.flare.rodeTheWindLog').length).toBeGreaterThanOrEqual(2);
   });
+  it('ui.json has the T-058 formerly-unwritten keys', () => {
+    const want: Record<string, string[]> = {
+      'minigame.common.fire': [], 'minigame.common.pauseIcon': [], 'minigame.common.countdownN': ['{n}'],
+      'minigame.salvage.resultRations': ['{n}'], 'minigame.salvage.resultParts': ['{parts}'],
+      'minigame.salvage.scrap': [], 'minigame.salvage.snap': [], 'minigame.salvage.hit': [],
+      'minigame.salvage.hot': [], 'minigame.salvage.blip': [],
+      'title.miniAuto': [], 'title.miniPlay': [],
+    };
+    for (const [k, ph] of Object.entries(want)) {
+      const v = variants(ui, k);
+      expect(v.length, k).toBeGreaterThan(0);
+      for (const line of v) {
+        expect(phs(line), k).toEqual(ph);
+        expect(line.length, k).toBeLessThanOrEqual(90);
+      }
+    }
+    for (const k of ['minigame.common.fire', 'minigame.common.pauseIcon', 'minigame.common.countdownN', 'minigame.salvage.blip']) {
+      for (const line of variants(ui, k)) expect(line.length, k).toBeLessThanOrEqual(24);
+    }
+  });
   it('mini-game labels fit 24 chars', () => {
     for (const k of LABELS) for (const line of variants(ui, k)) expect(line.length, k).toBeLessThanOrEqual(24);
   });

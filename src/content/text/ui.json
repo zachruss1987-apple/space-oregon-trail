@@ -11,7 +11,9 @@
     ],
     "seed": "Seed: {seed}",
     "comingSoon": "That part of the Lane opens in a later milestone.",
-    "hint": "Arrows or number keys to choose, Enter to confirm."
+    "hint": "Arrows or number keys to choose, Enter to confirm.",
+    "miniAuto": "Mini-games: Auto-resolve. (M to switch)",
+    "miniPlay": "Mini-games: Play. (M to switch)"
   },
   "travel": {
     "menu": [
@@ -508,7 +510,10 @@
       "skipYes": "Skip it",
       "skipNo": "Keep playing",
       "autoNotice": "Mini-games are set to Auto-resolve. The crew handled it without you.",
-      "controlsBody": "Move: arrows or WASD. Esc pauses. Touch: drag to steer, tap the pause icon."
+      "controlsBody": "Move: arrows or WASD. Esc pauses. Touch: drag to steer, tap the pause icon.",
+      "fire": "FIRE",
+      "pauseIcon": "II",
+      "countdownN": "{n}"
     },
     "salvage": {
       "title": "SALVAGE RUN",
@@ -525,7 +530,14 @@
       "resultNothing": "Nothing worth the tow.",
       "droneWrecked": "Drone wrecked. Half the haul was lost.",
       "chargesUsed": "Charges used: {n}",
-      "confirm": "Launch the drone? It takes the day."
+      "confirm": "Launch the drone? It takes the day.",
+      "resultRations": "Haul: {n} rations. Nobody asked where from.",
+      "resultParts": "Haul: {parts}. Mostly sturdy.",
+      "scrap": "Scrap. Lovely.",
+      "snap": "Tumbler. The cable snapped.",
+      "hit": "Tumbler hit! The drone felt that.",
+      "hot": "Something warm in the hold.",
+      "blip": "?"
     },
     "threading": {
       "title": "DEBRIS THREADING",
