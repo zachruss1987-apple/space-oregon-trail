@@ -222,6 +222,9 @@
   },
   "guide": {
     "title": "Learn about the Trail",
+    "hint": "Left/Right pages, Esc back",
+    "pageOf": "Page {n} of {total}",
+    "intro": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close.",
     "body": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close."
   },
   "log": {
@@ -569,5 +572,11 @@
         "A clean ride through the Flare Belt. The ship was fine. Some of the crew were not, from the excitement."
       ]
     }
+  },
+  "topTen": {
+    "title": "The Top Ten",
+    "empty": "No crews have reached New Willamette. Be the first.",
+    "header": "No. Name         Profession  Score   Days  Date",
+    "yourRun": "Your run: {rating}, {n} points. Entered in the Top Ten."
   }
 }

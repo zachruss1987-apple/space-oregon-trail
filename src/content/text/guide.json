@@ -1,0 +1,181 @@
+{
+  "pages": [
+    {
+      "title": "The Lane and Why We Go",
+      "body": [
+        "LANE AUTHORITY PAMPHLET 7-B. Please retain for your records.",
+        "The Lane is a chain of relay buoys and one jump gate, 2,040",
+        "megaklicks (Mk) from Independence Station to New Willamette.",
+        "Sixteen waypoints. Stations, landmarks, and six hazards.",
+        "The Authority wishes to stress that the Lane is marked.",
+        "  > Marked is not the same as safe. Ask anyone who came back.",
+        "Why go? Cheap land, clean air, and a sky with a second sun.",
+        "Also debts. Mostly debts.",
+        "A crew is five: you, as captain, and four friends or relatives.",
+        "  > Pick people you can stand. It is a long way to be wrong.",
+        "The trip takes about 140 to 150 days. Plan for 150."
+      ]
+    },
+    {
+      "title": "Choosing a Profession",
+      "body": [
+        "Three kinds of people are licensed to fly the Lane.",
+        "CORPORATE EXECUTIVE. 1,600 cr, no useful skills. Score x1.",
+        "  Money solves most problems. Spend it before they find you.",
+        "SHIP ENGINEER. 800 cr. Score x2. Repairs succeed 95% of the",
+        "  time (not 80%), waste fewer spares, and drives fail half as",
+        "  often.",
+        "HYDROPONICS FARMER. 400 cr. Score x3. Rations go 15% further.",
+        "  Algae blooms are kinder to you.",
+        "  > The Farmer scores most and survives least. Roughly one",
+        "  > in five makes it. Bring a hobby that pays.",
+        "  > The Executive wins nearly every time, for less glory."
+      ]
+    },
+    {
+      "title": "Launch Windows",
+      "body": [
+        "You may depart on the 1st of March, April, May, June or July.",
+        "EARLY LEAVERS meet storms near Earth: the Lunar Debris Ring",
+        "and Lagrange Shoals are rougher in March (+10%) and April (+5%).",
+        "LATE LEAVERS get a calm start, then meet the flares.",
+        "FLARE SEASON begins 15 September 2184. After that the last",
+        "three segments are mostly plasma, and the Flare Belt is worse.",
+        "Arrive before 15 September and the Authority adds 200 points.",
+        "  > Most trips take 140 days. March and April are safe.",
+        "  > May is a coin flip. June and July are a lesson.",
+        "  > Leave early. Burn hard when it counts.",
+        "  > A late start is for people who like weather reports."
+      ]
+    },
+    {
+      "title": "Mattie's Shopping Advice",
+      "body": [
+        "Mattie Ostrander keeps the Outfitters at Independence Station.",
+        "She is right more often than you will enjoy.",
+        "ION DRIVES: three or four, at 40 cr. One drive is a wish.",
+        "RATIONS: 450 per crew member. Five crew, 2,250. Cheap: 0.30 cr.",
+        "EVA SUITS: two per crew, so ten. Ten cr each.",
+        "DRONE CHARGES: five boxes, 2 cr a box. Each scan burns five.",
+        "SPARES: one hull plate, pump and gyro. Two of each if you can.",
+        "  > Heavy rations slow you a little, up to 15% at 3,000.",
+        "  > Nobody ever brought too many rations. Nobody.",
+        "  > Drives beyond four are spares, not speed.",
+        "  > You cannot depart with zero drives, and Mattie will say so."
+      ]
+    },
+    {
+      "title": "Thrust and Rations",
+      "body": [
+        "THRUST sets your pace. The flight computer calls it cruising.",
+        "  Cruise: 20 Mk a day. No strain on the crew.",
+        "  Hard burn: 25 Mk a day. Costs 2 health a day.",
+        "  Overburn: 30 Mk a day. Costs 5, and drives fail twice as",
+        "  often. Five days in a row and someone is exhausted.",
+        "RATIONS set how well you eat, per crew member per day.",
+        "  Full: 3 rations, +2 health. Half: 2, no change.",
+        "  Paste: 1 ration, -2 health. Run out entirely and everyone",
+        "  loses 10 health a day.",
+        "  > Overburn plus Paste is how crews become epitaphs.",
+        "  > Fewer drives means slower. Three is the sweet spot."
+      ]
+    },
+    {
+      "title": "Weather on the Lane",
+      "body": [
+        "Weather changes daily, and tends to stay as it is.",
+        "  Calm and Fair: full speed, no trouble.",
+        "  Unsettled: speed x0.9, small health loss, punctures likelier.",
+        "  Ion fog: speed x0.7. You will get lost. Probably twice.",
+        "  Solar storm: speed x0.6, health loss, ruined suits.",
+        "  Flare: speed x0.5, and only near the end of the Lane.",
+        "Suits protect the crew. Fewer suits than crew means the",
+        "captain is suited first, then the rest in order.",
+        "  > A storm costs about one suit in five. Count them.",
+        "  > Flares hurt unsuited crew five points a day. Suited, two.",
+        "  > Bring spare suits, and forgive yourself the rest."
+      ]
+    },
+    {
+      "title": "Stations and Trade",
+      "body": [
+        "Seven stations sell goods. Each has its own prices.",
+        "  Mars Relay: food at Earth prices.",
+        "  Ceres Depot: cheap charges and plates.",
+        "  Europa Outpost: flat food, good suits.",
+        "  Titan Refinery: cheap pumps. Food is dear.",
+        "  Oort Beacon: cheap gyros. No drives for sale.",
+        "  Lane Terminus: cheapest food. Everything else, the most.",
+        "Stations buy back at half their price. Mattie does not.",
+        "Travelers on the road offer trades. Haggle, or do not.",
+        "  > Stock up where the thing you need is cheap.",
+        "  > Do not buy rations at Titan unless you enjoy regret.",
+        "  > Talk to the keepers. They know the next stretch."
+      ]
+    },
+    {
+      "title": "Hazards and Your Choices",
+      "body": [
+        "Six hazards bar the Lane. Each asks you to choose.",
+        "THREAD IT. Fly straight in. The honest option.",
+        "SHIELDS UP AND PUSH. Half the risk, but the pump may fail.",
+        "HIRE A TUG. No risk, and a fee: 25 to 120 cr, dearer in flare",
+        "  season. It is the only sure way across.",
+        "WAIT FOR A BELTER PILOT. Almost safe, 10 cr plus days of",
+        "  waiting. Only at the Belt Crossing and the Saturn Ring Plane.",
+        "A crossing can go wrong in five ways, from scrapes and spilled",
+        "cargo to damage, injury, and loss. Density matters.",
+        "  > A damaged hull or gyro makes every hazard worse.",
+        "  > Belters are slow, taciturn, and worth the coffee."
+      ]
+    },
+    {
+      "title": "Illness, Rest and Repairs",
+      "body": [
+        "Space is not clean. Crew fall ill: dysentery, mold fever,",
+        "cryo fever, scurvy, radiation sickness and others.",
+        "Good health and full rations mean fewer deaths. Weak and",
+        "hungry crew take double the risk.",
+        "REST for 1 to 9 days. Crew recover 3 health a day, or 6 at a",
+        "station. Illness fades twice as fast.",
+        "REPAIR takes a day and a matching spare. Success is 80%, or",
+        "95% for engineers. A failed repair may still eat the spare.",
+        "Drives cannot be repaired; they stall or are lost.",
+        "  > A pump out of order stops the ship. Keep a spare.",
+        "  > Rest at stations. The beds there are almost beds."
+      ]
+    },
+    {
+      "title": "Salvage and Mini-games",
+      "body": [
+        "SCAN FOR SALVAGE costs a day and five drone charges. The",
+        "drone brings back rations, and now and then a spare part.",
+        "  Three or more scans in a segment halve the food found.",
+        "SALVAGE RUN: pilot the drone, fire charges, tow home up to",
+        "  100 units. Rations weigh 1, spares weigh 10.",
+        "DEBRIS THREADING: when you thread a hazard, steer the ship",
+        "  through the rocks. A clean run earns a bonus.",
+        "FLARE BELT: ride the plasma at the end. A clean ride earns",
+        "  200 points. A crash costs a crewmate.",
+        "  > You may auto-resolve any of them in Options. Poorly.",
+        "  > Skipping mid-run costs a little more. Pride, mostly."
+      ]
+    },
+    {
+      "title": "Beacons and the Score",
+      "body": [
+        "A memorial beacon marks where a crewmate was lost. Other",
+        "travelers see it. Leave a few words. Be kind to the stars.",
+        "At New Willamette, the Authority totals your journey.",
+        "  Each survivor: 200 to 500, by health.",
+        "  Ship 50. Drives 4, spares 2, suits 2, each.",
+        "  Rations, charges and credits: a few points apiece.",
+        "  Bonuses: arrive before flare season +200, nobody lost +300,",
+        "  ride the wind +200. Then multiply by profession.",
+        "RATINGS: Groundling under 3,000. Spacer 3,000 or more.",
+        "  Pathfinder 6,000 and above.",
+        "  > Nobody has been a Pathfinder lately. Be the first."
+      ]
+    }
+  ]
+}

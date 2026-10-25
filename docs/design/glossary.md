@@ -75,3 +75,6 @@
 | Sound test | The hidden `~` debug menu for auditioning songs, SFX and voices (development only). |
 | Sting | A short musical alarm played over the current song (`danger`, `jingle.clean`). |
 | Wheel clack | The soft off-beat hat in the travel loop; the Lane's version of wagon wheels. |
+| Lane Authority pamphlet | The in-fiction guidebook ("Learn about the Trail"), with marginal notes from a veteran; `guide.json`. |
+| Top Ten | The list of best finished runs, seeded with ten wry fictional crews; `highscores.json`. |
+| Pathfinder | The top rating (6,000+). No default crew holds it; it is left for the player. |

@@ -6,6 +6,8 @@ import ui from '../../../src/content/text/ui.json';
 import stations from '../../../src/content/text/stations.json';
 import trades from '../../../src/content/text/trades.json';
 import epitaphs from '../../../src/content/text/epitaphs.json';
+import guide from '../../../src/content/text/guide.json';
+import highscores from '../../../src/content/text/highscores.json';
 import { FALLBACK, PENDING } from '../../../src/ui/copy';
 
 const ALLOWED = new Set([
@@ -201,8 +203,8 @@ describe('ui.json', () => {
   });
   it('strings are short, nonempty, and use allowed placeholders', () => {
     // status labels repeat by design (Fair is both weather and health), so exclude them from uniqueness
-    const guide = (u.guide as { body: string }).body;
-    expect(guide.length).toBeLessThanOrEqual(400);
+    const guideIntro = (u.guide as { intro: string }).intro;
+    expect(guideIntro.length).toBeLessThanOrEqual(400);
     // Labels FALLBACK once covered repeat by design (Credits, Continue on the Lane), so skip uniqueness.
     const rest = structuredClone(u) as Obj;
     delete rest.status;
@@ -506,5 +508,47 @@ describe('mini-game text keys (T-056, minigames.md "Log kinds (new)" text keys)'
   });
   it('mini-game labels fit 24 chars', () => {
     for (const k of LABELS) for (const line of variants(ui, k)) expect(line.length, k).toBeLessThanOrEqual(24);
+  });
+});
+
+describe('guide.json and highscores.json (T-042)', () => {
+  const pages = (guide as { pages: { title: string; body: string[] }[] }).pages;
+  it('has 8-12 guide pages with short titles and fitting lines', () => {
+    expect(pages.length).toBeGreaterThanOrEqual(8);
+    expect(pages.length).toBeLessThanOrEqual(12);
+    for (const p of pages) {
+      expect(p.title.length, p.title).toBeGreaterThan(0);
+      expect(p.title.length, p.title).toBeLessThanOrEqual(32);
+      expect(p.body.length, p.title).toBeGreaterThanOrEqual(8);
+      expect(p.body.length, p.title).toBeLessThanOrEqual(14);
+      for (const l of p.body) {
+        expect(l.trim().length, p.title).toBeGreaterThan(0);
+        expect(l.length, l).toBeLessThanOrEqual(72);
+      }
+    }
+  });
+  const hs = (highscores as { defaults: { name: string; profession: string; score: number; days: number; date: string }[] }).defaults;
+  it('has ten default crews, descending, Spacer at best', () => {
+    expect(hs).toHaveLength(10);
+    for (let i = 1; i < hs.length; i++) expect(hs[i]!.score).toBeLessThan(hs[i - 1]!.score);
+    expect(hs[0]!.score).toBeGreaterThanOrEqual(3000);
+    expect(hs[0]!.score).toBeLessThan(6000);
+    for (const h of hs) {
+      expect(['executive', 'engineer', 'farmer']).toContain(h.profession);
+      expect(h.name.length).toBeGreaterThan(0);
+      expect(h.name.length).toBeLessThanOrEqual(12);
+      expect(h.days).toBeGreaterThan(0);
+      expect(h.date).toMatch(/^2184-\d\d-\d\d$/);
+      expect(Number.isNaN(Date.parse(h.date))).toBe(false);
+    }
+    expect(new Set(hs.map((h) => h.name)).size).toBe(10);
+  });
+  it('ui.json has guide and topTen keys', () => {
+    const g = (ui as unknown as Obj).guide as Obj;
+    for (const k of ['title', 'hint', 'pageOf', 'intro']) expect(typeof g[k], k).toBe('string');
+    expect(g.pageOf).toBe('Page {n} of {total}');
+    const t = (ui as unknown as Obj).topTen as Obj;
+    for (const k of ['title', 'empty', 'header', 'yourRun']) expect(typeof t[k], k).toBe('string');
+    expect((t.header as string).length).toBeLessThanOrEqual(72);
   });
 });
