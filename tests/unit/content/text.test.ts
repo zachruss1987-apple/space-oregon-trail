@@ -627,3 +627,40 @@ describe('ui.json vs mini-game copy requests (T-059)', () => {
     }
   });
 });
+
+describe('ui.json M5 feature keys (T-040)', () => {
+  // key -> its placeholders, sorted
+  const KEYS: Record<string, string[]> = {
+    'title.continue': [],
+    'setup.difficulty': ['{name}'],
+    'score.labels.difficulty': ['{name}'],
+    'topTen.enterPrompt': [],
+    'topTen.enterHint': [],
+    'save.exportTitle': [],
+    'save.exportHelp': [],
+    'save.copied': [],
+    'save.none': [],
+    'save.importTitle': [],
+    'save.importHelp': [],
+    'save.imported': [],
+    'save.invalid': [],
+    'save.over': [],
+    'options.export': [],
+    'options.import': [],
+    'options.value.greenhorn': [],
+    'options.value.pathfinder': [],
+    'options.hint.export': [],
+    'options.hint.import': [],
+  };
+  it('resolves every key as a short string with exactly its placeholders', () => {
+    for (const [k, ph] of Object.entries(KEYS)) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Record<string, unknown> | undefined)?.[p], ui);
+      expect(typeof v, k).toBe('string');
+      expect(((v as string).match(/{[^}]*}/g) ?? []).sort(), k).toEqual(ph);
+      expect((v as string).length, k).toBeLessThanOrEqual(k.startsWith('options.') && !k.startsWith('options.hint.') ? 24 : 72);
+    }
+  });
+  it('guide.body is gone (GuideScene pages guide.json)', () => {
+    expect((ui.guide as Record<string, unknown>)['body']).toBeUndefined();
+  });
+});

@@ -12,6 +12,8 @@
     "palette": "Colorblind palette",
     "difficulty": "Difficulty",
     "back": "Back",
+    "export": "Export save",
+    "import": "Import save",
     "value": {
       "on": "On",
       "off": "Off",
@@ -23,7 +25,9 @@
       "instant": "Instant",
       "play": "Play",
       "autoResolve": "Auto-resolve",
-      "spacer": "Spacer"
+      "spacer": "Spacer",
+      "greenhorn": "Greenhorn",
+      "pathfinder": "Pathfinder"
     },
     "hint": {
       "crt": "Scanlines, a curved tube, phosphor glow. Left/Right to change.",
@@ -35,7 +39,9 @@
       "minigames": "Auto-resolve skips the arcade parts, no penalty.",
       "reducedMotion": "No drifting stars, blinking or typewriter. The CRT stays off.",
       "palette": "Reds and greens swapped for colors that stay apart.",
-      "difficulty": "Only Spacer is open. The rest of the Lane is still being surveyed.",
+      "difficulty": "Greenhorn: gentler Lane, lower score. Pathfinder: the reverse.",
+      "export": "Show the journey in progress as a string you can copy.",
+      "import": "Paste a save string to continue that journey.",
       "back": "Back to the title. Everything here is already saved."
     }
   },
@@ -52,7 +58,8 @@
     "comingSoon": "That part of the Lane opens in a later milestone.",
     "hint": "Arrows or number keys to choose, Enter to confirm.",
     "miniAuto": "Mini-games: Auto-resolve. (M to switch)",
-    "miniPlay": "Mini-games: Play. (M to switch)"
+    "miniPlay": "Mini-games: Play. (M to switch)",
+    "continue": "Continue journey"
   },
   "travel": {
     "menu": [
@@ -101,7 +108,8 @@
     "captain": "Captain",
     "crew": "Crew {n}",
     "randomHint": "Tab: {label}",
-    "credits": "{n} cr"
+    "credits": "{n} cr",
+    "difficulty": "Difficulty: {name}. Change it in Options."
   },
   "mattie": {
     "advice": [
@@ -263,8 +271,7 @@
     "title": "Learn about the Trail",
     "hint": "Left/Right pages, Esc back",
     "pageOf": "Page {n} of {total}",
-    "intro": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close.",
-    "body": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close."
+    "intro": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close."
   },
   "log": {
     "departure": [
@@ -346,7 +353,8 @@
       "credits": "Credits",
       "flareBonus": "Beat the flare season",
       "noDeathsBonus": "Nobody died",
-      "rodeTheWind": "Rode the wind"
+      "rodeTheWind": "Rode the wind",
+      "difficulty": "Difficulty: {name}"
     },
     "subtotal": "Subtotal",
     "multiplier": "Profession multiplier",
@@ -622,6 +630,19 @@
     "title": "The Top Ten",
     "empty": "No crews have reached New Willamette. Be the first.",
     "header": "No. Name         Profession  Score   Days  Date",
-    "yourRun": "Your run: {rating}, {n} points. Entered in the Top Ten."
+    "yourRun": "Your run: {rating}, {n} points. Entered in the Top Ten.",
+    "enterPrompt": "Your crew made the Top Ten. What name goes on the list?",
+    "enterHint": "Up to 12 letters. Enter keeps the captain's name."
+  },
+  "save": {
+    "exportTitle": "EXPORT SAVE",
+    "exportHelp": "Select all and copy (Ctrl+C) to keep it somewhere safe. Esc closes.",
+    "copied": "Also copied to your clipboard.",
+    "none": "No journey in progress to export.",
+    "importTitle": "IMPORT SAVE",
+    "importHelp": "Paste a save string in the box, then press Enter. Esc cancels.",
+    "imported": "Save loaded. Continue journey from the title.",
+    "invalid": "That save will not load.",
+    "over": "That journey is already over. Nothing to continue."
   }
 }
