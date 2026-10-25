@@ -301,7 +301,8 @@
       "rations": "Rations",
       "credits": "Credits",
       "flareBonus": "Beat the flare season",
-      "noDeathsBonus": "Nobody died"
+      "noDeathsBonus": "Nobody died",
+      "rodeTheWind": "Rode the wind"
     },
     "subtotal": "Subtotal",
     "multiplier": "Profession multiplier",
@@ -484,5 +485,76 @@
       ]
     },
     "creditsLine": "Credits: {n} cr"
+  },
+  "minigame": {
+    "countdown": [
+      "Get ready...",
+      "Hands on the controls."
+    ],
+    "paused": "PAUSED",
+    "skip": "Skip (penalty)",
+    "controls": "Controls",
+    "resultTitle": "Run complete",
+    "bonusPick": "Clean run. Choose your reward:",
+    "holdFull": "Hold full.",
+    "outOfCharges": "Out of charges.",
+    "common": {
+      "go": "GO!",
+      "resume": "Resume",
+      "time": "TIME {n}",
+      "continue": "Press Enter or tap to continue.",
+      "skipConfirm": "Skip this run? Anything you gathered is lost and the penalty applies.",
+      "skipYes": "Skip it",
+      "skipNo": "Keep playing",
+      "autoNotice": "Mini-games are set to Auto-resolve. The crew handled it without you.",
+      "controlsBody": "Move: arrows or WASD. Esc pauses. Touch: drag to steer, tap the pause icon."
+    },
+    "salvage": {
+      "title": "SALVAGE RUN",
+      "howto": [
+        "Steer the drone with arrows or WASD. Space fires the grapple.",
+        "Hook crates and parts to reel them in. Dodge tumblers and green chunks.",
+        "You have 40 seconds and can tow back 100 units. Touch: drag, then tap to fire."
+      ],
+      "start": "Press Space to launch the drone.",
+      "hudCharges": "CHARGES {n}",
+      "hudHold": "HOLD {n}/100",
+      "hudHp": "HP {n}",
+      "resultHaul": "Haul: {n} rations, {parts}.",
+      "resultNothing": "Nothing worth the tow.",
+      "droneWrecked": "Drone wrecked. Half the haul was lost.",
+      "chargesUsed": "Charges used: {n}",
+      "confirm": "Launch the drone? It takes the day."
+    },
+    "threading": {
+      "title": "DEBRIS THREADING",
+      "howto": [
+        "Steer the ship up and down with arrows or W and S.",
+        "Slip between the rocks. Each hit becomes a damage roll.",
+        "Fly 25 seconds without a hit for a bonus. Touch: drag to steer."
+      ],
+      "start": "Press Enter to begin the thread.",
+      "hudHits": "HITS {hits}",
+      "resultClean": "Clean run. Not a scratch.",
+      "resultHits": "Hull strikes: {hits}.",
+      "bonusHealth": "+2 health, all crew",
+      "bonusRations": "+10 rations"
+    },
+    "flare": {
+      "title": "FLARE BELT",
+      "howto": [
+        "Fly anywhere with arrows or WASD. Flare arcs glow dim, then burn.",
+        "Stay out of the bright bands. Five hits is a crash.",
+        "Hold on for 45 seconds. A clean ride earns Rode the wind. Touch: drag to steer."
+      ],
+      "start": "Press Enter to ride the solar wind.",
+      "hudHits": "HITS {hits}/5",
+      "crash": "Crash. The wind won.",
+      "rodeTheWind": "Rode the wind!",
+      "rodeTheWindLog": [
+        "You rode the wind through the Flare Belt without a scratch. The crew will talk about it for years.",
+        "A clean ride through the Flare Belt. The ship was fine. Some of the crew were not, from the excitement."
+      ]
+    }
   }
 }

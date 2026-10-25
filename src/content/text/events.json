@@ -317,5 +317,80 @@
     "{name} has recovered from the micrometeorite puncture. A scar remains for stories.",
     "The micrometeorite puncture has closed. {name} counts it a lucky hole.",
     "{name} is over the micrometeorite puncture and wants a bigger suit."
+  ],
+  "salvage.haul": [
+    "The drone towed in {n} rations and {parts}. It looks pleased with itself.",
+    "Salvage run: {n} rations and {parts}, all of it dented and all of it yours.",
+    "The drone came home with {n} rations and {parts}. Nobody asked where it learned to steal."
+  ],
+  "salvage.haulRations": [
+    "The drone towed in {n} rations. It hovered by the hatch, waiting to be told it was good.",
+    "Salvage run: {n} rations, slightly used. The drone has no regrets."
+  ],
+  "salvage.haulParts": [
+    "The drone towed in {parts} and no rations. Mechanics were thrilled; cooks were not.",
+    "Salvage run: {parts}. The pantry was not consulted."
+  ],
+  "salvage.nothing": [
+    "The drone came back with scrap and a bent grapple. It would rather not discuss it.",
+    "Nothing worth towing. The drone blames the debris, the light, and you.",
+    "A day of grappling, a hold full of nothing. The drone sulks in its cradle."
+  ],
+  "salvage.wrecked": [
+    "The drone was wrecked out there. It limped home with half of what it had hooked.",
+    "Too many dents. The drone gave up and towed in only half its haul.",
+    "The drone took its third hit and went dark. A tug brought back half the haul."
+  ],
+  "salvage.hot": [
+    "{name} handled something warm.",
+    "{name} unloaded a glowing chunk bare-handed. It was warm and not food.",
+    "The hold smelled of ozone. {name} says that is probably fine."
+  ],
+  "salvage.overweight": [
+    "You could only tow 100 units back. {n} rations drift off toward Neptune.",
+    "The tow cable held at 100 units. {n} rations went on without you, toward Neptune.",
+    "Over the carry limit. {n} rations were left behind to be somebody else's lucky day."
+  ],
+  "threading.clean": [
+    "Clean thread. Not one rock touched the hull, and the hull looks relieved.",
+    "You threaded the gap without a scratch. The rocks seemed embarrassed."
+  ],
+  "threading.hit": [
+    "Rock strikes: {hits}. The hull has opinions.",
+    "Hull strikes logged: {hits}. The rocks kept score.",
+    "{hits} rock strikes. The paint has seen better days."
+  ],
+  "flare.clean": [
+    "Rode the wind. Not one arc touched you, and the crew has stopped holding its breath.",
+    "A clean ride through the flares. The ship hums like it meant to."
+  ],
+  "flare.scorch": [
+    "A flare cooked the hold. {n} {item} came out looking toasted.",
+    "Scorched cargo: {n} {item} are now a lesson in packing.",
+    "The flare licked the hold and {n} {item} were ruined."
+  ],
+  "flare.burn": [
+    "A flare flashed across the deck. {name} has a burn and a new respect for shade.",
+    "{name} caught the edge of an arc. It was a short, bright, unwelcome moment.",
+    "{name} was singed by a flare and is taking it personally."
+  ],
+  "flare.damage": [
+    "A flare hit the ship and your {item} is broken.",
+    "The plasma found a weak spot. Your {item} is broken.",
+    "An arc crossed the hull and left your {item} in pieces."
+  ],
+  "flare.radiation": [
+    "A flare soaked {name} in radiation. The sickness comes later, like the bill.",
+    "{name} was caught unsuited in the arc. Sickness has been scheduled.",
+    "The flare passed through {name} without asking. The doctor will ask for them."
+  ],
+  "flare.crash": [
+    "Five hits. The Flare Belt took {name} and half the hold, and left you the hull.",
+    "The ship ran out of luck and flare-free sky. {name} did not come back from it.",
+    "The wind threw you off. {name} is gone, and the cargo is half of what it was."
+  ],
+  "info.skipped": [
+    "The run was abandoned and the crew settled it the sensible way. It cost extra.",
+    "You called it off. The statistical route was shorter and worse."
   ]
 }

@@ -64,3 +64,8 @@
 | Flare arc | A telegraphed band of plasma across the Flare Belt; glows dim, then burns. |
 | Rode the wind | Score bonus (+200) for a clean Flare Belt ride. |
 | Auto-resolve | The Options setting (and skip) that settles a mini-game by the statistical roll instead. |
+| Wrecked (drone) | A drone out of HP; the Salvage Run ends and the haul is halved. |
+| Carry limit | The 100 units a drone can tow home: rations 1 each, spare parts 10 each. |
+| Clean thread | A Debris Threading run with zero hits; earns a bonus pick (+2 health all crew or +10 rations). |
+| Crash (Flare Belt) | Five flare hits: the run ends, one crew member is lost, and the hold is halved. |
+| Skip with penalty | Abandoning a mini-game from the pause menu; settled by the statistical roll, a little worse. |
