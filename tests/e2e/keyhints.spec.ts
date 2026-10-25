@@ -108,8 +108,19 @@ test('Travel: modal, auto-travel set and back, Supplies and Map tables, Waypoint
   await hints(page, 'table');
   await page.keyboard.press('Escape');
   await scene(page, 'Travel');
+  // Auto-travel can stop on an event modal within a day or two, so a sampled assertion races it on slow runners (CI
+  // 2026-10-25). Arm an observer before pressing T and accept any moment where the set was `travelAuto`.
+  const sawAuto = page.evaluate(() => new Promise<boolean>((resolve) => {
+    const b = document.body;
+    if (b.dataset['hints'] === 'travelAuto') return resolve(true);
+    const o = new MutationObserver(() => {
+      if (b.dataset['hints'] === 'travelAuto') { o.disconnect(); resolve(true); }
+    });
+    o.observe(b, { attributes: true, attributeFilter: ['data-hints'] });
+    setTimeout(() => { o.disconnect(); resolve(false); }, 15_000);
+  }));
   await page.keyboard.press('t');
-  await hints(page, 'travelAuto');
+  expect(await sawAuto, 'hints should have been travelAuto while auto-travelling').toBe(true);
   await page.keyboard.press('t'); // any key stops (an event modal may land first under load: dismiss it)
   await expect.poll(async () => {
     if ((await body(page).getAttribute('data-modal')) === '1') await page.keyboard.press('Enter');
