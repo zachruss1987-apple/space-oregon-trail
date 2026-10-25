@@ -18,7 +18,9 @@
     "kanban:build": "node scripts/kanban.mjs build",
     "kanban:open": "node scripts/kanban.mjs open",
     "balance": "node scripts/balance.mjs",
-    "brainstorm": "node scripts/brainstorm.mjs"
+    "brainstorm": "node scripts/brainstorm.mjs",
+    "test:visual": "playwright test tests/e2e/visual.spec.ts",
+    "test:visual:update": "playwright test tests/e2e/visual.spec.ts --update-snapshots"
   },
   "dependencies": {
     "phaser": "^3.90.0"

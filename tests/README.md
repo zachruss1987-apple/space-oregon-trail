@@ -85,3 +85,18 @@ Notes: canvas text cannot be asserted (score table, rating), so assert `state` a
 Screens: `screens.spec.ts` (all but Arrival) and `journey.spec.ts` (Arrival, Arrival-score) write to `test-results/screens/`.
 
 M2 specs: `m2-economy` (Mars Relay sell/trade/talk/rest), `m2-crossing` (tug, shields, Belt pilot), `m2-route` (Titan direct route, Map, Heliopause after Kuiper), `m2-beacons` (epitaph survives a reload, shown on the Waypoint scene). Beacon lists are canvas-only: assert via `sceneTexts` and `localStorage['proxima.beacons']`.
+
+## Visual regression (`tests/e2e/visual.spec.ts`)
+One `toHaveScreenshot` baseline per scene (Title, Options, TopTen, Guide, Store, Travel, Supplies, Map, Hazard, Station, Death,
+Arrival, Salvage-instructions, GfxPreview font page) with `maxDiffPixelRatio: 0.02`, `threshold: 0.3`. Determinism: fixed seed,
+`?minigames=auto` (except the real Salvage screen), and `proxima.options` pre-seeded with reduced motion on, instant text, CRT off and
+volumes 0 (so parallax, cursor blink, typewriter and the shader are off). Only the canvas is captured.
+- Run: `npm run test:visual`. Update after an intentional visual change: `npm run test:visual:update`, review the PNG diffs, commit them.
+- Baselines live in `tests/e2e/__screenshots__/<platform>/visual.spec.ts/<name>.png` (`snapshotPathTemplate` in `playwright.config.ts`).
+  They are **platform-specific** (font and WebGL rasterization). Only `win32` baselines exist, so the spec is `test.skip`ped elsewhere.
+  CI runs Linux Chromium: generate `linux` baselines (run the update script in the CI image and commit), then drop the skip. The PM decides CI handling.
+- Any change to a scene's art or copy changes its baseline: re-run the update script as part of that card.
+
+## Audio e2e and bundle budget
+`audio.spec.ts` asserts through `__PROXIMA__.audio` (`state`, `playing`, `volumes`). `tests/unit/spec/bundle.spec.test.ts` gzips `dist/assets/*.js`
+and requires < 1.8 MB total; it is skipped when `dist/` does not exist (run `npm run build` first).

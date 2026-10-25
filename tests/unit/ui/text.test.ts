@@ -41,4 +41,19 @@ describe('"No default Phaser text remains" (M4 acceptance)', () => {
       expect(src.includes('fontFamily'), f).toBe(false);
     }
   });
+  const scoped = ['src/scenes', 'src/ui', 'src/minigames'].flatMap((d) => files(d));
+  it('scenes, ui and minigames create no Phaser Text objects, fonts or CSS font strings', () => {
+    expect(scoped.length).toBeGreaterThan(10);
+    // T-038: TextArea.ts (save import/export DOM textarea) sets a CSS monospace font; see the palette bug card.
+    for (const f of scoped.filter((x) => !x.endsWith('TextArea.ts'))) {
+      const src = readFileSync(f, 'utf8');
+      for (const bad of ['add.text(', 'fontFamily', 'GameObjects.Text(', 'new Text(', 'setFontFamily', 'setFont(', 'px monospace', 'sans-serif', 'Courier'])
+        expect(src.includes(bad), f + ' contains ' + bad).toBe(false);
+    }
+  });
+  it('scenes, ui and minigames take colors from palette keys, not hex literals (art.md checklist)', () => {
+    // T-038: TextArea.ts styles its DOM input with off-palette hex (bug card filed); remove the exemption when fixed.
+    const offenders = scoped.filter((f) => !f.endsWith('TextArea.ts')).filter((f) => /['\"]#[0-9a-fA-F]{6}['\"]/.test(readFileSync(f, 'utf8')));
+    expect(offenders).toEqual([]);
+  });
 });

@@ -19,5 +19,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
+  // Visual baselines are platform-specific (fonts, GPU): tests/e2e/__screenshots__/<platform>/<spec>/<name>.png
+  snapshotPathTemplate: '{testDir}/__screenshots__/{platform}/{testFileName}/{arg}{ext}',
   outputDir: process.env.PW_OUT ?? 'test-results',
 });
