@@ -5,6 +5,7 @@ export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 30_000,
   retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : 4, // 16+ parallel Chromium boots time out on big machines
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
   use: {
     baseURL: 'http://localhost:4173',

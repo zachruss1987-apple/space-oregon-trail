@@ -129,3 +129,11 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Pixel font is 8×8 at ×1 (80 columns) for body text; 6×8 only for HUD. Rationale: avoid relaying out every scene; period-correct 80-column look.
 - Fractional nearest-neighbour scaling below ×2 is acceptable.
 - Art scope: 7 station exteriors, portraits with healthy/sick/dead frames, 11 songs (adds a hazard loop), 26 SFX.
+
+## 2026-10-25 (M3 scenes, developer, logged by PM)
+- E2E helpers default to `?minigames=auto` with an opt-out, so statistical flows stay deterministic; mini-game specs opt in.
+- The threading clean-run bonus is chosen in a modal before the result is dispatched (`finalize()` hook); `finishWith` skips the pick.
+- The Flare Belt hazard menu shows only Ride the solar wind and Pay the tug.
+- `__PROXIMA__.loadState(json)` exists only with `?debug=1` or in dev builds, for tests that must start mid-trail.
+- Skip-with-penalty for crossings: incident `min(95, T+10)`; rock gap rule enforced by redraw (≤ 12 tries).
+- Playwright runs with 4 workers locally (2 in CI); more caused cold-boot timeouts on a 32-core machine.

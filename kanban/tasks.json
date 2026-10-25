@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T04:28:35.148Z",
+  "updated": "2026-10-25T04:41:37.605Z",
   "milestones": [
     {
       "id": "M0",
@@ -969,11 +969,11 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "doing",
+      "status": "done",
       "assignee": "developer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:15:31.868Z",
+      "updated": "2026-10-25T04:41:37.432Z",
       "notes": [
         {
           "ts": "2026-10-25T04:14:42.739Z",
@@ -984,6 +984,21 @@
           "ts": "2026-10-25T04:15:31.868Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:36:21.779Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:36:22.230Z",
+          "by": "developer",
+          "text": "Sim cross thread skipped (info/skipped, T+10 cap 95; Flare +10); ThreadingScene/FlareScene + pure threadingLogic/flareLogic/steer; clean-run bonus modal (base finalize hook); Hazard launches Threading/Flare unless auto, replays pendingDay, Flare Belt rows Ride/Pay the tug; debug-only __PROXIMA__.loadState; e2e helpers default &minigames=auto; new threading (4) + flare (4) specs; unit 1224 pass; e2e 31/31 (5 timed out under full-suite load, pass on re-run with --workers=2)"
+        },
+        {
+          "ts": "2026-10-25T04:41:37.432Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ]
     },
@@ -1033,12 +1048,18 @@
       "desc": "",
       "milestone": "M3",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:41:37.488Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:41:37.488Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-032",
@@ -1226,12 +1247,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T04:41:37.546Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:41:37.547Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-038",
@@ -1883,6 +1910,19 @@
           "text": "review -> done"
         }
       ]
+    },
+    {
+      "id": "T-059",
+      "title": "Writer: ui.json for UNWRITTEN keys from T-029 (threading/flare hit lines, hazard ride/payTug options) and remove UNWRITTEN table + add resolves test",
+      "desc": "",
+      "milestone": "M3",
+      "role": "writer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T04:41:37.604Z",
+      "updated": "2026-10-25T04:41:37.605Z",
+      "notes": []
     }
   ]
 }
