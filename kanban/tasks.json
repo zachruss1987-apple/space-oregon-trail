@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T04:41:37.605Z",
+  "updated": "2026-10-25T04:49:57.255Z",
   "milestones": [
     {
       "id": "M0",
@@ -20,12 +20,12 @@
     {
       "id": "M3",
       "title": "Mini-games",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "M4",
       "title": "Audiovisual polish",
-      "status": "planned"
+      "status": "active"
     },
     {
       "id": "M5",
@@ -961,7 +961,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-029",
@@ -971,7 +971,7 @@
       "role": "developer",
       "status": "done",
       "assignee": "developer",
-      "issue": null,
+      "issue": 41,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:41:37.432Z",
       "notes": [
@@ -1000,7 +1000,8 @@
           "by": "developer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-030",
@@ -1040,7 +1041,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-031",
@@ -1048,18 +1049,39 @@
       "desc": "",
       "milestone": "M3",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "tester",
+      "issue": 42,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:41:37.488Z",
+      "updated": "2026-10-25T04:49:57.126Z",
       "notes": [
         {
           "ts": "2026-10-25T04:41:37.488Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:43:36.475Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:49:21.042Z",
+          "by": "tester",
+          "text": "tester: 63 spec tests (minigames.spec), 10 determinism tests, 6 e2e (minigames-scripted: salvage, threading, flare clean+crash, pause, touch, long-task). npm test 1298 pass; e2e 18/18 (42 s) incl. salvage/threading/flare specs. No long tasks > 50 ms. No bugs found."
+        },
+        {
+          "ts": "2026-10-25T04:49:21.479Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:49:57.127Z",
+          "by": "tester",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-032",
@@ -1069,7 +1091,7 @@
       "role": "designer",
       "status": "done",
       "assignee": "designer",
-      "issue": null,
+      "issue": 43,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T03:54:35.742Z",
       "notes": [
@@ -1093,7 +1115,8 @@
           "by": "designer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-033",
@@ -1103,7 +1126,7 @@
       "role": "graphics",
       "status": "done",
       "assignee": "graphics",
-      "issue": null,
+      "issue": 44,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:12:31.217Z",
       "notes": [
@@ -1127,7 +1150,8 @@
           "by": "graphics",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-034",
@@ -1137,7 +1161,7 @@
       "role": "graphics",
       "status": "done",
       "assignee": "graphics",
-      "issue": null,
+      "issue": 45,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:24:21.142Z",
       "notes": [
@@ -1166,7 +1190,8 @@
           "by": "graphics",
           "text": "PM: CRT preview shows moire rings on flat backgrounds; T-037 to tune scanline frequency to the integer scale factor."
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-035",
@@ -1176,7 +1201,7 @@
       "role": "sound",
       "status": "done",
       "assignee": "sound",
-      "issue": null,
+      "issue": 46,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:10:13.036Z",
       "notes": [
@@ -1200,7 +1225,8 @@
           "by": "sound",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-036",
@@ -1210,7 +1236,7 @@
       "role": "sound",
       "status": "done",
       "assignee": "sound",
-      "issue": null,
+      "issue": 47,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:17:25.455Z",
       "notes": [
@@ -1239,7 +1265,8 @@
           "by": "sound",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-037",
@@ -1247,18 +1274,24 @@
       "desc": "",
       "milestone": "M4",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "doing",
+      "assignee": "developer",
+      "issue": 48,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:41:37.546Z",
+      "updated": "2026-10-25T04:43:06.393Z",
       "notes": [
         {
           "ts": "2026-10-25T04:41:37.547Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T04:43:06.394Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-038",
@@ -1281,7 +1314,7 @@
       "role": "developer",
       "status": "review",
       "assignee": "developer",
-      "issue": null,
+      "issue": 49,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:28:35.148Z",
       "notes": [
@@ -1315,7 +1348,8 @@
           "by": "developer",
           "text": "Harness + baseline done; tuning pass remains (card stays open)."
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-040",
@@ -1351,7 +1385,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 50,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T04:26:33.785Z",
       "notes": [
@@ -1380,7 +1414,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-043",
@@ -1851,7 +1886,7 @@
       "role": "developer",
       "status": "done",
       "assignee": "developer",
-      "issue": null,
+      "issue": 51,
       "created": "2026-10-25T03:37:04.425Z",
       "updated": "2026-10-25T03:50:01.530Z",
       "notes": [
@@ -1875,7 +1910,8 @@
           "by": "developer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-058",
@@ -1885,7 +1921,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 52,
       "created": "2026-10-25T04:14:42.793Z",
       "updated": "2026-10-25T04:16:32.012Z",
       "notes": [
@@ -1909,7 +1945,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-059",
@@ -1917,12 +1954,34 @@
       "desc": "",
       "milestone": "M3",
       "role": "writer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "writer",
+      "issue": 53,
       "created": "2026-10-25T04:41:37.604Z",
-      "updated": "2026-10-25T04:41:37.605Z",
-      "notes": []
+      "updated": "2026-10-25T04:45:31.277Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:43:50.408Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T04:44:39.172Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T04:44:39.631Z",
+          "by": "writer",
+          "text": "Added 6 ui.json keys; UNWRITTEN removed; guide.body kept (TitleScene reads it); 1 new test"
+        },
+        {
+          "ts": "2026-10-25T04:45:31.278Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
     }
   ]
 }
