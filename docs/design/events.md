@@ -1,29 +1,44 @@
 # Random events
 
-One roll per travel day: 25% chance an event fires (12.5% while resting). Candidates are filtered by `condition`, then picked by `weight`. Effects are pure state changes. Text has `{name}`, `{n}`, `{item}` placeholders. Content lives in `src/content/events.json`; this table is the spec.
+One roll per tick: 15% chance an event fires (7.5% on rest days). Candidates are filtered by `condition`, then picked by effective `weight` (base × listed modifiers). Effects are pure state changes. Text has `{name}`, `{n}`, `{item}` placeholders. Content lives in `src/content/events.json`; this table is the spec.
 
-| id | Homage | Weight | Condition | Effect |
-|----|--------|--------|-----------|--------|
-| illness.* | Illness | 20 total | per `health.md` | Random living crew gets the condition |
-| pirates | Thief | 6 | after segment 2 | Lose 1 random supply type: 10–30% of it |
-| lost_lane | Lost trail | 6 | Ion fog or gyro broken ×2 | Lose 1–3 days |
-| drive_failure | Ox died | 5 | drives ≥ 1; ×2 on Overburn | One drive destroyed; if 0 remain, stranded |
-| drive_stall | Ox injured | 6 | | One drive offline 1–3 days (speed drop) |
-| hull_puncture | Wheel breaks | 6 | Unsettled+ ×1.5 | Hull plate broken; needs spare |
-| pump_failure | Axle breaks | 5 | | Coolant pump broken; travel halts until repaired |
-| gyro_failure | Tongue breaks | 4 | | Nav gyro broken; lost_lane ×2 until repaired |
-| hull_fire | Wagon fire | 3 | | Lose 5–15% rations and 1 suit; small health hit |
-| crew_eva_drift | Member wanders off | 3 | crew ≥ 2 | Crew member missing 1–4 days (no rations consumed by them); 5% never returns |
-| bad_recycler | Bad water | 6 | | All crew −5 health; dysentery chance ×3 next 3 days |
-| derelict | Abandoned wagon | 4 | after segment 1 | Gain random supplies (parts or rations) or nothing (50%) |
-| algae_bloom | Wild fruit/berries | 5 | | Gain 20–60 rations (Farmer ×1.5) |
-| belter_help | Indians help find food | 3 | segments 5–9 | Gain 40–80 rations |
-| solar_storm_sting | Hail/blizzard | — | weather only | Handled by weather, not events |
-| cargo_shift | Lost supplies in river | 3 | day after any hazard | Lose 5–10% of one supply |
-| quiet_day | (none) | — | | Flavor line only, no effect: used to keep the log lively when nothing happens (10% of event-free days) |
+"Segment" means `state.segment`, the index of the next waypoint (`travel.md`). "Random crew" = uniformly random present crew. Percent losses are `floor(qty × pct)`, minimum 1 when qty > 0. Ranges are inclusive integers.
+
+| id | Homage | Weight | Condition / modifiers | Effect |
+|----|--------|--------|-----------------------|--------|
+| illness | Illness | 20 (Good), 30 (Fair), 40 (Poor or Very poor) by general health | a present crew member has room for a condition | Pick condition from the illness pool below, then a random eligible present crew member; they gain it |
+| pirates | Thief | 6 | segment ≥ 3 | Pick one type with qty > 0 among rations, suits, charges, plates, pumps, gyros; lose 10–30% of it |
+| lost_lane | Lost trail | 6 | ×2 in Ion fog; ×2 if nav gyro broken | Next 1–3 ticks are delay days (distance 0) |
+| drive_failure | Ox died | 4 | ≥ 1 drive; ×2 on Overburn; ×0.5 for Engineer | One drive destroyed (a working one if any). At 0 drives the ship is stranded |
+| drive_stall | Ox injured | 6 | ≥ 1 working drive | One working drive offline for 1–3 days |
+| hull_puncture | Wheel breaks | 6 | hull not broken; ×1.5 in Unsettled, Solar storm, Flare | Hull plate broken |
+| pump_failure | Axle breaks | 5 | pump not broken | Coolant pump broken: no movement until repaired |
+| gyro_failure | Tongue breaks | 4 | gyro not broken; ×2 in Ion fog | Nav gyro broken |
+| hull_fire | Wagon fire | 3 | | Lose 5–15% rations and 1 suit (if any); a random crew member −10 health |
+| crew_eva_drift | Member wanders off | 3 | ≥ 2 present crew | Random crew member away 1–4 days; 5% instead they never return (death, cause `drift`) |
+| bad_recycler | Bad water | 6 | | All present crew −5 health; dysentery pool weight ×3 for the next 3 days |
+| derelict | Abandoned wagon | 4 | segment ≥ 2 | 50% nothing; otherwise sub-roll: 50% 20–60 rations, 25% 1 random spare part (at cap 3 → 20–60 rations), 25% 1–2 suits |
+| algae_bloom | Wild fruit | 5 | | Gain 20–60 rations (Farmer ×1.5, floor) |
+| belter_help | Help finding food | 3 | segment 5–9 | Gain 40–80 rations |
+| cargo_shift | Lost supplies in river | 3 | first tick after leaving a hazard waypoint | Pick one of rations, suits, charges with qty > 0; lose 5–10% |
+
+Not table events: solar storms, flares and ion fog are weather (`travel.md`). **quiet_day**: on a tick with no event, 10% chance to log a flavor line with no effect.
+
+## Illness pool
+Used by the `illness` event. Pick a condition by weight, then a present crew member who has fewer than 2 conditions and not that one. If none qualifies, the day is a quiet day.
+
+| Condition | Weight | Eligible / modifiers |
+|-----------|--------|----------------------|
+| Space dysentery | 6 | ×2 on Paste; ×3 for 3 days after bad_recycler |
+| Hull mold fever | 3 | ×2 once segment ≥ 10 (past Saturn Ring Plane) |
+| Cryo-fever | 4 | ×2 if general health is Poor or Very poor |
+| Scurvy | 4 | only after 10+ consecutive days on Half or Paste |
+| Micrometeorite puncture | 3 | only in Unsettled, Solar storm, or Flare weather |
+
+Radiation sickness, exhaustion and decompression injury are never rolled here (`health.md` triggers).
 
 ## Cadence guard
-No more than one "loss" event in any 3-day window unless the player is on Overburn or Paste. Implemented as a cooldown in state (`eventCooldownUntilDay`). This is the main anti-frustration lever; tune in M5.
+**Loss events**: pirates, lost_lane, drive_failure, drive_stall, hull_puncture, pump_failure, gyro_failure, hull_fire, crew_eva_drift, bad_recycler, cargo_shift. When one fires on day d, set `eventCooldownUntilDay = d + 3`; while `day < eventCooldownUntilDay`, loss events are filtered out unless thrust is Overburn or rations are Paste. Illness and gains are never filtered. This is the main anti-frustration lever; tune in M5.
 
 ## Text
 Each event has ≥ 2 text variants; losses name the thing lost in numbers ("Pirates boarded while you slept and took 212 rations."). Flavor lines are where the humor lives; see `writing.md`.

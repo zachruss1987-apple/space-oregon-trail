@@ -14,6 +14,7 @@ Reference lines (tone targets, not to be reused verbatim):
 { id: string, weight: number, condition?: string, effect: EffectSpec, text: string[] }
 // deaths.json
 { condition: string, text: string[] }   // use {name}
+// condition = one of the 8 health.md conditions or starvation | exhaustion | hazard | drift | hull_fire
 // stations.json (M2)
 { id: string, name: string, blurb: string, talk: string[], markup: number }
 // bulletins.json (landmarks)

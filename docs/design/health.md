@@ -1,26 +1,54 @@
 # Health
 
-Each crew member has `health` 0–100 (start 100) and a list of active conditions. A ship-wide **general health** label is shown to the player (homage: Good / Fair / Poor / Very poor), computed from the average of living crew: ≥ 75 Good, ≥ 50 Fair, ≥ 25 Poor, else Very poor.
+Each crew member has `health` 0–100 (start 100, integer), a list of active conditions (max 2), and `awayDays` (0 unless drifting). A ship-wide **general health** label is shown to the player (homage: Good / Fair / Poor / Very poor), computed from the average of living crew: ≥ 75 Good, ≥ 50 Fair, ≥ 25 Poor, else Very poor. The same bands label individual crew in Check supplies. Raw numbers are never shown.
 
-## Daily health delta (per crew member)
-Sum of: ration effect + thrust effect + weather effect + condition effects + resting bonus. Clamp 0–100. At 0 the crew member dies with a death message naming the dominant cause (worst active condition, else starvation, else exhaustion).
+**Present** crew = alive and `awayDays = 0`. Only present crew eat, take health changes, catch conditions, or are picked as event victims.
+
+## Daily health delta (per present crew member)
+Sum of:
+
+| Term | Value |
+|------|-------|
+| Rations | Full +2, Half 0, Paste −2; starving day −10 instead |
+| Thrust | Cruise 0, Hard burn −2, Overburn −5 (moving days only) |
+| Weather | `travel.md` (suited/unsuited) |
+| Conditions | each active condition's daily health |
+| Rest | +3 per rest day (+6 at a station) |
+
+Apply, then clamp 0–100.
+
+## Health step order (per present crew member, travel step 7)
+1. Apply the delta and clamp.
+2. If health is 0: dies. Cause = active condition with the most negative daily health (ties: table order); else "starvation" if today was a starving day; else "exhaustion".
+3. Else roll each active condition's death chance × health multiplier (below). First hit kills; cause = that condition.
+4. Trigger checks: radiation sickness (storm/flare, unsuited, 15%), exhaustion (5th consecutive Overburn moving day).
+5. Progress: each condition's remaining days −1 (−2 on a rest day). Remove at ≤ 0. Scurvy: while on Full rations, remaining is capped at 3.
+
+**Health multiplier on death chance** (choices beat dice): health ≥ 75 ×0.5; 50–74 ×1; 25–49 ×1.5; < 25 ×2.
 
 ## Conditions
-| Condition | Homage | Trigger | Duration | Daily health | Death chance/day | Cure |
-|-----------|--------|---------|----------|--------------|------------------|------|
-| Space dysentery | Dysentery | Random event; more likely on Paste rations | 5–10 days | −4 | 1% | Rest halves duration |
-| Hull mold fever | Cholera | Random; more likely after Saturn/Heliopause | 4–8 | −6 | 3% | Rest |
-| Cryo-fever | Typhoid | Random; more likely with low general health | 7–14 | −3 | 2% | Rest |
-| Scurvy ("yes, still") | Measles | Random; only on Half/Paste rations for 10+ days | 6–12 | −2 | 0.5% | Full rations cure in 3 days |
-| Radiation sickness | — | Solar storm/flare day without a suit | 5–9 | −5 | 2% | Rest; suits prevent |
-| Exhaustion | Exhaustion | Overburn 5+ consecutive days | until 2 days of Cruise/Rest | −3 | 0 | Rest |
-| Decompression injury | Broken arm/leg | Hazard outcomes, random event | 10–20 | −1 | 0 | None needed; slows repairs |
-| Micrometeorite puncture | Snakebite | Random event during Unsettled+ weather | 3–6 | −6 | 4% first 2 days | Suit reduces to 1% |
+| Condition | Homage | Trigger | Duration (days) | Daily health | Death chance/day | Cure |
+|-----------|--------|---------|-----------------|--------------|------------------|------|
+| Space dysentery | Dysentery | illness event (`events.md`) | 5–10 | −4 | 1% | Rest (2 days per rest day) |
+| Hull mold fever | Cholera | illness event | 4–8 | −6 | 3% | Rest |
+| Cryo-fever | Typhoid | illness event | 7–14 | −3 | 2% | Rest |
+| Scurvy ("yes, still") | Measles | illness event | 6–12 | −2 | 0.5% | Full rations cap remaining at 3 days |
+| Micrometeorite puncture | Snakebite | illness event | 3–6 | −6 | 4% on its first 2 days (1% if suited), then 0 | Rest |
+| Radiation sickness | — | Solar storm/Flare day, unsuited: 15% | 5–9 | −5 | 2% | Rest; suits prevent |
+| Exhaustion | Exhaustion | 5th consecutive Overburn moving day (all present crew) | until 2 consecutive days off Overburn (any non-Overburn tick) | −3 | 0 | Slow down or rest |
+| Decompression injury | Broken arm/leg | hazard outcome | 10–20 | −1 | 0 | Time; while any present crew has it, repair success −10 points |
 
-Only one new condition per crew member per day; a crew member may have up to 2 conditions.
+Rules: at most one new condition per crew member per day; max 2 active; a crew member cannot hold two copies of one condition. If a trigger finds no room, it does nothing (hazard injury instead does −15 health).
+
+All 8 conditions need death messages; illness-event conditions also need "has caught" lines.
 
 ## Death messages
-Template: `{name} has died of {condition}.` with the writer's variants per condition (≥ 3 each) in `src/content/deaths.json`. On death the player may write a memorial beacon epitaph (M2; M1 shows a simple notice).
+Template: `{name} has died of {condition}.` with the writer's variants per cause (≥ 3 each) in `src/content/deaths.json`. Causes: the 8 conditions, plus `starvation`, `exhaustion` (no condition), `hazard` ("was lost in the {hazard}"), `drift` ("drifted off and did not come back"), `hull_fire` (if the burn hits 0). On death the player may write a memorial beacon epitaph (M2; M1 shows a simple notice).
 
 ## Game over
-All five crew dead. Or: no working ion drive, no spare, and 15 consecutive days without help → "adrift" ending. Or rations 0 for 10 days with no salvage → starvation ending via health.
+| Ending | Rule |
+|--------|------|
+| All dead | No living crew. If only missing crew remain alive, they rejoin at once (set `awayDays = 0`); it is not game over. |
+| Adrift | 0 ion drives and `strandedDays` reaches 15 (reset to 0 whenever a drive is gained). |
+| Starvation | Not a separate rule: starving days (−10/day) kill through health in about 10 days. |
+| Arrival | Reaching New Willamette with ≥ 1 living crew: score screen (`scoring.md`). |

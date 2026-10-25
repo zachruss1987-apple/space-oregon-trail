@@ -1,16 +1,16 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:15:50.477Z",
+  "updated": "2026-10-25T01:28:05.667Z",
   "milestones": [
     {
       "id": "M0",
       "title": "Foundation",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "M1",
       "title": "Core loop",
-      "status": "planned"
+      "status": "active"
     },
     {
       "id": "M2",
@@ -136,11 +136,11 @@
       "desc": "Repo zachruss1987-apple/space-oregon-trail. Pages from GitHub Actions. Board linked in README.",
       "milestone": "M0",
       "role": "program-manager",
-      "status": "doing",
+      "status": "done",
       "assignee": "pm",
       "issue": 7,
       "created": "2026-10-24T20:40:00.000Z",
-      "updated": "2026-10-25T01:14:02.750Z",
+      "updated": "2026-10-25T01:28:05.183Z",
       "notes": [
         {
           "ts": "2026-10-25T01:14:02.692Z",
@@ -151,6 +151,11 @@
           "ts": "2026-10-25T01:14:02.749Z",
           "by": "pm",
           "text": "Repo created and pushed; Pages enabled (workflow build); 9 issues synced. Fixing CI coverage dep."
+        },
+        {
+          "ts": "2026-10-25T01:28:05.183Z",
+          "by": "pm",
+          "text": "doing -> done"
         }
       ],
       "issueClosed": false
@@ -161,16 +166,31 @@
       "desc": "Read docs/design/*; fix contradictions between trail/travel/events/health; confirm numbers produce ~150-day runs; list open questions; finalize item list and waypoint table.",
       "milestone": "M0",
       "role": "designer",
-      "status": "doing",
+      "status": "done",
       "assignee": "designer",
       "issue": 8,
       "created": "2026-10-24T20:40:00.000Z",
-      "updated": "2026-10-25T01:14:37.726Z",
+      "updated": "2026-10-25T01:28:05.120Z",
       "notes": [
         {
           "ts": "2026-10-25T01:14:37.726Z",
           "by": "designer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:26:56.656Z",
+          "by": "designer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:26:57.090Z",
+          "by": "designer",
+          "text": "Designer: M1 spec pass on docs/design (travel, resources, health, events, trail, world, scoring, ui, glossary, README, writing) + new decisions.md; speeds 20/25/30, rations 0.30cr cap 3000, event 15%, weather Markov table, salvage/hazard/initial state specced; sim ~135-190 day runs"
+        },
+        {
+          "ts": "2026-10-25T01:28:05.120Z",
+          "by": "designer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -216,12 +236,18 @@
       "desc": "src/sim/types.ts, game.ts (createGame with profession, crew, window, supplies), serialize.ts round-trip. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.399Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.400Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-011",
@@ -229,12 +255,18 @@
       "desc": "Per docs/design/travel.md and health.md. Arrival detection, death, game over. Unit tests incl. invariants over many seeds.",
       "milestone": "M1",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.451Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.451Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-012",
@@ -242,12 +274,18 @@
       "desc": "Weighted, conditional events with cooldown guard; conditions with duration/death chance/cure. Per events.md and health.md.",
       "milestone": "M1",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.506Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.506Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-013",
@@ -255,12 +293,18 @@
       "desc": "Buy with limits/credits, repair attempts with profession bonus, arrival scoring and rating. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.559Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.560Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-014",
@@ -268,12 +312,23 @@
       "desc": "src/content/*.ts mirroring docs/design tables. Content tests check totals (2,040 Mk, 16 segments).",
       "milestone": "M1",
       "role": "designer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.599Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.334Z",
+          "by": "pm",
+          "text": "Reassigned to the sim developer (data entry from design tables); designer verifies in review."
+        },
+        {
+          "ts": "2026-10-25T01:28:05.600Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-015",
@@ -281,12 +336,18 @@
       "desc": ">= 25 events x 2 variants, 8 conditions x 3 death lines, bulletins per landmark, title/store/status copy. Content tests for length and uniqueness.",
       "milestone": "M1",
       "role": "writer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T01:28:05.666Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:28:05.667Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-016",

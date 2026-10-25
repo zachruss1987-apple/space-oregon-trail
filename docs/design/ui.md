@@ -27,6 +27,48 @@ Side screens from Title: Learn about the Trail (M5 guidebook), Top Ten (M5), Opt
 ```
 "Continue" advances one day at a time with a short animation; holding Enter (or a "Travel until something happens" toggle) auto-advances until an event, waypoint, or state change, like the original's wagon rolling.
 
+Menu labels above are canonical (M1.md's "Set thrust/rations" and "Look at map" mean these items). All eight items are in M1; "Scan for salvage" is the auto-resolve in `travel.md` until M3. Disabled items stay visible, dimmed, and explain why when chosen ("No drone charges." / "Nothing is broken.").
+
+| Item | Opens | Result |
+|------|-------|--------|
+| Change thrust | Menu: Cruise / Hard burn / Overburn, each with "(Mk/day, health cost)" hint | Sets thrust; no day passes |
+| Change rations | Menu: Full / Half / Paste with "N days left at this setting" | Sets rations; no day passes |
+| Rest | NumberInput 1–9 | Runs that many ticks; log shows each day |
+| Attempt repair | Menu of broken parts + spare count | One tick; log shows success/failure |
+| Scan for salvage | Confirm "Spend 5 charges and a day?" | One tick; log shows yield |
+
+## Check supplies
+Full-screen `Table`, Esc/Enter returns. No day passes. Integers with thousands separators.
+```
+SUPPLIES                         CREW
+Ion drives      3 (1 offline)    Ezra        Good
+Rations     1,212 (~134 days)    Temperance  Fair  - space dysentery
+EVA suits      8                 Amos        Poor  - cryo-fever, scurvy
+Drone charges 85                 Lucinda     away (EVA drift)
+Hull plates    1  [HULL BROKEN]  Hollis      died (hull mold fever)
+Coolant pumps  1
+Nav gyros      0
+Credits      370 cr
+```
+"~N days" = `floor(rations / today's need)` at the current ration setting and present crew. Broken installed parts show a bracketed tag on their row. Crew rows show the health label only (never the number), up to 2 condition names, or `away` / `died (cause)`.
+
+## Look at the map
+Full-screen text map, Esc/Enter returns. No day passes.
+```
+THE LANE                        712 / 2,040 Mk
+[##########>.......................]
+ #  Waypoint                    Type      Mk    
+ 0  Independence Station        station      0  passed
+ ...
+ 5  Ceres Depot                 station    640  passed
+ 6  Jupiter's Eye               landmark   830  next: 118 Mk
+ 7  The Belt Crossing           hazard     932
+```
+Progress bar: 34 cells, `#` per 1/34 of distance traveled, `>` at the ship. List shows all 17 waypoints (scroll if needed, current row centered); status column is `passed`, `next: N Mk`, or blank. Type is spelled out (no color-only meaning). Estimated date of arrival is not shown (imperfect information).
+
+## Hazard outcome
+On arriving at a hazard (M1): a `Modal` with the hazard description, then one line for the roll result (`trail.md`) naming the loss in numbers, then "Continue".
+
 ## Controls
 - Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items, `?` shows controls. Typing fields accept printable ASCII up to 12 chars.
 - Mouse/touch: click or tap any menu item; mini-games have on-screen controls on touch devices.

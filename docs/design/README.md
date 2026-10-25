@@ -19,6 +19,7 @@ One topic per file. Numbers in tables are the source of truth; `src/content` mir
 | `audio.md` | Synth, songs, SFX list (M4) |
 | `writing.md` | Voice, content schemas, glossary pointer |
 | `glossary.md` | In-world terms |
+| `decisions.md` | Append-only log of rule decisions with rationale |
 
 ## Pillars
 1. **Scarcity you can see.** Every number on the status screen matters and the player can trace deaths back to choices.
