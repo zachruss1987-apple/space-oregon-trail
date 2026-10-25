@@ -27,6 +27,7 @@ export const FALLBACK: Readonly<Record<string, string>> = {
   'store.perBox': 'box of {n}',
   'travel.auto': 'Hold Enter or press T to travel until something happens.',
   'travel.autoOn': 'Traveling... (T or any key to stop)',
+  'travel.autoIndicator': 'TRAVELING… (any key to stop)',
   'travel.thrustOption': '{name} ({mk} Mk/day, health {health})',
   'travel.rationOption': '{name} ({n} days left at this setting)',
   'travel.restPrompt': 'Rest for how many days? (1-9)',

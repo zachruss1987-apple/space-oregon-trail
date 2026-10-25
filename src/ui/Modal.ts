@@ -16,7 +16,6 @@ export interface ModalOptions {
   /** Esc chooses the last button (default true). */
   escCloses?: boolean;
   width?: number;
-  typewriter?: boolean;
 }
 
 const DEPTH = 100;
@@ -33,7 +32,7 @@ export class Modal {
     const buttons = (opts.buttons ?? [t('common.ok')]).map((b) => (typeof b === 'string' ? { label: b } : b));
     const blocker = scene.add.rectangle(0, 0, GAME_W, GAME_H, 0x000000, 0.6).setOrigin(0, 0).setDepth(DEPTH).setInteractive();
     this.objects.push(blocker);
-    this.body = new TextBox(scene, x + 16, 0, w - 32, message, { depth: DEPTH + 2, typewriter: opts.typewriter ?? true });
+    this.body = new TextBox(scene, x + 16, 0, w - 32, message, { depth: DEPTH + 2, typewriter: false });
     const textH = this.body.lineCount() * LINE_HEIGHT;
     const h = Math.min(GAME_H - 20, textH + buttons.length * LINE_HEIGHT + 48);
     const y = Math.max(10, (GAME_H - h) / 2);

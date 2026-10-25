@@ -83,7 +83,7 @@ export class TravelScene extends BaseScene {
   private setAuto(on: boolean): void {
     this.auto = on;
     if (!on) this.holding = false;
-    this.hint.setText(on ? t('travel.autoOn') : t('travel.auto'));
+    this.hint.setText(on ? t('travel.autoIndicator') : t('travel.auto'));
     if (on && !this.busy) this.travelDay();
   }
 

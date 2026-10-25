@@ -35,7 +35,7 @@ export class ArrivalScene extends BaseScene {
     this.clear();
     const sc = computeScore(session.state!);
     this.heading(14, t('score.title'), 16);
-    const rows: (readonly string[])[] = sc.lines.map((l) => [t(`score.labels.${l.key}`), fmt(l.points)]);
+    const rows: (readonly string[])[] = sc.lines.filter((l) => !(l.points === 0 && (l.key === 'flareBonus' || l.key === 'noDeathsBonus'))).map((l) => [t(`score.labels.${l.key}`), fmt(l.points)]);
     rows.push(['', ''], [t('score.subtotal'), fmt(sc.subtotal)], [t('score.multiplier'), `x${sc.multiplier}`]);
     const table = new Table(this, 150, 44, [{ width: 26 }, { width: 8, right: true }], 18);
     table.setRows(rows);

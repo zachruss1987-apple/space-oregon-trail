@@ -48,7 +48,7 @@ export class WaypointScene extends BaseScene {
       // The crossing was rolled on the arrival tick; its outcome is the hazard entry of that day.
       const outcome = s.log.filter((e) => e.kind === 'hazard' && e.day === s.day).map((e) => e.text);
       body.finish();
-      this.modal([blurb, ...outcome].join('\n\n'));
+      this.modal(outcome.join('\n\n') || blurb);
     }
   }
 }
