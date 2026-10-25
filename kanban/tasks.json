@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:49:28.740Z",
+  "updated": "2026-10-25T01:49:29.752Z",
   "milestones": [
     {
       "id": "M0",
@@ -331,11 +331,11 @@
       "desc": "Buy with limits/credits, repair attempts with profession bonus, arrival scoring and rating. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "doing",
+      "status": "review",
       "assignee": "developer",
       "issue": 13,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:49:12.137Z",
+      "updated": "2026-10-25T01:49:29.752Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.560Z",
@@ -346,6 +346,16 @@
           "ts": "2026-10-25T01:49:12.137Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:49:29.316Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:49:29.752Z",
+          "by": "developer",
+          "text": "store.ts (price=base x markup, limits/caps/credits, Independence-only buy, depart, warnings), repair.ts (repair + passing help), score.ts (worked example 3,970 verified), scan tests; 21 tests"
         }
       ],
       "issueClosed": false
