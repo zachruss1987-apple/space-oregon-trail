@@ -73,8 +73,8 @@ export function storeWarnings(state: GameState): string[] {
   const s = state.supplies;
   if (s.drives === 0) out.push('noDrives');
   if (s.rations < RATIONS_WARNING_BELOW) out.push('lowRations');
-  if (s.suits < state.crew.filter((c) => c.alive).length) out.push('fewSuits');
-  if (state.credits <= 0) out.push('broke');
+  if (s.suits < state.crew.filter((c) => c.alive).length) out.push('lowSuits');
+  if (state.credits <= 0) out.push('noCredits');
   return out;
 }
 

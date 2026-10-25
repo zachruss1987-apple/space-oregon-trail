@@ -14,8 +14,6 @@ const LEFT = 24;
 const MENU_Y = 122;
 const ROW_H = 20;
 const NAME_W = 25;
-/** storeWarnings() keys → ui.json mattie.warnings keys. */
-const WARNING_KEYS: Readonly<Record<string, string>> = { noDrives: 'noDrives', lowRations: 'lowRations', fewSuits: 'lowSuits', broke: 'noCredits' };
 
 type Basket = Record<SupplyKey, number>;
 
@@ -81,7 +79,7 @@ export class StoreScene extends BaseScene {
   }
 
   private currentWarnings(state: GameState): string[] {
-    return storeWarnings(state).map((k) => t(`mattie.warnings.${WARNING_KEYS[k] ?? k}`));
+    return storeWarnings(state).map((k) => t(`mattie.warnings.${k}`));
   }
 
   private refresh(): void {

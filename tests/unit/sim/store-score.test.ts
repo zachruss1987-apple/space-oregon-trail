@@ -59,9 +59,9 @@ describe('store (resources.md)', () => {
 
   it("Mattie's warnings", () => {
     const s = fresh();
-    expect(storeWarnings(s)).toEqual(['noDrives', 'lowRations', 'fewSuits']);
+    expect(storeWarnings(s)).toEqual(['noDrives', 'lowRations', 'lowSuits']);
     s.credits = 0;
-    expect(storeWarnings(s)).toContain('broke');
+    expect(storeWarnings(s)).toContain('noCredits');
   });
 
   it('depart needs ≥ 1 drive and only works from the store', () => {
