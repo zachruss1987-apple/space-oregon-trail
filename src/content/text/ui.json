@@ -8,7 +8,10 @@
       "Learn about the Trail",
       "See the Top Ten",
       "Options"
-    ]
+    ],
+    "seed": "Seed: {seed}",
+    "comingSoon": "That part of the Lane opens in a later milestone.",
+    "hint": "Arrows or number keys to choose, Enter to confirm."
   },
   "travel": {
     "menu": [
@@ -20,7 +23,18 @@
       "Rest",
       "Attempt repair",
       "Scan for salvage"
-    ]
+    ],
+    "auto": "Hold Enter or press T to travel until something happens.",
+    "autoOn": "Traveling... (T or any key to stop)",
+    "thrustOption": "{name} ({mk} Mk/day, health {health})",
+    "rationOption": "{name} ({n} days left at this setting)",
+    "restPrompt": "Rest for how many days? (1-9)",
+    "repairOption": "{part} (spares: {n})",
+    "repairPrompt": "Which part will you repair?",
+    "thrustPrompt": "Set thrust:",
+    "rationsPrompt": "Set rations:",
+    "scanConfirm": "Spend 5 charges and a day?",
+    "cancel": "Cancel"
   },
   "setup": {
     "professionPrompt": "Many kinds of people travel the Lane. What will you be?",
@@ -39,7 +53,11 @@
       "1 May. Fair skies. Flare season is a coin flip on arrival.",
       "1 June. Fair skies early. You will likely meet the flares at the end.",
       "1 July. Calm start. Flare season will be waiting for you."
-    ]
+    ],
+    "captain": "Captain",
+    "crew": "Crew {n}",
+    "randomHint": "Tab: {label}",
+    "credits": "{n} cr"
   },
   "mattie": {
     "advice": [
@@ -114,7 +132,12 @@
       "credits": "Credits",
       "next": "Next",
       "traveled": "Traveled"
-    }
+    },
+    "units": {
+      "mk": "Mk"
+    },
+    "nextValue": "{name} in {n} Mk",
+    "traveledValue": "{n} Mk"
   },
   "crossing": {
     "clear": [
@@ -169,14 +192,16 @@
       "You have arrived at New Willamette. The sky is the wrong color.",
       "New Willamette. You made it, and the paperwork is next.",
       "Landfall at New Willamette. The ground is solid and slightly rude."
-    ]
+    ],
+    "returnTitle": "Return to title"
   },
   "death": {
     "title": "Your journey ends here.",
     "allDead": "The last of the crew is gone. The Lane keeps going, without you.",
     "adrift": "Your ship is adrift with no drives. The Lane Authority will log it as a recovery.",
     "epitaphPrompt": "Write a message for the beacon.",
-    "continue": "Return to title"
+    "continue": "Return to title",
+    "beaconSaved": "Your message is on the beacon."
   },
   "guide": {
     "title": "Learn about the Trail",
@@ -193,5 +218,72 @@
       "The tether drops and Independence Station shrinks behind you.",
       "Drives lit, hatches sealed. Independence Station recedes."
     ]
+  },
+  "common": {
+    "ok": "OK",
+    "yes": "Yes",
+    "no": "No",
+    "back": "Esc: back"
+  },
+  "store": {
+    "title": "MATTIE'S OUTFITTERS",
+    "leave": "Leave the store",
+    "header": "Item                         Price    Qty        Cost",
+    "total": "Total: {total} cr     Credits left: {left} cr",
+    "qtyPrompt": "How many? (max {n})",
+    "perBox": "box of {n}"
+  },
+  "supplies": {
+    "title": "SUPPLIES",
+    "crew": "CREW",
+    "offline": "({n} offline)",
+    "days": "(~{n} days)",
+    "broken": "[{part} BROKEN]",
+    "away": "away",
+    "died": "died ({cause})",
+    "credits": "Credits",
+    "return": "Enter or Esc to return."
+  },
+  "map": {
+    "title": "THE LANE",
+    "col": {
+      "waypoint": "Waypoint",
+      "type": "Type"
+    },
+    "type": {
+      "station": "station",
+      "hazard": "hazard",
+      "landmark": "landmark",
+      "gate": "gate",
+      "end": "colony"
+    },
+    "passed": "passed",
+    "next": "next: {n} Mk",
+    "here": "here"
+  },
+  "waypoint": {
+    "continue": "Continue on the Lane",
+    "enter": "Enter station",
+    "storeLater": "The station store opens in a later milestone. Mattie sends her regards.",
+    "bulletin": "Bulletin board:"
+  },
+  "score": {
+    "title": "SCORE",
+    "labels": {
+      "crew": "Surviving crew",
+      "ship": "The ship",
+      "drives": "Ion drives",
+      "spares": "Spare parts",
+      "suits": "EVA suits",
+      "charges": "Drone charges",
+      "rations": "Rations",
+      "credits": "Credits",
+      "flareBonus": "Beat the flare season",
+      "noDeathsBonus": "Nobody died"
+    },
+    "subtotal": "Subtotal",
+    "multiplier": "Profession multiplier",
+    "total": "Total",
+    "rating": "Rating: {rating}"
   }
 }

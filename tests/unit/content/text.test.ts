@@ -3,8 +3,13 @@ import events from '../../../src/content/text/events.json';
 import deaths from '../../../src/content/text/deaths.json';
 import bulletins from '../../../src/content/text/bulletins.json';
 import ui from '../../../src/content/text/ui.json';
+import { FALLBACK } from '../../../src/ui/copy';
 
-const ALLOWED = new Set(['{name}', '{n}', '{item}']);
+const ALLOWED = new Set([
+  '{name}', '{n}', '{item}',
+  // UI-only placeholders filled by src/ui/copy.ts callers
+  '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
+]);
 const CONDITIONS = [
   'space-dysentery', 'hull-mold-fever', 'cryo-fever', 'scurvy',
   'radiation-sickness', 'exhaustion', 'decompression-injury', 'micrometeorite-puncture',
@@ -195,8 +200,31 @@ describe('ui.json', () => {
     // status labels repeat by design (Fair is both weather and health), so exclude them from uniqueness
     const guide = (u.guide as { body: string }).body;
     expect(guide.length).toBeLessThanOrEqual(400);
-    const rest = { ...u, status: undefined, guide: undefined };
+    // Labels FALLBACK once covered repeat by design (Credits, Continue on the Lane), so skip uniqueness.
+    const rest = structuredClone(u) as Obj;
+    delete rest.status;
+    delete rest.guide;
+    for (const k of Object.keys(FALLBACK)) {
+      const parts = k.split('.');
+      const parent = parts.slice(0, -1).reduce<Obj | undefined>((a, p) => a?.[p] as Obj | undefined, rest);
+      if (parent) delete parent[parts[parts.length - 1] as string];
+    }
     checkStrings(collect(rest), 140, 'ui');
+    for (const k of Object.keys(FALLBACK)) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], u);
+      if (k !== 'store.header') expect((v as string).length, k).toBeLessThanOrEqual(90);
+    }
     for (const s of collect({ status: u.status })) expect(s.length).toBeGreaterThan(0);
+  });
+});
+
+describe('ui.json vs FALLBACK', () => {
+  it('resolves every FALLBACK key so the fallback never fires', () => {
+    for (const [k, fallback] of Object.entries(FALLBACK)) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], ui);
+      expect(typeof v, k).toBe('string');
+      const ph = (s: string) => (s.match(/{[^}]*}/g) ?? []).sort();
+      expect(ph(v as string), k).toEqual(ph(fallback));
+    }
   });
 });
