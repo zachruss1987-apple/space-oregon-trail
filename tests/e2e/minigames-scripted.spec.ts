@@ -149,6 +149,8 @@ test.describe('(e) touch device', () => {
 });
 
 test('frame time: no long task (> 50 ms) during 5 s of a Salvage run', async ({ page }) => {
+  // GitHub runners render WebGL in software; every frame is ~90 ms there, so this is a local-only budget check.
+  test.skip(!!process.env.CI, 'software WebGL on CI runners makes frame budgets meaningless');
   await page.addInitScript(() => {
     const w = window as unknown as { __long: number[]; __longOk: boolean };
     w.__long = [];

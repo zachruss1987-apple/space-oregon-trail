@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 // E2E tests run against the production build served by `vite preview`.
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 30_000,
+  timeout: process.env.CI ? 90_000 : 30_000, // CI runners are several times slower (software GL)
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : 4, // 16+ parallel Chromium boots time out on big machines
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
