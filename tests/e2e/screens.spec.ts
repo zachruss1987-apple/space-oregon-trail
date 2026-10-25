@@ -25,9 +25,13 @@ test('screenshot every scene except Arrival', async ({ page }) => {
   await autoTravelUntil(page, (_s, scene) => scene === 'Waypoint');
   await page.waitForTimeout(500);
   await snap(page, 'Waypoint');
-  await page.keyboard.press('Enter'); // dismiss crossing modal
+  await page.keyboard.press('Enter'); // Approach the crossing
+  await expect(body(page)).toHaveAttribute('data-scene', 'Hazard');
   await page.waitForTimeout(200);
-  await snap(page, 'Waypoint-after-modal');
+  await snap(page, 'Hazard');
+  await page.keyboard.press('Enter'); // Thread it
+  await expect(body(page)).toHaveAttribute('data-modal', '1');
+  await snap(page, 'Hazard-outcome');
 });
 
 test('screenshot the Death scene', async ({ page }) => {

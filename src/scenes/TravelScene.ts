@@ -1,10 +1,14 @@
-/** The travel loop: status panel, log, the eight actions. Continue/auto-travel advance days through applyAction. */
+/**
+ * The travel loop: status panel, log, the eight actions. Continue/auto-travel advance days through applyAction.
+ * Routing by sim state: arrival -> Waypoint; a refused Continue with a pending crossing -> Hazard, or stranded at a
+ * station -> Station; endings -> Death/Arrival.
+ */
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { REST, WAYPOINTS } from '@/content';
 import { markFlag } from '@/game/contract';
 import { session } from '@/game/session';
-import { applyAction, type Intent, type LogEntry } from '@/sim';
+import { applyAction, stationOpen, type Intent, type LogEntry } from '@/sim';
 import { t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
@@ -53,6 +57,11 @@ export class TravelScene extends BaseScene {
     this.hint = this.add.text(10, GAME_HEIGHT - 16, t('travel.auto'), textStyle(COLORS.dim, undefined, 11));
     this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e) });
     this.render();
+    if (session.departOnTravel) {
+      // The Station scene's Continue: run the departing day here so its events and arrival route normally.
+      session.departOnTravel = false;
+      this.travelDay();
+    }
   }
 
   override update(_time: number, delta: number): void {
@@ -152,6 +161,7 @@ export class TravelScene extends BaseScene {
     if (r.error) {
       this.setBusy(false);
       this.setAuto(false);
+      if (intent.type === 'continue' && this.routeParked()) return;
       this.menu.say(r.error);
       return;
     }
@@ -159,6 +169,15 @@ export class TravelScene extends BaseScene {
     this.render();
     if (takesDay) this.afterDay(r.entries);
     else this.setBusy(false);
+  }
+
+  /** A refused Continue while parked: a pending crossing goes to the Hazard scene, a stranded station stop to the Station. */
+  private routeParked(): boolean {
+    const s = session.state!;
+    if (s.crossing) this.go('Hazard');
+    else if (stationOpen(s)) this.go('Station');
+    else return false;
+    return true;
   }
 
   /** Route after a day: endings, event modal, waypoint arrival, or keep auto-traveling. */
@@ -184,10 +203,6 @@ export class TravelScene extends BaseScene {
       this.setBusy(false);
       this.modal(shown.map((e) => e.text).join('\n\n'), { onClose: next });
     } else next();
-  }
-
-  private ending(): void {
-    this.go(session.state?.status === 'arrived' ? 'Arrival' : 'Death');
   }
 
   /** Placeholder landmark band: starfield, the ship, destination name (art in M4). */

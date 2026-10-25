@@ -48,6 +48,8 @@ class Session {
   draft: SetupDraft = { profession: 'executive', names: [...DEFAULT_CREW_NAMES], window: 1 };
   /** Waypoint index whose scene was already shown (so returning to Travel does not re-open it). */
   shownWaypoint: number | null = null;
+  /** Set by the Station scene's Continue: Travel runs one Continue day as soon as it opens. */
+  departOnTravel = false;
   settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220 };
 
   /** Read `?seed=` (or pick a random one) and reset everything. */
@@ -64,6 +66,7 @@ class Session {
     this.uiRng = createRng((seed ^ 0x9e3779b9) >>> 0);
     this.state = null;
     this.shownWaypoint = null;
+    this.departOnTravel = false;
     this.draft = { profession: 'executive', names: [...DEFAULT_CREW_NAMES], window: 1 };
   }
 }

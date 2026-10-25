@@ -84,7 +84,7 @@ order (show `blocker` dimmed instead of a risk word; never show `chance`), `risk
 `shipModifier`, `baseIncident`, `isFlareBelt`. A crossing logs `crossing` (id `thread|shields|tug|pilot`; the pilot also
 logs `pilot-wait` per wait day and `pilot-arrives`), then `hazard` (outcome id), then `hazard` `pump-strain` (shields,
 15%). After resolution `crossing = null`, `justCrossedHazard = true`, the ship stays parked; Continue departs.
-Interim: `WaypointScene` offers Thread it / Hire a tug until the HazardScene exists.
+UI: Waypoint -> "Approach the crossing" -> `Hazard` scene (options 1-4, 5 Rest, 6 travel menu); Travel's refused Continue also routes there.
 
 ## Stations (economy.md)
 `state.station = { waypoint, offers: TradeOffer[] } | null` is created on arrival at a road station (offers drawn with
@@ -112,7 +112,7 @@ Map data: `routeWaypoints(route)` returns the active waypoint list with route-co
 For e2e tests (src/game/contract.ts); keep stable.
 - `?seed=<text|digits>`: digits are used as the number, other text is hashed with `seedFromString`. No param = random 6-char seed, shown on the title.
 - `window.__PROXIMA__ = { game, version, seed, state }`; `state` is a getter for the live `GameState` (null on the title/setup).
-- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Death Arrival`, set in each scene's create().
+- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Hazard Station Death Arrival`, set in each scene's create().
 - `body[data-modal="1"]` while a modal or number prompt is open; `body[data-busy="1"]` while a Travel day is animating (input ignored).
 - In the store, `state` updates live as quantities change (status stays `store` until "Leave the store" confirms `depart`).
 - Keys are read from `window` (no canvas focus needed). Keys pressed during a scene change can be lost: wait for `data-scene` first.

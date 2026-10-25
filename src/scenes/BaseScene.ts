@@ -1,13 +1,22 @@
-/** Shared scene plumbing: e2e marker, key router, modal helper, heading text. */
+/** Shared scene plumbing: e2e marker, key router, modal helper, heading text, endings, the Titan route prompt. */
 import Phaser from 'phaser';
 import { GAME_WIDTH } from '@/config';
+import { ROUTE } from '@/content';
 import { markScene } from '@/game/contract';
+import { session } from '@/game/session';
+import { applyAction, cumulativeAt, type RouteId } from '@/sim';
+import { t } from '@/ui/copy';
 import { KeyRouter } from '@/ui/keys';
 import { Modal, resetModals, type ModalOptions } from '@/ui/Modal';
-import { COLORS, textStyle } from '@/ui/theme';
+import { COLORS, fmt, textStyle } from '@/ui/theme';
 
 /** Scene keys (the `data-scene` values). */
-export type SceneKey = 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Death' | 'Arrival';
+export type SceneKey = 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Hazard' | 'Station' | 'Death' | 'Arrival';
+
+/** Mk from the Kuiper Gate (branch + 1) to the Heliopause on a route, for the route prompt. */
+function gateToHeliopause(route: RouteId): number {
+  return cumulativeAt(ROUTE.skipped + 1, route) - cumulativeAt(ROUTE.skipAfter, route);
+}
 
 export abstract class BaseScene extends Phaser.Scene {
   protected router!: KeyRouter;
@@ -32,8 +41,39 @@ export abstract class BaseScene extends Phaser.Scene {
     this.scene.start(key);
   }
 
+  /** The ending scene for a finished run. */
+  protected ending(): void {
+    this.go(session.state?.status === 'arrived' ? 'Arrival' : 'Death');
+  }
+
   /** Centered heading line. */
   protected heading(y: number, text: string, size = 14, color: string = COLORS.bright): Phaser.GameObjects.Text {
     return this.add.text(GAME_WIDTH / 2, y, text, textStyle(color, undefined, size)).setOrigin(0.5, 0);
+  }
+
+  /**
+   * At Titan Refinery: ask "via Oort Beacon / direct" (route.* keys), dispatch `route`, show the chosen line, then
+   * `onDone(true)`. Cancel (or Esc) calls `onDone(false)`. Elsewhere `onDone(true)` at once.
+   */
+  protected askRoute(onDone: (chosen: boolean) => void): void {
+    const s = session.state;
+    if (!s || s.arrivedAt !== ROUTE.branchAt) return onDone(true);
+    const vias: RouteId[] = ['oort', 'direct'];
+    const msg = [
+      t('route.prompt'),
+      `${t('route.oort')}: ${t('route.oortDesc', { n: fmt(gateToHeliopause('oort')) })}`,
+      `${t('route.direct')}: ${t('route.directDesc', { n: fmt(gateToHeliopause('direct')) })}`,
+    ].join('\n\n');
+    this.modal(msg, {
+      buttons: [t('route.oort'), t('route.direct'), t('travel.cancel')],
+      onClose: (i) => {
+        const via = vias[i];
+        if (!via) return onDone(false);
+        const r = applyAction(session.state!, { type: 'route', via }, session.rng);
+        if (r.error) return this.modal(r.error, { onClose: () => onDone(false) });
+        session.state = r.state;
+        this.modal(r.entries.map((e) => e.text).join('\n\n'), { onClose: () => onDone(true) });
+      },
+    });
   }
 }

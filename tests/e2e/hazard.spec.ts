@@ -2,9 +2,10 @@ import { expect, test } from '@playwright/test';
 import { autoTravelUntil, body, buy, getState, idle, leaveStore, startRun } from './helpers';
 import { FAST_FIRST_WAYPOINT_SEEDS } from './seeds';
 
-// M2 (hazards.md "Flow"): arrival pauses with `state.crossing` set; the interim Waypoint menu offers Thread it / Hire a
-// tug (enabled first). Enter picks the first row, then the crossing narration + outcome modal shows.
-test('first waypoint (Lunar Debris Ring): crossing choice, outcome modal, then Continue returns to Travel', async ({ page }) => {
+// M2 (hazards.md "Flow"): arrival pauses with `state.crossing` set. Waypoint row 1 "Approach the crossing" opens the
+// Hazard scene; its cursor starts on the first enabled option (Thread it), Enter crosses, the outcome modal shows,
+// Enter returns to Travel.
+test('first waypoint (Lunar Debris Ring): Hazard scene, Thread it, outcome modal, then Travel', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
@@ -14,21 +15,24 @@ test('first waypoint (Lunar Debris Ring): crossing choice, outcome modal, then C
   const s = await autoTravelUntil(page, (_st, scene) => scene === 'Waypoint');
   expect(s.arrivedAt).toBe(1);
   expect(s.crossing?.waypoint).toBe(1);
-  await expect(body(page)).toHaveAttribute('data-scene', 'Waypoint');
   await expect(body(page)).not.toHaveAttribute('data-modal', '1');
 
-  await page.keyboard.press('Enter'); // first enabled crossing option
-  await expect(body(page)).toHaveAttribute('data-modal', '1'); // crossing narration + outcome
+  await page.keyboard.press('Enter'); // Approach the crossing
+  await expect(body(page)).toHaveAttribute('data-scene', 'Hazard');
+  const before = await getState(page);
+  expect(before?.crossing?.waypoint).toBe(1);
+
+  await page.keyboard.press('Enter'); // 1. Thread it
+  await expect(body(page)).toHaveAttribute('data-modal', '1'); // narration + outcome
   const crossed = await getState(page);
   expect(crossed?.crossing).toBeNull();
+  expect(crossed?.log.some((e) => e.kind === 'crossing' && e.id === 'thread')).toBe(true);
   expect(crossed?.log.filter((e) => e.kind === 'hazard' && e.day === crossed.day).length).toBeGreaterThan(0);
 
-  await page.keyboard.press('Enter'); // dismiss modal
-  await expect(body(page)).not.toHaveAttribute('data-modal', '1');
-  await page.keyboard.press('Enter'); // Continue on the Lane
+  await page.keyboard.press('Enter'); // dismiss the outcome modal
   await expect(body(page)).toHaveAttribute('data-scene', 'Travel');
   const dayAtLeave = (await getState(page))?.day ?? 0;
-  await page.keyboard.press('Enter'); // one more day
+  await page.keyboard.press('Enter'); // Continue: departs
   await idle(page);
   await expect.poll(async () => (await getState(page))?.day).toBeGreaterThan(dayAtLeave);
   expect((await getState(page))?.arrivedAt).toBeNull();
