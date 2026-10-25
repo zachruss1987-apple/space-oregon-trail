@@ -9,3 +9,4 @@ export * from './names';
 export * from './rules';
 export * from './economy';
 export * from './text';
+export * from './minigames';

@@ -11,7 +11,9 @@ import { Modal, resetModals, type ModalOptions } from '@/ui/Modal';
 import { COLORS, fmt, textStyle } from '@/ui/theme';
 
 /** Scene keys (the `data-scene` values). */
-export type SceneKey = 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Hazard' | 'Station' | 'Death' | 'Arrival';
+export type SceneKey =
+  | 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Hazard' | 'Station' | 'Death' | 'Arrival'
+  | 'Salvage' | 'Threading' | 'Flare';
 
 /** Mk from the Kuiper Gate (branch + 1) to the Heliopause on a route, for the route prompt. */
 function gateToHeliopause(route: RouteId): number {

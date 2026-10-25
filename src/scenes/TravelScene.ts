@@ -59,7 +59,13 @@ export class TravelScene extends BaseScene {
     this.hint = this.add.text(10, GAME_HEIGHT - 16, t('travel.auto'), textStyle(COLORS.dim, undefined, 11));
     this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e) });
     this.render();
-    if (session.departOnTravel) {
+    const back = session.pendingDay;
+    if (back) {
+      // Returning from a mini-game: its day already ran in the sim; route it like any other day.
+      session.pendingDay = null;
+      this.setBusy(true);
+      this.afterDay(back.entries, back.dead);
+    } else if (session.departOnTravel) {
       // The Station scene's Continue: run the departing day here so its events and arrival route normally.
       session.departOnTravel = false;
       this.travelDay();
@@ -126,14 +132,18 @@ export class TravelScene extends BaseScene {
           if (days !== null) this.dispatch({ type: 'rest', days }, true);
         });
       case 6: return this.choose(t('travel.repairPrompt'), repairOptions(s), true);
-      case 7:
-        this.modal(t('travel.scanConfirm'), {
-          buttons: [t('common.yes'), t('common.no')],
-          onClose: (b) => {
-            if (b === 0) this.dispatch({ type: 'scan' }, true);
-          },
-        });
+      case 7: return this.scan();
     }
+  }
+
+  /** Scan for salvage: launch the Salvage Run (minigames.md). */
+  private scan(): void {
+    this.modal(t('minigame.salvage.confirm'), {
+      buttons: [t('common.yes'), t('common.no')],
+      onClose: (b) => {
+        if (b === 0) this.scene.start('Salvage', { returnTo: 'Travel' });
+      },
+    });
   }
 
   /** Sub-menu modal: options + Cancel. */

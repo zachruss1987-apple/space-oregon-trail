@@ -235,7 +235,7 @@ export type MiniGameResult = SalvageResult | ThreadingResult | FlareResult;
 export type DayKind =
   | { kind: 'travel' }
   | { kind: 'rest' }
-  | { kind: 'scan' }
+  | { kind: 'scan'; penalty?: number }
   | { kind: 'salvage'; result: SalvageResult }
   | { kind: 'repair'; part: PartId }
   | { kind: 'wait' };
@@ -248,7 +248,7 @@ export type Intent =
   | { type: 'setRations'; rations: RationId }
   | { type: 'repair'; part: PartId }
   | { type: 'scan' }
-  | { type: 'salvage'; result?: SalvageResult }
+  | { type: 'salvage'; result?: SalvageResult; skipped?: boolean }
   | { type: 'cross'; method: CrossMethod; result?: ThreadingResult | FlareResult }
   | { type: 'route'; via: RouteId }
   | { type: 'buy'; item: SupplyKey; packs: number }

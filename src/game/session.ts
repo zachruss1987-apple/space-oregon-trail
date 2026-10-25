@@ -3,7 +3,7 @@
  * through the sim, and write the new state back. No rules live here.
  */
 import { DEFAULT_CREW_NAMES, type ProfessionId, type WindowId } from '@/content';
-import { createRng, seedFromString, type GameState, type Rng } from '@/sim';
+import { createRng, seedFromString, type GameState, type LogEntry, type Rng } from '@/sim';
 
 /** Player-adjustable UI settings. */
 export interface Settings {
@@ -13,6 +13,12 @@ export interface Settings {
   textSpeedMs: number;
   /** Delay between days when continuing/auto-traveling, ms. */
   dayDelayMs: number;
+}
+
+/** What a mini-game scene hands back to the scene it returns to: the day's log entries and new deaths. */
+export interface PendingDay {
+  entries: LogEntry[];
+  dead: string[];
 }
 
 /** Choices made in SetupScene before createGame. */
@@ -51,10 +57,16 @@ class Session {
   /** Set by the Station scene's Continue: Travel runs one Continue day as soon as it opens. */
   departOnTravel = false;
   settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220 };
+  /** `?debug=1` (or a dev build): enables `__PROXIMA__.minigame.finishWith`. */
+  debug = false;
+  /** Set by a mini-game scene after it dispatched its intent; the scene it returns to shows it, then clears it. */
+  pendingDay: PendingDay | null = null;
 
-  /** Read `?seed=` (or pick a random one) and reset everything. */
+  /** Read `?seed=` (or pick a random one) and `?debug=1`, then reset everything. */
   init(search: string): void {
-    const raw = new URLSearchParams(search).get('seed');
+    const params = new URLSearchParams(search);
+    this.debug = params.get('debug') === '1' || import.meta.env.DEV;
+    const raw = params.get('seed');
     this.seedLabel = raw && raw.trim() ? raw.trim() : randomSeedLabel();
     this.reset();
   }
@@ -67,6 +79,7 @@ class Session {
     this.state = null;
     this.shownWaypoint = null;
     this.departOnTravel = false;
+    this.pendingDay = null;
     this.draft = { profession: 'executive', names: [...DEFAULT_CREW_NAMES], window: 1 };
   }
 }

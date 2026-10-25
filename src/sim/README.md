@@ -35,7 +35,7 @@ input unchanged and no day passes (show `error` as the dimmed-item message, e.g.
 | `{ type: 'setRations', rations: 'full' \| 'half' \| 'paste' }` | 0 | |
 | `{ type: 'repair', part: 'hull' \| 'pump' \| 'gyro' }` | 1 | Needs a broken part and its spare. |
 | `{ type: 'scan' }` | 1 | Needs 5 charges; M1 auto-resolve. |
-| `{ type: 'salvage', result? }` | 1 | Salvage Run. No `result` = exactly `scan` (auto-resolve). With a `SalvageResult`: needs >= 1 charge, see "Mini-games". |
+| `{ type: 'salvage', result?, skipped? }` | 1 | Salvage Run. No `result` = exactly `scan` (auto-resolve). With a `SalvageResult`: needs >= 1 charge, see "Mini-games". `skipped: true` (needs >= 1 charge) = the skip penalty: logs `info/skipped`, then scan with d100 - 10 (min 1); under 5 charges it spends them all and finds nothing. |
 | `{ type: 'cross', method: 'thread' \| 'shields' \| 'tug' \| 'pilot', result? }` | 0 / pilot n | Resolves the pending crossing (hazards.md). Pilot: first call pays 10 cr and runs the wait days as ticks (stops early on a death; call again to resume, no second fee), then resolves. `result` (thread only): a `ThreadingResult` at the five hazards, a `FlareResult` at the Flare Belt ("Ride the solar wind" keeps method `thread`); without it the M2 statistical roll runs unchanged. |
 | `{ type: 'route', via: 'oort' \| 'direct' }` | 0 | Only while parked at Titan Refinery (10); changeable until departing. |
 | `{ type: 'buy', item, packs }` | 0 | Road stations only (Independence keeps `buy()`). Limits/caps on holdings; never partial; credits never negative. |
@@ -123,8 +123,9 @@ result on a method other than thread, or the wrong kind for the place (`salvageR
   `damage` (66-85) / `radiation` (86-100), or `crash` (5: a present crew dies, cause `hazard`; rations/suits/charges
   lose floor(50%); one of each spare held; hull breaks).
 - `runPolicy` never sends a result, so its outputs are unchanged (pinned by a 50-seed fixture in `minigames.test.ts`).
-- Not in the sim yet: skip-with-penalty variants (scan d100 - 10, thread `T + 10`, Flare incident +10) and the
-  `info/skipped` log line; scenes need them before Skip ships.
+- Skip with penalty: salvage is in (`{ type: 'salvage', skipped: true }`, `MINIGAME_SCENE.skipPenalty`); thread `T + 10`
+  and Flare incident +10 are not yet (the Threading / Flare cards add `skipped` to `cross`, then map it in
+  `src/minigames/outcome.ts`).
 
 ## Route (hazards.md "Route branch")
 `state.route` (`'oort'` default). Direct skips waypoint 12 (next after 11 is 13; total 1,926 Mk; Heliopause +10).
@@ -141,15 +142,20 @@ Map data: `routeWaypoints(route)` returns the active waypoint list with route-co
 For e2e tests (src/game/contract.ts); keep stable.
 - `?seed=<text|digits>`: digits are used as the number, other text is hashed with `seedFromString`. No param = random 6-char seed, shown on the title.
 - `window.__PROXIMA__ = { game, version, seed, state }`; `state` is a getter for the live `GameState` (null on the title/setup).
-- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Hazard Station Death Arrival`, set in each scene's create().
+- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Hazard Station Death Arrival Salvage` (M3 adds `Threading Flare`), set in each scene's create().
 - `body[data-modal="1"]` while a modal or number prompt is open; `body[data-busy="1"]` while a Travel day is animating (input ignored).
 - In the store, `state` updates live as quantities change (status stays `store` until "Leave the store" confirms `depart`).
 - Keys are read from `window` (no canvas focus needed). Keys pressed during a scene change can be lost: wait for `data-scene` first.
-- M3 (minigames.md; **scene developer implements**, not the sim): `createGame` must receive `seed: __PROXIMA__.seed`
-  so `state.seed` is set; `body[data-scene]` adds `Salvage Threading Flare`; `body[data-paused="1"]` while paused;
-  `window.__PROXIMA__.minigame` is `null` outside the scenes, else `{ kind, elapsed, result? }` (`elapsed` = fixed-step play
-  seconds excluding countdown/pause; `result` set when the run ends, before the panel closes); while a run is live
-  `finishNow()` ends it as if time ran out, and `finishWith(result)` (test builds / `?debug=1` only) ends it with that
-  result. Both go through `resultError` and the same intent as normal play. Options flag `autoResolveMiniGames`
-  (`localStorage['proxima.options']`, `?minigames=auto`) dispatches the intents without a result.
+- Mini-games (src/minigames, implemented for Salvage): SetupScene passes `seed: __PROXIMA__.seed` to `createGame`
+  (`state.seed`). While a mini-game scene runs: `body[data-scene]` = its key and `body[data-minigame]` = its kind
+  (`salvage`); `body[data-paused="1"]` while the pause menu or the skip confirm is open. `window.__PROXIMA__.minigame` is
+  `null` outside the scenes, else `{ kind, elapsed, result?, skipped?, finishNow(), finishWith(result) }`: `elapsed` =
+  fixed-step play seconds (excludes the instruction screen, countdown and pause); `result` is set when the run ends (the
+  intent is already applied while the result panel shows, so `state.day` has advanced); `finishNow()` runs the remaining
+  steps instantly with no input (works from the instruction screen too); `finishWith(result)` (`?debug=1` or dev builds)
+  checks `resultError`, then ends with that result; it returns the refusal string or null. Both dispatch through the
+  same intent as play. Flow: instruction screen (Space / Enter / tap) -> 1.5 s countdown -> play -> result panel
+  (Enter / Space / tap, ignored for 0.4 s) -> back to Travel, which routes the day's entries like any other day.
+  Esc (or the `II` icon) pauses: Resume / Skip (penalty) / Controls; Skip asks to confirm (1 Keep playing, 2 Skip it),
+  then dispatches `{ type: 'salvage', skipped: true }` and returns to Travel.
 - Beacon epitaphs: `localStorage['proxima.beacons']` = `[{ segment, captain, name, text, date }]` (beacons.md; read with `parseBeacons`).

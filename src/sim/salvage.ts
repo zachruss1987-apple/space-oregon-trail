@@ -26,12 +26,23 @@ export function canScan(state: GameState): boolean {
   return state.status === 'traveling' && state.supplies.charges >= SALVAGE.charges;
 }
 
-/** Resolve one scan (consumes 5 charges). Returns rations gained. */
-export function resolveScan(state: GameState, rng: Rng, out: LogEntry[]): number {
-  state.supplies.charges -= SALVAGE.charges;
+/**
+ * Resolve one scan (consumes 5 charges). Returns rations gained. `penalty` > 0 is a skipped mini-game (minigames.md):
+ * logs `info/skipped` first, rolls d100 - penalty (min 1), and with fewer than 5 charges spends them all and finds nothing.
+ */
+export function resolveScan(state: GameState, rng: Rng, out: LogEntry[], penalty = 0): number {
+  if (penalty > 0) {
+    pushLog(state, out, 'info', resolveText(rng, 'events', 'info.skipped', {}, 'The run was abandoned. It cost extra.'), 'skipped');
+  }
+  const short = state.supplies.charges < SALVAGE.charges;
+  state.supplies.charges = Math.max(0, state.supplies.charges - SALVAGE.charges);
   state.scansThisSegment += 1;
+  if (penalty > 0 && short) {
+    pushLog(state, out, 'scan', resolveText(rng, 'events', 'scan.nothing', {}, 'The drones found nothing worth hauling.'), 'nothing');
+    return 0;
+  }
   const halve = state.scansThisSegment >= SALVAGE.halveFromScan;
-  const d100 = rng.int(1, 100);
+  const d100 = Math.max(1, rng.int(1, 100) - penalty);
   let rations = 0;
   if (d100 <= SALVAGE.nothingMax) {
     pushLog(state, out, 'scan', resolveText(rng, 'events', 'scan.nothing', {}, 'The drones found nothing worth hauling.'), 'nothing');

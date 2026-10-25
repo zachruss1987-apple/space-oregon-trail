@@ -1,5 +1,5 @@
 /** Player intents → state changes (Travel, Hazard and Station menus). Refusals return `error` and consume no day. */
-import { CROSSING, FINAL_WAYPOINT, PART_NAMES, RATIONS, REST, THRUST, WAYPOINTS } from '@/content';
+import { CROSSING, FINAL_WAYPOINT, MINIGAME_SCENE, PART_NAMES, RATIONS, REST, THRUST, WAYPOINTS } from '@/content';
 import { blockedText, crossBlocker, finishCrossing } from './crossing';
 import { applyFlare, applyThreading, crossResultBlocker } from './minicross';
 import { salvageResultBlocker } from './minigame';
@@ -48,6 +48,7 @@ export function intentBlocker(state: GameState, intent: Intent): string | null {
       return canScan(state) ? null : 'No drone charges.';
     case 'salvage':
       if (state.arrivedAt === FINAL_WAYPOINT) return 'Nothing left to salvage.';
+      if (intent.skipped) return state.supplies.charges >= 1 ? null : 'No drone charges.';
       if (intent.result === undefined) return canScan(state) ? null : 'No drone charges.';
       return salvageResultBlocker(state, intent.result);
     case 'cross':
@@ -128,7 +129,8 @@ export function applyAction(state: GameState, intent: Intent, rng: Rng): StepRes
       tickInPlace(s, rng, { kind: 'scan' }, out);
       break;
     case 'salvage':
-      tickInPlace(s, rng, intent.result ? { kind: 'salvage', result: intent.result } : { kind: 'scan' }, out);
+      if (intent.skipped) tickInPlace(s, rng, { kind: 'scan', penalty: MINIGAME_SCENE.skipPenalty }, out);
+      else tickInPlace(s, rng, intent.result ? { kind: 'salvage', result: intent.result } : { kind: 'scan' }, out);
       break;
     case 'cross':
       if (intent.result) crossWithResult(s, intent.result, rng, out);

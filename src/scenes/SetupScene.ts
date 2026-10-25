@@ -116,7 +116,7 @@ export class SetupScene extends BaseScene {
 
   private startRun(): void {
     const { profession, names, window } = session.draft;
-    session.state = createGame({ profession, crewNames: names, window }, session.rng);
+    session.state = createGame({ profession, crewNames: names, window, seed: session.seedLabel }, session.rng);
     this.go('Store');
   }
 

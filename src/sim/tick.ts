@@ -43,7 +43,7 @@ function spendDay(s: GameState, rng: Rng, day: DayKind, out: LogEntry[]): number
       pushLog(s, out, 'rest', resolveText(rng, 'events', 'rest', {}, 'The crew rests.'), 'rest');
       return 0;
     case 'scan':
-      resolveScan(s, rng, out);
+      resolveScan(s, rng, out, day.penalty ?? 0);
       return 0;
     case 'salvage':
       applySalvage(s, day.result, rng, out);

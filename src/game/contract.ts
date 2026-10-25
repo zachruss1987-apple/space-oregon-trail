@@ -1,5 +1,20 @@
 /** The test/debug surface on window (see src/sim/README.md "UI contract"). */
-import type { GameState } from '@/sim';
+import type { GameState, MiniGameKind, MiniGameResult } from '@/sim';
+
+/** `window.__PROXIMA__.minigame` while a mini-game scene runs (minigames.md "Debug hooks"). */
+export interface MiniGameDebug {
+  kind: MiniGameKind;
+  /** Fixed-step play seconds (excludes countdown and pause). */
+  readonly elapsed: number;
+  /** Set when the run ends, before the result panel closes. */
+  result?: MiniGameResult;
+  /** Set when the run was skipped (penalty path). */
+  skipped?: boolean;
+  /** End the run now as if time ran out (remaining steps run instantly, no input). */
+  finishNow(): void;
+  /** Test builds / `?debug=1`: end with this result (validated like normal play). Returns the refusal, or null. */
+  finishWith(result: unknown): string | null;
+}
 
 /** `window.__PROXIMA__`. */
 export interface ProximaDebug {
@@ -11,6 +26,8 @@ export interface ProximaDebug {
   seed: string;
   /** Current GameState, or null before a run starts. */
   readonly state: GameState | null;
+  /** Live mini-game hooks, or null outside the mini-game scenes. */
+  minigame: MiniGameDebug | null;
 }
 
 declare global {
@@ -26,10 +43,15 @@ export function markScene(key: string): void {
   markFlag('modal', false);
   markFlag('busy', false);
   markFlag('beacon', false);
+  markFlag('paused', false);
+  delete document.body.dataset['minigame'];
 }
 
-/** Flag UI states e2e tests wait on: `data-modal="1"` while a modal is open, `data-busy="1"` while a day animates. */
-export function markFlag(name: 'modal' | 'busy' | 'beacon', on: boolean): void {
+/**
+ * Flag UI states e2e tests wait on: `data-modal="1"` while a modal is open, `data-busy="1"` while a day animates,
+ * `data-paused="1"` while a mini-game is paused.
+ */
+export function markFlag(name: 'modal' | 'busy' | 'beacon' | 'paused', on: boolean): void {
   if (on) document.body.dataset[name] = '1';
   else delete document.body.dataset[name];
 }

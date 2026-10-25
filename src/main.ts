@@ -33,6 +33,7 @@ window.__PROXIMA__ = {
   get state() {
     return session.state;
   },
+  minigame: null,
 };
 
 // Keys are read from window, so they work on load; still give the canvas focus on load and first click.

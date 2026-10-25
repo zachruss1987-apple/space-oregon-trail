@@ -40,11 +40,12 @@ export function statusRows(s: GameState): StatusCell[][] {
   ];
 }
 
-/** The eight canonical actions, with disabled reasons from the sim. */
+/** The eight canonical actions, with disabled reasons from the sim (Scan launches the Salvage Run: needs 1 charge). */
 export function actionItems(s: GameState): MenuItem[] {
   const labels = list('travel.menu');
   const repairReason = brokenParts(s).length === 0 ? intentBlocker(s, { type: 'repair', part: 'hull' }) : null;
-  const disabled: (string | null)[] = [null, null, null, null, null, null, repairReason, intentBlocker(s, { type: 'scan' })];
+  const scan: Intent = { type: 'salvage', skipped: true };
+  const disabled: (string | null)[] = [null, null, null, null, null, null, repairReason, intentBlocker(s, scan)];
   return labels.map((label, i) => ({ label, disabled: disabled[i] ?? null }));
 }
 
