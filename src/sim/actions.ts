@@ -52,6 +52,7 @@ export function intentBlocker(state: GameState, intent: Intent): string | null {
       if (intent.result === undefined) return canScan(state) ? null : 'No drone charges.';
       return salvageResultBlocker(state, intent.result);
     case 'cross':
+      if (intent.skipped && (intent.method !== 'thread' || intent.result !== undefined)) return 'Only Thread it is a mini-game.';
       return crossBlocker(state, intent.method) ?? (intent.result === undefined ? null : crossResultBlocker(state, intent.method, intent.result));
     case 'route':
       return routeBlocker(state);
@@ -87,6 +88,12 @@ function crossWithResult(s: GameState, result: ThreadingResult | FlareResult, rn
   if (result.kind === 'flare') applyFlare(s, result, rng, out);
   else applyThreading(s, result, rng, out);
   s.crossing = null;
+}
+
+/** `cross thread` skipped from a mini-game: log `info/skipped`, then the statistical thread with incident +10. */
+function crossSkipped(s: GameState, rng: Rng, out: LogEntry[]): void {
+  pushLog(s, out, 'info', resolveText(rng, 'events', 'info.skipped', {}, 'The run was abandoned. It cost extra.'), 'skipped');
+  finishCrossing(s, 'thread', rng, out, MINIGAME_SCENE.skipPenalty);
 }
 
 /** Apply a player intent. Day-consuming intents run ordinary ticks (rest and pilot waits stop early on a death). */
@@ -134,6 +141,7 @@ export function applyAction(state: GameState, intent: Intent, rng: Rng): StepRes
       break;
     case 'cross':
       if (intent.result) crossWithResult(s, intent.result, rng, out);
+      else if (intent.skipped) crossSkipped(s, rng, out);
       else if (intent.method === 'pilot') crossWithPilot(s, rng, out);
       else finishCrossing(s, intent.method, rng, out);
       if (s.crossing === null && s.status === 'traveling') gameOverCheck(s, rng, out);

@@ -1,6 +1,6 @@
 /** M2 hazard crossings (hazards.md): today's density, the four methods, availability, risk words, resolution. */
 import { CROSSING, HAZARD, PART_NAMES, ROUTE, WAYPOINTS, type Waypoint } from '@/content';
-import { incidentChance, rollCrossing, resolveCrossing, type CrossingOutcome } from './hazard';
+import { incidentChance, rollCrossing, resolveCrossing, severityBonus, type CrossingOutcome } from './hazard';
 import type { Rng } from './rng';
 import { resolveText, textLine } from './text';
 import type { CrossMethod, Crossing, GameState, LogEntry } from './types';
@@ -157,8 +157,10 @@ export function crossingOptions(state: GameState): CrossOption[] {
 /**
  * Resolve the pending crossing with `method` (mutates; assumes crossBlocker is null and, for the pilot, the wait is
  * over). Logs `crossing` (method), `hazard` (outcome), then `hazard` `pump-strain` (shields, 15%). Clears `crossing`.
+ * `incidentPenalty` (thread only, a skipped mini-game) adds to the incident chance: `min(95, T + p)` at the five
+ * hazards, M1 roll + p at the Flare Belt. 0 keeps the M2 draws exactly.
  */
-export function finishCrossing(s: GameState, method: CrossMethod, rng: Rng, out: LogEntry[]): CrossingOutcome {
+export function finishCrossing(s: GameState, method: CrossMethod, rng: Rng, out: LogEntry[], incidentPenalty = 0): CrossingOutcome {
   const c = s.crossing!;
   const w = WAYPOINTS[c.waypoint]!;
   const chance = crossChance(s, method)!;
@@ -169,7 +171,13 @@ export function finishCrossing(s: GameState, method: CrossMethod, rng: Rng, out:
   switch (method) {
     case 'thread':
       narrate('hazard.thread', 'thread', 'You thread the gap.');
-      outcome = isFlareBelt(w) ? resolveCrossing(s, c.waypoint, rng, out) : rollCrossing(s, chance, densityBonus, rng, out);
+      if (incidentPenalty === 0) {
+        outcome = isFlareBelt(w) ? resolveCrossing(s, c.waypoint, rng, out) : rollCrossing(s, chance, densityBonus, rng, out);
+      } else if (isFlareBelt(w)) {
+        outcome = rollCrossing(s, Math.min(100, chance + incidentPenalty), severityBonus(s, w), rng, out);
+      } else {
+        outcome = rollCrossing(s, Math.min(CROSSING.maxIncident, chance + incidentPenalty), densityBonus, rng, out);
+      }
       break;
     case 'shields':
       narrate('hazard.shields', 'shields', 'Shields up. You push through.');

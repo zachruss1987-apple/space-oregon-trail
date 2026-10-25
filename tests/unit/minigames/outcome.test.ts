@@ -16,10 +16,11 @@ describe('outcomeIntent', () => {
     expect(outcomeIntent('salvage', { auto: true })).toEqual({ type: 'salvage' });
   });
 
-  it('threading / flare: cross thread with or without a result; skip waits for the sim variant', () => {
+  it('threading / flare: cross thread with a result, skipped (incident + 10), or bare (auto-resolve)', () => {
     expect(outcomeIntent('threading', { result: { kind: 'threading', hits: 1, bonus: null } })).toMatchObject({ type: 'cross', method: 'thread' });
     expect(outcomeIntent('flare', { auto: true })).toEqual({ type: 'cross', method: 'thread' });
-    expect(() => outcomeIntent('flare', { skipped: true })).toThrow();
+    expect(outcomeIntent('flare', { skipped: true })).toEqual({ type: 'cross', method: 'thread', skipped: true });
+    expect(outcomeIntent('threading', { skipped: true })).toEqual({ type: 'cross', method: 'thread', skipped: true });
   });
 });
 

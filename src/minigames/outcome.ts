@@ -10,8 +10,8 @@ export type MiniGameOutcome = { result: MiniGameResult } | { skipped: true } | {
 
 /**
  * The intent for an outcome. Salvage: `salvage` with result / `skipped` (scan d100 - 10) / bare (the 5-charge scan).
- * Threading and Flare dispatch `cross thread` (with `result`, or bare for auto-resolve); their skip variants need sim
- * support first (T-029/T-031: add `skipped` to the cross intent, then map it here).
+ * Threading and Flare dispatch `cross thread` with `result` / `skipped` (statistical roll, incident + 10) / bare (the
+ * statistical roll).
  */
 export function outcomeIntent(kind: MiniGameKind, outcome: MiniGameOutcome): Intent {
   if (kind === 'salvage') {
@@ -21,7 +21,7 @@ export function outcomeIntent(kind: MiniGameKind, outcome: MiniGameOutcome): Int
   if ('result' in outcome) {
     return { type: 'cross', method: 'thread', result: outcome.result as Extract<MiniGameResult, { kind: 'threading' | 'flare' }> };
   }
-  if ('skipped' in outcome) throw new Error(`Skip for ${kind} needs the sim's skip variant (minigames.md).`);
+  if ('skipped' in outcome) return { type: 'cross', method: 'thread', skipped: true };
   return { type: 'cross', method: 'thread' };
 }
 

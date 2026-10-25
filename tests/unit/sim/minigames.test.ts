@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { WAYPOINTS } from '@/content';
 import { applyAction, applyFlareResult, applySalvageResult, applyThreadingResult, intentBlocker } from '@/sim/actions';
+import { crossChance } from '@/sim/crossing';
 import { createGame } from '@/sim/game';
 import { applySalvage, haulUnits, minigameSeed, partsPhrase, resultError } from '@/sim/minigame';
 import { runPolicy } from '@/sim/policy';
@@ -268,6 +269,45 @@ describe('Flare Belt application', () => {
     const s = at();
     for (const c of s.crew.slice(1)) c.alive = false;
     expect(applyFlareResult(s, flare(5), createRng(1)).state.status).toBe('dead');
+  });
+});
+
+describe('cross thread skipped (minigames.md "Skip with penalty")', () => {
+  const skip = { type: 'cross', method: 'thread', skipped: true } as const;
+  const plain = { type: 'cross', method: 'thread' } as const;
+
+  it('logs info/skipped, then the statistical thread with incident T + 10; no day', () => {
+    const s = pending(BELT, 4);
+    const T = crossChance(s, 'thread')!;
+    const u = (T + 5) / 100; // inside the +10 band: an incident only when skipped
+    // draws: skipped text, thread narration, incident, severity (0.5 -> 51 + 5: cargo), cargo picks, text
+    const r = applyAction(s, skip, scriptedRng([0, 0, u, 0.5, 0, 0, 0]));
+    expect(r.error).toBeUndefined();
+    expect(ids(r.entries)).toEqual(['info:skipped', 'crossing:thread', 'hazard:cargo']);
+    expect(r.state).toMatchObject({ day: s.day, crossing: null, justCrossedHazard: true });
+    expect(ids(applyAction(s, plain, scriptedRng([0, u, 0])).entries, 'hazard')).toEqual(['clear']);
+  });
+
+  it('the skipped incident is exactly min(95, T + 10) (boundary draws)', () => {
+    const s = pending(BELT, 5, { broken: { hull: true, pump: false, gyro: true }, supplies: { drives: 1 } });
+    const p = Math.min(95, crossChance(s, 'thread')! + 10) / 100;
+    expect(ids(applyAction(s, skip, scriptedRng([0, 0, p, 0])).entries, 'hazard')).toEqual(['clear']);
+    expect(ids(applyAction(s, skip, scriptedRng([0, 0, p - 0.005, 0.01, 0])).entries, 'hazard')).toEqual(['scraped']);
+  });
+
+  it('Flare Belt: the M1 roll with incident + 10 (45 -> 55), severity unchanged', () => {
+    const s = pending(FLARE, 5);
+    expect(ids(applyAction(s, skip, scriptedRng([0, 0, 0.5, 0.01, 0])).entries, 'hazard')).toEqual(['scraped']);
+    expect(ids(applyAction(s, plain, scriptedRng([0, 0.5, 0])).entries, 'hazard')).toEqual(['clear']);
+    expect(applyAction(s, skip, createRng(3)).state.rodeTheWind).toBe(false);
+  });
+
+  it('refused on other methods, with a result, or when the ship cannot move', () => {
+    const s = pending(BELT, 4);
+    expect(intentBlocker(s, { type: 'cross', method: 'shields', skipped: true })).toBeTruthy();
+    expect(intentBlocker(s, { type: 'cross', method: 'thread', skipped: true, result: thread(0) })).toBeTruthy();
+    expect(intentBlocker(pending(BELT, 4, { broken: { hull: false, pump: true, gyro: false } }), skip)).toBeTruthy();
+    expect(intentBlocker(s, skip)).toBeNull();
   });
 });
 

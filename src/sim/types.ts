@@ -249,7 +249,7 @@ export type Intent =
   | { type: 'repair'; part: PartId }
   | { type: 'scan' }
   | { type: 'salvage'; result?: SalvageResult; skipped?: boolean }
-  | { type: 'cross'; method: CrossMethod; result?: ThreadingResult | FlareResult }
+  | { type: 'cross'; method: CrossMethod; result?: ThreadingResult | FlareResult; /** Skipped mini-game (thread only): statistical roll, incident +10. */ skipped?: boolean }
   | { type: 'route'; via: RouteId }
   | { type: 'buy'; item: SupplyKey; packs: number }
   | { type: 'sell'; item: SupplyKey; packs: number }
