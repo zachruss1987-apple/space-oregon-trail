@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T02:12:56.568Z",
+  "updated": "2026-10-25T02:20:43.039Z",
   "milestones": [
     {
       "id": "M0",
@@ -10,12 +10,12 @@
     {
       "id": "M1",
       "title": "Core loop",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "M2",
       "title": "Stations and hazards",
-      "status": "planned"
+      "status": "active"
     },
     {
       "id": "M3",
@@ -513,7 +513,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-017",
@@ -553,7 +553,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-018",
@@ -593,7 +593,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-019",
@@ -633,7 +633,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-020",
@@ -641,18 +641,39 @@
       "desc": "scripts/find-seed.mjs to discover seeds; tests/e2e/seeds.ts; screenshots to test-results/screens.",
       "milestone": "M1",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "tester",
+      "issue": 21,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:12:56.567Z",
+      "updated": "2026-10-25T02:20:42.742Z",
       "notes": [
         {
           "ts": "2026-10-25T02:12:56.568Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:13:58.118Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:19:56.247Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:19:56.691Z",
+          "by": "tester",
+          "text": "e2e: 7 tests pass in ~50s (journey 2, screens 2, hazard 1, flow 1, smoke 1); 18 screenshots in test-results/screens; test:all green"
+        },
+        {
+          "ts": "2026-10-25T02:20:42.742Z",
+          "by": "tester",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-021",
@@ -673,12 +694,18 @@
       "desc": "Price markup per station, buy-back, NPC trade offer generator, four crossing options with outcome tables.",
       "milestone": "M2",
       "role": "designer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:20:42.985Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:20:42.986Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-023",
@@ -999,7 +1026,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-046",
@@ -1007,12 +1034,18 @@
       "desc": "Replaces placeholder markups in src/content/rules.ts (Mars 1.25, +0.25 per station).",
       "milestone": "M2",
       "role": "designer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-25T01:50:31.196Z",
-      "updated": "2026-10-25T01:50:31.197Z",
-      "notes": []
+      "updated": "2026-10-25T02:20:43.039Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:20:43.039Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-047",
@@ -1022,7 +1055,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 22,
       "created": "2026-10-25T02:10:20.280Z",
       "updated": "2026-10-25T02:12:11.281Z",
       "notes": [
@@ -1046,7 +1079,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-048",
@@ -1059,6 +1093,19 @@
       "issue": null,
       "created": "2026-10-25T02:10:20.343Z",
       "updated": "2026-10-25T02:10:20.344Z",
+      "notes": []
+    },
+    {
+      "id": "T-049",
+      "title": "UI polish from M1 playtest: hazard modal repeats blurb and types slowly; auto-travel has no on-screen indicator; hide zero-value bonus lines on score",
+      "desc": "Tester notes from T-020. Designer may adjust ui.md first.",
+      "milestone": "M2",
+      "role": "developer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T02:20:42.796Z",
+      "updated": "2026-10-25T02:20:42.797Z",
       "notes": []
     }
   ]
