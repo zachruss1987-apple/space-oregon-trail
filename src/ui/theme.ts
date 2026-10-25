@@ -46,3 +46,6 @@ export function money(n: number): string {
   const whole = Math.abs(n - Math.round(n)) < 0.005;
   return n.toLocaleString('en-US', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 });
 }
+
+/** CSS font for DOM overlays (the save-string TextArea): the only non-bitmap font in the game, allowed by name in the font scan. */
+export const DOM_FONT = '12px monospace';

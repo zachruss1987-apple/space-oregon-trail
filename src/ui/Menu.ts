@@ -5,7 +5,7 @@
  */
 import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
-import { announce, pushMenu, removeMenu, syncMenu, type A11yMenu } from '@/game/a11y';
+import { announce, DISABLED_MARK, pushMenu, removeMenu, syncMenu, type A11yMenu } from '@/game/a11y';
 import { session } from '@/game/session';
 import { cursor } from './chrome';
 import { isBack, isConfirm, isDown, isUp, type KeyHandler } from './keys';
@@ -38,6 +38,13 @@ export interface MenuOptions {
   scale?: number;
   /** Silence the select sound (the caller plays its own). */
   quiet?: boolean;
+}
+
+/** Row a number key picks: 1-9 -> rows 1-9, 0 -> row 10, Shift+1 / Shift+2 -> rows 11 / 12 (by physical key, any layout). */
+export function numberRow(e: Pick<KeyboardEvent, 'key' | 'code' | 'shiftKey'>): number | null {
+  if (e.shiftKey) return e.code === 'Digit1' ? 10 : e.code === 'Digit2' ? 11 : null;
+  if (e.key === '0') return 9;
+  return /^[1-9]$/.test(e.key) ? Number(e.key) - 1 : null;
 }
 
 export class Menu implements KeyHandler {
@@ -95,9 +102,9 @@ export class Menu implements KeyHandler {
         audio().sfx('ui.back');
         this.opts.onBack();
       }
-    } else if (/^[1-9]$/.test(e.key)) {
-      const i = Number(e.key) - 1;
-      if (i < this.items.length) {
+    } else {
+      const i = numberRow(e);
+      if (i !== null && i < this.items.length) {
         // A disabled row only explains itself; the cursor stays where it was.
         if (!this.items[i]?.disabled) this.setCursor(i, true);
         this.choose(i);
@@ -165,7 +172,7 @@ export class Menu implements KeyHandler {
       const on = i === this.cursor;
       const num = this.opts.numbered ? `${i + 1}. ` : '';
       const color = item.disabled ? COLORS.dim : on ? COLORS.bright : COLORS.text;
-      this.rows[i]?.setText(`  ${num}${item.label}`).setTint(color);
+      this.rows[i]?.setText(`  ${num}${item.disabled ? DISABLED_MARK : ''}${item.label}`).setTint(color);
     });
     const row = this.rows[this.cursor];
     this.mark.setVisible(row !== undefined);

@@ -4,6 +4,7 @@
  * No day passes; Enter/Esc returns.
  */
 import { ROUTE, WAYPOINTS, type Waypoint } from '@/content';
+import { announceScreen } from '@/game/a11y';
 import { session } from '@/game/session';
 import { isSkipped, remainingInSegment, routeWaypoints, totalMk, type GameState } from '@/sim';
 import { t } from '@/ui/copy';
@@ -66,12 +67,15 @@ export class MapScene extends BaseScene {
     });
     const table = new Table(this, 16, 52, [{ width: 2, right: true }, { width: 24 }, { width: 8 }, { width: 5, right: true }, { width: 12 }], 16);
     table.setRows(rows, ['#', t('map.col.waypoint'), t('map.col.type'), t('status.units.mk'), '']);
+    const spoken = [t('map.title'), dist, ...rows.map((r) => r.cells.filter(Boolean).join(', '))];
     if (!pastBranch(s)) {
       const line = t('map.branch', {
         oortLabel: t('route.oortLabel'), oort: fmt(totalMk('oort')), directLabel: t('route.directLabel'), direct: fmt(totalMk('direct')),
       });
+      spoken.push(line);
       addText(this, 16, table.bottom + 6, line, { color: COLORS.dim, wrap: 608 });
     }
+    announceScreen(spoken);
     this.router.push({
       onKey: (e) => {
         if ((e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') && !e.repeat) this.go('Travel');

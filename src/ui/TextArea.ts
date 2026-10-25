@@ -5,6 +5,8 @@
  */
 import type Phaser from 'phaser';
 import { GAME_WIDTH } from '@/config';
+import { activePalette } from '@/gfx/palette';
+import { DOM_FONT } from './theme';
 
 export interface TextAreaOptions {
   /** Element id (e2e tests find the field by it). */
@@ -28,10 +30,11 @@ export class TextArea {
     if (opts.placeholder) el.placeholder = opts.placeholder;
     el.spellcheck = false;
     el.setAttribute('autocomplete', 'off');
+    const pal = activePalette();
     Object.assign(el.style, {
       position: 'fixed', zIndex: '10', boxSizing: 'border-box', margin: '0', padding: '6px', resize: 'none',
-      background: '#000', color: '#7dff9a', border: '1px solid #3a7a4a', outline: 'none',
-      font: '12px monospace', wordBreak: 'break-all', whiteSpace: 'pre-wrap',
+      background: pal.black, color: pal.phosphor, border: `1px solid ${pal.phosphor}`, outline: 'none', caretColor: pal.phosphorHi,
+      font: DOM_FONT, wordBreak: 'break-all', whiteSpace: 'pre-wrap',
     } satisfies Partial<CSSStyleDeclaration>);
     document.body.appendChild(el);
     this.el = el;

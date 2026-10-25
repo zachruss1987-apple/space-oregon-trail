@@ -124,3 +124,21 @@ test('M toggles mute in Travel but not on the Title or while typing a name', asy
   await expect.poll(() => muted(page)).toBe(false);
   await expect(live(page)).toContainText('Sound on.');
 });
+
+test('Guide page text is read into the log region', async ({ page }) => {
+  await gotoScene(page, 'Title');
+  await page.keyboard.press('2');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Guide');
+  await expect(live(page).getByText(/Page 1 of|1 of \d+/).first()).toBeVisible();
+});
+
+test('Options row 10 is reachable with the 0 key', async ({ page }) => {
+  await toOptions(page);
+  await page.keyboard.press('0'); // row 10 (Export save): disabled with no journey, so it explains itself
+  await expect(live(page).getByText('No journey in progress to export.')).toBeVisible();
+});
+
+test('a disabled Travel row carries the x marker in the listbox', async ({ page }) => {
+  await toTravel(page, 'a11y-mark');
+  await expect(listbox(page).getByRole('option', { name: /x Attempt repair.*unavailable/ })).toHaveAttribute('aria-disabled', 'true');
+});

@@ -1,4 +1,5 @@
 /** The Top Ten (scoring.md "High scores"): stored rows merged with the writer's defaults; Esc/Enter back to Title. */
+import { announceScreen } from '@/game/a11y';
 import { readHighScores } from '@/game/saveStore';
 import { t } from '@/ui/copy';
 import { isBack, isConfirm } from '@/ui/keys';
@@ -31,6 +32,7 @@ export class TopTenScene extends BaseScene {
       const mine = i === data?.highlight;
       addText(this, mine ? LEFT - 16 : LEFT, TOP + i * ROW_H, mine ? `> ${line}` : line, { color: mine ? COLORS.bright : COLORS.text });
     });
+    announceScreen([t('topTen.title'), ...(lines.length ? lines : [t('topTen.empty')])]);
     addText(this, LEFT, 372, t('common.back'), { color: COLORS.dim });
     this.router.set({
       onKey: (e) => {

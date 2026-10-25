@@ -114,9 +114,12 @@ export function liveLines(): string[] {
   return out;
 }
 
+/** Text marker before a disabled row's label (in addition to the dim color), on the canvas and in the listbox. */
+export const DISABLED_MARK = 'x ';
+
 /** Option text: number, label, and the reason when disabled. */
 export function optionText(item: A11yItem, i: number): string {
-  const base = `${i + 1}. ${item.label.trim()}`;
+  const base = `${i + 1}. ${item.disabled ? DISABLED_MARK : ''}${item.label.trim()}`;
   return item.disabled ? `${base} (unavailable: ${item.disabled})` : base;
 }
 
@@ -128,6 +131,12 @@ function top(): A11yMenu | undefined {
     menus.splice(i, 1);
   }
   return undefined;
+}
+
+/** Speak a screen's visible lines as one batched live-region message (one `<p>`), for read-aloud on open / page change. */
+export function announceScreen(lines: readonly string[]): void {
+  const text = lines.map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean).join('. ');
+  if (text) announce(text);
 }
 
 /** Re-render the listbox from the topmost live menu (empty when there is none). */

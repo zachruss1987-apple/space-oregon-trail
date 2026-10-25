@@ -650,10 +650,11 @@
     "title": "CONTROLS",
     "lines": [
       "Arrows or WASD (Tab, Shift+Tab): move the cursor.",
-      "Enter or Space: choose. Number keys: pick a row at once.",
+      "Enter or Space: choose. Number keys: pick a row.",
+      "Rows 10-12: 0, Shift+1, Shift+2. Disabled rows start x.",
       "Esc: back, cancel, or pause a mini-game.",
-      "Left / Right: change an Options value or turn a Guide page.",
-      "Travel: hold Enter or press T to keep going; any key stops.",
+      "Left / Right: change an Options value or Guide page.",
+      "Travel: hold Enter or T to keep going; any key stops.",
       "Typing a name: letters, Backspace, Enter. Tab: random names.",
       "M: sound on or off (not on the title or while typing).",
       "?: this list. Nothing outside the mini-games is timed."

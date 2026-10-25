@@ -35,7 +35,7 @@ describe('text contrast >= 4.5:1', () => {
     expect(COLORS.dim).toBe(hexToNumber(STANDARD.phosphorDim));
   });
 
-  it('the save-string TextArea (#7dff9a on #000) passes too', () => {
-    expect(contrast(0x7dff9a, 0x000000)).toBeGreaterThanOrEqual(4.5);
+  it('the save-string TextArea (phosphor on black) passes too', () => {
+    expect(contrast(hexToNumber(STANDARD.phosphor), hexToNumber(STANDARD.black))).toBeGreaterThanOrEqual(4.5);
   });
 });

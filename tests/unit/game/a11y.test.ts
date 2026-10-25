@@ -110,7 +110,7 @@ describe('a11y live region and listbox', () => {
     pushMenu(m);
     expect(options()).toEqual([
       { text: '1. Continue on the Lane', selected: 'false', disabled: null, role: 'option' },
-      { text: '2. Scan for salvage (unavailable: Out of charges.)', selected: 'false', disabled: 'true', role: 'option' },
+      { text: '2. x Scan for salvage (unavailable: Out of charges.)', selected: 'false', disabled: 'true', role: 'option' },
       { text: '3. Rest', selected: 'true', disabled: null, role: 'option' },
     ]);
     expect(box().attrs.get('aria-activedescendant')).toBe(`${MENU_ID}-2`);
@@ -138,7 +138,7 @@ describe('a11y live region and listbox', () => {
 
   it('optionText formats enabled and disabled rows', () => {
     expect(optionText({ label: 'Options' }, 4)).toBe('5. Options');
-    expect(optionText({ label: 'Export save', disabled: 'No journey.' }, 9)).toBe('10. Export save (unavailable: No journey.)');
+    expect(optionText({ label: 'Export save', disabled: 'No journey.' }, 9)).toBe('10. x Export save (unavailable: No journey.)');
   });
 
   it('is a no-op without a document', () => {

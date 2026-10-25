@@ -80,7 +80,7 @@ On arriving at a hazard (M1): a `Modal` with the hazard description, then one li
 | Touch | Drag to steer, tap to fire (Salvage), pause icon top-right; no on-screen buttons needed. |
 
 ## Controls
-- Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items, `?` shows controls. Typing fields accept printable ASCII up to 12 chars.
+- Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items (1-9; `0` picks row 10, Shift+1 / Shift+2 rows 11 / 12, so Options rows 10-12 are reachable), disabled rows are dimmed and start with `x ` (also in the screen-reader listbox), `?` shows controls. Typing fields accept printable ASCII up to 12 chars.
 - Mouse/touch: click or tap any menu item; mini-games have on-screen controls on touch devices.
 - Every input path must be reachable by keyboard alone (tested in M5).
 

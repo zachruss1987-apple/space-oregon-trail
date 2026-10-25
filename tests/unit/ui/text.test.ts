@@ -44,16 +44,21 @@ describe('"No default Phaser text remains" (M4 acceptance)', () => {
   const scoped = ['src/scenes', 'src/ui', 'src/minigames'].flatMap((d) => files(d));
   it('scenes, ui and minigames create no Phaser Text objects, fonts or CSS font strings', () => {
     expect(scoped.length).toBeGreaterThan(10);
-    // T-038: TextArea.ts (save import/export DOM textarea) sets a CSS monospace font; see the palette bug card.
-    for (const f of scoped.filter((x) => !x.endsWith('TextArea.ts'))) {
+    for (const f of scoped) {
       const src = readFileSync(f, 'utf8');
-      for (const bad of ['add.text(', 'fontFamily', 'GameObjects.Text(', 'new Text(', 'setFontFamily', 'setFont(', 'px monospace', 'sans-serif', 'Courier'])
+      for (const bad of ['add.text(', 'fontFamily', 'GameObjects.Text(', 'new Text(', 'setFontFamily', 'setFont(', 'sans-serif', 'Courier'])
         expect(src.includes(bad), f + ' contains ' + bad).toBe(false);
     }
   });
+  it('no file but theme.ts names a CSS monospace font', () => {
+    for (const f of scoped.filter((x) => !x.endsWith('theme.ts'))) expect(readFileSync(f, 'utf8').includes('px monospace'), f).toBe(false);
+  });
+  it('the only CSS font is the DOM_FONT constant in theme.ts, used by TextArea', () => {
+    expect(readFileSync('src/ui/theme.ts', 'utf8')).toMatch(/DOM_FONT = '12px monospace'/);
+    expect(readFileSync('src/ui/TextArea.ts', 'utf8')).toContain('DOM_FONT');
+  });
   it('scenes, ui and minigames take colors from palette keys, not hex literals (art.md checklist)', () => {
-    // T-038: TextArea.ts styles its DOM input with off-palette hex (bug card filed); remove the exemption when fixed.
-    const offenders = scoped.filter((f) => !f.endsWith('TextArea.ts')).filter((f) => /['\"]#[0-9a-fA-F]{6}['\"]/.test(readFileSync(f, 'utf8')));
+    const offenders = scoped.filter((f) => /['\"]#[0-9a-fA-F]{6}['\"]/.test(readFileSync(f, 'utf8')));
     expect(offenders).toEqual([]);
   });
 });

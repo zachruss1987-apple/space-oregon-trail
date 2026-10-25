@@ -1,5 +1,6 @@
 /** Check supplies: full-screen hold and crew table (docs/design/ui.md). No day passes; Enter/Esc returns. */
 import { CONDITIONS, ITEMS, PART_SPARE, type PartId, type SupplyKey } from '@/content';
+import { announceScreen } from '@/game/a11y';
 import { session } from '@/game/session';
 import { brokenParts, daysOfRations, healthLabel, workingDrives, type Crew, type GameState } from '@/sim';
 import { t } from '@/ui/copy';
@@ -60,13 +61,16 @@ export class SuppliesScene extends BaseScene {
     const rows = SUPPLY_ROWS.map((k) => [ITEMS[k].name, fmt(s.supplies[k]), supplyNote(s, k)]);
     rows.push([t('supplies.credits'), `${money(s.credits)} cr`, '']);
     new Table(this, 16, 52, [{ width: 14 }, { width: 6, right: true }, { width: 12 }], 22).setRows(rows);
+    const spoken = [t('supplies.title'), ...rows.map((r) => r.filter(Boolean).join(' ')), t('supplies.crew')];
     // One portrait per crew slot (frame: healthy / sick / dead), then name and status beside it.
     s.crew.forEach((c, i) => {
       const y = 48 + i * 40;
       this.add.image(300, y, `portrait.${i + 1}`, portraitFrame(c)).setOrigin(0, 0);
       addText(this, 340, y + 6, c.name, { color: c.alive ? COLORS.bright : COLORS.dim });
+      spoken.push(`${c.name}: ${crewStatus(c)}`);
       addText(this, 340, y + 20, crewStatus(c), { color: c.alive ? COLORS.text : COLORS.dim, wrap: 292 });
     });
+    announceScreen(spoken);
     addText(this, 16, 376, t('supplies.return'), { color: COLORS.dim });
     this.router.push({
       onKey: (e) => {

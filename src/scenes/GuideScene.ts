@@ -1,6 +1,7 @@
 /** Learn about the Trail (M5): the writer's guidebook (guide.json), one page at a time. Left/Right page, Esc back. */
 import type Phaser from 'phaser';
 import { GUIDE_PAGES } from '@/content';
+import { announceScreen } from '@/game/a11y';
 import { t } from '@/ui/copy';
 import { isBack } from '@/ui/keys';
 import { addText } from '@/ui/text';
@@ -50,6 +51,7 @@ export class GuideScene extends BaseScene {
     this.objects.forEach((o) => o.destroy());
     const p = GUIDE_PAGES[this.page];
     if (!p) return;
+    announceScreen([t('guide.pageOf', { n: this.page + 1, total: GUIDE_PAGES.length }), p.title, ...p.body]);
     this.objects = [
       addText(this, LEFT, 48, p.title, { color: COLORS.bright }),
       ...p.body.map((line, i) => addText(this, LEFT, BODY_Y + i * LINE_H, line, { color: line.trimStart().startsWith('>') ? COLORS.warn : COLORS.text })),
