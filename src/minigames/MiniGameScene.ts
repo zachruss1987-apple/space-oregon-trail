@@ -82,7 +82,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     this.rng = createRng(minigameSeed(s, this.kind));
     this.setup(s);
     this.hudView = new MiniGameHud(this, this.hud().length);
-    const buttons = isTouchDevice();
+    const buttons = isTouchDevice() || session.settings.touchControls;
     const regions = touchButtons(this, MINIGAME_SCENE.pauseIcon, buttons && this.actionKey ? mt(this.actionKey) : null);
     this.touch = new TouchLayer(this, regions, { live: () => !this.paused, pause: () => this.pause(), tap: (at) => this.onTap(at) });
     this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.held.delete(e.key.toLowerCase()) });

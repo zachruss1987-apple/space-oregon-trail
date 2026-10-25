@@ -1,6 +1,7 @@
 /** Title screen: name, tagline, menu (only "Travel the Trail" is live in M1), shareable seed. */
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { session } from '@/game/session';
+import { mt } from '@/minigames/copy';
 import { list, t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { COLORS, textStyle } from '@/ui/theme';
@@ -25,7 +26,15 @@ export class TitleScene extends BaseScene {
       lineHeight: 24,
       onSelect: (i) => this.choose(i),
     });
-    this.router.push(menu);
+    // Hidden key M toggles mini-game auto-resolve (an Options screen arrives in M4/M5).
+    const note = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 74, '', textStyle(COLORS.warn, undefined, 12)).setOrigin(0.5, 0);
+    this.router.push({
+      onKey: (e) => {
+        if (e.key !== 'm' && e.key !== 'M') return menu.onKey(e);
+        session.setOption('autoResolveMiniGames', !session.settings.autoResolveMiniGames);
+        note.setText(mt(session.autoResolveMiniGames ? 'title.miniAuto' : 'title.miniPlay'));
+      },
+    });
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 52, t('title.hint'), textStyle(COLORS.dim)).setOrigin(0.5, 0);
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 30, t('title.seed', { seed: session.seedLabel }), textStyle(COLORS.dim)).setOrigin(0.5, 0);
   }

@@ -4,6 +4,7 @@ import {
   brokenParts, daysOfRations, generalHealth, intentBlocker, remainingInSegment, sparesFor,
   type GameState, type Intent, type LogKind, type PartId,
 } from '@/sim';
+import { session } from '@/game/session';
 import { list, t } from '@/ui/copy';
 import type { MenuItem } from '@/ui/Menu';
 import type { StatusCell } from '@/ui/StatusBar';
@@ -40,11 +41,11 @@ export function statusRows(s: GameState): StatusCell[][] {
   ];
 }
 
-/** The eight canonical actions, with disabled reasons from the sim (Scan launches the Salvage Run: needs 1 charge). */
+/** The eight canonical actions, with disabled reasons from the sim (Scan: 5 charges when auto-resolving, else 1). */
 export function actionItems(s: GameState): MenuItem[] {
   const labels = list('travel.menu');
   const repairReason = brokenParts(s).length === 0 ? intentBlocker(s, { type: 'repair', part: 'hull' }) : null;
-  const scan: Intent = { type: 'salvage', skipped: true };
+  const scan: Intent = session.autoResolveMiniGames ? { type: 'scan' } : { type: 'salvage', skipped: true };
   const disabled: (string | null)[] = [null, null, null, null, null, null, repairReason, intentBlocker(s, scan)];
   return labels.map((label, i) => ({ label, disabled: disabled[i] ?? null }));
 }

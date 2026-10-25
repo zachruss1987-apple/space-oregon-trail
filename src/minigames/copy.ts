@@ -17,6 +17,8 @@ export const UNWRITTEN: Readonly<Record<string, string>> = {
   'minigame.salvage.hit': 'Tumbler hit!',
   'minigame.salvage.hot': 'Something warm in the hold.',
   'minigame.salvage.blip': '?',
+  'title.miniAuto': 'Mini-games: Auto-resolve. (M to switch)',
+  'title.miniPlay': 'Mini-games: Play. (M to switch)',
 };
 
 /** One line of mini-game copy (ui.json first, then UNWRITTEN). */

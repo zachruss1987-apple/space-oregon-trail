@@ -9,6 +9,7 @@ import { REST, WAYPOINTS } from '@/content';
 import { markFlag } from '@/game/contract';
 import { session } from '@/game/session';
 import { applyAction, makeBeacon, newlyDead, stationOpen, type Intent, type LogEntry } from '@/sim';
+import { outcomeIntent } from '@/minigames/outcome';
 import { promptBeacon } from '@/ui/BeaconPrompt';
 import { saveBeacon } from '@/ui/beaconStore';
 import { t } from '@/ui/copy';
@@ -136,12 +137,15 @@ export class TravelScene extends BaseScene {
     }
   }
 
-  /** Scan for salvage: launch the Salvage Run (minigames.md). */
+  /** Scan for salvage: the Salvage Run, or the statistical scan when mini-games auto-resolve (minigames.md). */
   private scan(): void {
-    this.modal(t('minigame.salvage.confirm'), {
+    const auto = session.autoResolveMiniGames;
+    this.modal(auto ? t('travel.scanConfirm') : t('minigame.salvage.confirm'), {
       buttons: [t('common.yes'), t('common.no')],
       onClose: (b) => {
-        if (b === 0) this.scene.start('Salvage', { returnTo: 'Travel' });
+        if (b !== 0) return;
+        if (auto) this.dispatch(outcomeIntent('salvage', { auto: true }), true);
+        else this.scene.start('Salvage', { returnTo: 'Travel' });
       },
     });
   }

@@ -13,12 +13,34 @@ export interface Settings {
   textSpeedMs: number;
   /** Delay between days when continuing/auto-traveling, ms. */
   dayDelayMs: number;
+  /** Mini-games resolve statistically (no scene, no penalty). Persisted in `localStorage['proxima.options']`. */
+  autoResolveMiniGames: boolean;
+  /** Show on-screen mini-game buttons even without a touch screen. Persisted. */
+  touchControls: boolean;
 }
+
+/** Settings persisted under `localStorage['proxima.options']`. */
+export type PersistedOption = 'autoResolveMiniGames' | 'touchControls';
+export const OPTIONS_KEY = 'proxima.options';
 
 /** What a mini-game scene hands back to the scene it returns to: the day's log entries and new deaths. */
 export interface PendingDay {
   entries: LogEntry[];
   dead: string[];
+}
+
+/** Read persisted options defensively (bad JSON or no storage = defaults). */
+function loadOptions(): Partial<Pick<Settings, PersistedOption>> {
+  try {
+    const raw: unknown = JSON.parse(globalThis.localStorage?.getItem(OPTIONS_KEY) ?? '{}');
+    if (!raw || typeof raw !== 'object') return {};
+    const o = raw as Record<string, unknown>;
+    const out: Partial<Pick<Settings, PersistedOption>> = {};
+    for (const k of ['autoResolveMiniGames', 'touchControls'] as const) if (typeof o[k] === 'boolean') out[k] = o[k];
+    return out;
+  } catch {
+    return {};
+  }
 }
 
 /** Choices made in SetupScene before createGame. */
@@ -56,16 +78,36 @@ class Session {
   shownWaypoint: number | null = null;
   /** Set by the Station scene's Continue: Travel runs one Continue day as soon as it opens. */
   departOnTravel = false;
-  settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220 };
+  settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220, autoResolveMiniGames: false, touchControls: false };
+  /** `?minigames=auto`: auto-resolve forced on for this page load (not persisted). */
+  forceAutoMiniGames = false;
   /** `?debug=1` (or a dev build): enables `__PROXIMA__.minigame.finishWith`. */
   debug = false;
   /** Set by a mini-game scene after it dispatched its intent; the scene it returns to shows it, then clears it. */
   pendingDay: PendingDay | null = null;
 
-  /** Read `?seed=` (or pick a random one) and `?debug=1`, then reset everything. */
+  /** Mini-games auto-resolve (persisted option or the URL override). */
+  get autoResolveMiniGames(): boolean {
+    return this.forceAutoMiniGames || this.settings.autoResolveMiniGames;
+  }
+
+  /** Change a persisted option and save it (storage errors are ignored). */
+  setOption(key: PersistedOption, value: boolean): void {
+    this.settings[key] = value;
+    try {
+      const { autoResolveMiniGames, touchControls } = this.settings;
+      globalThis.localStorage?.setItem(OPTIONS_KEY, JSON.stringify({ autoResolveMiniGames, touchControls }));
+    } catch {
+      // private mode / storage full: the option still applies for this session
+    }
+  }
+
+  /** Read `?seed=` (or pick a random one), `?minigames=auto`, `?debug=1` and saved options, then reset everything. */
   init(search: string): void {
     const params = new URLSearchParams(search);
+    this.forceAutoMiniGames = params.get('minigames') === 'auto';
     this.debug = params.get('debug') === '1' || import.meta.env.DEV;
+    Object.assign(this.settings, loadOptions());
     const raw = params.get('seed');
     this.seedLabel = raw && raw.trim() ? raw.trim() : randomSeedLabel();
     this.reset();

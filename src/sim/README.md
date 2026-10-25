@@ -158,4 +158,10 @@ For e2e tests (src/game/contract.ts); keep stable.
   (Enter / Space / tap, ignored for 0.4 s) -> back to Travel, which routes the day's entries like any other day.
   Esc (or the `II` icon) pauses: Resume / Skip (penalty) / Controls; Skip asks to confirm (1 Keep playing, 2 Skip it),
   then dispatches `{ type: 'salvage', skipped: true }` and returns to Travel.
+- Mini-game options (src/game/session.ts): `localStorage['proxima.options'] = { autoResolveMiniGames, touchControls }`
+  (booleans, read defensively; an Options screen comes in M4/M5). `?minigames=auto` forces auto-resolve for the page load
+  without saving it. Hidden key `M` on the Title toggles and saves `autoResolveMiniGames` (a confirmation line shows).
+  Auto-resolve on: Travel's Scan confirms "Spend 5 charges and a day?" and dispatches `{ type: 'salvage' }` (the scan);
+  no mini-game scene opens, no penalty. Off: Scan needs 1 charge and opens the scene. On-screen FIRE button (and the
+  `II` pause icon, always drawn) show on touch devices or when `touchControls` is true.
 - Beacon epitaphs: `localStorage['proxima.beacons']` = `[{ segment, captain, name, text, date }]` (beacons.md; read with `parseBeacons`).

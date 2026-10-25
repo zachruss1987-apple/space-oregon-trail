@@ -4,9 +4,16 @@ import { body, buy, getState, idle, leaveStore, sceneTexts, snap, startRun } fro
 // minigames.md section 1 + the UI contract: Travel 8 = Scan for salvage, confirm Yes, the Salvage scene opens on its
 // instruction screen, Space starts, `__PROXIMA__.minigame.finishNow()` ends the run, Enter returns to Travel.
 
-/** Title -> Store with a few charge boxes, then Travel. */
-async function runWithCharges(page: Page, seed: string): Promise<void> {
-  await startRun(page, seed);
+/** Title -> Store with a few charge boxes, then Travel. `query` is appended to the URL (e.g. `&minigames=auto`). */
+async function runWithCharges(page: Page, seed: string, query = ''): Promise<void> {
+  if (query) {
+    await page.goto(`/?seed=${seed}${query}`);
+    await expect(body(page)).toHaveAttribute('data-scene', 'Title');
+    await page.keyboard.press('Enter');
+    await expect(body(page)).toHaveAttribute('data-scene', 'Setup');
+    for (let i = 0; i < 7; i++) await page.keyboard.press('Enter');
+    await expect(body(page)).toHaveAttribute('data-scene', 'Store');
+  } else await startRun(page, seed);
   for (const [row, qty] of [[1, 3], [2, 1500], [4, 3]] as const) await buy(page, row, qty);
   await leaveStore(page);
   await idle(page);
@@ -88,4 +95,35 @@ test('Skip from the pause menu resolves with the penalty and logs info/skipped',
   expect(after.day).toBe(before.day + 1);
   expect(after.supplies.charges).toBe(before.supplies.charges - 5);
   expect(after.log.some((e) => e.kind === 'info' && e.id === 'skipped')).toBe(true);
+});
+
+test('?minigames=auto: Scan uses the statistical scan and no mini-game scene opens', async ({ page }) => {
+  const scenes: string[] = [];
+  await page.exposeFunction('__sceneSeen', (s: string) => scenes.push(s));
+  await page.addInitScript(() => {
+    new MutationObserver(() => (window as unknown as { __sceneSeen(s: string): void }).__sceneSeen(document.body.dataset['scene'] ?? ''))
+      .observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['data-scene'] });
+  });
+  await runWithCharges(page, 'SALVAGE3', '&minigames=auto');
+  const before = (await getState(page))!;
+  await page.keyboard.press('8');
+  await expect(body(page)).toHaveAttribute('data-modal', '1');
+  await page.keyboard.press('Enter'); // "Spend 5 charges and a day?" Yes
+  await expect.poll(async () => (await getState(page))!.day).toBe(before.day + 1);
+  await idle(page);
+  const after = (await getState(page))!;
+  expect(after.supplies.charges).toBe(before.supplies.charges - 5);
+  expect(after.log.some((e) => e.kind === 'scan')).toBe(true);
+  expect(await body(page).getAttribute('data-scene')).toBe('Travel');
+  expect(scenes).not.toContain('Salvage');
+});
+
+test('Title: hidden key M toggles auto-resolve and persists it', async ({ page }) => {
+  await page.goto('/?seed=SALVAGE4');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Title');
+  await page.keyboard.press('m');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('proxima.options'))).toContain('"autoResolveMiniGames":true');
+  expect((await sceneTexts(page, 'Title')).some((s) => s.includes('Auto-resolve'))).toBe(true);
+  await page.keyboard.press('M');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('proxima.options'))).toContain('"autoResolveMiniGames":false');
 });
