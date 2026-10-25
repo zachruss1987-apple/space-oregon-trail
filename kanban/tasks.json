@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T06:06:49.640Z",
+  "updated": "2026-10-25T06:07:32.143Z",
   "milestones": [
     {
       "id": "M0",
@@ -25,7 +25,7 @@
     {
       "id": "M4",
       "title": "Audiovisual polish",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "M5",
@@ -1351,7 +1351,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-039",
@@ -1476,7 +1476,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-042",
@@ -1526,7 +1526,7 @@
       "role": "tester",
       "status": "todo",
       "assignee": null,
-      "issue": null,
+      "issue": 61,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T06:06:49.640Z",
       "notes": [
@@ -1535,7 +1535,8 @@
           "by": "pm",
           "text": "backlog -> todo"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-044",
@@ -2233,7 +2234,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-064",
@@ -2243,7 +2244,7 @@
       "role": "developer",
       "status": "done",
       "assignee": null,
-      "issue": null,
+      "issue": 62,
       "created": "2026-10-25T05:48:40.517Z",
       "updated": "2026-10-25T06:06:49.566Z",
       "notes": [
@@ -2257,7 +2258,8 @@
           "by": "pm",
           "text": "Folded into T-066."
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-065",
@@ -2267,7 +2269,7 @@
       "role": "developer",
       "status": "done",
       "assignee": null,
-      "issue": null,
+      "issue": 63,
       "created": "2026-10-25T05:50:21.646Z",
       "updated": "2026-10-25T05:56:52.396Z",
       "notes": [
@@ -2286,7 +2288,8 @@
           "by": "pm",
           "text": "Duplicate of T-063 (in progress)."
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-066",
@@ -2296,10 +2299,11 @@
       "role": "developer",
       "status": "todo",
       "assignee": null,
-      "issue": null,
+      "issue": 64,
       "created": "2026-10-25T06:06:49.463Z",
       "updated": "2026-10-25T06:06:49.464Z",
-      "notes": []
+      "notes": [],
+      "issueClosed": false
     }
   ]
 }
