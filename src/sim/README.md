@@ -175,7 +175,7 @@ wrong prefix, checksum mismatch, bad base64 or bad save, with an `error` message
 For e2e tests (src/game/contract.ts); keep stable.
 - `?seed=<text|digits>`: digits are used as the number, other text is hashed with `seedFromString`. No param = random 6-char seed, shown on the title.
 - `window.__PROXIMA__ = { game, version, seed, state }`; `state` is a getter for the live `GameState` (null on the title/setup).
-- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Hazard Station Death Arrival Salvage Threading Flare`, set in each scene's create().
+- `body[data-scene]`: `Title Setup Store Travel Supplies Map Waypoint Hazard Station Death Arrival Salvage Threading Flare Options TopTen Guide`, set in each scene's create().
 - `body[data-modal="1"]` while a modal or number prompt is open; `body[data-busy="1"]` while a Travel day is animating (input ignored).
 - In the store, `state` updates live as quantities change (status stays `store` until "Leave the store" confirms `depart`).
 - Keys are read from `window` (no canvas focus needed). Keys pressed during a scene change can be lost: wait for `data-scene` first.
@@ -217,9 +217,25 @@ For e2e tests (src/game/contract.ts); keep stable.
   its level (`state.difficulty`). StoreScene/station views must pass `state.difficulty` to `priceAt/costOf/localPrice` for
   displayed prices (the sim's buy/limits already use it). Arrival: show `score.difficulty` as a final row after the
   profession multiplier when `points !== 0` (label `score.labels.difficulty`), and rate by `total`.
-- Autosave: `localStorage['proxima.autosave'] = JSON.stringify(makeSave(state, seedLabel, Date.now()))` after every applied
-  action while `state.status === 'traveling'`; remove the key on any ending (arrived / dead / adrift). Title shows
-  "Continue journey" when `parseSave(localStorage.getItem('proxima.autosave'))` is ok and its state is traveling, labelled
-  with `describeSave(slot)`. Export/import: `exportSave(slot)` / `importSave(text)`.
-- High scores: `localStorage['proxima.highscores']`; on arrival `insertHighScore(loadHighScores(raw), { name: crew[0].name,
-  profession, score: total, days: state.day, date: state.date, difficulty })`, save `serializeHighScores(list)`, highlight `index`.
+- Autosave (src/game/saveStore.ts, T-040): the `session.state` setter calls `syncAutosave`, so every state write (each
+  applied action, store departure, mini-game results, `loadState`) stores `JSON.stringify(makeSave(state, seedLabel,
+  Date.now()))` in `localStorage['proxima.autosave']` while `status === 'traveling'`, and removes the key on any ending
+  (arrived / dead / adrift). Title: with a valid traveling autosave (`readAutosave()`) the menu is **1 Continue journey,
+  2 Travel the Trail, 3 Learn about the Trail, 4 See the Top Ten, 5 Options** (else the four items as before) and the
+  `describeSave(slot)` line shows under it. Continue calls `session.resume(slot, state)` (seed label from the slot, main Rng
+  `createRng(resumeSeed(slot))`, `shownWaypoint = arrivedAt`) and opens `resumeScene(state)`: Hazard (crossing pending),
+  Station (`stationOpen`), else Travel.
+- Options rows (ui.md + T-040): 1-8 as before, **9 Difficulty** (Greenhorn / Spacer / Pathfinder from `DIFFICULTY_ORDER`,
+  persisted as `difficulty` in `proxima.options`), **10 Export save** (dimmed without an autosave), **11 Import save**,
+  12 Back. Export / Import open an overlay (`body[data-modal="1"]`) with a DOM `<textarea>`: `#proxima-export` (read-only,
+  pre-selected `exportSave(slot)`, also offered to the clipboard) and `#proxima-import` (paste up to 200,000 chars; Enter
+  runs `importSave`; failure shows "That save will not load." + the reason; success stores the slot as the autosave and
+  returns to Title with Continue). Esc closes either. KeyRouter leaves typing keys to text fields.
+- Difficulty: SetupScene passes `session.options.difficulty` to `createGame` and shows it on the profession step.
+- Top Ten (`TopTen` scene, Title item "See the Top Ten"): `readHighScores()` = `loadHighScores(localStorage['proxima.highscores'])`
+  (defaults merged), columns under `topTen.header`; Esc / Enter / click back. On arrival, after the score screen, a score
+  that `qualifies` asks for a name (default `crew[0].name`, 12 chars), then `insertHighScore(..., { name, profession,
+  score: total, days, date, difficulty })`, saves `serializeHighScores`, shows `topTen.yourRun` and offers the Top Ten
+  with the new row highlighted (`scene.start('TopTen', { highlight: index })`). Deaths never enter the list.
+- Guide (`Guide` scene, Title item "Learn about the Trail"): pages `guide.json` (`GUIDE_PAGES`), Left/Right (A/D,
+  PageUp/PageDown, Enter/Space next, click halves) with `guide.pageOf`; Esc back.

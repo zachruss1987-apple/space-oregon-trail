@@ -27,10 +27,12 @@ export async function idle(page: Page): Promise<void> {
   await expect(body(page)).not.toHaveAttribute('data-busy', '1');
 }
 
-/** Title -> Setup -> Store with defaults (Corporate Executive, default names, first launch window). Auto-resolve by default. */
+/** Title -> Setup -> Store with defaults (Corporate Executive, default names, first launch window). Auto-resolve by default; skips "Continue journey". */
 export async function startRun(page: Page, seed: string, snapSteps = false, query = AUTO_MINIGAMES): Promise<void> {
   await gotoScene(page, 'Title', seed, query);
   if (snapSteps) await snap(page, 'Title');
+  // An autosave from an earlier run on this page puts "Continue journey" first (T-040): step past it.
+  if ((await sceneTexts(page, 'Title')).some((l) => l.includes('Continue journey'))) await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await expect(body(page)).toHaveAttribute('data-scene', 'Setup');
   if (snapSteps) await snap(page, 'Setup-1-profession');
