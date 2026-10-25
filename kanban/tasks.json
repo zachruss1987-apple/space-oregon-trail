@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T02:20:43.039Z",
+  "updated": "2026-10-25T02:26:42.868Z",
   "milestones": [
     {
       "id": "M0",
@@ -673,7 +673,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-021",
@@ -694,18 +694,24 @@
       "desc": "Price markup per station, buy-back, NPC trade offer generator, four crossing options with outcome tables.",
       "milestone": "M2",
       "role": "designer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "doing",
+      "assignee": "designer",
+      "issue": 23,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:20:42.985Z",
+      "updated": "2026-10-25T02:21:45.294Z",
       "notes": [
         {
           "ts": "2026-10-25T02:20:42.986Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:21:45.295Z",
+          "by": "designer",
+          "text": "todo -> doing"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-023",
@@ -726,12 +732,38 @@
       "desc": "Brainstorm then curate into stations.json, epitaphs.json, trades.json.",
       "milestone": "M2",
       "role": "writer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "writer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:26:42.750Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:21:08.360Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:22:02.251Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:25:25.063Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:25:25.510Z",
+          "by": "writer",
+          "text": "Writer: 7 stations x12 talk (84), 14 personas, 33 epitaphs, +9 quiet_day, +12 crossing variants, travel.autoIndicator. 599 tests pass."
+        },
+        {
+          "ts": "2026-10-25T02:26:42.750Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-025",
@@ -1034,18 +1066,24 @@
       "desc": "Replaces placeholder markups in src/content/rules.ts (Mars 1.25, +0.25 per station).",
       "milestone": "M2",
       "role": "designer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "doing",
+      "assignee": "designer",
+      "issue": 24,
       "created": "2026-10-25T01:50:31.196Z",
-      "updated": "2026-10-25T02:20:43.039Z",
+      "updated": "2026-10-25T02:21:45.604Z",
       "notes": [
         {
           "ts": "2026-10-25T02:20:43.039Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:21:45.605Z",
+          "by": "designer",
+          "text": "todo -> doing"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-047",
@@ -1088,12 +1126,38 @@
       "desc": "",
       "milestone": "M2",
       "role": "developer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "developer",
       "issue": null,
       "created": "2026-10-25T02:10:20.343Z",
-      "updated": "2026-10-25T02:10:20.344Z",
-      "notes": []
+      "updated": "2026-10-25T02:26:42.804Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:21:08.413Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:22:19.383Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:24:32.504Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:24:33.381Z",
+          "by": "developer",
+          "text": "ids renamed to lowSuits/noCredits, StoreScene mapping removed; unit tests updated"
+        },
+        {
+          "ts": "2026-10-25T02:26:42.805Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-049",
@@ -1101,12 +1165,39 @@
       "desc": "Tester notes from T-020. Designer may adjust ui.md first.",
       "milestone": "M2",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 25,
       "created": "2026-10-25T02:20:42.796Z",
-      "updated": "2026-10-25T02:20:42.797Z",
-      "notes": []
+      "updated": "2026-10-25T02:26:42.867Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:21:08.467Z",
+          "by": "pm",
+          "text": "todo -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:22:19.837Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:24:32.932Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:24:33.813Z",
+          "by": "developer",
+          "text": "modal shows crossing outcome only, no typewriter in modals; auto-travel indicator; zero bonus rows hidden; e2e 7/7"
+        },
+        {
+          "ts": "2026-10-25T02:26:42.868Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
     }
   ]
 }
