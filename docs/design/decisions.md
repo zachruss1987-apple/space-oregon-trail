@@ -34,7 +34,7 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - M1 always routes via Oort Beacon: the Titan branch is an M2 choice.
 
 ## 2026-10-24 (sim implementation, developer, logged by PM)
-- Station price markups are placeholders until `economy.md` exists: Mars Relay 1.25, +0.25 per station, Lane Terminus 2.5.
+- Station price markups: superseded by the per-item markup table in `economy.md` (T-022/T-046, 2026-10-24); the flat 1.25 + 0.25/station placeholder is retired.
 - Auto-play policy also repairs whenever a broken part has a spare; "days left" is counted at Half rations.
 - Exhaustion counter builds only on Overburn days with movement and decays 1 per tick off Overburn (rest days included).
 - Scans and repairs resolve at tick step 4 (distance step) as zero-distance days.
@@ -48,3 +48,27 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - A condition caught today (radiation sickness, illness, injury) does not tick down on the day it is caught, so its first full duration is the rolled 5–9 / table range: health.md steps 4–5 were ambiguous; the code's reading is reasonable and now asserted by `tests/unit/spec/health.spec.test.ts`.
 - Scurvy becomes eligible on the 10th consecutive Half/Paste day (the counter is compared after that day's increment): events.md "after 10+ consecutive days" was ambiguous; asserted in `events.spec.test.ts`.
 - Policy-run finding (not a rule change): in 1,000 seeds (SEED-0..999) no reference-policy run dies before day 40 (earliest Executive death is day 111), so e2e "early death" seeds are the earliest deaths, not under-40 ones; see `tests/e2e/seeds.ts`.
+
+## 2026-10-24 (T-022 / T-046, M2 economy and hazards spec)
+- Markups are per station per item (not one number per station), all in 1.0–2.5: scarcity becomes thematic (Mars food 1.0, Ceres charges 1.0, Titan pumps 1.25, Oort gyros 1.5 and no drives, Lane Terminus food 2.0) while the overall +0.25/station trend matches the original.
+- Ration markups limited to 1.0/1.5/2.0/2.5 so ration prices are whole cents (avoids float rounding of 0.375/0.675).
+- Buy-back = min(50% local, 90% base), stations buy only what they sell: plain 50% let players buy at Independence/Mars and sell farther out at a profit (e.g. rations 0.30 → 0.375 at Titan); with the cap, buy-then-sell always loses ≥ 10%.
+- No per-visit stock limits on the road; the start buy limits and caps apply to holdings: fewer state fields, and caps already bound the useful amounts.
+- Cannot sell the last drive, trades cannot take it, and Continue needs ≥ 1 drive; arriving with 0 drives is resolved by buying, trading, or resting (passing help / adrift), so no soft-lock.
+- NPC offers: 2–3 per road-station visit, generated in the arrival tick with the main Rng (reproducible regardless of UI path), valued at base prices with a hidden fairness roll (1.6 / 1.25 / 1.0 / 0.75); credit asks floored at 1.0 so a trader is never a cheaper source than the cheapest store.
+- Trades value at base prices, not local: trading is how a broke traveler beats the markup; the Farmer's lever (30 rations for one spare at fair, vs 20 from selling it) beats the store 1.5–2×.
+- Rations trade lot 30–150 so a single spare can buy food at fair terms.
+- `trades.json` uses `{give}`/`{get}` as full phrases with counts; `{n}` is optional (the get quantity): two quantities made a lone `{n}` ambiguous.
+- Talk pool ≥ 10 per road station (brief said ≥ 8): 6 × 10 meets M2's ≥ 60 lines; Talk is UI-only with the text Rng and no state.
+- stations.json drops `name`, `blurb`, `markup` from the old writing.md schema: names live in waypoints.ts, blurbs in bulletins.json, markups are rules (content TS), not text.
+- Hazards: crossing becomes a pending decision on arrival; resolution costs no day (as in M1), and rest/repair/scan stay available while pending so blocked options cannot soft-lock.
+- Today's density rolled on arrival (±1 around nominal, 25/50/25) and scales Thread risk ×0.8/1.0/1.2: gives the readout real information and makes "baseline × density factor" concrete.
+- Ship state adds +10 each for broken hull, broken gyro, ≤ 1 working drive: ties hazard risk to earlier repair and drive choices.
+- Shields halve risk and apply −10 severity (no Lost possible) at a 15% pump-break cost: a clear "spend a part to protect people" trade.
+- Belter pilot only at the Belt Crossing and Saturn Ring Plane (trail.md had waits for all hazards): matches the Belters' lore; pilot is 3% flat with −20 severity (no injury/death); wait days are ordinary ticks (food, events), not rest.
+- Tug ×1.5 in flare season applies by date at any hazard (only the last two meet it in practice).
+- The Flare Belt in M2 offers only Thread (exactly the M1 roll) and a tug; shields/pilot dimmed. M3 replaces both with the finale.
+- Risk words: None 0, Low 1–9, Moderate 10–24, High 25–44, Severe ≥ 45; percentages hidden (imperfect information).
+- Route: direct skips waypoint 12; segment 13 stays 160 Mk from the Gate (total 1,926); Heliopause +10. Route can be changed until leaving Titan; default via Oort.
+- Beacons: one optional epitaph per crew death (not only the last), segment = `arrivedAt ?? segment`, last 200 kept; up to 3 shown per waypoint, player beacons first, canned fill at most 2 slots (1 once the player has ≥ 10 beacons) so canned ones fade as real ones accumulate.
+- Reference auto-play crossing policy: pilot > tug if credits ≥ 2× price > shields if a spare pump > thread; route always via Oort.

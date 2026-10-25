@@ -22,29 +22,29 @@ Total length 2,040 Mk in 16 segments. Types: **station** (store, trade, talk, re
 | 15 | The Flare Belt | hazard/finale | 120 | 1,839 | The Dalles / Columbia River |
 | 16 | New Willamette, Proxima b | end | 201 | 2,040 | Willamette Valley |
 
-Branch at Titan Refinery (M2): the Gate direct route skips Oort Beacon (saves 114 Mk, no resupply; the Heliopause is harder). **M1 always takes the default path via Oort Beacon.**
+Branch at Titan Refinery (M2, `hazards.md`): the Gate direct route skips Oort Beacon (saves 114 Mk, total 1,926 Mk, no resupply; Heliopause baseline +10). **M1 always takes the default path via Oort Beacon.**
 
 Weather phases by segment (`travel.md`): early 1–5, mid 6–13, late 14–16 ("the last three segments", the only place Flare weather occurs).
 
 ## M1 waypoint behavior
 | Type | M1 behavior |
 |------|-------------|
-| station | Description; "Continue" or "Enter station" (placeholder text: store opens in M2). Resting here gets the station bonus. |
+| station | Description; "Continue" or "Enter station" (M2: Outfitters / Trade / Talk / Rest / Continue, `economy.md`). Resting here gets the station bonus. |
 | landmark / gate | Description (+ bulletin line from `bulletins.json`); "Continue". |
 | hazard | Automatic crossing roll on arrival (below); outcome shown, then "Continue". |
 | end | Arrival scene → score. |
 
 ## Hazard parameters
-| Hazard | Density (1–5) | Baseline incident chance | Tug price (cr, M2) | Pilot wait (days, M2) |
+| Hazard | Nominal density (1–5) | Baseline incident chance | Tug price (cr, M2; ×1.5 in flare season) | Belter pilot wait (days, M2) |
 |--------|---------------|--------------------------|--------------------|-----------------------|
-| Lunar Debris Ring | 2 | 15% | 25 | 2 |
-| Lagrange Shoals | 2 | 15% | 35 | 2 |
+| Lunar Debris Ring | 2 | 15% | 25 | n/a |
+| Lagrange Shoals | 2 | 15% | 35 | n/a |
 | The Belt Crossing | 4 | 35% | 80 | 4 |
 | Saturn Ring Plane | 3 | 25% | 60 | 3 |
-| Proxima Heliopause Shock | 4 | 35% | 90 | 4 |
-| The Flare Belt | 5 | 45% (ride) | 120 | n/a |
+| Proxima Heliopause Shock | 4 | 35% (45% on the direct route) | 90 | n/a |
+| The Flare Belt | 5 | 45% (ride) | 120 (M2 only; M3 removes it) | n/a |
 
-## M1 crossing roll (single, no choices)
+## M1 crossing roll (single, no choices; in M2 only the Flare Belt's "Thread it")
 Resolved on the arrival tick; costs no extra day except as below. Sets the "just crossed" flag for `cargo_shift`.
 
 1. **Incident chance** = baseline + modifiers: Window 1 +10 and Window 2 +5 at Lunar Debris Ring and Lagrange Shoals ("spring tides"); +15 at The Flare Belt during flare season. Roll; no incident → "You made it across." 
@@ -58,6 +58,6 @@ Resolved on the arrival tick; costs no extra day except as below. Sets the "just
 | 86–95 | Injury: random present crew gains Decompression injury (no room → −15 health) |
 | 96–100 | Lost: random present crew dies (cause `hazard`) |
 
-M2 (`hazards.md`) adds the choices: ride it out, wait for a pilot, hire a tug.
+M2 (`hazards.md`) replaces the auto-roll with four choices (Thread it, Shields up and push, Hire a tug, Wait for a Belter pilot), a density roll, and reuses the severity table above.
 
 Stations' price markup and talk pools: `economy.md`, `writing.md`. Landmark bulletins: `writing.md`.

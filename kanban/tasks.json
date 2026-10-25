@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T02:26:42.868Z",
+  "updated": "2026-10-25T02:29:54.669Z",
   "milestones": [
     {
       "id": "M0",
@@ -694,11 +694,11 @@
       "desc": "Price markup per station, buy-back, NPC trade offer generator, four crossing options with outcome tables.",
       "milestone": "M2",
       "role": "designer",
-      "status": "doing",
+      "status": "done",
       "assignee": "designer",
       "issue": 23,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:21:45.294Z",
+      "updated": "2026-10-25T02:29:54.509Z",
       "notes": [
         {
           "ts": "2026-10-25T02:20:42.986Z",
@@ -709,6 +709,21 @@
           "ts": "2026-10-25T02:21:45.295Z",
           "by": "designer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:29:08.808Z",
+          "by": "designer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:29:09.694Z",
+          "by": "designer",
+          "text": "economy.md (per-item markups 1.0-2.5, buy-back min(50% local, 90% base), road buying, NPC trade generator 2-3 offers w/ hidden fairness, Talk >=10/station, station flow, stations.json + trades.json schemas, worked example), hazards.md (density roll, 4 options w/ formulas, availability, tug x1.5 flare, readout + risk words, text keys, log kinds, RNG order, route branch, state/intents summary, reference policy), new beacons.md; trail/travel/resources/writing/ui/README/glossary/decisions updated. T-046 folded in. No src/tests edits."
+        },
+        {
+          "ts": "2026-10-25T02:29:54.510Z",
+          "by": "designer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -719,12 +734,18 @@
       "desc": "Per economy.md and hazards.md. Statistical tests on outcome distributions.",
       "milestone": "M2",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:29:54.668Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:29:54.669Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-024",
@@ -734,7 +755,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 26,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T02:26:42.750Z",
       "notes": [
@@ -763,7 +784,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-025",
@@ -1066,11 +1088,11 @@
       "desc": "Replaces placeholder markups in src/content/rules.ts (Mars 1.25, +0.25 per station).",
       "milestone": "M2",
       "role": "designer",
-      "status": "doing",
+      "status": "done",
       "assignee": "designer",
       "issue": 24,
       "created": "2026-10-25T01:50:31.196Z",
-      "updated": "2026-10-25T02:21:45.604Z",
+      "updated": "2026-10-25T02:29:54.559Z",
       "notes": [
         {
           "ts": "2026-10-25T02:20:43.039Z",
@@ -1081,6 +1103,16 @@
           "ts": "2026-10-25T02:21:45.605Z",
           "by": "designer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:29:09.243Z",
+          "by": "designer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:29:54.560Z",
+          "by": "designer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -1128,7 +1160,7 @@
       "role": "developer",
       "status": "done",
       "assignee": "developer",
-      "issue": null,
+      "issue": 27,
       "created": "2026-10-25T02:10:20.343Z",
       "updated": "2026-10-25T02:26:42.804Z",
       "notes": [
@@ -1157,7 +1189,8 @@
           "by": "developer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-049",
@@ -1197,7 +1230,20 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
+    },
+    {
+      "id": "T-050",
+      "title": "Writer: ui.json hazard.* and route.* keys, station menu copy per economy.md/hazards.md; top up trades.json to 20 personas and epitaphs.json to 40 beacons",
+      "desc": "",
+      "milestone": "M2",
+      "role": "writer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T02:29:54.607Z",
+      "updated": "2026-10-25T02:29:54.608Z",
+      "notes": []
     }
   ]
 }

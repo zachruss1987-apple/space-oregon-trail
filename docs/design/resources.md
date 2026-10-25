@@ -40,4 +40,4 @@ Warnings (shown once each in the store): 0 drives ("You will not get far."), rat
 Full rations for five crew over a ~150-day trip is 2,250 ration-days = 675 cr. After a basic kit (~260 cr), only the Executive can afford it; the Engineer can afford Half for the whole trip (1,500 = 450 cr); the Farmer cannot afford Half without salvage. See the worked example in `travel.md`.
 
 ## Selling
-Stations buy back at 50% of their local price (M2). Independence Station does not buy back.
+Stations buy back at 50% of their local price, capped at 90% of base price, and only items they sell (M2, `economy.md`). Independence Station does not buy back.

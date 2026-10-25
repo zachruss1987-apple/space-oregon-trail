@@ -16,11 +16,13 @@ Reference lines (tone targets, not to be reused verbatim):
 { condition: string, text: string[] }   // use {name}
 // condition = one of the 8 health.md conditions or starvation | exhaustion | hazard | drift | hull_fire
 // stations.json (M2)
-{ id: string, name: string, blurb: string, talk: string[], markup: number }
+{ [stationId]: { keeper: string, greeting: string[], talk: string[] } }   // economy.md; blurbs stay in bulletins.json, markups in waypoints.ts
+// trades.json (M2)
+{ personas: { [id]: { name, pitch[], accept[], decline[] } } }   // economy.md; {give} {get} {n}
 // bulletins.json (landmarks)
 { waypoint: string, lines: string[] }
 // epitaphs.json (seed beacons, M2)
-{ name: string, text: string, segment: number }
+{ beacons: { segment, captain, name, text, date }[] }   // beacons.md
 ```
 Content tests enforce: every `text` ≤ 140 chars (events ≤ 2 sentences), unique strings across a file, placeholders resolvable, no words from `docs/design/forbidden.txt` (slurs, modern internet slang).
 

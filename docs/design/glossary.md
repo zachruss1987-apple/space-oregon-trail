@@ -37,3 +37,16 @@
 | Lucky bolt | An ordinary bolt sold as a charm at Independence Station. |
 | Paste cake | Nutrient paste, baked. Not an improvement. |
 | The Shock | Short for the Proxima Heliopause Shock. |
+| Outfitters | A station's store (buy and sell). Mattie's at Independence; the keeper's elsewhere. |
+| Buy-back | Selling to a station: 50% of its price, never more than 90% of the Independence price ("Lane list"). |
+| Lane list | The Independence Station price; the most any station pays when buying back is 90% of it. |
+| Trader | An NPC at a road station offering a one-time barter; each has a persona (`trades.json`). |
+| Talk | Station flavor lines from locals (`stations.json`), the stations' version of bulletins. |
+| Keeper | A road station's store proprietor, named in `stations.json`. |
+| Density | How thick a hazard is today, 1–5, rolled on arrival around the hazard's nominal value. |
+| Thread it | Crossing a hazard under your own power; risk by density and ship state. |
+| Shields up and push | Crossing behind shields: half the risk, no deaths, but strains the coolant pump. |
+| Belter pilot | A miner who flies your ship through the Belt Crossing or Saturn Ring Plane after a wait, for 10 cr. |
+| Coolant strain | The 15% chance shields break the coolant pump. |
+| Gate direct | The route from Titan Refinery that skips Oort Beacon (1,926 Mk total); the Heliopause is worse. |
+| Via Oort | The default route through Oort Beacon (2,040 Mk). |

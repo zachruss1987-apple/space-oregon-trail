@@ -12,7 +12,7 @@ One tick = one day. Terms: **segment n** is the leg from waypoint n−1 to waypo
 7. Health update for every present crew member (`health.md`), then condition death rolls and progression.
 8. Missing crew: decrement `awayDays`; at 0 they rejoin.
 9. Random event roll (`events.md`): 15% (7.5% on rest days); at most one per day.
-10. Arrival check: if the segment is complete, set `state.arrivedAt = waypoint`, resolve a hazard roll if it is a hazard (`trail.md`), and pause for the waypoint scene.
+10. Arrival check: if the segment is complete, set `state.arrivedAt = waypoint`, if it is a hazard set the pending crossing (`hazards.md`; M1: resolve the `trail.md` roll), if a road station generate trade offers (`economy.md`), and pause for the waypoint scene.
 11. Game-over check (`health.md`).
 
 Day-consuming actions (Rest, Scan for salvage, Attempt repair, delay days from events/hazards) are ordinary ticks with distance 0, so every rule above still applies to them.

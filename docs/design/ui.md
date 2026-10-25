@@ -67,7 +67,7 @@ THE LANE                        712 / 2,040 Mk
 Progress bar: 34 cells, `#` per 1/34 of distance traveled, `>` at the ship. List shows all 17 waypoints (scroll if needed, current row centered); status column is `passed`, `next: N Mk`, or blank. Type is spelled out (no color-only meaning). Estimated date of arrival is not shown (imperfect information).
 
 ## Hazard outcome
-On arriving at a hazard (M1): a `Modal` with the hazard description, then one line for the roll result (`trail.md`) naming the loss in numbers, then "Continue".
+On arriving at a hazard (M1): a `Modal` with the hazard description, then one line for the roll result (`trail.md`) naming the loss in numbers, then "Continue". M2: HazardScene with the readout and four options (`hazards.md`); StationScene menu (`economy.md`); beacons on the Waypoint scene (`beacons.md`).
 
 ## Controls
 - Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items, `?` shows controls. Typing fields accept printable ASCII up to 12 chars.
