@@ -1,0 +1,4 @@
+{
+  "$schema": "Each key is a death cause id (condition id or starvation, exhaustion, hazard, drift, hull_fire). Value: array of variants using {name}.",
+  "starvation": ["{name} has died of starvation."]
+}

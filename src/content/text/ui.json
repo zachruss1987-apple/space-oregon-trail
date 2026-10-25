@@ -1,0 +1,6 @@
+{
+  "$schema": "UI copy. Keys are stable identifiers used by scenes; see docs/design/ui.md for canonical menu labels.",
+  "title": { "name": "THE PROXIMA TRAIL", "tagline": "You have died of space dysentery.", "menu": ["Travel the Trail", "Learn about the Trail", "See the Top Ten", "Options"] },
+  "travel": { "menu": ["Continue on the Lane", "Check supplies", "Look at the map", "Change thrust", "Change rations", "Rest", "Attempt repair", "Scan for salvage"] },
+  "mattie": { "advice": ["Two suits per crew. Space is mostly empty, but the parts that aren't are sharp."] }
+}

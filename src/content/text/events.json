@@ -1,0 +1,4 @@
+{
+  "$schema": "Each key is an event id from docs/design/events.md (plus quiet_day). Value: array of text variants. Placeholders: {name} crew member, {n} number, {item} supply name.",
+  "quiet_day": ["Nothing happened today. The crew found this suspicious."]
+}

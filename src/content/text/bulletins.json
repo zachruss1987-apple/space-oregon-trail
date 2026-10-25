@@ -1,0 +1,4 @@
+{
+  "$schema": "Each key is a waypoint id from src/content/waypoints.ts (kebab-case of the name). Value: { blurb: string, lines: string[] }.",
+  "independence-station": { "blurb": "Independence Station. Everyone here is either leaving or selling something to people who are leaving.", "lines": ["Lane Authority bulletin: the Lane is open."] }
+}
