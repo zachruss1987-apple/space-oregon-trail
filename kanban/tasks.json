@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T08:04:56.864Z",
+  "updated": "2026-10-25T13:27:51.145Z",
   "milestones": [
     {
       "id": "M0",
@@ -2418,6 +2418,32 @@
       "issue": null,
       "created": "2026-10-25T07:08:03.207Z",
       "updated": "2026-10-25T07:08:03.208Z",
+      "notes": []
+    },
+    {
+      "id": "T-069",
+      "title": "UI: context-sensitive key hints bar under the game view (platform-aware key names, Options row)",
+      "desc": "Spec: docs/design/keyhints.md. 16px band below the 640x400 view (canvas 640x416), persistent KeyHints scene, KeyRouter publishes the top handler's hint set, platform detection from the user agent (Enter/Return, Backspace/Delete, hidden on touch), Options row Key hints Auto/On/Off, data-hints body attribute, unit + e2e tests, visual baselines regenerated.",
+      "milestone": "M5",
+      "role": "developer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T13:27:51.086Z",
+      "updated": "2026-10-25T13:27:51.087Z",
+      "notes": []
+    },
+    {
+      "id": "T-070",
+      "title": "Test: key hints bar spec suite (unit for detectPlatform/keyLabel/fit rule, e2e data-hints walk of every scene, Options row, baselines)",
+      "desc": "From docs/design/keyhints.md. Depends on T-069.",
+      "milestone": "M5",
+      "role": "tester",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T13:27:51.144Z",
+      "updated": "2026-10-25T13:27:51.145Z",
       "notes": []
     }
   ]

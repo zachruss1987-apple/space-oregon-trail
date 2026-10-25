@@ -14,6 +14,7 @@ One topic per file. Numbers in tables are the source of truth; `src/content` mir
 | `hazards.md` | Hazard crossings and outcomes, route branch (M2) |
 | `beacons.md` | Memorial beacons: writing, storage, reading (M2) |
 | `minigames.md` | Salvage Run, Debris Threading, Flare Belt (M3) |
+| `keyhints.md` | Key hints bar under the game view: contexts, platform key names, Options row (post-1.0) |
 | `scoring.md` | Arrival scoring, ratings, high scores |
 | `ui.md` | Screen flow, layouts, controls, accessibility |
 | `art.md` | Palette, sprite specs, CRT look (M4) |
