@@ -40,6 +40,7 @@ export function buyReason(s: GameState, id: SupplyKey, wp: number): string | nul
 /** Why the Sell button is dimmed for an item here (null = enabled). */
 export function sellReason(s: GameState, id: SupplyKey, wp: number): string | null {
   if (sellPrice(id, wp) === null) return t('station.outfitters.noSell');
+  if (s.supplies[id] <= 0) return t('station.outfitters.noneToSell');
   return maxSellable(s, id) > 0 ? null : (sellBlocker(s, id, 1) ?? t('station.outfitters.noSell'));
 }
 

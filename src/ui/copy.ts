@@ -82,6 +82,7 @@ export const FALLBACK: Readonly<Record<string, string>> = {
   'score.multiplier': 'Profession multiplier',
   'score.total': 'Total',
   'score.rating': 'Rating: {rating}',
+  'station.outfitters.noneToSell': 'You have none to sell.',
 };
 
 /**

@@ -52,7 +52,7 @@ export abstract class BaseScene extends Phaser.Scene {
   }
 
   /**
-   * At Titan Refinery: ask "via Oort Beacon / direct" (route.* keys), dispatch `route`, show the chosen line, then
+   * At Titan Refinery: ask "via Oort Beacon / direct" (route.* keys), dispatch `route` (its log line shows in Travel), then
    * `onDone(true)`. Cancel (or Esc) calls `onDone(false)`. Elsewhere `onDone(true)` at once.
    */
   protected askRoute(onDone: (chosen: boolean) => void): void {
@@ -72,7 +72,8 @@ export abstract class BaseScene extends Phaser.Scene {
         const r = applyAction(session.state!, { type: 'route', via }, session.rng);
         if (r.error) return this.modal(r.error, { onClose: () => onDone(false) });
         session.state = r.state;
-        this.modal(r.entries.map((e) => e.text).join('\n\n'), { onClose: () => onDone(true) });
+        // The sim logged the chosen-route line (kind route); Travel's log shows it, so no extra confirmation.
+        onDone(true);
       },
     });
   }

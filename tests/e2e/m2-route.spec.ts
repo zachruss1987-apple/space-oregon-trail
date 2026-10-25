@@ -19,7 +19,7 @@ test('Titan Refinery: choose the direct route; Oort Beacon is skipped, Heliopaus
   await snap(page, 'Station-route-prompt');
   await page.keyboard.press('2'); // direct
   await expect.poll(async () => (await getState(page))?.route).toBe('direct');
-  await page.keyboard.press('Enter'); // dismiss the chosen-route line -> Travel (departs)
+  // No confirmation modal: the chosen-route line is in the Travel log, so choosing departs at once.
   await expect(body(page)).toHaveAttribute('data-scene', 'Travel');
   await idle(page);
 

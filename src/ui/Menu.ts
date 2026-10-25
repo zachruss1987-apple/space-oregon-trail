@@ -68,7 +68,8 @@ export class Menu implements KeyHandler {
     else if (/^[1-9]$/.test(e.key)) {
       const i = Number(e.key) - 1;
       if (i < this.items.length) {
-        this.setCursor(i);
+        // A disabled row only explains itself; the cursor stays where it was.
+        if (!this.items[i]?.disabled) this.setCursor(i);
         this.choose(i);
       }
     }

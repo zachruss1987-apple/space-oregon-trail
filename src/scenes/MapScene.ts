@@ -47,7 +47,7 @@ export class MapScene extends BaseScene {
     const total = totalMk(s.route);
     this.add.text(16, 10, t('map.title'), textStyle(COLORS.bright));
     this.add.text(624, 10, `${fmt(s.distanceTotal)} / ${fmt(total)} ${t('status.units.mk')}`, textStyle(COLORS.text)).setOrigin(1, 0);
-    this.add.text(16, 30, progressBar(s.distanceTotal, total), textStyle(COLORS.text));
+    this.add.text(16, 28, progressBar(s.distanceTotal, total), textStyle(COLORS.text));
     // Active route list, with the skipped Oort Beacon put back in place (marked) when direct.
     const active = routeWaypoints(s.route);
     const shown = WAYPOINTS.map((w) => active.find((a) => a.index === w.index) ?? w);
@@ -58,13 +58,13 @@ export class MapScene extends BaseScene {
         color: skipped ? COLORS.dim : w.index === s.segment || w.index === s.arrivedAt ? COLORS.bright : w.index < s.segment ? COLORS.dim : COLORS.text,
       };
     });
-    const table = new Table(this, 16, 52, [{ width: 2, right: true }, { width: 25 }, { width: 9 }, { width: 6, right: true }, { width: 14 }], 18);
+    const table = new Table(this, 16, 48, [{ width: 2, right: true }, { width: 24 }, { width: 8 }, { width: 5, right: true }, { width: 12 }], 16);
     table.setRows(rows, ['#', t('map.col.waypoint'), t('map.col.type'), t('status.units.mk'), '']);
     if (!pastBranch(s)) {
       const line = t('map.branch', {
         oortLabel: t('route.oortLabel'), oort: fmt(totalMk('oort')), directLabel: t('route.directLabel'), direct: fmt(totalMk('direct')),
       });
-      this.add.text(16, table.bottom + 2, line, textStyle(COLORS.dim, 608, 12));
+      this.add.text(16, table.bottom + 4, line, textStyle(COLORS.dim, 608, 12));
     }
     this.router.push({
       onKey: (e) => {
