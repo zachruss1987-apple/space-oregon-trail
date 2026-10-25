@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:32:47.770Z",
+  "updated": "2026-10-25T03:37:04.554Z",
   "milestones": [
     {
       "id": "M0",
@@ -15,12 +15,12 @@
     {
       "id": "M2",
       "title": "Stations and hazards",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "M3",
       "title": "Mini-games",
-      "status": "planned"
+      "status": "active"
     },
     {
       "id": "M4",
@@ -1369,11 +1369,11 @@
       "desc": "",
       "milestone": "M2",
       "role": "tester",
-      "status": "doing",
+      "status": "done",
       "assignee": "tester",
       "issue": 34,
       "created": "2026-10-25T02:56:34.493Z",
-      "updated": "2026-10-25T03:27:08.703Z",
+      "updated": "2026-10-25T03:37:04.316Z",
       "notes": [
         {
           "ts": "2026-10-25T03:26:17.090Z",
@@ -1384,6 +1384,21 @@
           "ts": "2026-10-25T03:27:08.703Z",
           "by": "tester",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:36:16.540Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:36:16.991Z",
+          "by": "tester",
+          "text": "verified: 16 e2e (8 existing + 4 new m2 specs, 3 new tests in screens), 912 unit; e2e 1.4 min; seeds refreshed (SEED-14 arrives d153)"
+        },
+        {
+          "ts": "2026-10-25T03:37:04.316Z",
+          "by": "tester",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -1492,6 +1507,72 @@
         }
       ],
       "issueClosed": true
+    },
+    {
+      "id": "T-055",
+      "title": "Sim: mini-game result application (salvage/threading/flare intents), state.seed, rodeTheWind, STATE_VERSION 3, auto-resolve mapping",
+      "desc": "",
+      "milestone": "M3",
+      "role": "developer",
+      "status": "doing",
+      "assignee": "developer",
+      "issue": null,
+      "created": "2026-10-25T03:33:02.948Z",
+      "updated": "2026-10-25T03:33:29.018Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:33:29.019Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        }
+      ]
+    },
+    {
+      "id": "T-056",
+      "title": "Writer: mini-game text keys per minigames.md (instructions, results, Rode the wind, skip penalty)",
+      "desc": "",
+      "milestone": "M3",
+      "role": "writer",
+      "status": "done",
+      "assignee": "writer",
+      "issue": null,
+      "created": "2026-10-25T03:33:03.008Z",
+      "updated": "2026-10-25T03:37:04.370Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:33:43.240Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:36:19.044Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:36:19.503Z",
+          "by": "writer",
+          "text": "Added 16 events.json log keys (45 variants) + ~45 ui.json minigame.* keys + score.labels.rodeTheWind; text test extended; npm test: 912 pass, 3 fail outside content (STATE_VERSION migration, concurrent sim work)"
+        },
+        {
+          "ts": "2026-10-25T03:37:04.371Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
+    },
+    {
+      "id": "T-057",
+      "title": "UI polish from M2 playtest: number key on disabled modal button should not move cursor silently; route prompt needs an extra Enter; Map wording",
+      "desc": "Tester notes from T-051.",
+      "milestone": "M3",
+      "role": "developer",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T03:37:04.425Z",
+      "updated": "2026-10-25T03:37:04.425Z",
+      "notes": []
     }
   ]
 }
