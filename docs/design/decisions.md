@@ -101,3 +101,9 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - "Pay the tug" remains available at the Flare Belt in M3 (consistent with the M2 build); riding the solar wind is the mini-game alternative.
 - Auto-resolve players cannot earn the "Rode the wind" +200 bonus; it rewards the real-time run only.
 - Average-player hit rates (3%/5%/7%) are provisional until M5 playtests.
+
+## 2026-10-24 (M3 sim results, developer, logged by PM)
+- Result validation refuses (rather than clamps) chargesUsed above min(charges, 20) and hauls above the 100-unit carry limit; the scene enforces limits and shows `salvage.overweight` itself. Parts above the hold cap of 3 are clamped.
+- The Flare Belt mini-game uses method `thread` with a flare-kind result; there is no separate `ride` method.
+- Hot-chunk deaths take the health.md dominant cause; flare burn/radiation deaths are cause `hazard`; scorch with empty cargo logs n = 0; radiation on a crew member with no condition room gives a second random crew −10.
+- Crash: cargo halves rounded down; one of each held spare is lost deterministically (no draw); threading health bonus caps at 100.

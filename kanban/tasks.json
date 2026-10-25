@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:37:04.554Z",
+  "updated": "2026-10-25T03:44:50.396Z",
   "milestones": [
     {
       "id": "M0",
@@ -928,12 +928,18 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T03:44:50.347Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:44:50.348Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-029",
@@ -954,12 +960,18 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T03:44:50.395Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:44:50.396Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-031",
@@ -1514,16 +1526,31 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "doing",
+      "status": "done",
       "assignee": "developer",
       "issue": null,
       "created": "2026-10-25T03:33:02.948Z",
-      "updated": "2026-10-25T03:33:29.018Z",
+      "updated": "2026-10-25T03:44:50.285Z",
       "notes": [
         {
           "ts": "2026-10-25T03:33:29.019Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:42:35.412Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:42:35.845Z",
+          "by": "developer",
+          "text": "Sim: salvage/cross-thread result intents (Salvage, Threading, Flare) with schema validation, minigameSeed, state.seed/rodeTheWind, STATE_VERSION 3 + v2 migration, Rode the wind +200 score line, log kinds salvage/threading/flare; runPolicy 50-seed fixture unchanged; 958 unit tests (41 new), 16 e2e green"
+        },
+        {
+          "ts": "2026-10-25T03:44:50.285Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ]
     },
