@@ -72,14 +72,14 @@ describe('scan for salvage (travel.md)', () => {
     expect(canScan(s)).toBe(true);
     expect(resolveScan(s, scriptedRng([0.1]), [])).toBe(0);
     expect(s.supplies.charges).toBe(20);
-    expect(resolveScan(s, scriptedRng([0.5, 0]), [])).toBe(15);
-    expect(resolveScan(s, scriptedRng([0.9, 0.99]), [])).toBe(40);
+    expect(resolveScan(s, scriptedRng([0.5, 0]), [])).toBe(25); // yields 25-60 / 60-120 since T-039, decisions.md 2026-10-25
+    expect(resolveScan(s, scriptedRng([0.9, 0.99]), [])).toBe(60);
     expect(s.scansThisSegment).toBe(3);
     s.scansThisSegment = 0;
     expect(resolveScan(s, scriptedRng([0.99, 0]), [])).toBe(0);
     expect(s.supplies.plates).toBe(1);
     s.supplies.pumps = 3;
-    expect(resolveScan(s, scriptedRng([0.99, 0.5, 0]), [])).toBe(40);
+    expect(resolveScan(s, scriptedRng([0.99, 0.5, 0]), [])).toBe(60);
     expect(canScan(s)).toBe(false);
   });
 

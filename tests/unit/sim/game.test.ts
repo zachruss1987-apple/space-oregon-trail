@@ -11,7 +11,7 @@ describe('createGame (world.md initial state)', () => {
     const s = createGame({ profession: 'engineer', window: 2 }, createRng(1));
     expect(s.crew.map((c) => c.name)).toEqual(['Ezra', 'Temperance', 'Amos', 'Lucinda', 'Hollis']);
     expect(s.crew.every((c) => c.health === 100 && c.alive && c.awayDays === 0 && c.conditions.length === 0)).toBe(true);
-    expect(s.credits).toBe(800);
+    expect(s.credits).toBe(650); // T-039, decisions.md 2026-10-25 (was 800)
     expect(Object.values(s.supplies).every((v) => v === 0)).toBe(true);
     expect(s.broken).toEqual({ hull: false, pump: false, gyro: false });
     expect(s).toMatchObject({

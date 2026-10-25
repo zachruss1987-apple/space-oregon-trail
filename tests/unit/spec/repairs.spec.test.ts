@@ -182,18 +182,19 @@ describe('Scan for salvage (travel.md "Scan for salvage")', () => {
     expect(r.state.distanceInSegment).toBe(0);
   });
 
-  it('yields: nothing / 15-40 / 40-80 rations; never more than 80', () => {
+  // Yields 25-60 / 60-120 since T-039, decisions.md 2026-10-25 (were 15-40 / 40-80).
+  it('yields: nothing / 25-60 / 60-120 rations; never more than 120', () => {
     const g = gains(ship(), 1500);
-    expect(Math.max(...g)).toBeLessThanOrEqual(80);
-    for (const x of g) expect(x === 0 || (x >= 15 && x <= 80)).toBe(true);
-    expect(g.some((x) => x >= 15 && x < 40)).toBe(true);
-    expect(g.some((x) => x > 40)).toBe(true);
+    expect(Math.max(...g)).toBeLessThanOrEqual(120);
+    for (const x of g) expect(x === 0 || (x >= 25 && x <= 120)).toBe(true);
+    expect(g.some((x) => x >= 25 && x < 60)).toBe(true);
+    expect(g.some((x) => x > 60)).toBe(true);
   });
 
-  it('expected first-scan yield is about 27 rations', () => {
+  it('expected first-scan yield is about 42 rations', () => {
     const m = mean(gains(ship(), 3000));
-    expect(m).toBeGreaterThan(25);
-    expect(m).toBeLessThan(29.5);
+    expect(m).toBeGreaterThan(39);
+    expect(m).toBeLessThan(45);
   });
 
   it('25% of scans find nothing (spares at cap: the 5% spare case yields rations instead)', () => {
@@ -207,11 +208,11 @@ describe('Scan for salvage (travel.md "Scan for salvage")', () => {
     expectRate(parts, trials.length, 0.05, 4, 'spare finds');
   });
 
-  it('the 3rd and later scans in a segment halve ration yields (floor): mean ~13', () => {
+  it('the 3rd and later scans in a segment halve ration yields (floor): mean ~21', () => {
     const g = gains(ship({ scansThisSegment: 2 }), 3000);
-    expect(mean(g)).toBeGreaterThan(11.5);
-    expect(mean(g)).toBeLessThan(15);
-    expect(Math.max(...g)).toBeLessThanOrEqual(40);
+    expect(mean(g)).toBeGreaterThan(19);
+    expect(mean(g)).toBeLessThan(23);
+    expect(Math.max(...g)).toBeLessThanOrEqual(60);
   });
 
   it('the 2nd scan in a segment is not yet halved', () => {

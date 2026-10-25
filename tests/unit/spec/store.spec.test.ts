@@ -117,8 +117,8 @@ describe('Affordability by profession (resources.md, travel.md worked example)',
     expect(s.credits).toBeCloseTo(370, 9);
   });
 
-  it('Engineer kit: 3 drives, 10 suits, 1 of each, 5 boxes, 1,800 rations spends exactly 800', () => {
-    const s = buyAll(fresh('engineer'), [...kit, ['rations', 1800]]);
+  it('Engineer kit: 3 drives, 10 suits, 1 of each, 5 boxes, 1,300 rations spends exactly 650 (T-039, decisions.md 2026-10-25)', () => {
+    const s = buyAll(fresh('engineer'), [...kit, ['rations', 1300]]);
     expect(s.credits).toBeCloseTo(0, 9);
   });
 

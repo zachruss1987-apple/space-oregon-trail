@@ -46,8 +46,8 @@ describe('createGame', () => {
   it('scales starting credits (rounded) and stores the level', () => {
     const credits = (difficulty: DifficultyId, profession: 'executive' | 'engineer' | 'farmer'): number =>
       createGame({ profession, window: 1, difficulty }, createRng(1)).credits;
-    expect([credits('greenhorn', 'executive'), credits('greenhorn', 'engineer'), credits('greenhorn', 'farmer')]).toEqual([1840, 920, 460]);
-    expect([credits('pathfinder', 'executive'), credits('pathfinder', 'engineer'), credits('pathfinder', 'farmer')]).toEqual([1440, 720, 360]);
+    expect([credits('greenhorn', 'executive'), credits('greenhorn', 'engineer'), credits('greenhorn', 'farmer')]).toEqual([1840, 747, 460]);
+    expect([credits('pathfinder', 'executive'), credits('pathfinder', 'engineer'), credits('pathfinder', 'farmer')]).toEqual([1440, 585, 360]);
     expect(createGame({ profession: 'farmer', window: 2, difficulty: 'pathfinder' }, createRng(1)).difficulty).toBe('pathfinder');
   });
 
@@ -194,6 +194,7 @@ describe('saves and policy', () => {
     expect(fromJSON(toJSON(at('greenhorn'))).difficulty).toBe('greenhorn');
   });
 
+  // Snapshot re-baselined on T-039 (balance tuning).
   it('runPolicy with difficulty spacer reproduces the 50-seed snapshot', () => {
     const now = fixture.map((f) => {
       const r = runPolicy(f.seed, { difficulty: 'spacer' });

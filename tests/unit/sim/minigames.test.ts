@@ -331,6 +331,7 @@ describe('state.seed and minigameSeed', () => {
 });
 
 describe('reference policy unchanged (minigames.md "Reference policy")', () => {
+  // Fixture re-baselined on T-039 (balance tuning, decisions.md 2026-10-25); it still pins the policy between tuning passes.
   it('50 seeds give the same RunSummary as before M3 (fixture snapshot)', () => {
     const now = fixture.map((f) => {
       const r = runPolicy(f.seed);

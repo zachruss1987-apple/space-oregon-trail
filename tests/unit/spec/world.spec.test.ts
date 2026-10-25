@@ -5,7 +5,8 @@ import { createGame, createRng, isFlareSeason, isValidName, normalizeCrewNames, 
 const POOL = ['Abigail', 'Bartholomew', 'Cora', 'Delphine', 'Eli', 'Florence', 'Gideon', 'Hester', 'Ignatius', 'Jemima',
   'Kit', 'Lavinia', 'Mordecai', 'Nell', 'Obadiah', 'Prudence', 'Silas', 'Theodora', 'Ulysses', 'Zebulon'];
 const DEFAULTS = ['Ezra', 'Temperance', 'Amos', 'Lucinda', 'Hollis'];
-const CREDITS: Record<ProfessionId, number> = { executive: 1600, engineer: 800, farmer: 400 };
+// Engineer 650 since T-039, decisions.md 2026-10-25 (was 800).
+const CREDITS: Record<ProfessionId, number> = { executive: 1600, engineer: 650, farmer: 400 };
 const STARTS: Record<WindowId, string> = { 1: '2184-03-01', 2: '2184-04-01', 3: '2184-05-01', 4: '2184-06-01', 5: '2184-07-01' };
 const make = (profession: ProfessionId = 'executive', window: WindowId = 1, crewNames?: string[]) =>
   createGame({ profession, window, ...(crewNames ? { crewNames } : {}) }, createRng(9));

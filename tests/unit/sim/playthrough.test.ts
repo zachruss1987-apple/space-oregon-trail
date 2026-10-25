@@ -28,11 +28,13 @@ describe.skipIf(process.env.SKIP_SLOW)('playthrough (reference policy)', () => {
     expect(all.meanDays).toBeLessThanOrEqual(200);
   });
 
-  it('profession ordering matches the design: Executive and Engineer far ahead of Farmer', () => {
+  it('profession ordering matches the design: Executive and Engineer ahead of Farmer', () => {
     const by = (p: ProfessionId) => summarize(runs.filter((r) => r.profession === p));
     expect(by('executive').winRate).toBeGreaterThan(by('farmer').winRate);
     expect(by('engineer').winRate).toBeGreaterThan(by('farmer').winRate);
-    expect(by('farmer').winRate).toBeLessThan(0.2);
+    // M5 band (T-039 tuning): Farmer hard but winnable, ~30% (61 runs here, so a wide window).
+    expect(by('farmer').winRate).toBeGreaterThanOrEqual(0.15);
+    expect(by('farmer').winRate).toBeLessThanOrEqual(0.45);
   });
 
   it('every run ends, with no NaN or negative values', () => {

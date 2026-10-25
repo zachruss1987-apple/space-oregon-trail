@@ -9,10 +9,10 @@ describe('reference policy (travel.md)', () => {
     const shop = (p: 'executive' | 'engineer' | 'farmer') => policyShop(createGame({ profession: p, window: 1 }, createRng(1)));
     expect(shop('executive').supplies).toEqual({ drives: 3, suits: 10, plates: 1, pumps: 1, gyros: 1, charges: 100, rations: 3000 });
     expect(shop('executive').credits).toBe(440);
-    expect(shop('engineer').supplies.rations).toBe(1800);
+    expect(shop('engineer').supplies.rations).toBe(1300); // T-039, decisions.md 2026-10-25: Engineer 650 cr, Farmer 8 suits
     expect(shop('engineer').credits).toBe(0);
-    expect(shop('farmer').supplies).toMatchObject({ suits: 5, rations: 633 });
-    expect(policyKit('farmer').suits).toBe(5);
+    expect(shop('farmer').supplies).toMatchObject({ suits: 8, rations: 533 });
+    expect(policyKit('farmer').suits).toBe(8);
   });
 
   it('chooses repair > rations > thrust > rest > scan > continue', () => {

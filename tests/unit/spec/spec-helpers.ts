@@ -20,7 +20,8 @@ export const WEATHER_SPEC: Record<WeatherName, { speed: number; unsuited: number
   flare: { speed: 0.5, unsuited: -5, suited: -2 },
 };
 
-export const THRUST_SPEC = { cruise: { mk: 20, health: 0 }, hard: { mk: 25, health: -2 }, overburn: { mk: 30, health: -5 } } as const;
+// Thrust 22/27/33 since T-039 (decisions.md 2026-10-25, balance tuning).
+export const THRUST_SPEC = { cruise: { mk: 22, health: 0 }, hard: { mk: 27, health: -2 }, overburn: { mk: 33, health: -5 } } as const;
 export const RATION_SPEC = { full: { per: 3, health: 2 }, half: { per: 2, health: 0 }, paste: { per: 1, health: -2 } } as const;
 export const DRIVE_SPEC = [0, 0.6, 0.85, 1.0, 1.1];
 

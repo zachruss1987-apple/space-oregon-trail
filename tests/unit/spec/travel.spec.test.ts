@@ -10,7 +10,8 @@ const massSpec = (rations: number): number => 1 - Math.min(0.15, (0.05 * Math.ma
 const suitedHealth = (w: string): number => WEATHER_SPEC[w as WeatherName].suited;
 
 describe('Thrust and distance (travel.md "Thrust", "Distance")', () => {
-  it.each([['cruise', 20], ['hard', 25], ['overburn', 30]] as const)('%s burns %i Mk/day base (3 drives, fair weather, 1000 rations)', (thrust, mk) => {
+  // T-039 (decisions.md 2026-10-25): base thrust 22/27/33 (was 20/25/30).
+  it.each([['cruise', 22], ['hard', 27], ['overburn', 33]] as const)('%s burns %i Mk/day base (3 drives, fair weather, 1000 rations)', (thrust, mk) => {
     expect(dailyDistance(ship({ thrust, weather: 'fair', supplies: { rations: 1000 } }))).toBeCloseTo(mk, 9);
   });
 
@@ -26,11 +27,11 @@ describe('Thrust and distance (travel.md "Thrust", "Distance")', () => {
   });
 
   it.each([[0, 0], [1, 0.6], [2, 0.85], [3, 1.0], [4, 1.1], [5, 1.1], [9, 1.1]])('drive factor with %i working drives is %f', (drives, f) => {
-    expect(dailyDistance(ship({ weather: 'fair', supplies: { drives, rations: 1000 } }))).toBeCloseTo(20 * f, 9);
+    expect(dailyDistance(ship({ weather: 'fair', supplies: { drives, rations: 1000 } }))).toBeCloseTo(22 * f, 9);
   });
 
   it('working drives = owned minus offline (4 owned, 1 stalled -> factor 1.0)', () => {
-    expect(dailyDistance(ship({ weather: 'fair', offlineDrives: [2], supplies: { drives: 4, rations: 1000 } }))).toBeCloseTo(20, 9);
+    expect(dailyDistance(ship({ weather: 'fair', offlineDrives: [2], supplies: { drives: 4, rations: 1000 } }))).toBeCloseTo(22, 9);
   });
 
   it('with every drive offline the ship does not move', () => {
@@ -39,12 +40,12 @@ describe('Thrust and distance (travel.md "Thrust", "Distance")', () => {
 
   it.each([['calm', 1.0], ['fair', 1.0], ['unsettled', 0.9], ['storm', 0.6], ['fog', 0.7], ['flare', 0.5]] as const)(
     '%s weather speed factor is %f', (weather, f) => {
-      expect(dailyDistance(ship({ weather, supplies: { rations: 1000 } }))).toBeCloseTo(20 * f, 9);
+      expect(dailyDistance(ship({ weather, supplies: { rations: 1000 } }))).toBeCloseTo(22 * f, 9);
     });
 
   it.each([[0, 1], [1000, 1], [1500, 0.975], [2000, 0.95], [3000, 0.9], [4000, 0.85], [9000, 0.85]])(
     'ration mass factor at %i rations is %f (-5%% per 1000 over 1000, capped at -15%%)', (rations, f) => {
-      expect(dailyDistance(ship({ weather: 'fair', supplies: { rations } }))).toBeCloseTo(20 * f, 9);
+      expect(dailyDistance(ship({ weather: 'fair', supplies: { rations } }))).toBeCloseTo(22 * f, 9);
     });
 
   it('a broken coolant pump means no movement', () => {
@@ -132,12 +133,13 @@ describe('Order of operations (travel.md steps 1, 4, 10)', () => {
 describe('Rations (travel.md "Rations")', () => {
   it.each([
     ['executive', 'full', 15], ['executive', 'half', 10], ['executive', 'paste', 5], ['engineer', 'full', 15],
-    ['farmer', 'full', 12], ['farmer', 'half', 8], ['farmer', 'paste', 4],
+    // Farmer floor(need x 0.65) since T-039 (decisions.md 2026-10-25; was x0.85).
+    ['farmer', 'full', 9], ['farmer', 'half', 6], ['farmer', 'paste', 3],
   ] as const)('%s on %s rations needs %i ration-days for five crew', (profession, setting, need) => {
     expect(rationNeed(ship({ rations: setting as RationId }, profession))).toBe(need);
   });
 
-  it('Farmer need has a minimum of 1 (one crew member on Paste: floor(0.85) = 0 -> 1)', () => {
+  it('Farmer need has a minimum of 1 (one crew member on Paste: floor(0.65) = 0 -> 1)', () => {
     let s = ship({ rations: 'paste' }, 'farmer');
     s = { ...s, crew: s.crew.map((c, i) => (i === 0 ? c : { ...c, alive: false })) };
     expect(rationNeed(s)).toBe(1);
@@ -224,7 +226,7 @@ describe('Weather health and suits (travel.md weather table, "Suited")', () => {
       expect(trials.length).toBeGreaterThan(20);
       for (const { r } of trials) {
         expect(r.state.crew[0]!.health).toBe(80 + (suits === 0 ? -5 : -2));
-        expect(r.state.distanceInSegment).toBeCloseTo(20 * 0.5 * massSpec(1500), 9);
+        expect(r.state.distanceInSegment).toBeCloseTo(22 * 0.5 * massSpec(1500), 9);
       }
     }
   });
@@ -261,7 +263,7 @@ describe('Weather health and suits (travel.md weather table, "Suited")', () => {
 });
 
 describe('Solar storm side effects (travel.md step 6, weather table)', () => {
-  it('Suit wear: 20% chance per storm day to lose exactly 1 suit', () => {
+  it('Suit wear: 25% chance per storm day to lose exactly 1 suit (T-039, was 20%)', () => {
     const s = allHealth(ship({ weather: 'storm' }), 90);
     let storms = 0;
     let lost = 0;
@@ -274,7 +276,7 @@ describe('Solar storm side effects (travel.md step 6, weather table)', () => {
       expect(d === 0 || d === 1).toBe(true);
       lost += d;
     }
-    expectRate(lost, storms, 0.2, 4, 'suit loss');
+    expectRate(lost, storms, 0.25, 4, 'suit loss');
   });
 
   it('Suit wear never happens on fair or calm days (no suit entry)', () => {

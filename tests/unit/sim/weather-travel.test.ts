@@ -59,7 +59,7 @@ describe('distance and rations (travel.md)', () => {
 
   it('distance = base × drive × weather × mass × damage', () => {
     const s = travelingState({ thrust: 'hard', weather: 'storm', supplies: { drives: 2, rations: 2000 } });
-    expect(dailyDistance(s)).toBeCloseTo(25 * 0.85 * 0.6 * 0.95);
+    expect(dailyDistance(s)).toBeCloseTo(27 * 0.85 * 0.6 * 0.95);
     s.offlineDrives = [1, 1];
     expect(dailyDistance(s)).toBe(0);
   });
@@ -69,14 +69,14 @@ describe('distance and rations (travel.md)', () => {
     expect(remainingInSegment(s)).toBe(3);
   });
 
-  it('ration need per present crew; Farmer floor ×0.85 min 1', () => {
+  it('ration need per present crew; Farmer floor ×0.65 min 1 (T-039, decisions.md 2026-10-25)', () => {
     const s = travelingState();
     expect(rationNeed(s)).toBe(15);
     expect(rationNeed(s, 'paste')).toBe(5);
     s.crew[4]!.awayDays = 2;
     expect(rationNeed(s, 'half')).toBe(8);
     const f = travelingState({}, 'farmer');
-    expect(rationNeed(f)).toBe(12);
+    expect(rationNeed(f)).toBe(9);
     f.crew.slice(1).forEach((c) => (c.alive = false));
     expect(rationNeed(f, 'paste')).toBe(1);
     f.crew[0]!.alive = false;

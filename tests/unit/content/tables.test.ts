@@ -61,8 +61,9 @@ describe('items (resources.md)', () => {
 describe('professions (world.md)', () => {
   it('credits, multipliers and exact perk numbers', () => {
     expect(PROFESSIONS.executive).toMatchObject({ credits: 1600, multiplier: 1, repairSuccess: 0.8, spareLossOnFail: 0.3 });
-    expect(PROFESSIONS.engineer).toMatchObject({ credits: 800, multiplier: 2, repairSuccess: 0.95, spareLossOnFail: 0.1, driveFailureWeight: 0.5 });
-    expect(PROFESSIONS.farmer).toMatchObject({ credits: 400, multiplier: 3, rationFactor: 0.85, algaeFactor: 1.5 });
+    // Engineer credits 650 and Farmer ration factor 0.65 since T-039, decisions.md 2026-10-25.
+    expect(PROFESSIONS.engineer).toMatchObject({ credits: 650, multiplier: 2, repairSuccess: 0.95, spareLossOnFail: 0.1, driveFailureWeight: 0.5 });
+    expect(PROFESSIONS.farmer).toMatchObject({ credits: 400, multiplier: 3, rationFactor: 0.65, algaeFactor: 1.5 });
   });
 });
 
@@ -87,7 +88,7 @@ describe('windows and weather (world.md, travel.md)', () => {
   });
 
   it('thrust and rations tables', () => {
-    expect(Object.values(THRUST).map((t) => [t.mkPerDay, t.health])).toEqual([[20, 0], [25, -2], [30, -5]]);
+    expect(Object.values(THRUST).map((t) => [t.mkPerDay, t.health])).toEqual([[22, 0], [27, -2], [33, -5]]) // T-039, decisions.md 2026-10-25;
     expect(Object.values(RATIONS).map((r) => [r.perCrew, r.health])).toEqual([[3, 2], [2, 0], [1, -2]]);
   });
 });
