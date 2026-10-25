@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T06:07:32.143Z",
+  "updated": "2026-10-25T06:26:38.222Z",
   "milestones": [
     {
       "id": "M0",
@@ -1359,11 +1359,11 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "review",
+      "status": "done",
       "assignee": "developer",
       "issue": 49,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T04:28:35.148Z",
+      "updated": "2026-10-25T06:26:38.155Z",
       "notes": [
         {
           "ts": "2026-10-25T04:25:20.471Z",
@@ -1394,6 +1394,26 @@
           "ts": "2026-10-25T04:28:35.147Z",
           "by": "developer",
           "text": "Harness + baseline done; tuning pass remains (card stays open)."
+        },
+        {
+          "ts": "2026-10-25T06:08:23.246Z",
+          "by": "developer",
+          "text": "review -> doing"
+        },
+        {
+          "ts": "2026-10-25T06:26:08.622Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T06:26:09.048Z",
+          "by": "developer",
+          "text": "Tuned (balanced, 300 seeds x 5 windows): Exec 59.7->63.3% (203->184 d), Eng 65.4->51.1% (176->157 d), Farmer 4.3->31.7% (169->171 d); mean 183->170.5 d; top cause radiation 29.8%; greenhorn 78.3 / spacer 48.7 / pathfinder 21.2. Changes: thrust 22/27/33, suit wear 25%, salvage 25-60/60-120, Engineer 650 cr, Farmer x0.65, policy Farmer 8 suits. Report docs/reports/balance-tuned.md; bands test asserts M5 bands; policy-50 re-baselined; e2e seeds regenerated (visual baselines + seed-pinned specs need tester refresh). 1570 unit tests pass."
+        },
+        {
+          "ts": "2026-10-25T06:26:38.156Z",
+          "by": "developer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -2304,6 +2324,19 @@
       "updated": "2026-10-25T06:06:49.464Z",
       "notes": [],
       "issueClosed": false
+    },
+    {
+      "id": "T-067",
+      "title": "Sim: reference policy tops up rations at stations (Engineer cautious policy drops to 19%)",
+      "desc": "",
+      "milestone": "M5",
+      "role": "developer",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T06:26:38.222Z",
+      "updated": "2026-10-25T06:26:38.222Z",
+      "notes": []
     }
   ]
 }
