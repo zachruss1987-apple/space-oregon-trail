@@ -6,7 +6,8 @@ import { list, t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { NameInput } from '@/ui/NameInput';
 import { TextBox } from '@/ui/TextBox';
-import { COLORS, fmt, LINE_HEIGHT, textStyle } from '@/ui/theme';
+import { addText } from '@/ui/text';
+import { COLORS, fmt, LINE_HEIGHT } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
 
 const LEFT = 40;
@@ -15,6 +16,10 @@ const WIDTH = 560;
 export class SetupScene extends BaseScene {
   constructor() {
     super('Setup');
+  }
+
+  protected override music(): string {
+    return 'title';
   }
 
   create(): void {
@@ -62,15 +67,15 @@ export class SetupScene extends BaseScene {
     this.clear();
     const names = session.draft.names;
     new TextBox(this, LEFT, 30, WIDTH, t('setup.namePrompt'));
-    this.add.text(LEFT, 70, t('setup.nameHint'), textStyle(COLORS.dim, WIDTH));
+    addText(this, LEFT, 70, t('setup.nameHint'), { color: COLORS.dim, wrap: WIDTH });
     const label = (i: number): string => (i === 0 ? t('setup.captain') : t('setup.crew', { n: i + 1 }));
-    const rowY = (i: number): number => 120 + i * (LINE_HEIGHT + 6);
+    const rowY = (i: number): number => 120 + i * (LINE_HEIGHT + 8);
     for (let i = 0; i < CREW_SIZE; i++) {
       const color = i === field ? COLORS.bright : COLORS.text;
-      this.add.text(LEFT, rowY(i), `${i === field ? '>' : ' '} ${label(i).padEnd(10)}`, textStyle(color));
-      if (i !== field) this.add.text(LEFT + 120, rowY(i), names[i] ?? '', textStyle(COLORS.text));
+      addText(this, LEFT, rowY(i), `${i === field ? '>' : ' '} ${label(i).padEnd(10)}`, { color });
+      if (i !== field) addText(this, LEFT + 120, rowY(i), names[i] ?? '', { color: COLORS.text });
     }
-    this.add.text(LEFT, rowY(CREW_SIZE) + 10, t('setup.randomHint', { label: t('setup.randomNames') }), textStyle(COLORS.dim));
+    addText(this, LEFT, rowY(CREW_SIZE) + 10, t('setup.randomHint', { label: t('setup.randomNames') }), { color: COLORS.dim });
     const input = new NameInput(this, LEFT + 120, rowY(field), {
       placeholder: names[field] ?? '',
       maxLength: NAME_MAX_LENGTH,
@@ -121,6 +126,6 @@ export class SetupScene extends BaseScene {
   }
 
   private hint(): void {
-    this.add.text(LEFT, 372, t('common.back'), textStyle(COLORS.dim));
+    addText(this, LEFT, 372, t('common.back'), { color: COLORS.dim });
   }
 }

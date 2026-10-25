@@ -3,7 +3,8 @@
  * Routing by sim state: arrival -> Waypoint; a refused Continue with a pending crossing -> Hazard, or stranded at a
  * station -> Station; endings -> Death/Arrival.
  */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { REST, WAYPOINTS } from '@/content';
 import { markFlag } from '@/game/contract';
@@ -17,23 +18,32 @@ import { Menu } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
 import { StatusBar } from '@/ui/StatusBar';
 import { TextBox } from '@/ui/TextBox';
-import { COLORS, panel, textStyle } from '@/ui/theme';
+import { panel } from '@/ui/chrome';
+import { addText, setText } from '@/ui/text';
+import { COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
+import { TravelBand } from './travelBand';
 import { actionItems, MODAL_KINDS, rationOptions, recentLog, repairOptions, statusRows, STOP_KINDS, thrustOptions, type Option } from './travelView';
 
-const BAND_H = 132;
+const STATUS_Y = 142;
 const MENU_Y = 204;
+const MENU_LH = 18;
 const LOG_X = 332;
 const LOG_W = 296;
-const LOG_LINES = 9;
+const LOG_LINES = 14;
+/** Log kinds that sound the alarm (danger events) when a day brings them. */
+const ALARM_KINDS = new Set(['event', 'condition']);
+/** Kinds too routine for the new-line ding. */
+const QUIET_KINDS = new Set(['travel', 'quiet', 'setting', 'rest', 'weather']);
 
 export class TravelScene extends BaseScene {
   private menu!: Menu;
   private status!: StatusBar;
   private log!: TextBox;
-  private bandLabel!: Phaser.GameObjects.Text;
-  private hint!: Phaser.GameObjects.Text;
-  private stars: Phaser.GameObjects.Rectangle[] = [];
+  private bandLabel!: Phaser.GameObjects.BitmapText;
+  private hint!: Phaser.GameObjects.BitmapText;
+  private band!: TravelBand;
+  private humAt = 0;
   private busy = false;
   private auto = false;
   /** Auto-travel started by holding Enter (stops on key up). */
@@ -51,13 +61,15 @@ export class TravelScene extends BaseScene {
     const s = session.state;
     if (!s) return this.go('Title');
     if (s.status !== 'traveling') return this.ending();
-    this.drawBand();
-    panel(this, 4, BAND_H + 2, GAME_WIDTH - 8, 60, true);
-    this.status = new StatusBar(this, 12, BAND_H + 8, [26, 22, 22]);
-    panel(this, 4, MENU_Y - 6, GAME_WIDTH - 8, GAME_HEIGHT - MENU_Y + 2, true);
-    this.log = new TextBox(this, LOG_X, MENU_Y, LOG_W, '');
-    this.menu = new Menu(this, actionItems(s), { x: 10, y: MENU_Y, numbered: true, lineHeight: 20, onSelect: (i) => this.act(i) });
-    this.hint = this.add.text(10, GAME_HEIGHT - 16, t('travel.auto'), textStyle(COLORS.dim, undefined, 11));
+    this.band = new TravelBand(this, s);
+    this.bandLabel = addText(this, GAME_WIDTH - 8, 6, '', { color: COLORS.dim, depth: 8 });
+    panel(this, 0, STATUS_Y, GAME_WIDTH, 56);
+    this.status = new StatusBar(this, 16, STATUS_Y + 10, [28, 24, 26]);
+    panel(this, 0, MENU_Y - 6, GAME_WIDTH, GAME_HEIGHT - MENU_Y + 6);
+    this.add.rectangle(LOG_X - 10, MENU_Y, 1, GAME_HEIGHT - MENU_Y - 26, COLORS.borderDim).setOrigin(0, 0);
+    this.log = new TextBox(this, LOG_X, MENU_Y + 2, LOG_W, '');
+    this.menu = new Menu(this, actionItems(s), { x: 10, y: MENU_Y + 2, numbered: true, lineHeight: MENU_LH, onSelect: (i) => this.act(i) });
+    this.hint = addText(this, 12, GAME_HEIGHT - 18, t('travel.auto'), { color: COLORS.dim });
     this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e) });
     this.render();
     const back = session.pendingDay;
@@ -73,11 +85,19 @@ export class TravelScene extends BaseScene {
     }
   }
 
-  override update(_time: number, delta: number): void {
-    if (!this.busy && !this.auto) return;
-    for (const st of this.stars) {
-      st.x -= (delta / 1000) * (40 + st.width * 40);
-      if (st.x < 0) st.x += GAME_WIDTH;
+  protected override music(): string {
+    return 'travel';
+  }
+
+  override update(time: number, delta: number): void {
+    const s = session.state;
+    if (!s || !this.band) return;
+    const moving = this.busy || this.auto;
+    this.band.update(delta, s, moving);
+    // Drive hum bed (audio.md): retriggered once a second while a day animates.
+    if (moving && time - this.humAt >= 1000) {
+      this.humAt = time;
+      audio().sfx('drive.hum');
     }
   }
 
@@ -101,7 +121,7 @@ export class TravelScene extends BaseScene {
   private setAuto(on: boolean): void {
     this.auto = on;
     if (!on) this.holding = false;
-    this.hint.setText(on ? t('travel.autoIndicator') : t('travel.auto'));
+    setText(this.hint, on ? t('travel.autoIndicator') : t('travel.auto'));
     if (on && !this.busy) this.travelDay();
   }
 
@@ -111,7 +131,9 @@ export class TravelScene extends BaseScene {
     this.menu.setItems(actionItems(s));
     this.menu.say('');
     const parked = s.arrivedAt !== null ? WAYPOINTS[s.arrivedAt] : undefined;
-    this.bandLabel.setText(parked ? parked.name : (WAYPOINTS[s.segment]?.name ?? ''));
+    const label = parked ? parked.name : (WAYPOINTS[s.segment]?.name ?? '');
+    this.bandLabel.setText(label).setX(GAME_WIDTH - 8 - label.length * 8);
+    this.band.refresh(s);
     let lines = recentLog(s);
     this.log.set(lines.join('\n'));
     while (lines.length > 1 && this.log.lineCount() > LOG_LINES) {
@@ -217,6 +239,8 @@ export class TravelScene extends BaseScene {
       else this.setBusy(false);
     };
     const shown = entries.filter((e) => MODAL_KINDS.has(e.kind));
+    if (entries.some((e) => ALARM_KINDS.has(e.kind))) audio().sfx('alarm');
+    else if (entries.some((e) => !QUIET_KINDS.has(e.kind))) audio().sfx('event.ding');
     if (shown.length > 0) {
       this.setBusy(false);
       this.modal(shown.map((e) => e.text).join('\n\n'), { onClose: next });
@@ -227,22 +251,10 @@ export class TravelScene extends BaseScene {
   private beaconsThen(dead: string[], done: () => void): void {
     const [name, ...rest] = dead;
     if (name === undefined) return done();
+    const slot = session.state!.crew.findIndex((c) => c.name === name);
     promptBeacon(this, this.router, name, (text) => {
       if (text) saveBeacon(makeBeacon(session.state!, name, text));
       this.beaconsThen(rest, done);
-    });
-  }
-
-  /** Placeholder landmark band: starfield, the ship, destination name (art in M4). */
-  private drawBand(): void {
-    this.add.rectangle(0, 0, GAME_WIDTH, BAND_H, 0x000000).setOrigin(0, 0).setStrokeStyle(1, COLORS.borderDim);
-    this.stars = [];
-    for (let i = 0; i < 60; i++) {
-      const size = session.uiRng.chance(0.2) ? 2 : 1;
-      const color = size === 2 ? 0xc8ffc8 : 0x2e8a2e;
-      this.stars.push(this.add.rectangle(session.uiRng.int(2, GAME_WIDTH - 2), session.uiRng.int(4, BAND_H - 24), size, size, color));
-    }
-    this.add.rectangle(GAME_WIDTH / 2 - 10, BAND_H - 18, 20, 6, 0x5cff5c);
-    this.bandLabel = this.add.text(GAME_WIDTH - 12, 8, '', textStyle(COLORS.dim)).setOrigin(1, 0);
+    }, slot >= 0 ? `portrait.${slot + 1}` : undefined);
   }
 }

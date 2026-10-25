@@ -5,7 +5,7 @@
  * Thread it opens Debris Threading (Ride the solar wind: the Flare Belt) unless mini-games auto-resolve; the mini-game
  * returns here with `session.pendingDay`, which is replayed like a crossing.
  */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
 import { REST, WAYPOINTS } from '@/content';
 import { session } from '@/game/session';
 import { mt } from '@/minigames/copy';
@@ -15,7 +15,10 @@ import { t } from '@/ui/copy';
 import { DayLog } from '@/ui/DayLog';
 import { Menu, type MenuItem } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
-import { COLORS, panel, textStyle } from '@/ui/theme';
+import { panel } from '@/ui/chrome';
+import { addText, setText } from '@/ui/text';
+import { COLORS } from '@/ui/theme';
+import { artBand } from './artBand';
 import { BaseScene } from './BaseScene';
 import { atFlareBelt, optionKey, optionRows, outcomeLines, readoutLines, type HazardRow } from './hazardView';
 import { MODAL_KINDS } from './travelView';
@@ -25,11 +28,15 @@ const MENU_Y = 150;
 export class HazardScene extends BaseScene {
   private rows: HazardRow[] = [];
   private menu!: Menu;
-  private desc!: Phaser.GameObjects.Text;
+  private desc!: Phaser.GameObjects.BitmapText;
   private log!: DayLog;
 
   constructor() {
     super('Hazard');
+  }
+
+  protected override music(): string {
+    return 'hazard';
   }
 
   create(): void {
@@ -44,10 +51,9 @@ export class HazardScene extends BaseScene {
     if (s.status !== 'traveling') return this.ending();
     if (!s.crossing) return this.go('Travel');
     const w = WAYPOINTS[s.crossing.waypoint]!;
-    panel(this, 4, 4, 632, 52, true);
-    this.heading(12, w.name.toUpperCase(), 18);
-    this.heading(36, t('hazard.title'), 12, COLORS.dim);
-    readoutLines(s).forEach((line, i) => this.add.text(24, 66 + i * 20, line, textStyle(COLORS.text)));
+    // The hazard's composition (rocks, arcs, walls) behind the name (art.md "Hazards reuse parts").
+    artBand(this, w.index, { h: 60, artX: 470, artW: 340, title: w.name.toUpperCase(), sub: t('hazard.title') });
+    readoutLines(s).forEach((line, i) => addText(this, 24, 70 + i * 18, line, { color: COLORS.text }));
     this.rows = optionRows(s);
     const items: MenuItem[] = [...this.rows.map((r) => r.item), { label: t('hazard.option.rest') }, { label: t('hazard.other') }];
     const first = Math.max(0, items.findIndex((it) => !it.disabled));
@@ -60,9 +66,9 @@ export class HazardScene extends BaseScene {
       onMove: (i) => this.describe(i),
       onSelect: (i) => this.select(i),
     });
-    this.desc = this.add.text(24, MENU_Y + items.length * 22 + 24, '', textStyle(COLORS.dim, 592, 12));
-    panel(this, 4, 324, 632, 72, true);
-    this.log = new DayLog(this, 14, 330, 612, 3);
+    this.desc = addText(this, 24, MENU_Y + items.length * 22 + 24, '', { color: COLORS.dim, wrap: 592 });
+    panel(this, 0, 336, 640, 64);
+    this.log = new DayLog(this, 14, 346, 612, 3);
     this.log.show(s.log.slice(-3).map((e) => e.text));
     this.router.push({ onKey: (e) => !this.log.busy && this.menu.onKey(e) });
     this.describe(first);
@@ -70,17 +76,16 @@ export class HazardScene extends BaseScene {
 
   private describe(i: number): void {
     const row = this.rows[i];
-    this.desc.setText(row ? mt(optionKey(session.state!, row.method, 'desc')) : '');
+    setText(this.desc, row ? mt(optionKey(session.state!, row.method, 'desc')) : '');
   }
 
   /** Back from a mini-game: its crossing already ran in the sim; play the entries, then the outcome modal and routing. */
   private replay(entries: LogEntry[]): void {
     const s = session.state!;
     const w = WAYPOINTS[s.arrivedAt ?? s.segment];
-    panel(this, 4, 4, 632, 52, true);
-    this.heading(12, (w?.name ?? '').toUpperCase(), 18);
-    panel(this, 4, 324, 632, 72, true);
-    this.log = new DayLog(this, 14, 330, 612, 3);
+    artBand(this, w?.index ?? 0, { h: 60, artX: 470, artW: 340, title: (w?.name ?? '').toUpperCase() });
+    panel(this, 0, 336, 640, 64);
+    this.log = new DayLog(this, 14, 346, 612, 3);
     this.log.play(entries, () => this.after(entries, true));
   }
 

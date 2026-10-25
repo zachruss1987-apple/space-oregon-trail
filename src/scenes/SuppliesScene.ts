@@ -4,7 +4,8 @@ import { session } from '@/game/session';
 import { brokenParts, daysOfRations, healthLabel, workingDrives, type Crew, type GameState } from '@/sim';
 import { t } from '@/ui/copy';
 import { Table } from '@/ui/Table';
-import { COLORS, fmt, money, textStyle } from '@/ui/theme';
+import { addText } from '@/ui/text';
+import { COLORS, fmt, money } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
 
 const SUPPLY_ROWS: readonly SupplyKey[] = ['drives', 'rations', 'suits', 'charges', 'plates', 'pumps', 'gyros'];
@@ -35,23 +36,38 @@ function crewStatus(c: Crew): string {
   return conds ? `${label} - ${conds}` : label;
 }
 
+/** Portrait frame: 0 healthy, 1 sick (a condition or poor health), 2 dead or lost. */
+function portraitFrame(c: Crew): number {
+  if (!c.alive) return 2;
+  return c.conditions.length > 0 || healthLabel(c.health) === 'Poor' || healthLabel(c.health) === 'Very poor' ? 1 : 0;
+}
+
 export class SuppliesScene extends BaseScene {
   constructor() {
     super('Supplies');
+  }
+
+  protected override music(): string {
+    return 'travel';
   }
 
   create(): void {
     this.begin();
     const s = session.state;
     if (!s) return this.go('Title');
-    this.add.text(16, 16, t('supplies.title'), textStyle(COLORS.bright));
-    this.add.text(300, 16, t('supplies.crew'), textStyle(COLORS.bright));
+    addText(this, 16, 16, t('supplies.title'), { color: COLORS.bright, scale: 2 });
+    addText(this, 300, 16, t('supplies.crew'), { color: COLORS.bright, scale: 2 });
     const rows = SUPPLY_ROWS.map((k) => [ITEMS[k].name, fmt(s.supplies[k]), supplyNote(s, k)]);
     rows.push([t('supplies.credits'), `${money(s.credits)} cr`, '']);
-    new Table(this, 16, 44, [{ width: 14 }, { width: 6, right: true }, { width: 12 }], 22).setRows(rows);
-    const crewRows = s.crew.map((c) => ({ cells: [c.name, crewStatus(c)], color: c.alive ? COLORS.text : COLORS.dim }));
-    new Table(this, 300, 44, [{ width: 12 }, { width: 26 }], 22).setRows(crewRows);
-    this.add.text(16, 370, t('supplies.return'), textStyle(COLORS.dim));
+    new Table(this, 16, 52, [{ width: 14 }, { width: 6, right: true }, { width: 12 }], 22).setRows(rows);
+    // One portrait per crew slot (frame: healthy / sick / dead), then name and status beside it.
+    s.crew.forEach((c, i) => {
+      const y = 48 + i * 40;
+      this.add.image(300, y, `portrait.${i + 1}`, portraitFrame(c)).setOrigin(0, 0);
+      addText(this, 340, y + 6, c.name, { color: c.alive ? COLORS.bright : COLORS.dim });
+      addText(this, 340, y + 20, crewStatus(c), { color: c.alive ? COLORS.text : COLORS.dim, wrap: 292 });
+    });
+    addText(this, 16, 376, t('supplies.return'), { color: COLORS.dim });
     this.router.push({
       onKey: (e) => {
         if ((e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') && !e.repeat) this.go('Travel');

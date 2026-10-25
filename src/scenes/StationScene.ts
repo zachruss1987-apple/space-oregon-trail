@@ -2,7 +2,8 @@
  * A road station (economy.md "Enter station flow"), available while `stationOpen(state)`: Outfitters (buy/sell at
  * local prices), Trade (NPC offers), Talk, Rest here, Continue (route prompt at Titan Refinery, then depart).
  */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
 import { ITEM_ORDER, ITEMS, REST, WAYPOINTS, type SupplyKey } from '@/content';
 import { session } from '@/game/session';
 import {
@@ -14,12 +15,16 @@ import { DayLog } from '@/ui/DayLog';
 import { Menu, type MenuItem } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
 import { TextBox } from '@/ui/TextBox';
-import { COLORS, money, panel, textStyle } from '@/ui/theme';
+import { panel } from '@/ui/chrome';
+import { addText } from '@/ui/text';
+import { COLORS, money } from '@/ui/theme';
+import { artBand } from './artBand';
 import { BaseScene } from './BaseScene';
 import { buyReason, outfitterHeader, outfitterRows, sellReason, tradeRows, tradeTerms } from './stationView';
 import { MODAL_KINDS } from './travelView';
 
-const MENU_Y = 150;
+const MENU_Y = 166;
+const MENU_LH = 18;
 type Mode = 'main' | 'outfitters' | 'trade';
 
 export class StationScene extends BaseScene {
@@ -27,8 +32,8 @@ export class StationScene extends BaseScene {
   private mode: Mode = 'main';
   private menu!: Menu;
   private speech!: TextBox;
-  private header!: Phaser.GameObjects.Text;
-  private credits!: Phaser.GameObjects.Text;
+  private header!: Phaser.GameObjects.BitmapText;
+  private credits!: Phaser.GameObjects.BitmapText;
   private log!: DayLog;
   private talk: string[] = [];
   private talkAt = 0;
@@ -36,6 +41,10 @@ export class StationScene extends BaseScene {
 
   constructor() {
     super('Station');
+  }
+
+  protected override music(): string {
+    return 'station';
   }
 
   create(): void {
@@ -48,18 +57,17 @@ export class StationScene extends BaseScene {
     this.talkAt = 0;
     this.pitches = new Map();
     const w = WAYPOINTS[this.wp]!;
-    panel(this, 4, 4, 632, 52, true);
-    this.heading(12, w.name.toUpperCase(), 18);
-    this.add.text(16, 36, stationKeeper(w.id) ?? t('station.title'), textStyle(COLORS.dim, undefined, 12));
-    this.credits = this.add.text(624, 36, '', textStyle(COLORS.text, undefined, 12)).setOrigin(1, 0);
-    this.speech = new TextBox(this, 24, 66, 592, stationGreeting(session.uiRng, s, this.wp), { typewriter: true });
-    this.header = this.add.text(16, MENU_Y - 20, '', textStyle(COLORS.dim));
+    // The station's exterior in the top band (art.md "Stations"), name and keeper beside it.
+    artBand(this, this.wp, { h: 72, artX: 572, title: w.name.toUpperCase(), sub: stationKeeper(w.id) ?? t('station.title') });
+    this.credits = addText(this, 12, 50, '', { color: COLORS.text });
+    this.speech = new TextBox(this, 24, 82, 592, stationGreeting(session.uiRng, s, this.wp), { typewriter: true });
+    this.header = addText(this, 16, MENU_Y - 16, '', { color: COLORS.dim });
     this.menu = new Menu(this, [], {
-      x: 16, y: MENU_Y, numbered: true, lineHeight: 20,
+      x: 16, y: MENU_Y, numbered: true, lineHeight: MENU_LH,
       onSelect: (i) => this.select(i), onMove: (i) => this.moved(i), onBack: () => this.setMode('main'),
     });
-    panel(this, 4, 330, 632, 66, true);
-    this.log = new DayLog(this, 14, 336, 612, 3);
+    panel(this, 0, 336, 640, 64);
+    this.log = new DayLog(this, 14, 346, 612, 3);
     this.router.push({
       onKey: (e) => {
         if (this.log.busy) return;
@@ -191,6 +199,9 @@ export class StationScene extends BaseScene {
       return this.menu.say(r.error);
     }
     session.state = r.state;
+    if (intent.type === 'buy') audio().sfx('store.buy');
+    else if (intent.type === 'sell') audio().sfx('store.sell');
+    else if (intent.type === 'trade') audio().sfx('trade.accept');
     if (intent.type === 'trade') this.speech.set(r.entries.map((e) => e.text).join(' '));
     this.log.play(r.entries, () => this.after(r.entries));
   }

@@ -1,5 +1,6 @@
 /** Mattie's Outfitters: pick quantities, watch the total, heed (or not) the advice, leave and launch. */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
 import { ITEM_ORDER, ITEMS, type SupplyKey } from '@/content';
 import { session } from '@/game/session';
 import { buy, costOf, createRng, depart, maxBuyable, priceAt, storeWarnings, type GameState } from '@/sim';
@@ -7,7 +8,8 @@ import { list, t } from '@/ui/copy';
 import { Menu, type MenuItem } from '@/ui/Menu';
 import { NumberInput } from '@/ui/NumberInput';
 import { TextBox } from '@/ui/TextBox';
-import { CHAR_W, col, COLORS, money, textStyle } from '@/ui/theme';
+import { addText } from '@/ui/text';
+import { CHAR_W, col, COLORS, money } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
 
 const LEFT = 24;
@@ -22,12 +24,16 @@ export class StoreScene extends BaseScene {
   private basket!: Basket;
   private menu!: Menu;
   private mattie!: TextBox;
-  private totals!: Phaser.GameObjects.Text;
-  private warnings!: Phaser.GameObjects.Text;
-  private advice!: Phaser.GameObjects.Text;
+  private totals!: Phaser.GameObjects.BitmapText;
+  private warnings!: Phaser.GameObjects.BitmapText;
+  private advice!: Phaser.GameObjects.BitmapText;
 
   constructor() {
     super('Store');
+  }
+
+  protected override music(): string {
+    return 'station';
   }
 
   create(): void {
@@ -37,7 +43,7 @@ export class StoreScene extends BaseScene {
     this.basket = { drives: 0, rations: 0, suits: 0, charges: 0, plates: 0, pumps: 0, gyros: 0 };
     this.heading(10, t('store.title'));
     this.mattie = new TextBox(this, LEFT, 34, 592, t('mattie.greeting'), { typewriter: true });
-    this.add.text(LEFT, MENU_Y - ROW_H, `     ${t('store.header')}`, textStyle(COLORS.dim));
+    addText(this, LEFT, MENU_Y - ROW_H, `     ${t('store.header')}`, { color: COLORS.dim });
     this.menu = new Menu(this, this.rows(), {
       x: LEFT,
       y: MENU_Y,
@@ -47,9 +53,9 @@ export class StoreScene extends BaseScene {
       onSelect: (i) => (i < ITEM_ORDER.length ? this.editQuantity(ITEM_ORDER[i]!) : this.leave()),
       onBack: () => this.go('Setup'),
     });
-    this.totals = this.add.text(LEFT, MENU_Y + 8 * ROW_H + 10, '', textStyle(COLORS.bright));
-    this.warnings = this.add.text(LEFT, MENU_Y + 8 * ROW_H + 32, '', textStyle(COLORS.warn, 592));
-    this.advice = this.add.text(LEFT, 362, '', textStyle(COLORS.dim, 592));
+    this.totals = addText(this, LEFT, MENU_Y + 8 * ROW_H + 10, '', { color: COLORS.bright });
+    this.warnings = addText(this, LEFT, MENU_Y + 8 * ROW_H + 32, '', { color: COLORS.warn, wrap: 592 });
+    this.advice = addText(this, LEFT, 362, '', { color: COLORS.dim, wrap: 592 });
     this.router.push(this.menu);
     this.refresh();
   }
@@ -103,6 +109,7 @@ export class StoreScene extends BaseScene {
     const x = LEFT + (5 + NAME_W + 1 + 8 + 1 - 3) * CHAR_W;
     const cover = this.add.rectangle(x - 2, MENU_Y + row * ROW_H, 9 * CHAR_W + 8, ROW_H - 2, COLORS.bg).setOrigin(0, 0);
     const done = (value: number): void => {
+      if (value !== before) audio().sfx(value > before ? 'store.buy' : 'store.sell');
       this.basket[id] = value;
       input.destroy();
       cover.destroy();
