@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:49:27.717Z",
+  "updated": "2026-10-25T01:49:28.740Z",
   "milestones": [
     {
       "id": "M0",
@@ -296,11 +296,11 @@
       "desc": "Weighted, conditional events with cooldown guard; conditions with duration/death chance/cure. Per events.md and health.md.",
       "milestone": "M1",
       "role": "developer",
-      "status": "doing",
+      "status": "review",
       "assignee": "developer",
       "issue": 12,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:49:11.702Z",
+      "updated": "2026-10-25T01:49:28.740Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.506Z",
@@ -311,6 +311,16 @@
           "ts": "2026-10-25T01:49:11.703Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:49:28.291Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:49:28.739Z",
+          "by": "developer",
+          "text": "health.ts (delta, death roll x health mult, radiation/exhaustion triggers, progression), events.ts (weights, modifiers, cadence guard, 15 effects, illness pool), hazard.ts (M1 crossing), salvage helpers; 32 tests"
         }
       ],
       "issueClosed": false
