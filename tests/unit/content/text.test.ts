@@ -11,7 +11,7 @@ import { FALLBACK, PENDING } from '../../../src/ui/copy';
 const ALLOWED = new Set([
   '{name}', '{n}', '{item}',
   // UI-only placeholders filled by src/ui/copy.ts callers
-  '{captain}', '{cr}', '{captain}', '{cr}', '{give}', '{get}', '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
+  '{captain}', '{cr}', '{captain}', '{cr}', '{give}', '{get}', '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}', '{parts}', '{hits}',
 ]);
 const CONDITIONS = [
   'space-dysentery', 'hull-mold-fever', 'cryo-fever', 'scurvy',
@@ -419,5 +419,72 @@ describe('epitaphs.json (T-024)', () => {
     for (const h of [1, 2, 7, 9, 13, 15]) {
       expect(canned.filter((e) => e.segment === h).length, `hazard segment ${h}`).toBeGreaterThanOrEqual(3);
     }
+  });
+});
+
+describe('mini-game text keys (T-056, minigames.md "Log kinds (new)" text keys)', () => {
+  const get = (t: unknown, key: string): unknown => key.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], t);
+  const variants = (t: unknown, k: string): string[] => {
+    const v = get(t, k) ?? (t as Obj)[k];
+    return typeof v === 'string' ? [v] : (v as string[]);
+  };
+  const phs = (s: string) => [...new Set(s.match(/{[^}]*}/g) ?? [])].sort();
+  // events.json: log lines the sim resolves (kinds salvage / threading / flare / info); key -> exact placeholder set
+  const EVENT_KEYS: Record<string, string[]> = {
+    'salvage.haul': ['{n}', '{parts}'], 'salvage.haulRations': ['{n}'], 'salvage.haulParts': ['{parts}'],
+    'salvage.nothing': [], 'salvage.wrecked': [], 'salvage.hot': ['{name}'], 'salvage.overweight': ['{n}'],
+    'threading.clean': [], 'threading.hit': ['{hits}'],
+    'flare.clean': [], 'flare.scorch': ['{item}', '{n}'], 'flare.burn': ['{name}'],
+    'flare.damage': ['{item}'], 'flare.radiation': ['{name}'], 'flare.crash': ['{name}'],
+    'info.skipped': [],
+  };
+  it('events.json has each log key, 2+ variants, <= 140 chars, exact placeholders', () => {
+    for (const [k, want] of Object.entries(EVENT_KEYS)) {
+      const v = variants(events, k);
+      expect(v.length, k).toBeGreaterThanOrEqual(2);
+      for (const line of v) {
+        expect(phs(line), `${k}: ${line}`).toEqual(want);
+        expect(line.length, k).toBeLessThanOrEqual(140);
+      }
+    }
+  });
+  // ui.json scene copy; labels (single strings tagged L) must fit 24 chars
+  const UI_KEYS: Record<string, string[]> = {
+    'minigame.countdown': [], 'minigame.paused': [], 'minigame.skip': [], 'minigame.controls': [],
+    'minigame.resultTitle': [], 'minigame.bonusPick': [], 'minigame.holdFull': [], 'minigame.outOfCharges': [],
+    'minigame.common.go': [], 'minigame.common.resume': [], 'minigame.common.time': ['{n}'], 'minigame.common.continue': [],
+    'minigame.common.skipConfirm': [], 'minigame.common.skipYes': [], 'minigame.common.skipNo': [],
+    'minigame.common.autoNotice': [], 'minigame.common.controlsBody': [],
+    'minigame.salvage.title': [], 'minigame.salvage.howto': [], 'minigame.salvage.start': [],
+    'minigame.salvage.hudCharges': ['{n}'], 'minigame.salvage.hudHold': ['{n}'], 'minigame.salvage.hudHp': ['{n}'],
+    'minigame.salvage.resultHaul': ['{n}', '{parts}'], 'minigame.salvage.resultNothing': [],
+    'minigame.salvage.droneWrecked': [], 'minigame.salvage.chargesUsed': ['{n}'], 'minigame.salvage.confirm': [],
+    'minigame.threading.title': [], 'minigame.threading.howto': [], 'minigame.threading.start': [],
+    'minigame.threading.hudHits': ['{hits}'], 'minigame.threading.resultClean': [], 'minigame.threading.resultHits': ['{hits}'],
+    'minigame.threading.bonusHealth': [], 'minigame.threading.bonusRations': [],
+    'minigame.flare.title': [], 'minigame.flare.howto': [], 'minigame.flare.start': [], 'minigame.flare.hudHits': ['{hits}'],
+    'minigame.flare.crash': [], 'minigame.flare.rodeTheWind': [], 'minigame.flare.rodeTheWindLog': [],
+    'score.labels.rodeTheWind': [],
+  };
+  const LABELS = ['minigame.skip', 'minigame.controls', 'minigame.common.resume', 'minigame.common.skipYes', 'minigame.common.skipNo',
+    'minigame.salvage.title', 'minigame.threading.title', 'minigame.flare.title', 'minigame.salvage.hudCharges',
+    'minigame.threading.hudHits', 'minigame.flare.hudHits', 'minigame.threading.bonusHealth', 'minigame.threading.bonusRations',
+    'minigame.flare.rodeTheWind', 'score.labels.rodeTheWind'];
+  it('ui.json has every mini-game key with its placeholder set and length limits', () => {
+    for (const [k, want] of Object.entries(UI_KEYS)) {
+      const v = variants(ui, k);
+      expect(Array.isArray(v) && v.length > 0, k).toBe(true);
+      for (const line of v) {
+        expect(phs(line), `${k}: ${line}`).toEqual(want);
+        expect(line.length, k).toBeLessThanOrEqual(140);
+      }
+    }
+    for (const k of ['minigame.salvage.howto', 'minigame.threading.howto', 'minigame.flare.howto']) {
+      expect(variants(ui, k), k).toHaveLength(3);
+    }
+    expect(variants(ui, 'minigame.flare.rodeTheWindLog').length).toBeGreaterThanOrEqual(2);
+  });
+  it('mini-game labels fit 24 chars', () => {
+    for (const k of LABELS) for (const line of variants(ui, k)) expect(line.length, k).toBeLessThanOrEqual(24);
   });
 });

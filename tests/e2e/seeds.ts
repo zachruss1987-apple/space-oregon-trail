@@ -12,16 +12,16 @@
  * Executive, Window 3: the EARLIEST policy deaths in SEED-0..SEED-999 (none die before day 40; the sim is forgiving early).
  * For a fast game-over in e2e, play badly in the UI (e.g. buy no rations) rather than rely on a seed.
  */
-//   {"seed":"SEED-212","day":111,"cause":"cryo-fever+space-dysentery+hazard+space-dysentery+hull-mold-fever"}
-//   {"seed":"SEED-237","day":143,"cause":"cryo-fever+space-dysentery+space-dysentery+cryo-fever+space-dysentery"}
-//   {"seed":"SEED-298","day":143,"cause":"scurvy+space-dysentery+space-dysentery+hazard+space-dysentery"}
-export const EARLY_DEATH_SEEDS: readonly string[] = ['SEED-212', 'SEED-237', 'SEED-298'];
+//   {"seed":"SEED-359","day":116,"cause":"cryo-fever+cryo-fever+cryo-fever+hull-mold-fever+cryo-fever"}
+//   {"seed":"SEED-276","day":125,"cause":"hull-mold-fever+drift+drift+cryo-fever+space-dysentery"}
+//   {"seed":"SEED-720","day":134,"cause":"space-dysentery+space-dysentery+cryo-fever+cryo-fever+scurvy"}
+export const EARLY_DEATH_SEEDS: readonly string[] = ['SEED-359', 'SEED-276', 'SEED-720'];
 
 /** Executive, Window 3: arrives with all five crew alive under the policy. */
-//   {"seed":"SEED-9","days":140,"score":2222}
-//   {"seed":"SEED-20","days":143,"score":2238}
-//   {"seed":"SEED-48","days":154,"score":2324}
-export const FULL_CREW_ARRIVAL_SEEDS: readonly string[] = ['SEED-9', 'SEED-20', 'SEED-48'];
+//   {"seed":"SEED-14","days":154,"score":2160}
+//   {"seed":"SEED-20","days":138,"score":2340}
+//   {"seed":"SEED-25","days":155,"score":2264}
+export const FULL_CREW_ARRIVAL_SEEDS: readonly string[] = ['SEED-14', 'SEED-20', 'SEED-25'];
 
 /** Executive, Window 3: the policy reaches the first waypoint (Lunar Debris Ring) within 6 days. */
 //   {"seed":"SEED-1","day":6}
@@ -29,5 +29,5 @@ export const FULL_CREW_ARRIVAL_SEEDS: readonly string[] = ['SEED-9', 'SEED-20', 
 //   {"seed":"SEED-5","day":6}
 export const FAST_FIRST_WAYPOINT_SEEDS: readonly string[] = ['SEED-1', 'SEED-3', 'SEED-5'];
 
-/** Seeds to try first for UI arrival runs (policy-alive). The UI's shopping differs, so the journey spec tries them in order. */
-export const ALL_ALIVE: readonly string[] = ['SEED-20', 'SEED-9', 'SEED-48'];
+/** Seeds to try first for UI arrival runs (policy-alive); the journey spec tries them in order. */
+export const ALL_ALIVE: readonly string[] = FULL_CREW_ARRIVAL_SEEDS;

@@ -69,6 +69,9 @@ export const FULL_CREW_ARRIVAL_SEEDS: readonly string[] = [${q(full)}];
 /** Executive, Window 3: the policy reaches the first waypoint (Lunar Debris Ring) within 6 days. */
 ${note(fast)}
 export const FAST_FIRST_WAYPOINT_SEEDS: readonly string[] = [${q(fast)}];
+
+/** Seeds to try first for UI arrival runs (policy-alive); the journey spec tries them in order. */
+export const ALL_ALIVE: readonly string[] = FULL_CREW_ARRIVAL_SEEDS;
 `);
     expect(early.length).toBe(WANT);
     expect(full.length).toBe(WANT);

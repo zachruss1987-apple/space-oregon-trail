@@ -90,3 +90,45 @@ export async function autoTravelUntil(
   }
   throw new Error('autoTravelUntil: step budget exhausted');
 }
+
+type RunState = NonNullable<Awaited<ReturnType<typeof getState>>>;
+
+/** Standard generous Executive shopping (4 drives, 3000 rations, 10 suits, 5 boxes, 1 of each part), then leave to Travel. */
+export async function generousRun(page: Page, seed: string): Promise<void> {
+  await startRun(page, seed);
+  for (const [row, qty] of [[1, 4], [2, 3000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
+  await leaveStore(page);
+}
+
+/**
+ * Auto-travel to the Waypoint scene of waypoint `wp` (stops BEFORE pressing anything there). Earlier hazards are threaded
+ * (Enter picks the first enabled option, the outcome modal and beacon prompts are dismissed by Enter).
+ */
+export async function reachWaypoint(page: Page, wp: number, maxSteps = 6000): Promise<RunState> {
+  const s = await autoTravelUntil(page, (st, scene) => scene === 'Waypoint' && st.arrivedAt === wp, { maxSteps });
+  expect(s.arrivedAt, `reached waypoint ${wp} (status ${s.status})`).toBe(wp);
+  return s;
+}
+
+/** At a hazard's Waypoint scene: open the Hazard scene and press option `row` (1 thread, 2 shields, 3 tug, 4 pilot). */
+export async function approachAndCross(page: Page, row: number): Promise<void> {
+  await page.keyboard.press('Enter');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Hazard');
+  await page.waitForTimeout(150);
+  await page.keyboard.press(String(row));
+}
+
+/** All text currently drawn by Phaser Text objects in scene `key` (the canvas is opaque to Playwright; this reads the scene graph). */
+export async function sceneTexts(page: Page, key: string): Promise<string[]> {
+  return page.evaluate((k) => {
+    const game = window.__PROXIMA__?.game as { scene: { getScene(k: string): { children: { list: { text?: unknown }[] } } } } | undefined;
+    const sc = game?.scene.getScene(k);
+    return (sc?.children.list ?? []).map((o) => o.text).filter((x): x is string => typeof x === 'string');
+  }, key);
+}
+
+/** Wait until every day animation and modal has finished. */
+export async function settle(page: Page): Promise<void> {
+  await idle(page);
+  await expect(body(page)).not.toHaveAttribute('data-modal', '1');
+}

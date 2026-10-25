@@ -74,7 +74,14 @@ resolve the `@/` alias, so the search lives in a vitest file that is skipped oth
 | `leaveStore(page)` | Row 8, confirm, farewell; ends on Travel |
 | `autoTravelUntil(page, stop, opts?)` | Presses T on Travel and Enter on Waypoint/modals until `stop(state, scene)` or status leaves 'traveling'; skips input while `data-busy` |
 | `pressUntilScene(page, scene)` | Enter until `data-scene` matches |
+| `generousRun(page, seed)` | startRun + 4 drives, 3000 rations, 10 suits, 5 boxes, 1 of each part, leave to Travel |
+| `reachWaypoint(page, wp)` | Auto-travel (threading hazards) to the Waypoint scene of waypoint `wp`; stops before pressing anything |
+| `approachAndCross(page, row)` | At a hazard Waypoint: Enter (Hazard scene), then option key (1 thread, 2 shields, 3 tug, 4 pilot) |
+| `sceneTexts(page, key)` | Text of every Phaser Text object in scene `key` (reads the scene graph; makes canvas copy assertable) |
+| `settle(page)` | Wait out day animation and modals |
 | `getState`, `sceneOf`, `idle`, `body` | Read `__PROXIMA__.state`, `data-scene`; wait out a day animation |
 Notes: canvas text cannot be asserted (score table, rating), so assert `state` and screenshot. `seeds.ts` `ALL_ALIVE` is tried in order by
-`journey.spec.ts`; with UI shopping (4 drives, 3000 rations...) SEED-20 arrives (day 140), SEED-9 dies (day 203). `DEATHSEED` + 1 drive and no rations dies fast.
+`journey.spec.ts`; with UI shopping (4 drives, 3000 rations...) SEED-14 arrives (day 153 in the M2 sim; the finder rewrites `ALL_ALIVE` = `FULL_CREW_ARRIVAL_SEEDS`). `DEATHSEED` + 1 drive and no rations dies fast.
 Screens: `screens.spec.ts` (all but Arrival) and `journey.spec.ts` (Arrival, Arrival-score) write to `test-results/screens/`.
+
+M2 specs: `m2-economy` (Mars Relay sell/trade/talk/rest), `m2-crossing` (tug, shields, Belt pilot), `m2-route` (Titan direct route, Map, Heliopause after Kuiper), `m2-beacons` (epitaph survives a reload, shown on the Waypoint scene). Beacon lists are canvas-only: assert via `sceneTexts` and `localStorage['proxima.beacons']`.

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { autoTravelUntil, body, buy, leaveStore, snap, startRun } from './helpers';
+import { autoTravelUntil, body, buy, generousRun, leaveStore, reachWaypoint, snap, startRun } from './helpers';
 import { FAST_FIRST_WAYPOINT_SEEDS } from './seeds';
 
 // Screenshots for designer review (no pixel asserts). Arrival and Arrival-score are saved by journey.spec.ts.
@@ -42,4 +42,31 @@ test('screenshot the Death scene', async ({ page }) => {
   await autoTravelUntil(page, (_s, scene) => scene === 'Death');
   await page.waitForTimeout(1500);
   await snap(page, 'Death');
+});
+
+// M2 screens: Station-trade and the per-death BeaconPrompt are saved here; Hazard-belt-pilot (pilot option visible),
+// Map-direct and Station-route-prompt are saved by m2-crossing / m2-route; Waypoint-beacons by m2-beacons.
+test('screenshot Station-trade', async ({ page }) => {
+  test.setTimeout(60_000);
+  await generousRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
+  await reachWaypoint(page, 3);
+  await page.keyboard.press('2');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Station');
+  await page.waitForTimeout(500);
+  await page.keyboard.press('2'); // Trade
+  await page.waitForTimeout(600);
+  await snap(page, 'Station-trade');
+});
+
+test('screenshot the BeaconPrompt', async ({ page }) => {
+  test.setTimeout(60_000);
+  await startRun(page, 'DEATHSEED');
+  await buy(page, 1, 1);
+  await leaveStore(page);
+  await autoTravelUntil(page, (s, scene) => scene === 'Death' || (scene === 'Travel' && s.crew.some((c) => !c.alive)));
+  await page.keyboard.press('Enter'); // death modal -> beacon prompt
+  await expect(body(page)).toHaveAttribute('data-beacon', '1');
+  await page.keyboard.type('Here lies a test');
+  await page.waitForTimeout(300);
+  await snap(page, 'BeaconPrompt');
 });
