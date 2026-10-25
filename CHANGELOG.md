@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 — 2026-10-25
+- Key hints bar: a 16 px band under the game view (canvas 640×416) that always lists the keys that work right now, with
+  platform-aware names (Return/Delete on a Mac), hidden on touch devices, and an Options row Key hints (Auto / On / Off).
+  Options grows to 13 rows (Shift+3 picks row 13). Spec: `docs/design/keyhints.md`. 80 new unit tests, 9 e2e tests, baselines regenerated.
+
 ## 1.0.0 — 2026-10-25
 First release. Built in six milestones by an AI agent team over two days; see `docs/reports/` for each.
 

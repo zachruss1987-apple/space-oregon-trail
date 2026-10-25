@@ -578,7 +578,7 @@
         "Hook crates and parts to reel them in. Dodge tumblers and green chunks.",
         "You have 40 seconds and can tow back 100 units. Touch: drag, then tap to fire."
       ],
-      "start": "Press Space to launch the drone.",
+      "start": "Press Enter or Space to launch the drone.",
       "hudCharges": "CHARGES {n}",
       "hudHold": "HOLD {n}/100",
       "hudHp": "HP {n}",

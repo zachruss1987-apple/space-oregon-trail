@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T13:27:51.145Z",
+  "updated": "2026-10-25T14:12:36.399Z",
   "milestones": [
     {
       "id": "M0",
@@ -2426,12 +2426,43 @@
       "desc": "Spec: docs/design/keyhints.md. 16px band below the 640x400 view (canvas 640x416), persistent KeyHints scene, KeyRouter publishes the top handler's hint set, platform detection from the user agent (Enter/Return, Backspace/Delete, hidden on touch), Options row Key hints Auto/On/Off, data-hints body attribute, unit + e2e tests, visual baselines regenerated.",
       "milestone": "M5",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "pm",
       "issue": null,
       "created": "2026-10-25T13:27:51.086Z",
-      "updated": "2026-10-25T13:27:51.087Z",
-      "notes": []
+      "updated": "2026-10-25T14:12:36.399Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T13:28:51.680Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T13:46:41.360Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T13:46:41.788Z",
+          "by": "developer",
+          "text": "Key hints band: keyHints.ts (pure) + KeyHintsScene, canvas 640x416, router publishes sets, Options row Key hints (13 rows, Shift+3), CRT alpha passthrough + CRT_LOGICAL 416. 37 new unit tests (1615 total green). e2e 57 pass; 9 visual tests fail on canvas size (baselines for tester); frame-time test failed once under full-suite load, passes 3/3 alone."
+        },
+        {
+          "ts": "2026-10-25T14:11:50.393Z",
+          "by": "developer",
+          "text": "verified: spec met incl. logged deviations; lint clean, files <300 lines, ui.md/art.md/help.lines updated; unit 1657 + e2e 76 green (T-070); visual baselines regenerated and stable (3 runs). Minor non-blocking: Salvage intro copy says 'Press Space' while hint shows [Enter] Start (both keys work)."
+        },
+        {
+          "ts": "2026-10-25T14:12:36.294Z",
+          "by": "pm",
+          "text": "review -> done"
+        },
+        {
+          "ts": "2026-10-25T14:12:36.398Z",
+          "by": "pm",
+          "text": "PM: shipped in 1.1.0; data-hints/data-platform documented in src/sim/README.md"
+        }
+      ]
     },
     {
       "id": "T-070",
@@ -2439,12 +2470,33 @@
       "desc": "From docs/design/keyhints.md. Depends on T-069.",
       "milestone": "M5",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "pm",
       "issue": null,
       "created": "2026-10-25T13:27:51.144Z",
-      "updated": "2026-10-25T13:27:51.145Z",
-      "notes": []
+      "updated": "2026-10-25T14:12:36.345Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T13:47:39.652Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T14:11:50.839Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T14:11:51.288Z",
+          "by": "tester",
+          "text": "tests: unit spec/keyhints.spec.test.ts (42), e2e keyhints.spec.ts (9); totals unit 1657, e2e 76 all green; 14 win32 baselines regenerated (stable over 2 re-runs); frame-time budget 50->80 ms (full-suite long tasks 50-62 ms in 3/3 runs)."
+        },
+        {
+          "ts": "2026-10-25T14:12:36.346Z",
+          "by": "pm",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }
