@@ -4,6 +4,7 @@ import './game/contract';
 import { session } from './game/session';
 import { audioBoot } from './audio/boot';
 import { SCENES } from './scenes';
+import { GfxPreviewScene } from './gfx/previewScene';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
 session.init(window.location.search);
