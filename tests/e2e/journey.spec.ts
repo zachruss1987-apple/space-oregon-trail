@@ -11,6 +11,14 @@ test('death path: no rations ends in the Death scene, a beacon is saved, back to
   await leaveStore(page);
   expect((await getState(page))?.supplies.rations).toBe(0);
 
+  // A mid-run death opens the per-death beacon prompt (after the death modal); Esc skips it.
+  const mid = await autoTravelUntil(page, (s, scene) => scene === 'Death' || (scene === 'Travel' && s.crew.some((c) => !c.alive)));
+  if (mid.status === 'traveling') {
+    await page.keyboard.press('Enter');
+    await expect(body(page)).toHaveAttribute('data-beacon', '1');
+    await page.keyboard.press('Escape');
+    await expect(body(page)).not.toHaveAttribute('data-beacon', '1');
+  }
   const end = await autoTravelUntil(page, (_s, scene) => scene === 'Death');
   expect(['dead', 'adrift']).toContain(end.status);
   await expect(body(page)).toHaveAttribute('data-scene', 'Death');

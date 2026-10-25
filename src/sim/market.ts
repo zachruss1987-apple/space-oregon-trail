@@ -71,7 +71,7 @@ export function roadBuy(state: GameState, item: SupplyKey, packs: number): StepR
   const cost = costOf(item, packs, storeIndex(state)!);
   const r = buy(state, item, packs);
   const entries: LogEntry[] = [];
-  pushLog(r.state, entries, 'store', `Bought ${itemPhrase(item, packs * ITEMS[item].packSize)} for ${formatCr(cost)} cr.`, item);
+  pushLog(r.state, entries, 'store', textLine('ui', 'station.log.bought', 'Bought {item} for {cr} cr.', { item: itemPhrase(item, packs * ITEMS[item].packSize), cr: formatCr(cost) }), item);
   return { state: r.state, entries };
 }
 
@@ -84,6 +84,6 @@ export function sell(state: GameState, item: SupplyKey, packs: number): StepResu
   s.credits = cents(s.credits + gain);
   s.supplies[item] -= packs * ITEMS[item].packSize;
   const entries: LogEntry[] = [];
-  pushLog(s, entries, 'store', `Sold ${itemPhrase(item, packs * ITEMS[item].packSize)} for ${formatCr(gain)} cr.`, item);
+  pushLog(s, entries, 'store', textLine('ui', 'station.log.sold', 'Sold {item} for {cr} cr.', { item: itemPhrase(item, packs * ITEMS[item].packSize), cr: formatCr(gain) }), item);
   return { state: s, entries };
 }

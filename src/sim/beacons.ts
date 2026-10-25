@@ -36,6 +36,20 @@ export function makeBeacon(state: GameState, name: string, text: string): Beacon
   return { segment: beaconSegment(state), captain: state.crew[0]?.name ?? '', name, text: text.trim(), date: state.date };
 }
 
+/** Names of crew alive in `before` and dead in `after`, in roster order. */
+export function newlyDead(before: GameState, after: GameState): string[] {
+  return after.crew.filter((c, i) => !c.alive && before.crew[i]?.alive).map((c) => c.name);
+}
+
+/** The crew member who died most recently (latest diedOnDay, later roster slot on ties), or null. */
+export function lastDeceased(state: GameState): string | null {
+  let best: { name: string; day: number } | null = null;
+  for (const c of state.crew) {
+    if (!c.alive && c.diedOnDay !== null && (best === null || c.diedOnDay >= best.day)) best = { name: c.name, day: c.diedOnDay };
+  }
+  return best?.name ?? null;
+}
+
 /** Defensive parse of stored data: non-array → []; skips entries missing segment/name/text; missing captain → "". */
 export function parseBeacons(raw: unknown): BeaconRecord[] {
   if (!Array.isArray(raw)) return [];

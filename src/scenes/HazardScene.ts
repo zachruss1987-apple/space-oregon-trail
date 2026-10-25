@@ -40,7 +40,7 @@ export class HazardScene extends BaseScene {
     this.heading(36, t('hazard.title'), 12, COLORS.dim);
     readoutLines(s).forEach((line, i) => this.add.text(24, 66 + i * 20, line, textStyle(COLORS.text)));
     this.rows = optionRows(s);
-    const items: MenuItem[] = [...this.rows.map((r) => r.item), { label: t('hazard.rest') }, { label: t('hazard.other') }];
+    const items: MenuItem[] = [...this.rows.map((r) => r.item), { label: t('hazard.option.rest') }, { label: t('hazard.other') }];
     const first = Math.max(0, items.findIndex((it) => !it.disabled));
     this.menu = new Menu(this, items, {
       x: 10,

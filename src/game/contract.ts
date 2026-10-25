@@ -25,10 +25,11 @@ export function markScene(key: string): void {
   document.body.dataset['scene'] = key;
   markFlag('modal', false);
   markFlag('busy', false);
+  markFlag('beacon', false);
 }
 
 /** Flag UI states e2e tests wait on: `data-modal="1"` while a modal is open, `data-busy="1"` while a day animates. */
-export function markFlag(name: 'modal' | 'busy', on: boolean): void {
+export function markFlag(name: 'modal' | 'busy' | 'beacon', on: boolean): void {
   if (on) document.body.dataset[name] = '1';
   else delete document.body.dataset[name];
 }

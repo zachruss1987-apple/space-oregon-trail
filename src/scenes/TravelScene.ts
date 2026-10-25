@@ -8,7 +8,9 @@ import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { REST, WAYPOINTS } from '@/content';
 import { markFlag } from '@/game/contract';
 import { session } from '@/game/session';
-import { applyAction, stationOpen, type Intent, type LogEntry } from '@/sim';
+import { applyAction, makeBeacon, newlyDead, stationOpen, type Intent, type LogEntry } from '@/sim';
+import { promptBeacon } from '@/ui/BeaconPrompt';
+import { saveBeacon } from '@/ui/beaconStore';
 import { t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { promptNumber } from '@/ui/NumberPrompt';
@@ -157,7 +159,8 @@ export class TravelScene extends BaseScene {
   }
 
   private dispatch(intent: Intent, takesDay: boolean): void {
-    const r = applyAction(session.state!, intent, session.rng);
+    const before = session.state!;
+    const r = applyAction(before, intent, session.rng);
     if (r.error) {
       this.setBusy(false);
       this.setAuto(false);
@@ -167,7 +170,7 @@ export class TravelScene extends BaseScene {
     }
     session.state = r.state;
     this.render();
-    if (takesDay) this.afterDay(r.entries);
+    if (takesDay) this.afterDay(r.entries, newlyDead(before, r.state));
     else this.setBusy(false);
   }
 
@@ -181,7 +184,7 @@ export class TravelScene extends BaseScene {
   }
 
   /** Route after a day: endings, event modal, waypoint arrival, or keep auto-traveling. */
-  private afterDay(entries: LogEntry[]): void {
+  private afterDay(entries: LogEntry[], dead: string[]): void {
     const s = session.state!;
     if (s.status !== 'traveling') {
       this.setAuto(false);
@@ -191,7 +194,8 @@ export class TravelScene extends BaseScene {
     }
     const arrived = s.arrivedAt !== null && s.arrivedAt !== session.shownWaypoint;
     if (entries.some((e) => STOP_KINDS.has(e.kind))) this.setAuto(false);
-    const next = (): void => {
+    const next = (): void => this.beaconsThen(dead, proceed);
+    const proceed = (): void => {
       if (arrived) {
         session.shownWaypoint = s.arrivedAt;
         this.go('Waypoint');
@@ -203,6 +207,16 @@ export class TravelScene extends BaseScene {
       this.setBusy(false);
       this.modal(shown.map((e) => e.text).join('\n\n'), { onClose: next });
     } else next();
+  }
+
+  /** One memorial beacon prompt per crew death this action (the run continues), then `done`. */
+  private beaconsThen(dead: string[], done: () => void): void {
+    const [name, ...rest] = dead;
+    if (name === undefined) return done();
+    promptBeacon(this, this.router, name, (text) => {
+      if (text) saveBeacon(makeBeacon(session.state!, name, text));
+      this.beaconsThen(rest, done);
+    });
   }
 
   /** Placeholder landmark band: starfield, the ship, destination name (art in M4). */

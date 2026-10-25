@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { WAYPOINTS } from '@/content';
 import { applyAction, intentBlocker } from '@/sim/actions';
 import {
-  appendBeacon, beaconSegment, beaconsForSegment, cannedBeacons, formatBeacon, isValidEpitaph, makeBeacon, parseBeacons, type BeaconRecord,
+  appendBeacon, beaconSegment, beaconsForSegment, cannedBeacons, formatBeacon, isValidEpitaph, lastDeceased, makeBeacon, newlyDead, parseBeacons, type BeaconRecord,
 } from '@/sim/beacons';
 import { crossChance } from '@/sim/crossing';
 import { sellBlocker } from '@/sim/market';
@@ -145,5 +145,18 @@ describe('station helpers', () => {
     expect(stationOpen(travelingState())).toBe(false);
     expect(sellBlocker({ ...travelingState(), status: 'store' }, 'drives', 1)).toBe('Mattie does not buy back.');
     expect(WAYPOINTS[12]!.markup?.drives).toBeUndefined();
+  });
+});
+
+describe('per-death beacon helpers', () => {
+  it('newlyDead lists crew who died between two states in roster order; lastDeceased picks the latest', () => {
+    const a = travelingState();
+    const b = structuredClone(a);
+    b.day = 9;
+    for (const i of [1, 3]) Object.assign(b.crew[i]!, { alive: false, diedOnDay: 9 });
+    expect(newlyDead(a, b)).toEqual([b.crew[1]!.name, b.crew[3]!.name]);
+    expect(newlyDead(b, b)).toEqual([]);
+    expect(lastDeceased(b)).toBe(b.crew[3]!.name);
+    expect(lastDeceased(a)).toBeNull();
   });
 });

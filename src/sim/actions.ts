@@ -100,14 +100,14 @@ export function applyAction(state: GameState, intent: Intent, rng: Rng): StepRes
       break;
     case 'setThrust':
       s.thrust = intent.thrust;
-      pushLog(s, out, 'setting', `Thrust set to ${THRUST[intent.thrust].name}.`, intent.thrust);
+      pushLog(s, out, 'setting', textLine('ui', 'log.thrustSet', 'Thrust set to {name}.', { name: THRUST[intent.thrust].name }), intent.thrust);
       break;
     case 'setRations':
       s.rations = intent.rations;
-      pushLog(s, out, 'setting', `Rations set to ${RATIONS[intent.rations].name}.`, intent.rations);
+      pushLog(s, out, 'setting', textLine('ui', 'log.rationsSet', 'Rations set to {name}.', { name: RATIONS[intent.rations].name }), intent.rations);
       break;
     case 'repair':
-      pushLog(s, out, 'repair', `You set to work on the ${PART_NAMES[intent.part]}.`, intent.part);
+      pushLog(s, out, 'repair', textLine('ui', 'log.repairStart', 'You set to work on the {part}.', { part: PART_NAMES[intent.part] }), intent.part);
       tickInPlace(s, rng, { kind: 'repair', part: intent.part }, out);
       break;
     case 'scan':

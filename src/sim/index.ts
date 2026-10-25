@@ -13,7 +13,7 @@ export { acceptTrade, offerVars, personaIds, personaName, tradeBlocker, tradeLin
 export { shuffledTalk, stationGreeting, stationKeeper, stationOpen, stationTalk } from './station';
 export { cumulativeAt, isSkipped, nextWaypoint, routeBlocker, routeWaypoints, totalMk } from './route';
 export {
-  BEACONS, appendBeacon, beaconSegment, beaconsForSegment, cannedBeacons, formatBeacon, isValidEpitaph, makeBeacon,
+  BEACONS, appendBeacon, beaconSegment, beaconsForSegment, cannedBeacons, formatBeacon, isValidEpitaph, lastDeceased, makeBeacon, newlyDead,
   parseBeacons, type BeaconRecord,
 } from './beacons';
 export { buy, buyBlocker, costOf, depart, localPrice, maxBuyable, priceAt, sellPrice, storeIndex, storeWarnings } from './store';

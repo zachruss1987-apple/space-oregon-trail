@@ -1,6 +1,6 @@
 /** Death endings: the last words from the log, a beacon epitaph saved via makeBeacon/appendBeacon, return to title. */
 import { session } from '@/game/session';
-import { BEACONS, makeBeacon } from '@/sim';
+import { BEACONS, lastDeceased, makeBeacon } from '@/sim';
 import { saveBeacon } from '@/ui/beaconStore';
 import { t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
@@ -27,7 +27,7 @@ export class DeathScene extends BaseScene {
       maxLength: BEACONS.textMax,
       onCommit: (text) => {
         if (text.trim()) {
-          saveBeacon(makeBeacon(s, s.crew[0]?.name ?? '', text));
+          saveBeacon(makeBeacon(s, lastDeceased(s) ?? s.crew[0]?.name ?? '', text));
           this.add.text(40, 308, t('death.beaconSaved'), textStyle(COLORS.dim));
         }
         this.finish();
