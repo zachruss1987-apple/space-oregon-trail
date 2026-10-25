@@ -8,11 +8,15 @@ platform names them. It never covers anything: it lives in its own 16 px band be
   in `src/config.ts`). `GAME_WIDTH`/`GAME_HEIGHT` stay 640×400 and every scene keeps drawing in 0..640 × 0..400.
 - `fitCamera` centres the main camera on the full 640×416 world (`centerOn(320, 208)` at `RENDER_SCALE`), so the band
   rows 400..415 are visible below each scene and nothing a scene draws (modal blockers, mini-game backgrounds) reaches them.
-- A persistent `KeyHints` scene (`src/ui/KeyHintsScene.ts`, key `KeyHints`, launched by Boot after fonts are built,
-  never stopped, never sets `data-scene`) draws the band at y 400..415: fill `COLORS.bg`, a 1 px `COLORS.borderDim` rule
-  on row 400, text baseline row 404 (8 px glyphs, `retro8` x1). It renders above every other scene (last in the display list).
-- The CRT post-pipeline applies to the band too (`sync` already walks every active scene). `crtRowScale` stays 2 at
-  1280×832. If the shader's vignette/curvature reads `uLogical`, bump `CRT_LOGICAL.h` to 416 so the band is inside the tube.
+- A per-scene band component (`src/ui/KeyHintsBand.ts`) draws the band inside each scene's own camera:
+  `BaseScene.begin()` creates it right after `fitCamera`; it subscribes to the `keyHints.ts` store and unsubscribes on
+  the scene's `shutdown`. It draws at y 400..415, depth 500 (above modal blockers 100 and the `?` overlay 200): fill
+  `COLORS.bg`, a 1 px `COLORS.borderDim` rule on row 400, text baseline row 404 (8 px glyphs, `retro8` x1). Boot,
+  GfxPreview and SoundTest have no band.
+- Why per scene, not a persistent overlay scene: the CRT is a full-screen post pass per camera, so an overlay scene
+  doubled the shader cost every frame (CI's software WebGL went from 13 to 20+ minutes for e2e). With the band in the
+  scene's camera there is one post pass per frame and the band sits in the same tube. `CRT_LOGICAL.h` is 416 (the
+  shader's glow reads `uLogical`); `crtRowScale` stays 2 at 1280×832.
 - Scaling text in `art.md` ("Scaling") now computes `s` from 416 rows; the 16:10 note becomes 40:26.
 
 ## Content and layout

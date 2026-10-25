@@ -6,6 +6,7 @@ import { markScene } from '@/game/contract';
 import { session } from '@/game/session';
 import { applyAction, cumulativeAt, type RouteId } from '@/sim';
 import { t } from '@/ui/copy';
+import { KeyHintsBand } from '@/ui/KeyHintsBand';
 import { KeyRouter } from '@/ui/keys';
 import { Modal, resetModals, type ModalOptions } from '@/ui/Modal';
 import { audio } from '@/audio/AudioManager';
@@ -40,6 +41,8 @@ export abstract class BaseScene extends Phaser.Scene {
     resetModals();
     this.router = new KeyRouter(this);
     fitCamera(this).setBackgroundColor(COLORS.bg);
+    // Key hints band at y 400..415 in this scene's camera (keyhints.md): one CRT post pass per frame.
+    new KeyHintsBand(this);
     markScene(this.sceneKey);
     const song = this.music();
     if (song) audio().playMusic(song);

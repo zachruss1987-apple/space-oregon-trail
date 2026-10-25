@@ -125,7 +125,7 @@ test('Top Ten: ten defaults; a qualifying arrival enters the crew; the autosave 
   });
   await expect(body(page)).toHaveAttribute('data-scene', 'Travel');
   await page.keyboard.press('Enter'); // Continue: the last day
-  await expect(body(page)).toHaveAttribute('data-scene', 'Arrival', { timeout: 10_000 });
+  await expect(body(page)).toHaveAttribute('data-scene', 'Arrival', { timeout: process.env.CI ? 30_000 : 10_000 });
   expect(await page.evaluate(() => localStorage.getItem('proxima.autosave'))).toBeNull();
   await page.keyboard.press('Enter'); // See your score
   await page.keyboard.press('Enter'); // Continue -> Top Ten entry

@@ -8,7 +8,6 @@ import { audioBoot } from './audio/boot';
 import { bindMuteKey } from './game/muteKey';
 import { SCENES } from './scenes';
 import { GfxPreviewScene } from './gfx/previewScene';
-import { KeyHintsScene } from './ui/KeyHintsScene';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
 session.init(window.location.search);
@@ -31,8 +30,7 @@ const config: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   // BootScene (first) builds fonts and textures, then opens Title or a `?scene=` debug scene.
-  // KeyHints (last, so it draws above every scene) is launched by Boot once fonts exist.
-  scene: [...audioBoot(SCENES), GfxPreviewScene, KeyHintsScene],
+  scene: [...audioBoot(SCENES), GfxPreviewScene],
 };
 
 const game = new Phaser.Game(config);

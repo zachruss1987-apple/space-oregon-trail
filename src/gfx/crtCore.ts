@@ -109,8 +109,6 @@ void main() {
   float v = dot(p, p) * 0.5;
   col *= 1.0 - uVignette * v;
   col *= 1.0 + uFlicker * sin(uTime * 60.0);
-  // Alpha passes through (premultiplied) so an overlay camera (the KeyHints band) only covers what it draws;
-  // scene cameras fill their background, so for them this is the old opaque output.
-  gl_FragColor = vec4(col * base.a, base.a);
+  gl_FragColor = vec4(col, 1.0);
 }
 `;
