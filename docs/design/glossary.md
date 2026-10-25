@@ -52,3 +52,4 @@
 | Via Oort | The default route through Oort Beacon (2,040 Mk). |
 | Fork | Titan Refinery's route choice: Via Oort Beacon or Direct to the Shock. |
 | Dome gardener / ice diver / algae farmer | Trader personas at Mars Relay, Europa Outpost and the vats (`trades.json`). |
+| Station keepers | Ottoline Varga (Mars Relay), Bram Okonkwo-Hale (Ceres Depot), Sister Maren Voss (Europa Outpost), Dutch Halloran (Titan Refinery), Quill Anand (Oort Beacon), Imogen Pike (Lane Terminus); Mattie Ostrander keeps Independence. |

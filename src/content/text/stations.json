@@ -1,5 +1,11 @@
 {
   "independence-station": {
+    "keeper": "Mattie Ostrander",
+    "greeting": [
+      "Mattie looks up from the ledger. 'Captain {captain}. Sit. Everything here is priced to teach.'",
+      "'Captain {captain},' says Mattie. 'The airlock is that way. The good advice is over here.'",
+      "Mattie: 'Welcome back to Independence, Captain {captain}. Last chance for anything you forgot.'"
+    ],
     "talk": [
       "Dockhand: 'Check your seals twice. I will check them a third time, for a fee.'",
       "Clerk: 'Manifests go in triplicate. The third copy is for the Lane. The Lane never reads it.'",
@@ -16,6 +22,12 @@
     ]
   },
   "mars-relay": {
+    "keeper": "Ottoline Varga",
+    "greeting": [
+      "Ottoline waves a tomato at you. 'Captain {captain}. Welcome to Mars Relay. The tomatoes are real.'",
+      "'Captain {captain}, you came all this way for rations. I respect that,' says Ottoline.",
+      "Ottoline Varga: 'Mind the red dust, Captain {captain}. It is in everything. It is in my tea.'"
+    ],
     "talk": [
       "Postmaster: 'Letters home are free. Replies are your problem.'",
       "Dockhand: 'Everything here is red. Don't ask about the paint. It was not paint.'",
@@ -32,6 +44,12 @@
     ]
   },
   "ceres-depot": {
+    "keeper": "Bram Okonkwo-Hale",
+    "greeting": [
+      "Bram nods from behind a crate. 'Captain {captain}. Ceres Depot. Mind the rocks. They mind you.'",
+      "'Captain {captain}, welcome. Prices are fixed. So is the coffee machine, mostly,' says Bram.",
+      "Bram Okonkwo-Hale: 'Belt ahead, Captain {captain}. Buy parts now. Buy courage elsewhere.'"
+    ],
     "talk": [
       "Depot hand: 'Welcome to Ceres. We have rations, parts and quite a lot of rock.'",
       "Clerk: 'The Belt Crossing is dense this year. Hire a tug or hire a prayer.'",
@@ -48,6 +66,12 @@
     ]
   },
   "europa-outpost": {
+    "keeper": "Sister Maren Voss",
+    "greeting": [
+      "Sister Maren pulls her scarf up. 'Captain {captain}. Europa Outpost. Warm welcome, cold floor.'",
+      "'Captain {captain},' says Maren. 'Blessings are extra. The air is free, for now.'",
+      "Maren Voss: 'Saturn is next, Captain {captain}. Take a spare of everything. Then a spare spare.'"
+    ],
     "talk": [
       "Dockhand: 'Ice moon, warm welcome. The welcome is the only warm thing.'",
       "Clerk: 'Saturn Ring Plane is next. Thin ring, fat rocks. Hire a tug if you value your paint.'",
@@ -64,6 +88,12 @@
     ]
   },
   "titan-refinery": {
+    "keeper": "Dutch Halloran",
+    "greeting": [
+      "Dutch wipes his hands on a rag older than the station. 'Captain {captain}. Titan Refinery. Mind the fumes.'",
+      "'Captain {captain}, welcome to the orange end of nowhere,' says Dutch. 'Fuel is cheap. Opinions are cheaper.'",
+      "Dutch Halloran: 'Fork ahead, Captain {captain}. Pick your road, then pick your regrets.'"
+    ],
     "talk": [
       "Foreman: 'Fuel is cheap. Orange sky is free. Please stay off the gantries.'",
       "Clerk: 'The Gate direct saves 114 Mk and skips Oort. The Heliopause is harder that way.'",
@@ -80,6 +110,12 @@
     ]
   },
   "oort-beacon": {
+    "keeper": "Quill Anand",
+    "greeting": [
+      "A voice crackles. 'Captain {captain}. Oort Beacon. Quill here. You are very far from everything.'",
+      "'Captain {captain}, you made it to the edge,' says Quill. 'Ring the bell if you need it. It does not work.'",
+      "Quill Anand: 'Welcome to Oort, Captain {captain}. The dark out here is the good kind. Nothing in it.'"
+    ],
     "talk": [
       "Beacon keeper: 'Last light before the Proxima shell. Please keep your running lights on.'",
       "Dockhand: 'Rations here cost three times Ceres. Don't blame me. Blame the distance.'",
@@ -96,6 +132,12 @@
     ]
   },
   "lane-terminus-station": {
+    "keeper": "Imogen Pike",
+    "greeting": [
+      "Imogen Pike checks her clipboard. 'Captain {captain}. Lane Terminus. Last stop. Please stop.'",
+      "'Captain {captain}, almost there,' says Imogen. 'Everything costs more here. It is the view.'",
+      "Imogen: 'Welcome, Captain {captain}. Flare Belt is next. I have a form for it. The form is not comforting.'"
+    ],
     "talk": [
       "Clerk: 'Final station before New Willamette. Final prices, too. Do not hope.'",
       "Dockhand: 'The Flare Belt is in season. Hire a tug if you can. If you can't, ride low.'",

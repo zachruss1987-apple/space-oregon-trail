@@ -11,7 +11,7 @@ import { FALLBACK } from '../../../src/ui/copy';
 const ALLOWED = new Set([
   '{name}', '{n}', '{item}',
   // UI-only placeholders filled by src/ui/copy.ts callers
-  '{give}', '{get}', '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
+  '{captain}', '{cr}', '{captain}', '{cr}', '{give}', '{get}', '{seed}', '{label}', '{total}', '{left}', '{mk}', '{health}', '{part}', '{cause}', '{rating}',
 ]);
 const CONDITIONS = [
   'space-dysentery', 'hull-mold-fever', 'cryo-fever', 'scurvy',
@@ -250,9 +250,110 @@ describe('stations.json (T-024)', () => {
   it('lines are short, unique across the file, and placeholder-free', () => {
     const all = collect(stations);
     checkStrings(all, 140, 'stations');
-    for (const s of all) expect(s, s).not.toMatch(/\{/);
+    const talkLines = entries(stations).flatMap(([, v]) => (v as { talk: string[] }).talk);
+    for (const s of talkLines) expect(s, s).not.toMatch(/\{/);
     const lanes = collect(bulletins);
     for (const s of all) expect(lanes, s).not.toContain(s);
+  });
+});
+
+describe('stations.json keeper and greeting (T-052)', () => {
+  type Station = { keeper: string; greeting: string[]; talk: string[] };
+  const all = entries(stations) as [string, Station][];
+  it('every station has a keeper (<= 24 chars) and 2+ greetings, each with {captain}', () => {
+    expect(all).toHaveLength(7);
+    for (const [id, st] of all) {
+      expect(typeof st.keeper, id).toBe('string');
+      expect(st.keeper.length, id).toBeGreaterThan(0);
+      expect(st.keeper.length, id).toBeLessThanOrEqual(24);
+      expect(st.greeting.length, id).toBeGreaterThanOrEqual(2);
+      for (const g of st.greeting) {
+        expect(g, g).toContain('{captain}');
+        expect(g.match(/{[^}]*}/g)).toEqual(['{captain}']);
+      }
+    }
+  });
+  it('keepers are unique', () => {
+    const names = all.map(([, st]) => st.keeper);
+    expect(new Set(names).size).toBe(names.length);
+  });
+});
+
+describe('ui.json station log and interim keys (T-052)', () => {
+  const get = (key: string): unknown => key.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], ui);
+  const phs = (s: string) => [...new Set(s.match(/{[^}]*}/g) ?? [])].sort();
+  // key -> placeholders every variant must contain (src/sim/market.ts, actions.ts; hazard.option.rest in WaypointScene)
+  const REQUIRED: Record<string, string[]> = {
+    'station.log.bought': ['{cr}', '{item}'],
+    'station.log.sold': ['{cr}', '{item}'],
+    'log.thrustSet': ['{name}'],
+    'log.rationsSet': ['{name}'],
+    'log.repairStart': ['{part}'],
+    'hazard.option.rest': [],
+  };
+  it('has every required key with its placeholder set', () => {
+    for (const [k, want] of Object.entries(REQUIRED)) {
+      const v = get(k);
+      const variants = typeof v === 'string' ? [v] : (v as string[]);
+      expect(Array.isArray(variants) && variants.length > 0, k).toBe(true);
+      for (const line of variants) {
+        expect(phs(line), k + ': ' + line).toEqual(want);
+        expect(line.length, k).toBeLessThanOrEqual(140);
+      }
+    }
+  });
+  it('interim labels fit the 24-char menu limit', () => {
+    for (const k of ['hazard.option.rest', 'hazard.option.thread', 'hazard.option.tug']) expect((get(k) as string).length, k).toBeLessThanOrEqual(24);
+  });
+});
+
+describe('stations.json keeper and greeting (T-052)', () => {
+  type Station = { keeper: string; greeting: string[]; talk: string[] };
+  const all = entries(stations) as [string, Station][];
+  it('every station has a keeper (<= 24 chars) and 2+ greetings, each with only {captain}', () => {
+    expect(all).toHaveLength(7);
+    for (const [id, st] of all) {
+      expect(typeof st.keeper, id).toBe('string');
+      expect(st.keeper.length, id).toBeGreaterThan(0);
+      expect(st.keeper.length, id).toBeLessThanOrEqual(24);
+      expect(st.greeting.length, id).toBeGreaterThanOrEqual(2);
+      for (const g of st.greeting) {
+        expect(g, g).toContain('{captain}');
+        expect(g.match(/{[^}]*}/g)).toEqual(['{captain}']);
+      }
+    }
+  });
+  it('keepers are unique', () => {
+    const names = all.map(([, st]) => st.keeper);
+    expect(new Set(names).size).toBe(names.length);
+  });
+});
+
+describe('ui.json station log and interim keys (T-052)', () => {
+  const get = (key: string): unknown => key.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], ui);
+  const phs = (s: string) => [...new Set(s.match(/{[^}]*}/g) ?? [])].sort();
+  // key -> placeholders every variant must contain (src/sim/market.ts, actions.ts; hazard.option.rest in WaypointScene)
+  const REQUIRED: Record<string, string[]> = {
+    'station.log.bought': ['{cr}', '{item}'],
+    'station.log.sold': ['{cr}', '{item}'],
+    'log.thrustSet': ['{name}'],
+    'log.rationsSet': ['{name}'],
+    'log.repairStart': ['{part}'],
+    'hazard.option.rest': [],
+  };
+  it('has every required key with its placeholder set', () => {
+    for (const [k, want] of Object.entries(REQUIRED)) {
+      const v = get(k);
+      const variants = typeof v === 'string' ? [v] : (v as string[]);
+      expect(Array.isArray(variants) && variants.length > 0, k).toBe(true);
+      for (const line of variants) {
+        expect(phs(line), k + ': ' + line).toEqual(want);
+        expect(line.length, k).toBeLessThanOrEqual(140);
+      }
+    }
+  });
+  it('interim labels fit the 24-char menu limit', () => {
+    for (const k of ['hazard.option.rest', 'hazard.option.thread', 'hazard.option.tug']) expect((get(k) as string).length, k).toBeLessThanOrEqual(24);
   });
 });
 

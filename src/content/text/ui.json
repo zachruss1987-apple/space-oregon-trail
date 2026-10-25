@@ -230,7 +230,10 @@
       "You cast off from Independence Station. The Lane is two thousand Mk long.",
       "The tether drops and Independence Station shrinks behind you.",
       "Drives lit, hatches sealed. Independence Station recedes."
-    ]
+    ],
+    "thrustSet": "Thrust set to {name}.",
+    "rationsSet": "Rations set to {name}.",
+    "repairStart": "You set to work on the {part}."
   },
   "common": {
     "ok": "OK",
@@ -318,7 +321,8 @@
       "thread": "Thread it",
       "shields": "Shields up and push",
       "tug": "Hire a tug",
-      "pilot": "Wait for a Belter pilot"
+      "pilot": "Wait for a Belter pilot",
+      "rest": "Rest a day"
     },
     "desc": {
       "thread": "Fly it yourself. Fast, free, and exactly as risky as it looks.",
@@ -446,6 +450,16 @@
       "noDrive": "You need at least one ion drive to leave.",
       "lastDrive": "You need a drive to leave.",
       "confirm": "Cast off from the station?"
+    },
+    "log": {
+      "bought": [
+        "Bought {item} for {cr} cr.",
+        "Paid {cr} cr for {item}. The keeper counts it twice."
+      ],
+      "sold": [
+        "Sold {item} for {cr} cr.",
+        "Handed over {item} and took {cr} cr. A poor rate, as promised."
+      ]
     }
   }
 }
