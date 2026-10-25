@@ -34,7 +34,8 @@
     "thrustPrompt": "Set thrust:",
     "rationsPrompt": "Set rations:",
     "scanConfirm": "Spend 5 charges and a day?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "autoIndicator": "TRAVELING... (any key to stop)"
   },
   "setup": {
     "professionPrompt": "Many kinds of people travel the Lane. What will you be?",
@@ -142,27 +143,39 @@
   "crossing": {
     "clear": [
       "You made it across without incident. The ship, for once, is not even dented.",
-      "The crossing was clean. You are slightly disappointed to have nothing to report."
+      "The crossing was clean. You are slightly disappointed to have nothing to report.",
+      "Clean crossing. The ship is unharmed, and slightly smug.",
+      "You came through without a scratch. The hull is suspicious of its own luck."
     ],
     "scraped": [
       "You scraped through, and the ship needs a day to catch its breath.",
-      "Close call. The hull sang the whole way through, and you will lose a day."
+      "Close call. The hull sang the whole way through, and you will lose a day.",
+      "The hull took a scrape and a half. A day to catch your breath.",
+      "You slid through with paint to spare, but the ship wants a rest day."
     ],
     "cargo": [
       "The crossing shook loose {n} {item}. They were last seen floating behind you.",
-      "You lost {n} {item} in the crossing. The rest of the cargo has opinions."
+      "You lost {n} {item} in the crossing. The rest of the cargo has opinions.",
+      "The crossing shook free {n} {item}. They are somewhere behind you, floating politely.",
+      "{n} {item} went out with the tide. Nobody saw them leave."
     ],
     "damage": [
       "The crossing damaged your ship. Your {item} is broken.",
-      "Something big went by too close. The {item} did not take it well."
+      "Something big went by too close. The {item} did not take it well.",
+      "The crossing was rough on the ship. Your {item} is broken.",
+      "Something struck the hull on the way through. The {item} is the worse for it."
     ],
     "injury": [
       "{name} was hurt in the crossing. The suit held, but {name} did not entirely.",
-      "{name} took a bad knock coming through. It will take some time to mend."
+      "{name} took a bad knock coming through. It will take some time to mend.",
+      "{name} was hurt in the crossing. A few days of rest should help.",
+      "{name} came through with a bad bruise and worse manners."
     ],
     "lost": [
       "{name} was lost in the crossing. Nobody saw it happen.",
-      "The crossing took {name}. The crew made it through. They are not celebrating."
+      "The crossing took {name}. The crew made it through. They are not celebrating.",
+      "{name} did not come through the crossing. The crew went quiet for a while.",
+      "The crossing took {name}. The ship is lighter, and so is everyone's heart."
     ]
   },
   "arrival": {

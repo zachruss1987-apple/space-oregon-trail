@@ -1,0 +1,169 @@
+{
+  "canned": [
+    {
+      "name": "Obadiah",
+      "text": "Trusted the Ring. The Ring noted it.",
+      "segment": 1
+    },
+    {
+      "name": "Jemima",
+      "text": "Hit the Ring at full burn.",
+      "segment": 1
+    },
+    {
+      "name": "Silas",
+      "text": "Said 'it is only debris.'",
+      "segment": 1
+    },
+    {
+      "name": "Hester",
+      "text": "Went to wave. Drifted off.",
+      "segment": 1
+    },
+    {
+      "name": "Ulysses",
+      "text": "Argued with a shoal. Lost.",
+      "segment": 2
+    },
+    {
+      "name": "Nell",
+      "text": "Found the Shoals. Briefly.",
+      "segment": 2
+    },
+    {
+      "name": "Gideon",
+      "text": "Swore the gravel was friendly.",
+      "segment": 2
+    },
+    {
+      "name": "Cora",
+      "text": "Checked her tether. Once.",
+      "segment": 2
+    },
+    {
+      "name": "Eli",
+      "text": "Drank the Mars coffee.",
+      "segment": 3
+    },
+    {
+      "name": "Prudence",
+      "text": "Trusted the recycler.",
+      "segment": 4
+    },
+    {
+      "name": "Kit",
+      "text": "Wanted a closer look.",
+      "segment": 5
+    },
+    {
+      "name": "Mordecai",
+      "text": "Threaded the gap. Missed.",
+      "segment": 7
+    },
+    {
+      "name": "Lavinia",
+      "text": "Left her seals loose.",
+      "segment": 7
+    },
+    {
+      "name": "Zebulon",
+      "text": "Belt Crossing took his hat.",
+      "segment": 7
+    },
+    {
+      "name": "Amos",
+      "text": "Didn't hire the tug.",
+      "segment": 7
+    },
+    {
+      "name": "Florence",
+      "text": "Out of paste at Ceres.",
+      "segment": 6
+    },
+    {
+      "name": "Bartholomew",
+      "text": "Hull mold. Nobody warned him.",
+      "segment": 8
+    },
+    {
+      "name": "Temperance",
+      "text": "Saturn's rings went by.",
+      "segment": 9
+    },
+    {
+      "name": "Delphine",
+      "text": "Called the ring pretty.",
+      "segment": 9
+    },
+    {
+      "name": "Ignatius",
+      "text": "Rode the plane. Lost the ride.",
+      "segment": 9
+    },
+    {
+      "name": "Theodora",
+      "text": "Flew solo past the rings.",
+      "segment": 9
+    },
+    {
+      "name": "Ezra",
+      "text": "Left the Gate at dinner.",
+      "segment": 11
+    },
+    {
+      "name": "Abigail",
+      "text": "Counted rations. Came up short.",
+      "segment": 12
+    },
+    {
+      "name": "Hollis",
+      "text": "The Shock shook him loose.",
+      "segment": 13
+    },
+    {
+      "name": "Lucinda",
+      "text": "Skipped the Shock tug.",
+      "segment": 13
+    },
+    {
+      "name": "Cora",
+      "text": "Sent letters home. Fine.",
+      "segment": 13
+    },
+    {
+      "name": "Gideon",
+      "text": "Logged out at the Beacon.",
+      "segment": 12
+    },
+    {
+      "name": "Mordecai",
+      "text": "Ate the last paste cake.",
+      "segment": 14
+    },
+    {
+      "name": "Silas",
+      "text": "Bought the lucky bolt.",
+      "segment": 14
+    },
+    {
+      "name": "Prudence",
+      "text": "Rode the flare. Rode it low.",
+      "segment": 15
+    },
+    {
+      "name": "Jemima",
+      "text": "Flare came early.",
+      "segment": 15
+    },
+    {
+      "name": "Nell",
+      "text": "Last leg. Just the last.",
+      "segment": 15
+    },
+    {
+      "name": "Kit",
+      "text": "Mud was real. Never saw it.",
+      "segment": 16
+    }
+  ]
+}

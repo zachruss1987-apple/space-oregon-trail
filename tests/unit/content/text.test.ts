@@ -3,6 +3,9 @@ import events from '../../../src/content/text/events.json';
 import deaths from '../../../src/content/text/deaths.json';
 import bulletins from '../../../src/content/text/bulletins.json';
 import ui from '../../../src/content/text/ui.json';
+import stations from '../../../src/content/text/stations.json';
+import trades from '../../../src/content/text/trades.json';
+import epitaphs from '../../../src/content/text/epitaphs.json';
 import { FALLBACK } from '../../../src/ui/copy';
 
 const ALLOWED = new Set([
@@ -226,5 +229,78 @@ describe('ui.json vs FALLBACK', () => {
       const ph = (s: string) => (s.match(/{[^}]*}/g) ?? []).sort();
       expect(ph(v as string), k).toEqual(ph(fallback));
     }
+  });
+});
+
+describe('stations.json (T-024)', () => {
+  const IDS = [
+    'independence-station', 'mars-relay', 'ceres-depot', 'europa-outpost',
+    'titan-refinery', 'oort-beacon', 'lane-terminus-station',
+  ];
+  it('has 10+ talk lines for each of the 7 stations, all known to bulletins.json', () => {
+    const ids = entries(stations).map(([k]) => k).sort();
+    expect(ids).toEqual([...IDS].sort());
+    for (const id of ids) {
+      expect((bulletins as Obj)[id], id).toBeDefined();
+      const talk = ((stations as Obj)[id] as { talk: string[] }).talk;
+      expect(Array.isArray(talk), id).toBe(true);
+      expect(talk.length, id).toBeGreaterThanOrEqual(10);
+    }
+  });
+  it('lines are short, unique across the file, and placeholder-free', () => {
+    const all = collect(stations);
+    checkStrings(all, 140, 'stations');
+    for (const s of all) expect(s, s).not.toMatch(/\{/);
+    const lanes = collect(bulletins);
+    for (const s of all) expect(lanes, s).not.toContain(s);
+  });
+});
+
+describe('trades.json (T-024)', () => {
+  const personas = Object.entries((trades as { personas: Record<string, Obj> }).personas);
+  it('has 12+ personas with name and 2+ variants per line type', () => {
+    expect(personas.length).toBeGreaterThanOrEqual(12);
+    for (const [id, p] of personas) {
+      expect(typeof p.name, id).toBe('string');
+      for (const k of ['offer', 'accept', 'decline']) {
+        expect((p[k] as string[]).length, `${id}.${k}`).toBeGreaterThanOrEqual(2);
+      }
+    }
+  });
+  it('offers use exactly {give} and {get}; replies use no placeholders', () => {
+    for (const [id, p] of personas) {
+      for (const s of p.offer as string[]) {
+        expect(s, id).toContain('{give}');
+        expect(s, id).toContain('{get}');
+        expect((s.match(/\{[^}]*\}/g) ?? []).every((x) => x === '{give}' || x === '{get}'), s).toBe(true);
+      }
+      for (const s of [...(p.accept as string[]), ...(p.decline as string[])]) expect(s, s).not.toMatch(/\{/);
+    }
+  });
+  it('strings are short and unique', () => {
+    const all = personas.flatMap(([, p]) => [p.name as string, ...(p.offer as string[]), ...(p.accept as string[]), ...(p.decline as string[])]);
+    const nonPh = all.filter((s) => !/\{/.test(s));
+    checkStrings(nonPh, 140, 'trades');
+    for (const s of all) expect(s.length, s).toBeLessThanOrEqual(140);
+    expect(new Set(all).size).toBe(all.length);
+  });
+});
+
+describe('epitaphs.json (T-024)', () => {
+  const canned = (epitaphs as { canned: { name: string; text: string; segment: number }[] }).canned;
+  it('has 24+ canned beacons with names, short text, and segments 1-16', () => {
+    expect(canned.length).toBeGreaterThanOrEqual(24);
+    for (const e of canned) {
+      expect(e.name.length, e.name).toBeGreaterThan(0);
+      expect(e.name.length, e.name).toBeLessThanOrEqual(12);
+      expect(e.text.length, e.text).toBeLessThanOrEqual(40);
+      expect(Number.isInteger(e.segment) && e.segment >= 1 && e.segment <= 16, e.text).toBe(true);
+    }
+  });
+  it('texts are unique and cover the hazard segments', () => {
+    checkStrings(canned.map((e) => e.text), 40, 'epitaphs');
+    const segs = new Set(canned.map((e) => e.segment));
+    for (const h of [1, 2, 7, 9, 13, 15]) expect(segs.has(h), `segment ${h}`).toBe(true);
+    expect(segs.size).toBeGreaterThanOrEqual(10);
   });
 });

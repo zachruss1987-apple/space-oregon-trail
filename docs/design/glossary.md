@@ -31,3 +31,9 @@
 | Derelict | An abandoned wreck that may hold rations, a spare, or suits. |
 | Drones | Salvage drones; they sweep wrecks on a scan and come back smug or sorry. |
 | Hold position | A lost day when the ship waits in place (`delay`). |
+| Talk lines | Per-station chatter (`stations.json`, `talk`): dockhands, clerks, colonists. |
+| Persona | A trading partner voice in `trades.json`; offers use `{give}` (what the player pays) and `{get}` (what the player receives). |
+| Canned beacon | A pre-written memorial left by NPC colonists (`epitaphs.json`); text max 40 chars, tied to a trail segment. |
+| Lucky bolt | An ordinary bolt sold as a charm at Independence Station. |
+| Paste cake | Nutrient paste, baked. Not an improvement. |
+| The Shock | Short for the Proxima Heliopause Shock. |

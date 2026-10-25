@@ -1,0 +1,114 @@
+{
+  "independence-station": {
+    "talk": [
+      "Dockhand: 'Check your seals twice. I will check them a third time, for a fee.'",
+      "Clerk: 'Manifests go in triplicate. The third copy is for the Lane. The Lane never reads it.'",
+      "A mother counts crates aloud. She has counted them four times. The number is still the same.",
+      "Dockhand: 'Buy your rations here. Out there they cost more and taste worse.'",
+      "Overheard: 'My brother went in spring. No word yet. That's the Lane for you: quiet.'",
+      "Mattie's boy sweeps the floor. He says Mattie is never wrong, only early.",
+      "Clerk: 'Flare season opens September fifteenth. Plan your last three legs accordingly.'",
+      "Old Belter at the rail: 'Never outrun a flare. Hide behind something big and be bored.'",
+      "A man sells lucky bolts, three credits each. They are ordinary bolts. They sell well.",
+      "Dockhand: 'Spare drive parts are cheaper here. You will want two. Everyone wants two, later.'",
+      "A child asks if Proxima b has trees. Her father says it has 'prospects'.",
+      "Lane clerk: 'Sign here to confirm you were warned. We warn everybody. It is very fair.'"
+    ]
+  },
+  "mars-relay": {
+    "talk": [
+      "Postmaster: 'Letters home are free. Replies are your problem.'",
+      "Dockhand: 'Everything here is red. Don't ask about the paint. It was not paint.'",
+      "Chandler: 'Fresh ration stock came in Tuesday. By fresh I mean Tuesday.'",
+      "Overheard: 'The Ring was easy. Wait until the Shoals dream about you.'",
+      "Clerk: 'Line forms at the left. The left is shorter. The left is also closed.'",
+      "A colonist writes his twelfth letter home. All twelve say 'fine'.",
+      "Dockhand: 'Ceres is 250 Mk of nothing. Buy extra rations for the nothing.'",
+      "Lane clerk: 'Relay staff are on break. I am a volunteer. The break is mine too.'",
+      "Trader: 'Prices are up. So is everyone's opinion of the prices.'",
+      "A kid peers out the viewport. 'Is that Mars?' 'It's a rock with ambitions,' says her aunt.",
+      "Mechanic: 'Your drive sounds like a goat. A healthy goat. Mostly.'",
+      "Overheard: 'Tug captains up here quote by the klick. Haggle. They respect it.'"
+    ]
+  },
+  "ceres-depot": {
+    "talk": [
+      "Depot hand: 'Welcome to Ceres. We have rations, parts and quite a lot of rock.'",
+      "Clerk: 'The Belt Crossing is dense this year. Hire a tug or hire a prayer.'",
+      "Belter in the canteen: 'Never thread a gap you can't see the end of. I did. Hence the arm.'",
+      "Chandler: 'Drone charges, boxes of twenty. Scan wrecks, find rations, avoid heroics.'",
+      "Overheard: 'Jupiter's Eye is worth the look. It is not a detour. It is the route.'",
+      "Dockhand: 'We roll the rocks in on Fridays. Please don't be here on Fridays.'",
+      "A widow sells hydroponic tomatoes. Her sign says: 'Grown with love and mild neglect.'",
+      "Depot clerk: 'Pilot wait at the Belt is four days. Pilot opinions are free.'",
+      "Mechanic: 'Gyros don't fail. They retire. Usually without notice.'",
+      "A boy sorts bolts by size and mood. He is paid per bolt.",
+      "Overheard: 'My cousin hired a Belter pilot. Lost nothing but his pride. And two crates.'",
+      "Lane clerk: 'Please report all drift incidents. Drifting is discouraged.'"
+    ]
+  },
+  "europa-outpost": {
+    "talk": [
+      "Dockhand: 'Ice moon, warm welcome. The welcome is the only warm thing.'",
+      "Clerk: 'Saturn Ring Plane is next. Thin ring, fat rocks. Hire a tug if you value your paint.'",
+      "Overheard: 'Don't drink the water. I mean, drink it. Just not the first glass.'",
+      "Priest: 'Bless your ship? Ten credits. Bless your recycler? Fifteen. It needs it more.'",
+      "Trader: 'Everything is priced for people who have already left Earth.'",
+      "Dockhand: 'The ice cracks at night. It's not you. It's the ice.'",
+      "A miner winks: 'Frozen sea down there. Fish, maybe. Nobody has proved otherwise.'",
+      "Lane clerk: 'Spares, rations, suits. We do not sell optimism. Out of stock.'",
+      "Mechanic: 'Take a spare of everything. Take two of the thing you think you won't need.'",
+      "Overheard: 'After the Rings, Titan. After Titan, the Gate. Eat well before the Gate.'",
+      "A boy asks what Proxima smells like. His mother says: 'Probably dirt.' He is satisfied.",
+      "Outpost cook: 'Stew of the day is stew. Ask no questions, get no answers.'"
+    ]
+  },
+  "titan-refinery": {
+    "talk": [
+      "Foreman: 'Fuel is cheap. Orange sky is free. Please stay off the gantries.'",
+      "Clerk: 'The Gate direct saves 114 Mk and skips Oort. The Heliopause is harder that way.'",
+      "Refiner: 'Smells like a campfire made of rubber. You'll stop noticing by Friday.'",
+      "Overheard: 'The Gate jump takes no time at all. The wait for it takes plenty.'",
+      "Dockhand: 'Buy rations here for the long stretch. Oort Beacon is thin on supplies.'",
+      "Trader: 'Titan methane in jugs. Good for lamps, bad for matches.'",
+      "Mechanic: 'Last drive checkup before the Gate. Don't skip it. The Gate skips nothing.'",
+      "A widow in a rubber coat sells pies. 'Methane-baked,' she says. 'Safe. Mostly.'",
+      "Lane clerk: 'The Kuiper Gate is a legal border. Bring a pen. And some patience.'",
+      "Overheard: 'My brother says space dysentery is a rumor. My brother is in the infirmary.'",
+      "A boy plays catch with a bolt. 'Gravity is low here,' says his dad. 'Aim is not.'",
+      "Foreman: 'Flare season up ahead. Rest here, repair here, regret nothing here.'"
+    ]
+  },
+  "oort-beacon": {
+    "talk": [
+      "Beacon keeper: 'Last light before the Proxima shell. Please keep your running lights on.'",
+      "Dockhand: 'Rations here cost three times Ceres. Don't blame me. Blame the distance.'",
+      "Overheard: 'The Heliopause Shock is next. It is called a shock for a reason.'",
+      "Lane clerk: 'Please sign the guest log. We like to know who might not return.'",
+      "A hermit tends the beacon lamp. 'Eleven years,' he says. 'Good company, the dark.'",
+      "Mechanic: 'Check your hull seals. The Shock rattles loose bolts and loose resolve.'",
+      "Trader: 'Nothing here is cheap. Nothing here is rotten, either. Barely.'",
+      "Overheard: 'I counted my rations. Then I counted them again. The Beacon makes you count.'",
+      "Beacon keeper: 'Forty ships logged this year. Thirty-one made the other side.'",
+      "A child waves at the dark outside. 'Hello, Proxima,' she says. Nobody corrects her.",
+      "Dockhand: 'Flare season has begun. Hug the hull of whatever is bigger than you.'",
+      "Clerk: 'Customs on the far side may ask about your cargo. Answer slowly.'"
+    ]
+  },
+  "lane-terminus-station": {
+    "talk": [
+      "Clerk: 'Final station before New Willamette. Final prices, too. Do not hope.'",
+      "Dockhand: 'The Flare Belt is in season. Hire a tug if you can. If you can't, ride low.'",
+      "Overheard: 'Two hundred Mk past the Belt and you're home. Home is mud, I hear.'",
+      "Trader: 'Nobody haggles at the end of the road. They pay and hold the receipt.'",
+      "Lane clerk: 'Arrivals are logged by rank. Pathfinder, Spacer, Groundling. We do not make the ranks.'",
+      "Mechanic: 'Fix everything you can fix. The Belt does the rest.'",
+      "A veteran settler: 'I made it in '81. The mud is real. The tomatoes are worth it.'",
+      "Dockhand: 'Rest if you must. The flares will wait. They always do.'",
+      "A mother counts her children out loud. Five. 'Good,' she tells the stars.",
+      "Overheard: 'The last leg is the longest. It's only 201 Mk. Don't ask me why.'",
+      "Clerk: 'Please review the beacons on the wall. They are not decor.'",
+      "Priest: 'We say a short prayer for the Belt. It is a very short prayer. We are optimistic.'"
+    ]
+  }
+}

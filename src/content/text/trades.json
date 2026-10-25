@@ -1,0 +1,214 @@
+{
+  "personas": {
+    "belter-miner": {
+      "name": "Belter miner",
+      "offer": [
+        "Take {give}, give me {get}. A Belter's word is as good as the rock he stands on.",
+        "I've got {get} going spare. You've got {give}. Seems like destiny, or arithmetic."
+      ],
+      "accept": [
+        "Done. Don't tell the others how little I asked.",
+        "Fair enough. Shake, and mind the gloves."
+      ],
+      "decline": [
+        "No. I've seen better offers from a rock.",
+        "Not for that. Try again with more manners."
+      ]
+    },
+    "lane-clerk": {
+      "name": "Lane Authority clerk",
+      "offer": [
+        "The Authority will accept {give} in exchange for {get}. Form 9 is optional, which means mandatory.",
+        "I may release {get} for {give}. Please do not mention this."
+      ],
+      "accept": [
+        "Approved. Stamp is on the left.",
+        "Noted. Filed. Forgotten."
+      ],
+      "decline": [
+        "Denied. The form says so.",
+        "I cannot accept that. I could, but I would have to sign something."
+      ]
+    },
+    "tug-captain": {
+      "name": "Tug captain",
+      "offer": [
+        "I'll swap {get} for {give}. The tow is still extra.",
+        "{give} for {get}. My ship eats credits, so spare me the haggle."
+      ],
+      "accept": [
+        "Good deal. The tug and I thank you.",
+        "Done. I'll put it on the invoice anyway."
+      ],
+      "decline": [
+        "Not worth my fuel.",
+        "No. The tug has opinions, and they match mine."
+      ]
+    },
+    "hydroponics-widow": {
+      "name": "Hydroponics widow",
+      "offer": [
+        "Bring me {give} and I'll part with {get}. Henry would have said no. Henry is not here.",
+        "{get} for {give}. The tomatoes have been lonely."
+      ],
+      "accept": [
+        "Wonderful. Mind the leaves.",
+        "Deal. Henry would have approved, mostly."
+      ],
+      "decline": [
+        "Not today, dear. I need more than that.",
+        "No. I have survived worse offers."
+      ]
+    },
+    "depot-chandler": {
+      "name": "Depot chandler",
+      "offer": [
+        "I'll trade {get} for {give}. Prices are firm. My knees are not.",
+        "{give} gets you {get}. Don't read the small print. It is blank."
+      ],
+      "accept": [
+        "Sold. Receipt is in the drawer. The drawer is stuck.",
+        "A fine trade. Come again."
+      ],
+      "decline": [
+        "No. I did not get this fat on bad deals.",
+        "The scale says no, and the scale is honest."
+      ]
+    },
+    "refinery-foreman": {
+      "name": "Refinery foreman",
+      "offer": [
+        "I'll part with {get} for {give}. The fumes are free.",
+        "{get} for {give}. Take it before the boss sees."
+      ],
+      "accept": [
+        "Done. Wipe your boots.",
+        "Deal. Try not to light anything."
+      ],
+      "decline": [
+        "No. The shift ended two hours ago.",
+        "That won't cover the fumes."
+      ]
+    },
+    "ice-priest": {
+      "name": "Ice-moon priest",
+      "offer": [
+        "The Lord provides {get}. The Lord asks {give}. The Lord is fair.",
+        "A blessing and {get}, for {give}. The blessing is a courtesy."
+      ],
+      "accept": [
+        "Bless you. Truly.",
+        "Go in peace, and with parts."
+      ],
+      "decline": [
+        "The Lord is not moved. I am even less so.",
+        "Pray on it. Then come back with more."
+      ]
+    },
+    "salvage-dealer": {
+      "name": "Salvage dealer",
+      "offer": [
+        "Found {get} in a wreck. Won't say whose. Trade me {give} and we forget it.",
+        "{get} for {give}. The previous owner will not be needing it."
+      ],
+      "accept": [
+        "Done. No questions. No receipts.",
+        "Pleasure. Don't ask about the dent."
+      ],
+      "decline": [
+        "No. I pulled that off a wreck. I want more.",
+        "Walk on. The wreck will find someone else."
+      ]
+    },
+    "ration-trader": {
+      "name": "Ration trader",
+      "offer": [
+        "I carry {get}. You carry {give}. We should be friends.",
+        "{give} for {get}. It is a fair price. For me."
+      ],
+      "accept": [
+        "Splendid. Eat well.",
+        "Done. Nobody starved today."
+      ],
+      "decline": [
+        "No. I have a family and a ledger.",
+        "Too thin. Fatten the offer."
+      ]
+    },
+    "drive-mechanic": {
+      "name": "Drive mechanic",
+      "offer": [
+        "I'll hand over {get} if you hand over {give}. Quick. The grease is drying.",
+        "{get} for {give}. The part works. Probably."
+      ],
+      "accept": [
+        "Done. Don't thank me, thank the wrench.",
+        "Good. Bolt it in, say a word."
+      ],
+      "decline": [
+        "No. That would not fix a toaster.",
+        "Not enough. I have a crew to feed and a spanner to blame."
+      ]
+    },
+    "beacon-hermit": {
+      "name": "Beacon hermit",
+      "offer": [
+        "It's been a while. I have {get}. Do you have {give}?",
+        "{give} for {get}. I have not seen a trade in years. Please be kind."
+      ],
+      "accept": [
+        "Oh. Oh, good. Thank you.",
+        "Yes. Thank you. It has been quiet."
+      ],
+      "decline": [
+        "No. I'll just sit here, then.",
+        "Not this time. The dark is patient."
+      ]
+    },
+    "settler-veteran": {
+      "name": "Veteran settler",
+      "offer": [
+        "I made the trip in '81. {get} for {give} and I'll throw in a warning.",
+        "{give} for {get}. You'll need it more than I do."
+      ],
+      "accept": [
+        "Good. You'll do fine. Probably.",
+        "Done. Keep your head down on the last leg."
+      ],
+      "decline": [
+        "No. I paid too much for it myself.",
+        "Not for that. I earned this the hard way."
+      ]
+    },
+    "dock-kid": {
+      "name": "Dockside kid",
+      "offer": [
+        "Hey. {get} for {give}? Mum said to ask for more.",
+        "Got {get}. Want it for {give}? Don't tell Mum."
+      ],
+      "accept": [
+        "Wow. Thanks!",
+        "Deal. I'll tell Mum I drove a hard bargain."
+      ],
+      "decline": [
+        "Mum says no.",
+        "I have to ask my sister."
+      ]
+    },
+    "smooth-stranger": {
+      "name": "Smooth stranger",
+      "offer": [
+        "Friend, I have {get}. You have {give}. It's a sign. Do not look at the sign closely.",
+        "A rare chance: {get} for {give}. Nobody has complained. Yet."
+      ],
+      "accept": [
+        "Pleasure. Count it later. Much later.",
+        "You're a sharp one. Run along."
+      ],
+      "decline": [
+        "Oh well. Your loss, friend.",
+        "No? Then I have not met you."
+      ]
+    }
+  }
+}
