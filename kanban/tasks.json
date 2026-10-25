@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:49:26.672Z",
+  "updated": "2026-10-25T01:49:27.717Z",
   "milestones": [
     {
       "id": "M0",
@@ -236,11 +236,11 @@
       "desc": "src/sim/types.ts, game.ts (createGame with profession, crew, window, supplies), serialize.ts round-trip. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "doing",
+      "status": "review",
       "assignee": "developer",
       "issue": 10,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:30:01.626Z",
+      "updated": "2026-10-25T01:49:27.717Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.400Z",
@@ -251,6 +251,16 @@
           "ts": "2026-10-25T01:30:01.626Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:49:27.270Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:49:27.716Z",
+          "by": "developer",
+          "text": "types.ts (GameState, Crew, Intent, DayKind, LogEntry, StepResult), createGame per world.md, versioned toJSON/fromJSON, pure text resolver (one rng draw per line, fallback), util helpers; 15 tests"
         }
       ],
       "issueClosed": false
