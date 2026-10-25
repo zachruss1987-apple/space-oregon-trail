@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T06:26:38.222Z",
+  "updated": "2026-10-25T06:30:18.748Z",
   "milestones": [
     {
       "id": "M0",
@@ -2317,12 +2317,33 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "developer",
       "issue": 64,
       "created": "2026-10-25T06:06:49.463Z",
-      "updated": "2026-10-25T06:06:49.464Z",
-      "notes": [],
+      "updated": "2026-10-25T06:30:18.747Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T06:27:17.185Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T06:29:53.660Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T06:29:54.105Z",
+          "by": "developer",
+          "text": "Disabled rows 'x ' marker; announceScreen for Guide/TopTen/Map/Supplies; 0/Shift+1/Shift+2 = rows 10/11/12; debugLoad uses resumeScene; TextArea palette + DOM_FONT; 1572 unit, 15 e2e pass; visual baselines need refresh"
+        },
+        {
+          "ts": "2026-10-25T06:30:18.747Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ],
       "issueClosed": false
     },
     {
