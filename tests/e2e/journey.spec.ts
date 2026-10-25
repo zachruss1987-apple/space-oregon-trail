@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { ALL_ALIVE } from './seeds';
-import { autoTravelUntil, body, buy, getState, leaveStore, snap, startRun } from './helpers';
+import { autoTravelUntil, body, buy, getState, leaveStore, setHalfRations, snap, startRun } from './helpers';
 
 test('death path: no rations ends in the Death scene, a beacon is saved, back to Title', async ({ page }) => {
   test.setTimeout(60_000);
@@ -33,16 +32,23 @@ test('death path: no rations ends in the Death scene, a beacon is saved, back to
   expect(errors).toEqual([]);
 });
 
+// T-039 re-tune: verified through the UI (4 drives, 3000 rations, 10 suits, 5 boxes, 1 of each part, Half rations, Cruise, T
+// auto-travel, first enabled hazard option, ?minigames=auto, no resting) to ARRIVE: SEED-9 day 112 (3 alive), SEED-20 day 123
+// (2), SEED-8 day 128 (2). The policy-run FULL_CREW_ARRIVAL_SEEDS (SEED-5/10/20) rest and scan, which this autopilot does not,
+// so SEED-5 and SEED-10 die here (days 96 / 141); they are not used.
+const UI_ARRIVAL_SEEDS: readonly string[] = ['SEED-9', 'SEED-20', 'SEED-8'];
+
 test('arrival path: generous Executive run reaches a legal ending (pinned arrival seed search)', async ({ page }) => {
   test.setTimeout(150_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const results: string[] = [];
   let arrivedSeed: string | null = null;
-  for (const seed of ALL_ALIVE) {
+  for (const seed of UI_ARRIVAL_SEEDS) {
     await startRun(page, seed);
     for (const [row, qty] of [[1, 4], [2, 3000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
     await leaveStore(page);
+    await setHalfRations(page);
     const end = await autoTravelUntil(page, (s) => s.status !== 'traveling', { maxSteps: 4000 });
     results.push(`${seed}:${end.status}@day${end.day}`);
     expect(['arrived', 'dead', 'adrift']).toContain(end.status);

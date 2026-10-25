@@ -44,6 +44,28 @@ test('autosave: reload shows Continue journey with the save line and resumes on 
   expect(errors).toEqual([]);
 });
 
+test('autosave taken mid-hazard: reload and Continue journey resume on the Hazard scene with the crossing pending', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await generousRun(page, 'M5HAZ', '&minigames=auto&debug=1');
+  await loadPatchedState(page, {
+    segment: 16, arrivedAt: 15, distanceInSegment: 0, offlineDrives: [], justCrossedHazard: false,
+    broken: { hull: false, pump: false, gyro: false }, crossing: { waypoint: 15, density: 5, pilotDaysLeft: null },
+  });
+  await expect(body(page)).toHaveAttribute('data-scene', 'Hazard');
+  const before = (await getState(page))!;
+  expect(before.crossing).not.toBeNull();
+  await page.reload();
+  await expect(body(page)).toHaveAttribute('data-scene', 'Title');
+  expect(await texts(page, 'Title')).toContain('Continue journey');
+  await page.keyboard.press('Enter');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Hazard');
+  const after = (await getState(page))!;
+  expect(after.crossing).toEqual(before.crossing);
+  expect(after.day).toBe(before.day);
+  expect(errors).toEqual([]);
+});
+
 test('export / import round-trip through the Options fields', async ({ page }) => {
   await generousRun(page, 'M5XFER');
   await travelDays(page, 1);

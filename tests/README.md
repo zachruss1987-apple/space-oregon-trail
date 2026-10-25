@@ -81,7 +81,7 @@ resolve the `@/` alias, so the search lives in a vitest file that is skipped oth
 | `settle(page)` | Wait out day animation and modals |
 | `getState`, `sceneOf`, `idle`, `body` | Read `__PROXIMA__.state`, `data-scene`; wait out a day animation |
 Notes: canvas text cannot be asserted (score table, rating), so assert `state` and screenshot. `seeds.ts` `ALL_ALIVE` is tried in order by
-`journey.spec.ts`; with UI shopping (4 drives, 3000 rations...) SEED-14 arrives (day 153 in the M2 sim; the finder rewrites `ALL_ALIVE` = `FULL_CREW_ARRIVAL_SEEDS`). `DEATHSEED` + 1 drive and no rations dies fast.
+`journey.spec.ts`; UI arrival runs use `UI_ARRIVAL_SEEDS` in `journey.spec.ts` (SEED-9, SEED-20, SEED-8: 4 drives, 3000 rations, Half rations via `setHalfRations`, T auto-travel; verified by playing them, T-039 tuning), because the policy-run seeds rest and scan while the autopilot does not. `DEATHSEED` + 1 drive and no rations dies fast.
 Screens: `screens.spec.ts` (all but Arrival) and `journey.spec.ts` (Arrival, Arrival-score) write to `test-results/screens/`.
 
 M2 specs: `m2-economy` (Mars Relay sell/trade/talk/rest), `m2-crossing` (tug, shields, Belt pilot), `m2-route` (Titan direct route, Map, Heliopause after Kuiper), `m2-beacons` (epitaph survives a reload, shown on the Waypoint scene). Beacon lists are canvas-only: assert via `sceneTexts` and `localStorage['proxima.beacons']`.
@@ -96,6 +96,12 @@ volumes 0 (so parallax, cursor blink, typewriter and the shader are off). Only t
   They are **platform-specific** (font and WebGL rasterization). Only `win32` baselines exist, so the spec is `test.skip`ped elsewhere.
   CI runs Linux Chromium: generate `linux` baselines (run the update script in the CI image and commit), then drop the skip. The PM decides CI handling.
 - Any change to a scene's art or copy changes its baseline: re-run the update script as part of that card.
+
+**Linux baselines (post-1.0 follow-up, card "CI: generate Linux visual baselines and enable visual suite in CI").** The visual suite is
+`test.skip`ped off Windows, so CI (ubuntu) never runs it. To enable it: on Linux (or in the CI image / a `mcr.microsoft.com/playwright`
+container matching the pinned Playwright version) run `npm run test:visual:update`; the PNGs land in
+`tests/e2e/__screenshots__/linux/visual.spec.ts/`. Review and commit them, drop the `process.platform !== 'win32'` skip in
+`tests/e2e/visual.spec.ts`, and add `npm run test:visual` to `.github/workflows/ci.yml`. Regenerate whenever art or copy changes.
 
 ## Audio e2e and bundle budget
 `audio.spec.ts` asserts through `__PROXIMA__.audio` (`state`, `playing`, `volumes`). `tests/unit/spec/bundle.spec.test.ts` gzips `dist/assets/*.js`

@@ -31,3 +31,11 @@ Unit suite < 30 s; e2e < 3 min; statistical tests gated by `SKIP_SLOW` env var l
 
 ## Running e2e while other agents work
 Playwright builds to `dist/`, serves on :4173 and writes `test-results/`. Two agents running e2e at once collide (ENOENT in test-results, stale builds). Rules: run `npm test` freely; run `npm run test:e2e` once at the end of your card with `PW_OUT=test-results/<card-id>` set so artifacts do not clash; if it fails with ENOENT or a build race, re-run once before investigating.
+
+## Visual baselines on Linux
+
+**Linux baselines (post-1.0 follow-up, card "CI: generate Linux visual baselines and enable visual suite in CI").** The visual suite is
+`test.skip`ped off Windows, so CI (ubuntu) never runs it. To enable it: on Linux (or in the CI image / a `mcr.microsoft.com/playwright`
+container matching the pinned Playwright version) run `npm run test:visual:update`; the PNGs land in
+`tests/e2e/__screenshots__/linux/visual.spec.ts/`. Review and commit them, drop the `process.platform !== 'win32'` skip in
+`tests/e2e/visual.spec.ts`, and add `npm run test:visual` to `.github/workflows/ci.yml`. Regenerate whenever art or copy changes.

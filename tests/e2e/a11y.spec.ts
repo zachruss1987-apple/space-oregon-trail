@@ -3,7 +3,7 @@
  * keyboard-only run, reduced motion, the colorblind palette and the global mute key.
  */
 import { expect, test, type Page } from '@playwright/test';
-import { autoTravelUntil, body, buy, getState, gotoScene, idle, leaveStore, sceneTexts, startRun } from './helpers';
+import { autoTravelUntil, body, buy, getState, gotoScene, idle, leaveStore, sceneTexts, setHalfRations, startRun } from './helpers';
 
 const muted = (page: Page) => page.evaluate(() => window.__PROXIMA__?.audio?.volumes.muted ?? null);
 const live = (page: Page) => page.getByRole('log');
@@ -73,6 +73,26 @@ test('keyboard only: title to day 10 with no mouse', async ({ page }) => {
   const start = (await getState(page))!.day;
   const s = await autoTravelUntil(page, (st) => st.day >= start + 10, { maxSteps: 3000 });
   expect(s.day >= start + 10 || s.status !== 'traveling').toBe(true);
+});
+
+// T-043 / M5 Tests: a whole run, Title to an ending, with the keyboard only. The page counts every pointer event; the
+// run must finish with zero. SEED-9 arrives through the UI choices below under the T-039 tuning (day 112; see journey.spec.ts).
+test('keyboard only: full run from Title to an ending with zero pointer events', async ({ page }) => {
+  test.setTimeout(150_000);
+  await page.addInitScript(() => {
+    (window as unknown as { __ptr: number }).__ptr = 0;
+    for (const t of ['mousedown', 'mouseup', 'click', 'pointerdown', 'touchstart']) {
+      window.addEventListener(t, () => { (window as unknown as { __ptr: number }).__ptr++; }, true);
+    }
+  });
+  await startRun(page, 'SEED-9');
+  for (const [row, qty] of [[1, 4], [2, 3000], [3, 10], [4, 5], [5, 1], [6, 1], [7, 1]] as const) await buy(page, row, qty);
+  await leaveStore(page);
+  await setHalfRations(page);
+  const end = await autoTravelUntil(page, (s) => s.status !== 'traveling', { maxSteps: 4000 });
+  expect(end.status).toBe('arrived');
+  await expect(body(page)).toHaveAttribute('data-scene', 'Arrival');
+  expect(await page.evaluate(() => (window as unknown as { __ptr: number }).__ptr)).toBe(0);
 });
 
 test('reduced motion sets data-reduced and turns the CRT off', async ({ page }) => {

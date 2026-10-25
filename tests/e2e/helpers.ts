@@ -102,6 +102,16 @@ export async function autoTravelUntil(
 
 type RunState = NonNullable<Awaited<ReturnType<typeof getState>>>;
 
+/** Travel: open Change rations (row 5) and pick Half rations (the reference policy's setting; Full starves a 3000-ration hold slowly but kills more). */
+export async function setHalfRations(page: Page): Promise<void> {
+  await idle(page);
+  await page.keyboard.press('5');
+  await expect(body(page)).toHaveAttribute('data-modal', '1');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect.poll(async () => (await getState(page))?.rations).toBe('half');
+}
+
 /** Standard generous Executive shopping (4 drives, 3000 rations, 10 suits, 5 boxes, 1 of each part), then leave to Travel. */
 export async function generousRun(page: Page, seed: string, query = AUTO_MINIGAMES): Promise<void> {
   await startRun(page, seed, false, query);
