@@ -1,42 +1,34 @@
-/** Text-first theme: phosphor green monospace on black (pixel font and palette arrive in M4). */
-import type Phaser from 'phaser';
+/**
+ * UI theme: a thin layer over src/gfx/palette.ts (text roles -> palette keys), the 8x8 text grid, and number formatting.
+ * Colors are getters so a palette switch (colorblind) applies to everything drawn after it.
+ */
+import { activeNumbers } from '@/gfx/palette';
 
+/** Text and chrome roles as 0xRRGGBB, read from the active palette. */
 export const COLORS = {
-  text: '#5cff5c',
-  dim: '#2e8a2e',
-  bright: '#c8ffc8',
-  warn: '#ffd75c',
-  bg: 0x000000,
-  panel: 0x001a00,
-  border: 0x5cff5c,
-  borderDim: 0x2e8a2e,
-} as const;
+  /** Default text (phosphor). */
+  get text(): number { return activeNumbers().phosphor; },
+  /** Hints, disabled rows, panel borders (forest). */
+  get dim(): number { return activeNumbers().forest; },
+  /** Selected rows and headings (phosphorHi). */
+  get bright(): number { return activeNumbers().phosphorHi; },
+  /** Warnings (amber). */
+  get warn(): number { return activeNumbers().amber; },
+  /** Danger (red). */
+  get danger(): number { return activeNumbers().red; },
+  /** Drop shadow under the logo (brown). */
+  get shadow(): number { return activeNumbers().brown; },
+  get bg(): number { return activeNumbers().black; },
+  get panel(): number { return activeNumbers().panel; },
+  get border(): number { return activeNumbers().phosphor; },
+  get borderDim(): number { return activeNumbers().forest; },
+};
 
-export const FONT_SIZE = 14;
-export const LINE_HEIGHT = 18;
-/** Approximate monospace advance at FONT_SIZE, used for column layout. */
-export const CHAR_W = 8.4;
-
-/** Standard text style; `wrap` is a pixel width for word-wrap. */
-export function textStyle(color: string = COLORS.text, wrap?: number, size = FONT_SIZE): Phaser.Types.GameObjects.Text.TextStyle {
-  const style: Phaser.Types.GameObjects.Text.TextStyle = {
-    fontFamily: '"Courier New", Courier, monospace',
-    fontSize: `${size}px`,
-    color,
-    resolution: 2,
-    lineSpacing: LINE_HEIGHT - size,
-  };
-  if (wrap !== undefined) style.wordWrap = { width: wrap, useAdvancedWrap: true };
-  return style;
-}
-
-/** Draw a bordered panel rectangle. */
-export function panel(scene: Phaser.Scene, x: number, y: number, w: number, h: number, dim = false): Phaser.GameObjects.Rectangle {
-  return scene.add
-    .rectangle(x, y, w, h, COLORS.panel)
-    .setOrigin(0, 0)
-    .setStrokeStyle(1, dim ? COLORS.borderDim : COLORS.border);
-}
+/** Glyph cell at x1 (retro8): 80 columns on the 640 px canvas. */
+export const CHAR_W = 8;
+export const GLYPH_H = 8;
+/** Default line pitch for body text at x1 (8 px glyph + 4 px leading). */
+export const LINE_HEIGHT = 12;
 
 /** Integer with thousands separators. */
 export function fmt(n: number): string {

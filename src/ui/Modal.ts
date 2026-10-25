@@ -6,7 +6,8 @@ import type { KeyRouter } from './keys';
 import { Menu, type MenuItem } from './Menu';
 import { TextBox } from './TextBox';
 import { GAME_HEIGHT as GAME_H, GAME_WIDTH as GAME_W } from '@/config';
-import { COLORS, LINE_HEIGHT } from './theme';
+import { panel } from './chrome';
+import { LINE_HEIGHT } from './theme';
 
 export interface ModalOptions {
   /** Button labels (default: a single OK). */
@@ -34,18 +35,18 @@ export class Modal {
     this.objects.push(blocker);
     this.body = new TextBox(scene, x + 16, 0, w - 32, message, { depth: DEPTH + 2, typewriter: false });
     const textH = this.body.lineCount() * LINE_HEIGHT;
-    const h = Math.min(GAME_H - 20, textH + buttons.length * LINE_HEIGHT + 48);
+    const h = Math.min(GAME_H - 20, textH + buttons.length * (LINE_HEIGHT + 4) + 52);
     const y = Math.max(10, (GAME_H - h) / 2);
-    const box = scene.add.rectangle(x, y, w, h, COLORS.panel).setOrigin(0, 0).setStrokeStyle(1, COLORS.border).setDepth(DEPTH + 1);
-    this.objects.push(box);
-    this.body.text.setY(y + 14);
+    this.objects.push(...panel(scene, x, y, w, h, false, DEPTH + 1));
+    this.body.text.setY(y + 16);
     const close = (i: number): void => {
       this.destroy();
       opts.onClose?.(i);
     };
     this.menu = new Menu(scene, buttons, {
       x: x + 16,
-      y: y + 22 + textH,
+      y: y + 26 + textH,
+      lineHeight: LINE_HEIGHT + 4,
       depth: DEPTH + 2,
       onSelect: close,
       onBack: opts.escCloses === false ? undefined : () => close(buttons.length - 1),

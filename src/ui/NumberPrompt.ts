@@ -4,7 +4,9 @@ import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { markFlag } from '@/game/contract';
 import type { KeyRouter } from './keys';
 import { NumberInput } from './NumberInput';
-import { COLORS, textStyle } from './theme';
+import { panel } from './chrome';
+import { addText } from './text';
+import { COLORS } from './theme';
 
 export function promptNumber(
   scene: Phaser.Scene,
@@ -19,8 +21,8 @@ export function promptNumber(
   const y = (GAME_HEIGHT - h) / 2;
   const objects: Phaser.GameObjects.GameObject[] = [
     scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0, 0).setDepth(100).setInteractive(),
-    scene.add.rectangle(x, y, w, h, COLORS.panel).setOrigin(0, 0).setStrokeStyle(1, COLORS.border).setDepth(101),
-    scene.add.text(x + 16, y + 14, message, textStyle(COLORS.text, w - 32)).setDepth(102),
+    ...panel(scene, x, y, w, h, false, 101),
+    addText(scene, x + 16, y + 16, message, { color: COLORS.text, wrap: w - 32, depth: 102 }),
   ];
   markFlag('modal', true);
   const close = (v: number | null): void => {
@@ -30,7 +32,7 @@ export function promptNumber(
     markFlag('modal', false);
     onDone(v);
   };
-  const input: NumberInput = new NumberInput(scene, x + 16, y + 46, {
+  const input: NumberInput = new NumberInput(scene, x + 16, y + 48, {
     min: range.min,
     max: range.max,
     value: range.value ?? range.min,

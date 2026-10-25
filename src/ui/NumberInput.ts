@@ -1,7 +1,8 @@
 /** Integer entry: type digits, arrows adjust (Up/Down ±1, Left/Right ±10), Enter commits, Esc cancels. */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
 import { isBack, type KeyHandler } from './keys';
-import { COLORS, textStyle } from './theme';
+import { addText } from './text';
+import { COLORS } from './theme';
 
 export interface NumberInputOptions {
   min: number;
@@ -18,11 +19,11 @@ export class NumberInput implements KeyHandler {
   private value: number;
   /** True until the first digit is typed: typing replaces the starting value. */
   private fresh = true;
-  private readonly text: Phaser.GameObjects.Text;
+  private readonly text: Phaser.GameObjects.BitmapText;
 
   constructor(scene: Phaser.Scene, x: number, y: number, private readonly opts: NumberInputOptions) {
     this.value = this.clamp(opts.value ?? opts.min);
-    this.text = scene.add.text(x, y, '', textStyle(COLORS.bright)).setDepth(opts.depth ?? 0);
+    this.text = addText(scene, x, y, '', { color: COLORS.bright, depth: opts.depth ?? 0 });
     this.paint();
   }
 
@@ -69,6 +70,6 @@ export class NumberInput implements KeyHandler {
 
   private paint(): void {
     const over = this.value > this.opts.max || this.value < this.opts.min;
-    this.text.setText(`[ ${String(this.value).padStart(5)} ]`).setColor(over ? COLORS.warn : COLORS.bright);
+    this.text.setText(`[ ${String(this.value).padStart(5)} ]`).setTint(over ? COLORS.warn : COLORS.bright);
   }
 }

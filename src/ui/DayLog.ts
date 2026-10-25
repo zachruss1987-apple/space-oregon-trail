@@ -15,7 +15,7 @@ export class DayLog {
   busy = false;
 
   constructor(private readonly scene: Phaser.Scene, x: number, y: number, width: number, private readonly maxLines = 4) {
-    this.box = new TextBox(scene, x, y, width, '', { size: 12 });
+    this.box = new TextBox(scene, x, y, width, '');
   }
 
   /** Show these lines now (keeps the newest that fit). */

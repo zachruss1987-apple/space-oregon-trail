@@ -1,23 +1,26 @@
-/** Word-wrapped prose with an optional typewriter reveal (honors session.settings.typewriter). */
-import Phaser from 'phaser';
+/** Word-wrapped prose in the bitmap font with an optional typewriter reveal (honors session.settings.typewriter). */
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
 import { session } from '@/game/session';
-import { COLORS, textStyle } from './theme';
+import { addText, lineCount, linePitch } from './text';
+import { COLORS } from './theme';
 
 export interface TextBoxOptions {
-  color?: string;
+  color?: number;
   /** Reveal character by character (still subject to the global setting). */
   typewriter?: boolean;
   depth?: number;
-  size?: number;
+  /** Integer scale (default x1). */
+  scale?: number;
 }
 
 export class TextBox {
-  readonly text: Phaser.GameObjects.Text;
+  readonly text: Phaser.GameObjects.BitmapText;
   private full = '';
   private timer: Phaser.Time.TimerEvent | null = null;
 
   constructor(private readonly scene: Phaser.Scene, x: number, y: number, private readonly width: number, content = '', private readonly opts: TextBoxOptions = {}) {
-    this.text = scene.add.text(x, y, '', textStyle(opts.color ?? COLORS.text, width, opts.size)).setDepth(opts.depth ?? 0);
+    this.text = addText(scene, x, y, '', { color: opts.color ?? COLORS.text, wrap: width, scale: opts.scale, depth: opts.depth ?? 0 });
     this.set(content);
   }
 
@@ -39,6 +42,7 @@ export class TextBox {
       callback: () => {
         shown += 1;
         this.text.setText(this.full.slice(0, shown));
+        if (this.full[shown - 1] !== ' ') audio().sfx('text.tick');
         if (shown >= this.full.length) this.timer = null;
       },
     });
@@ -56,14 +60,14 @@ export class TextBox {
     this.text.setText(this.full);
   }
 
-  /** Rendered height in pixels (of the full text once finished). */
+  /** Rendered height in pixels of the full text. */
   get height(): number {
-    return this.text.height;
+    return this.lineCount() * linePitch(this.opts.scale ?? 1);
   }
 
   /** Wrapped line count of the full content. */
   lineCount(): number {
-    return this.text.getWrappedText(this.full).length;
+    return lineCount(this.full, this.width, this.opts.scale ?? 1);
   }
 
   destroy(): void {

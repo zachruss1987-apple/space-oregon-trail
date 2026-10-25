@@ -1,7 +1,8 @@
 /** Text entry for printable ASCII (default ≤ 12 chars). Empty commits the placeholder/default. */
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
 import { isBack, type KeyHandler } from './keys';
-import { COLORS, textStyle } from './theme';
+import { addText } from './text';
+import { COLORS } from './theme';
 
 export interface NameInputOptions {
   /** Shown dimmed while empty and committed if left empty. */
@@ -16,12 +17,12 @@ export interface NameInputOptions {
 
 export class NameInput implements KeyHandler {
   private value = '';
-  private readonly text: Phaser.GameObjects.Text;
+  private readonly text: Phaser.GameObjects.BitmapText;
   private readonly max: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, private readonly opts: NameInputOptions) {
     this.max = opts.maxLength ?? 12;
-    this.text = scene.add.text(x, y, '', textStyle()).setDepth(opts.depth ?? 0);
+    this.text = addText(scene, x, y, '', { depth: opts.depth ?? 0 });
     this.paint();
   }
 
@@ -56,6 +57,6 @@ export class NameInput implements KeyHandler {
   private paint(): void {
     const empty = this.value.length === 0;
     const shown = empty ? (this.opts.placeholder ?? '') : this.value;
-    this.text.setText(`${shown}_`).setColor(empty ? COLORS.dim : COLORS.bright);
+    this.text.setText(`${shown}_`).setTint(empty ? COLORS.dim : COLORS.bright);
   }
 }

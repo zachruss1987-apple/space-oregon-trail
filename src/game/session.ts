@@ -4,10 +4,13 @@
  */
 import { DEFAULT_CREW_NAMES, type ProfessionId, type WindowId } from '@/content';
 import { createRng, seedFromString, type GameState, type LogEntry, type Rng } from '@/sim';
+import {
+  DEFAULT_OPTIONS, OPTIONS_KEY, parseOptions, reducedMotionOn, serializeOptions, TEXT_SPEED_MS, touchUiOn, type Options,
+} from './options';
 
-/** Player-adjustable UI settings. */
+/** Player-adjustable UI settings (derived from the persisted Options plus fixed timings). */
 export interface Settings {
-  /** Typewriter effect for prose boxes. */
+  /** Typewriter effect for prose boxes (off at Instant text speed or with reduced motion). */
   typewriter: boolean;
   /** Milliseconds per character when typewriter is on. */
   textSpeedMs: number;
@@ -15,13 +18,13 @@ export interface Settings {
   dayDelayMs: number;
   /** Mini-games resolve statistically (no scene, no penalty). Persisted in `localStorage['proxima.options']`. */
   autoResolveMiniGames: boolean;
-  /** Show on-screen mini-game buttons even without a touch screen. Persisted. */
+  /** Show on-screen mini-game buttons (Options "Touch controls" On, or Auto on a touch screen). */
   touchControls: boolean;
+  /** Reduced motion in effect (no parallax, bob, typewriter, cursor blink; overlays frozen; CRT off). */
+  reducedMotion: boolean;
 }
 
-/** Settings persisted under `localStorage['proxima.options']`. */
-export type PersistedOption = 'autoResolveMiniGames' | 'touchControls';
-export const OPTIONS_KEY = 'proxima.options';
+export { OPTIONS_KEY };
 
 /** What a mini-game scene hands back to the scene it returns to: the day's log entries and new deaths. */
 export interface PendingDay {
@@ -30,18 +33,16 @@ export interface PendingDay {
 }
 
 /** Read persisted options defensively (bad JSON or no storage = defaults). */
-function loadOptions(): Partial<Pick<Settings, PersistedOption>> {
+function loadOptions(): Options {
   try {
-    const raw: unknown = JSON.parse(globalThis.localStorage?.getItem(OPTIONS_KEY) ?? '{}');
-    if (!raw || typeof raw !== 'object') return {};
-    const o = raw as Record<string, unknown>;
-    const out: Partial<Pick<Settings, PersistedOption>> = {};
-    for (const k of ['autoResolveMiniGames', 'touchControls'] as const) if (typeof o[k] === 'boolean') out[k] = o[k];
-    return out;
+    return parseOptions(globalThis.localStorage?.getItem(OPTIONS_KEY));
   } catch {
-    return {};
+    return { ...DEFAULT_OPTIONS };
   }
 }
+
+const media = (q: string): boolean => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(q).matches;
+const touchScreen = (): boolean => typeof window !== 'undefined' && ('ontouchstart' in window || (navigator.maxTouchPoints ?? 0) > 0);
 
 /** Choices made in SetupScene before createGame. */
 export interface SetupDraft {
@@ -78,7 +79,9 @@ class Session {
   shownWaypoint: number | null = null;
   /** Set by the Station scene's Continue: Travel runs one Continue day as soon as it opens. */
   departOnTravel = false;
-  settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220, autoResolveMiniGames: false, touchControls: false };
+  settings: Settings = { typewriter: true, textSpeedMs: 12, dayDelayMs: 220, autoResolveMiniGames: false, touchControls: false, reducedMotion: false };
+  /** The persisted Options (`proxima.options`); `settings` is derived from it. */
+  options: Options = { ...DEFAULT_OPTIONS };
   /** `?minigames=auto`: auto-resolve forced on for this page load (not persisted). */
   forceAutoMiniGames = false;
   /** `?debug=1` (or a dev build): enables `__PROXIMA__.minigame.finishWith`. */
@@ -91,15 +94,28 @@ class Session {
     return this.forceAutoMiniGames || this.settings.autoResolveMiniGames;
   }
 
-  /** Change a persisted option and save it (storage errors are ignored). */
-  setOption(key: PersistedOption, value: boolean): void {
-    this.settings[key] = value;
+  /** Change a persisted option and save it (storage errors are ignored); derived settings update at once. */
+  setOption<K extends keyof Options>(key: K, value: Options[K]): void {
+    this.options[key] = value;
+    this.derive();
     try {
-      const { autoResolveMiniGames, touchControls } = this.settings;
-      globalThis.localStorage?.setItem(OPTIONS_KEY, JSON.stringify({ autoResolveMiniGames, touchControls }));
+      globalThis.localStorage?.setItem(OPTIONS_KEY, serializeOptions(this.options));
     } catch {
       // private mode / storage full: the option still applies for this session
     }
+  }
+
+  /** Recompute `settings` from `options` and the environment. */
+  derive(): void {
+    const o = this.options;
+    const reduced = reducedMotionOn(o, media('(prefers-reduced-motion: reduce)'));
+    Object.assign(this.settings, {
+      reducedMotion: reduced,
+      typewriter: o.textSpeed !== 'instant' && !reduced,
+      textSpeedMs: TEXT_SPEED_MS[o.textSpeed] || 12,
+      autoResolveMiniGames: o.autoResolveMiniGames,
+      touchControls: touchUiOn(o, touchScreen()),
+    });
   }
 
   /** Read `?seed=` (or pick a random one), `?minigames=auto`, `?debug=1` and saved options, then reset everything. */
@@ -107,7 +123,8 @@ class Session {
     const params = new URLSearchParams(search);
     this.forceAutoMiniGames = params.get('minigames') === 'auto';
     this.debug = params.get('debug') === '1' || import.meta.env.DEV;
-    Object.assign(this.settings, loadOptions());
+    this.options = loadOptions();
+    this.derive();
     const raw = params.get('seed');
     this.seedLabel = raw && raw.trim() ? raw.trim() : randomSeedLabel();
     this.reset();

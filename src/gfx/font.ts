@@ -19,8 +19,21 @@ export interface FontSpec {
 
 const ASCII = Array.from({ length: LAST_CHAR - FIRST_CHAR + 1 }, (_, i) => String.fromCharCode(FIRST_CHAR + i)).join('');
 
+/** Extra retro8 glyphs drawn on the sheet: the ellipsis used in UI copy. */
+const ELLIPSIS = 0x2026;
+const EXTRA_8: Record<number, number[]> = { [ELLIPSIS]: [0, 0, 0, 0, 0, 0, 0x92, 0] };
+
+/**
+ * Non-ASCII characters that appear in copy, drawn with an existing glyph (dashes, curly quotes, math signs), so text
+ * from content tables never renders as a gap. Targets missing from a font (retro6 has no lowercase) are skipped.
+ */
+export const GLYPH_ALIASES: Readonly<Record<string, string>> = {
+  '—': '-', '–': '-', '−': '-', '‘': "'", '’': "'", '“': '"', '”': '"',
+  '×': 'x', '≤': '<', '≥': '>', '→': '>', '±': '+', ' ': ' ',
+};
+
 export const FONTS: Record<FontName, FontSpec> = {
-  retro8: { key: 'retro8', cellW: 8, cellH: 8, chars: ASCII, glyphs: GLYPHS_8 },
+  retro8: { key: 'retro8', cellW: 8, cellH: 8, chars: ASCII + String.fromCharCode(ELLIPSIS), glyphs: { ...GLYPHS_8, ...EXTRA_8 } },
   retro6: { key: 'retro6', cellW: 6, cellH: 8, chars: CHARS_6, glyphs: GLYPHS_6 },
 };
 
@@ -70,6 +83,10 @@ export function buildFont(scene: Phaser.Scene, name: FontName): void {
       u0: cx / w, v0: cy / h, u1: (cx + spec.cellW) / w, v1: (cy + spec.cellH) / h,
     };
   });
+  for (const [from, to] of Object.entries(GLYPH_ALIASES)) {
+    const target = chars[to.charCodeAt(0)];
+    if (target) chars[from.charCodeAt(0)] = target;
+  }
   ctx.putImageData(img, 0, 0);
   tex.refresh();
   tex.setFilter(1); // Phaser.Textures.FilterMode.NEAREST

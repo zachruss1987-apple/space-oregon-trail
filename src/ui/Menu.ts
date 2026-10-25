@@ -1,7 +1,14 @@
-/** Vertical cursor menu: arrows/WASD, Enter/Space, number keys, Esc, mouse hover/click, disabled items with reasons. */
-import Phaser from 'phaser';
+/**
+ * Vertical cursor menu: arrows/WASD, Enter/Space, number keys, Esc, mouse hover/click, disabled items with reasons.
+ * Rows are bitmap text; the `ui.cursor` ship marks the selected row. UI sounds: move, select, back, deny.
+ */
+import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
+import { session } from '@/game/session';
+import { cursor } from './chrome';
 import { isBack, isConfirm, isDown, isUp, type KeyHandler } from './keys';
-import { COLORS, LINE_HEIGHT, textStyle } from './theme';
+import { addText } from './text';
+import { COLORS } from './theme';
 
 /** One menu row. `disabled` is the reason shown when it is chosen (null/undefined = enabled). */
 export interface MenuItem {
@@ -25,20 +32,26 @@ export interface MenuOptions {
   onDisabled?: (reason: string, index: number) => void;
   /** Depth for all menu objects. */
   depth?: number;
+  /** Integer text scale (x2 on the title). */
+  scale?: number;
+  /** Silence the select sound (the caller plays its own). */
+  quiet?: boolean;
 }
 
 export class Menu implements KeyHandler {
   cursor: number;
   private items: MenuItem[];
-  private readonly rows: Phaser.GameObjects.Text[] = [];
-  private readonly reason: Phaser.GameObjects.Text;
+  private readonly rows: Phaser.GameObjects.BitmapText[] = [];
+  private readonly reason: Phaser.GameObjects.BitmapText;
+  private readonly mark: Phaser.GameObjects.Image;
   private readonly lh: number;
 
   constructor(private readonly scene: Phaser.Scene, items: MenuItem[], private readonly opts: MenuOptions) {
     this.items = items;
-    this.lh = opts.lineHeight ?? LINE_HEIGHT;
+    this.lh = opts.lineHeight ?? 16;
     this.cursor = Math.min(opts.cursor ?? 0, Math.max(0, items.length - 1));
-    this.reason = scene.add.text(opts.x, opts.y, '', textStyle(COLORS.warn)).setDepth(opts.depth ?? 0);
+    this.reason = addText(scene, opts.x, opts.y, '', { color: COLORS.warn, depth: opts.depth ?? 0 });
+    this.mark = cursor(scene, opts.depth ?? 0, session.settings.reducedMotion).setScale(opts.scale ?? 1);
     this.build();
   }
 
@@ -64,12 +77,16 @@ export class Menu implements KeyHandler {
     else if (isDown(e)) this.move(1);
     else if (isConfirm(e)) {
       if (!e.repeat) this.choose(this.cursor);
-    } else if (isBack(e)) this.opts.onBack?.();
-    else if (/^[1-9]$/.test(e.key)) {
+    } else if (isBack(e)) {
+      if (this.opts.onBack) {
+        audio().sfx('ui.back');
+        this.opts.onBack();
+      }
+    } else if (/^[1-9]$/.test(e.key)) {
       const i = Number(e.key) - 1;
       if (i < this.items.length) {
         // A disabled row only explains itself; the cursor stays where it was.
-        if (!this.items[i]?.disabled) this.setCursor(i);
+        if (!this.items[i]?.disabled) this.setCursor(i, true);
         this.choose(i);
       }
     }
@@ -80,16 +97,19 @@ export class Menu implements KeyHandler {
     const item = this.items[i];
     if (!item) return;
     if (item.disabled) {
+      audio().sfx('ui.deny');
       if (this.opts.onDisabled) this.opts.onDisabled(item.disabled, i);
       else this.say(item.disabled);
       return;
     }
+    if (!this.opts.quiet) audio().sfx('ui.select');
     this.opts.onSelect(i);
   }
 
-  setCursor(i: number): void {
+  setCursor(i: number, silent = false): void {
     if (i === this.cursor || i < 0 || i >= this.items.length) return;
     this.cursor = i;
+    if (!silent) audio().sfx('ui.move');
     this.say('');
     this.paint();
     this.opts.onMove?.(i);
@@ -99,6 +119,7 @@ export class Menu implements KeyHandler {
     this.rows.forEach((r) => r.destroy());
     this.rows.length = 0;
     this.reason.destroy();
+    this.mark.destroy();
   }
 
   private move(d: number): void {
@@ -110,12 +131,13 @@ export class Menu implements KeyHandler {
     this.rows.forEach((r) => r.destroy());
     this.rows.length = 0;
     const { x, y } = this.opts;
+    const scale = this.opts.scale ?? 1;
     this.items.forEach((_, i) => {
-      const row = this.scene.add.text(x, y + i * this.lh, '', textStyle()).setDepth(this.opts.depth ?? 0);
+      const row = addText(this.scene, x, y + i * this.lh, '', { depth: this.opts.depth ?? 0, scale });
       row.setInteractive({ useHandCursor: true });
       row.on('pointerover', () => this.setCursor(i));
       row.on('pointerdown', () => {
-        this.setCursor(i);
+        this.setCursor(i, true);
         this.choose(i);
       });
       this.rows.push(row);
@@ -129,7 +151,10 @@ export class Menu implements KeyHandler {
       const on = i === this.cursor;
       const num = this.opts.numbered ? `${i + 1}. ` : '';
       const color = item.disabled ? COLORS.dim : on ? COLORS.bright : COLORS.text;
-      this.rows[i]?.setText(`${on ? '>' : ' '} ${num}${item.label}`).setColor(color);
+      this.rows[i]?.setText(`  ${num}${item.label}`).setTint(color);
     });
+    const row = this.rows[this.cursor];
+    this.mark.setVisible(row !== undefined);
+    if (row) this.mark.setPosition(row.x, row.y);
   }
 }
