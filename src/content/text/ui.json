@@ -438,6 +438,7 @@
       "none": "—",
       "noBuy": "They don't sell that here.",
       "noSell": "They don't buy that here.",
+      "noneToSell": "You have none to sell.",
       "sellHeader": "They buy back at these prices:",
       "buyPrompt": "Buy how many? (max {n})",
       "sellPrompt": "Sell how many? (max {n})",

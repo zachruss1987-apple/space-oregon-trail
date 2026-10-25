@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:44:50.396Z",
+  "updated": "2026-10-25T03:50:01.531Z",
   "milestones": [
     {
       "id": "M0",
@@ -896,7 +896,7 @@
       "role": "designer",
       "status": "done",
       "assignee": "designer",
-      "issue": null,
+      "issue": 36,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T03:32:47.770Z",
       "notes": [
@@ -920,7 +920,8 @@
           "by": "designer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-028",
@@ -928,18 +929,24 @@
       "desc": "",
       "milestone": "M3",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "doing",
+      "assignee": "developer",
+      "issue": 37,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T03:44:50.347Z",
+      "updated": "2026-10-25T03:45:52.072Z",
       "notes": [
         {
           "ts": "2026-10-25T03:44:50.348Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T03:45:52.073Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-029",
@@ -962,7 +969,7 @@
       "role": "developer",
       "status": "todo",
       "assignee": null,
-      "issue": null,
+      "issue": 38,
       "created": "2026-10-24T21:00:00.000Z",
       "updated": "2026-10-25T03:44:50.395Z",
       "notes": [
@@ -971,7 +978,8 @@
           "by": "pm",
           "text": "backlog -> todo"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-031",
@@ -992,12 +1000,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "designer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "designer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T03:46:26.135Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:46:26.136Z",
+          "by": "designer",
+          "text": "backlog -> doing"
+        }
+      ]
     },
     {
       "id": "T-033",
@@ -1413,7 +1427,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-052",
@@ -1528,7 +1542,7 @@
       "role": "developer",
       "status": "done",
       "assignee": "developer",
-      "issue": null,
+      "issue": 39,
       "created": "2026-10-25T03:33:02.948Z",
       "updated": "2026-10-25T03:44:50.285Z",
       "notes": [
@@ -1552,7 +1566,8 @@
           "by": "developer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-056",
@@ -1562,7 +1577,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 40,
       "created": "2026-10-25T03:33:03.008Z",
       "updated": "2026-10-25T03:37:04.370Z",
       "notes": [
@@ -1586,7 +1601,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-057",
@@ -1594,12 +1610,33 @@
       "desc": "Tester notes from T-051.",
       "milestone": "M3",
       "role": "developer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "developer",
       "issue": null,
       "created": "2026-10-25T03:37:04.425Z",
-      "updated": "2026-10-25T03:37:04.425Z",
-      "notes": []
+      "updated": "2026-10-25T03:50:01.530Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:46:41.491Z",
+          "by": "developer",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:49:47.242Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:49:47.689Z",
+          "by": "developer",
+          "text": "Menu number keys on disabled rows keep cursor; route confirm modal removed (Travel log shows it); map layout tightened; noneToSell copy. e2e green; ui.json noneToSell uncommitted (writer)"
+        },
+        {
+          "ts": "2026-10-25T03:50:01.531Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }
