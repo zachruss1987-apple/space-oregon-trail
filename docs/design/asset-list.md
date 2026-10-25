@@ -7,7 +7,7 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [x] palette.standard (16 + phosphor, phosphorHi, panel)
 - [x] palette.cb
 - [x] font.proxima (95 glyphs, 6×8)
-- [ ] crt pipeline (+ Canvas skip)
+- [x] crt pipeline (+ Canvas skip)
 - [x] atlas builder / sprite parser
 
 ### Sprites
@@ -16,9 +16,9 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [x] ship.flare.burn
 - [x] ship.flare.over
 - [x] ship.mini
-- [ ] ship.dock
+- [x] ship.dock
 - [x] tug
-- [ ] skiff
+- [x] skiff
 - [x] drone
 - [x] grapple.hook
 - [x] debris.crate
@@ -33,38 +33,38 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [x] debris.tumbler
 - [x] debris.hot
 - [x] debris.blip
-- [ ] rock.16
-- [ ] rock.24
-- [ ] rock.32
-- [ ] rock.48
-- [ ] rock.shard
-- [ ] station.independence
-- [ ] station.mars
-- [ ] station.ceres
-- [ ] station.europa
-- [ ] station.titan
-- [ ] station.oort
-- [ ] station.terminus
-- [ ] landmark.spire
-- [ ] landmark.eye
-- [ ] landmark.gate
-- [ ] landmark.oort
-- [ ] landmark.proxima
-- [ ] planet.earth
-- [ ] planet.luna
-- [ ] planet.mars
-- [ ] planet.saturn
-- [ ] planet.titan
-- [ ] planet.europa
-- [ ] star.proxima
-- [ ] far.station
-- [ ] far.planet
-- [ ] far.ring
-- [ ] far.hazard
+- [x] rock.16
+- [x] rock.24
+- [x] rock.32
+- [x] rock.48
+- [x] rock.shard
+- [x] station.independence
+- [x] station.mars
+- [x] station.ceres
+- [x] station.europa
+- [x] station.titan
+- [x] station.oort
+- [x] station.terminus
+- [x] landmark.spire
+- [x] landmark.eye
+- [x] landmark.gate
+- [x] landmark.oort
+- [x] landmark.proxima
+- [x] planet.earth
+- [x] planet.luna
+- [x] planet.mars
+- [x] planet.saturn
+- [x] planet.titan
+- [x] planet.europa
+- [x] star.proxima
+- [x] far.station
+- [x] far.planet
+- [x] far.ring
+- [x] far.hazard
 - [x] beacon
-- [ ] overlay.static
-- [ ] overlay.fog
-- [ ] overlay.streak
+- [x] overlay.static
+- [x] overlay.fog
+- [x] overlay.streak
 - [x] portrait.1
 - [x] portrait.2
 - [x] portrait.3
@@ -74,27 +74,27 @@ Flat checklist of every generated asset. Specs: `art.md`, `audio.md`. Tick a box
 - [x] ui.cursor
 - [x] ui.scroll
 - [x] ui.toggle
-- [ ] ui.icon.hp
-- [ ] ui.icon.charge
-- [ ] ui.icon.haul
-- [ ] ui.icon.hit
-- [ ] ui.icon.pause
-- [ ] ui.icon.sound
-- [ ] ui.icon.mute
+- [x] ui.icon.hp
+- [x] ui.icon.charge
+- [x] ui.icon.haul
+- [x] ui.icon.hit
+- [x] ui.icon.pause
+- [x] ui.icon.sound
+- [x] ui.icon.mute
 
 ### Drawn compositions (Graphics, no grid)
 - [ ] gfx.grapple-line
 - [ ] gfx.flare-arc
-- [ ] gfx.overlay-glow
-- [ ] gfx.starfield (3 layers)
-- [ ] gfx.phase-tint
+- [x] gfx.overlay-glow
+- [x] gfx.starfield (3 layers)
+- [x] gfx.phase-tint
 - [ ] gfx.hazard.lunar-ring
 - [ ] gfx.hazard.shoals
 - [ ] gfx.hazard.belt
 - [ ] gfx.hazard.saturn
 - [ ] gfx.hazard.shock
 - [ ] gfx.hazard.flare-belt
-- [ ] gfx.title-hero
+- [x] gfx.title-hero
 
 ## Music (owner: sound)
 - [x] title

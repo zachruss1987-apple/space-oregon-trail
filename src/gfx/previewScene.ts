@@ -7,6 +7,8 @@ import Phaser from 'phaser';
 import { buildFonts, FONTS } from './font';
 import { activeNumbers, PALETTE_KEYS, type PaletteNumbers } from './palette';
 import { ALL_SPRITES, registerAll } from './sprites';
+import { heroPage, travelPage } from './previewPages';
+import { enableCrt } from './crt';
 
 const W = 640;
 const H = 400;
@@ -14,6 +16,7 @@ const H = 400;
 export class GfxPreviewScene extends Phaser.Scene {
   private pages: Phaser.GameObjects.GameObject[][] = [];
   private page = 0;
+  private updaters: ((dtMs: number) => void)[] = [];
 
   constructor() {
     super('GfxPreview');
@@ -26,12 +29,21 @@ export class GfxPreviewScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(pal.navy);
     this.pages.push(this.fontPage(pal));
     this.spritePages(pal).forEach((p) => this.pages.push(p));
+    this.pages.push(travelPage(this, pal, this.updaters));
+    this.pages.push(heroPage(this, pal, this.updaters));
+    // ?crt=1 turns the CRT pipeline on so a screenshot can show it
+    const crt = new URLSearchParams(window.location.search).get('crt') === '1' && enableCrt(this.game, true);
+    document.body.dataset['crt'] = crt ? 'on' : 'off';
     this.input.keyboard?.on('keydown-RIGHT', () => this.show(this.page + 1));
     this.input.keyboard?.on('keydown-LEFT', () => this.show(this.page - 1));
     this.input.on('pointerdown', () => this.show(this.page + 1));
     document.body.dataset['pages'] = String(this.pages.length);
     this.show(0);
     document.body.dataset['scene'] = 'GfxPreview';
+  }
+
+  override update(_time: number, delta: number): void {
+    for (const u of this.updaters) u(delta);
   }
 
   private show(n: number): void {
