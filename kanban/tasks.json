@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T05:20:11.159Z",
+  "updated": "2026-10-25T05:44:03.314Z",
   "milestones": [
     {
       "id": "M0",
@@ -1306,7 +1306,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-038",
@@ -1314,12 +1314,18 @@
       "desc": "",
       "milestone": "M4",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T05:44:03.266Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:44:03.266Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-039",
@@ -1372,18 +1378,39 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 54,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T05:20:11.158Z",
+      "updated": "2026-10-25T05:44:03.158Z",
       "notes": [
         {
           "ts": "2026-10-25T05:20:11.159Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T05:21:26.585Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:40:31.425Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:40:31.859Z",
+          "by": "developer",
+          "text": "Autosave via session.state setter (proxima.autosave, cleared on endings); Title Continue journey + describeSave line, resume via resumeSeed into Hazard/Station/Travel; Options Difficulty/Export/Import (DOM textarea overlay, 200k paste cap since exports run 10-40k chars); TopTen + Guide scenes; Arrival difficulty row + Top Ten name entry; Store/station prices use state.difficulty. Unit 1368 pass; e2e 44 pass incl. m5-features (5)."
+        },
+        {
+          "ts": "2026-10-25T05:44:03.159Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-041",
@@ -1391,12 +1418,18 @@
       "desc": "",
       "milestone": "M5",
       "role": "developer",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T05:44:03.205Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:44:03.206Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-042",
@@ -2012,7 +2045,7 @@
       "role": "developer",
       "status": "done",
       "assignee": "developer",
-      "issue": null,
+      "issue": 55,
       "created": "2026-10-25T04:50:23.970Z",
       "updated": "2026-10-25T05:02:49.806Z",
       "notes": [
@@ -2036,7 +2069,8 @@
           "by": "developer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     },
     {
       "id": "T-061",
@@ -2044,12 +2078,34 @@
       "desc": "",
       "milestone": "M4",
       "role": "writer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "writer",
+      "issue": 56,
       "created": "2026-10-25T05:20:11.049Z",
-      "updated": "2026-10-25T05:20:11.049Z",
-      "notes": []
+      "updated": "2026-10-25T05:22:43.631Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:20:57.894Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:22:33.534Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:22:33.984Z",
+          "by": "writer",
+          "text": "33 options.* keys in ui.json; OPTIONS_PENDING removed; test added"
+        },
+        {
+          "ts": "2026-10-25T05:22:43.631Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-062",
@@ -2057,12 +2113,52 @@
       "desc": "",
       "milestone": "M4",
       "role": "sound",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "sound",
       "issue": null,
       "created": "2026-10-25T05:20:11.103Z",
-      "updated": "2026-10-25T05:20:11.104Z",
-      "notes": []
+      "updated": "2026-10-25T05:23:44.866Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:21:50.709Z",
+          "by": "sound",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:23:24.540Z",
+          "by": "sound",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:23:25.009Z",
+          "by": "sound",
+          "text": "playSting/stopSfx/bindGlobalMuteKey added in AudioManager; tmpx/size.test.ts (not mine) fails parse in npm test"
+        },
+        {
+          "ts": "2026-10-25T05:23:44.867Z",
+          "by": "sound",
+          "text": "review -> done"
+        }
+      ]
+    },
+    {
+      "id": "T-063",
+      "title": "Dev: wire playSting (danger/clean), drive.hum and grapple.reel loops via sfx/stopSfx, bindGlobalMuteKey with Title ignore",
+      "desc": "",
+      "milestone": "M4",
+      "role": "developer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T05:23:44.922Z",
+      "updated": "2026-10-25T05:44:03.314Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T05:44:03.314Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     }
   ]
 }
