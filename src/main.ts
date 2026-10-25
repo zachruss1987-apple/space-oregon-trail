@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from './config';
 import './game/contract';
 import { session } from './game/session';
+import { audioBoot } from './audio/boot';
 import { SCENES } from './scenes';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
@@ -20,7 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: SCENES,
+  scene: audioBoot(SCENES),
 };
 
 const game = new Phaser.Game(config);
