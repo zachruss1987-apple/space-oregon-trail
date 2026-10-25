@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test';
 import { autoTravelUntil, body, buy, getState, idle, leaveStore, startRun } from './helpers';
 import { FAST_FIRST_WAYPOINT_SEEDS } from './seeds';
 
-test('first waypoint (Lunar Debris Ring): crossing modal, then Continue returns to Travel', async ({ page }) => {
+// M2 (hazards.md "Flow"): arrival pauses with `state.crossing` set; the interim Waypoint menu offers Thread it / Hire a
+// tug (enabled first). Enter picks the first row, then the crossing narration + outcome modal shows.
+test('first waypoint (Lunar Debris Ring): crossing choice, outcome modal, then Continue returns to Travel', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, FAST_FIRST_WAYPOINT_SEEDS[0] as string);
@@ -11,10 +13,15 @@ test('first waypoint (Lunar Debris Ring): crossing modal, then Continue returns 
 
   const s = await autoTravelUntil(page, (_st, scene) => scene === 'Waypoint');
   expect(s.arrivedAt).toBe(1);
+  expect(s.crossing?.waypoint).toBe(1);
   await expect(body(page)).toHaveAttribute('data-scene', 'Waypoint');
-  await expect(body(page)).toHaveAttribute('data-modal', '1'); // hazard crossing outcome
-  const hazardLog = s.log.filter((e) => e.kind === 'hazard' && e.day === s.day);
-  expect(hazardLog.length).toBeGreaterThan(0);
+  await expect(body(page)).not.toHaveAttribute('data-modal', '1');
+
+  await page.keyboard.press('Enter'); // first enabled crossing option
+  await expect(body(page)).toHaveAttribute('data-modal', '1'); // crossing narration + outcome
+  const crossed = await getState(page);
+  expect(crossed?.crossing).toBeNull();
+  expect(crossed?.log.filter((e) => e.kind === 'hazard' && e.day === crossed.day).length).toBeGreaterThan(0);
 
   await page.keyboard.press('Enter'); // dismiss modal
   await expect(body(page)).not.toHaveAttribute('data-modal', '1');
