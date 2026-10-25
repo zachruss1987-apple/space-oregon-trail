@@ -8,7 +8,7 @@ import trades from '../../../src/content/text/trades.json';
 import epitaphs from '../../../src/content/text/epitaphs.json';
 import guide from '../../../src/content/text/guide.json';
 import highscores from '../../../src/content/text/highscores.json';
-import { FALLBACK, PENDING } from '../../../src/ui/copy';
+import { FALLBACK, PENDING, t } from '../../../src/ui/copy';
 
 const ALLOWED = new Set([
   '{name}', '{n}', '{item}',
@@ -209,6 +209,7 @@ describe('ui.json', () => {
     const rest = structuredClone(u) as Obj;
     delete rest.status;
     delete rest.guide;
+    delete rest.options; // labels repeat by design (Spacer); lengths checked in the T-061 block
     for (const k of [...Object.keys(FALLBACK), ...Object.keys(PENDING)]) {
       const parts = k.split('.');
       const parent = parts.slice(0, -1).reduce<Obj | undefined>((a, p) => a?.[p] as Obj | undefined, rest);
@@ -242,6 +243,56 @@ describe('ui.json vs PENDING (T-054)', () => {
       expect(typeof v, k).toBe('string');
       expect(ph(v as string), k).toEqual(ph(pending));
       expect((v as string).length, k).toBeLessThanOrEqual(90);
+    }
+  });
+});
+
+describe('ui.json options keys (T-061)', () => {
+  const KEYS = [
+    'options.title',
+    'options.crt',
+    'options.music',
+    'options.sfx',
+    'options.textSpeed',
+    'options.touch',
+    'options.minigames',
+    'options.reducedMotion',
+    'options.palette',
+    'options.difficulty',
+    'options.back',
+    'options.value.on',
+    'options.value.off',
+    'options.value.na',
+    'options.value.auto',
+    'options.value.slow',
+    'options.value.normal',
+    'options.value.fast',
+    'options.value.instant',
+    'options.value.play',
+    'options.value.autoResolve',
+    'options.value.spacer',
+    'options.hint.crt',
+    'options.hint.crtNa',
+    'options.hint.music',
+    'options.hint.sfx',
+    'options.hint.textSpeed',
+    'options.hint.touch',
+    'options.hint.minigames',
+    'options.hint.reducedMotion',
+    'options.hint.palette',
+    'options.hint.difficulty',
+    'options.hint.back',
+  ];
+  it('lists all 33 keys and resolves each as a string with no stray placeholders', () => {
+    expect(KEYS).toHaveLength(33);
+    for (const k of KEYS) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], ui);
+      expect(typeof v, k).toBe('string');
+      expect((v as string).length, k).toBeGreaterThan(0);
+      expect((v as string).match(/{[^}]*}/g) ?? [], k).toEqual([]);
+      if (k.startsWith('options.hint.')) expect((v as string).length, k).toBeLessThanOrEqual(72);
+      else expect((v as string).length, k).toBeLessThanOrEqual(24);
+      expect(t(k), k).toBe(v);
     }
   });
 });

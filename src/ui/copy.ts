@@ -114,46 +114,6 @@ export const PENDING: Readonly<Record<string, string>> = {
 };
 
 
-/**
- * T-037 Options screen keys not yet in ui.json (writer follow-up: add them under `options`, then delete this table).
- * Separate from FALLBACK / PENDING because their tests require every key to already exist in ui.json.
- */
-export const OPTIONS_PENDING: Readonly<Record<string, string>> = {
-  'options.title': 'OPTIONS',
-  'options.crt': 'CRT effect',
-  'options.music': 'Music volume',
-  'options.sfx': 'Sound effects',
-  'options.textSpeed': 'Text speed',
-  'options.touch': 'Touch controls',
-  'options.minigames': 'Mini-games',
-  'options.reducedMotion': 'Reduced motion',
-  'options.palette': 'Colorblind palette',
-  'options.difficulty': 'Difficulty',
-  'options.back': 'Back',
-  'options.value.on': 'On',
-  'options.value.off': 'Off',
-  'options.value.na': 'n/a',
-  'options.value.auto': 'Auto',
-  'options.value.slow': 'Slow',
-  'options.value.normal': 'Normal',
-  'options.value.fast': 'Fast',
-  'options.value.instant': 'Instant',
-  'options.value.play': 'Play',
-  'options.value.autoResolve': 'Auto-resolve',
-  'options.value.spacer': 'Spacer',
-  'options.hint.crt': 'Scanlines, a curved tube and phosphor glow. Left/Right or Enter to change.',
-  'options.hint.crtNa': 'This browser draws without WebGL, so there is no tube to warm up.',
-  'options.hint.music': 'Music volume, 0 to 10.',
-  'options.hint.sfx': 'Sound effects volume, 0 to 10.',
-  'options.hint.textSpeed': 'How fast the prose types itself out. Instant skips the typewriter.',
-  'options.hint.touch': 'Pause icon and FIRE button in the mini-games. Auto: on touch screens.',
-  'options.hint.minigames': 'Auto-resolve skips the arcade parts with no penalty.',
-  'options.hint.reducedMotion': 'No scrolling stars, blinking or typewriter; the CRT stays off.',
-  'options.hint.palette': 'Swaps reds and greens for colors that stay apart for every eye.',
-  'options.hint.difficulty': 'Only Spacer difficulty is open for now.',
-  'options.hint.back': 'Back to the title. Everything here is already saved.',
-};
-
 /** Cosmetic rng for picking text variants; never the run rng, so UI copy cannot change outcomes. */
 function uiRng(): Rng {
   return session.uiRng;
@@ -161,7 +121,7 @@ function uiRng(): Rng {
 
 /** One line of UI copy by dotted key, with {placeholders} filled. */
 export function t(key: string, vars: Readonly<Record<string, string | number>> = {}): string {
-  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key] ?? PENDING[key] ?? OPTIONS_PENDING[key]);
+  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key] ?? PENDING[key]);
 }
 
 /** A string list from ui.json (menus, advice). */

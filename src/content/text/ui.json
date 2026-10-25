@@ -1,5 +1,44 @@
 {
   "$schema": "UI copy. Keys are stable identifiers used by scenes; see docs/design/ui.md for canonical menu labels. Placeholders: {name} crew member, {n} number, {item} supply name.",
+  "options": {
+    "title": "OPTIONS",
+    "crt": "CRT effect",
+    "music": "Music volume",
+    "sfx": "Sound effects",
+    "textSpeed": "Text speed",
+    "touch": "Touch controls",
+    "minigames": "Mini-games",
+    "reducedMotion": "Reduced motion",
+    "palette": "Colorblind palette",
+    "difficulty": "Difficulty",
+    "back": "Back",
+    "value": {
+      "on": "On",
+      "off": "Off",
+      "na": "n/a",
+      "auto": "Auto",
+      "slow": "Slow",
+      "normal": "Normal",
+      "fast": "Fast",
+      "instant": "Instant",
+      "play": "Play",
+      "autoResolve": "Auto-resolve",
+      "spacer": "Spacer"
+    },
+    "hint": {
+      "crt": "Scanlines, a curved tube, phosphor glow. Left/Right to change.",
+      "crtNa": "No WebGL here, so there is no tube to warm up.",
+      "music": "Music volume, 0 to 10.",
+      "sfx": "Sound effects volume, 0 to 10.",
+      "textSpeed": "How fast the prose types out. Instant skips the typewriter.",
+      "touch": "Pause icon and FIRE button in mini-games. Auto: touch screens.",
+      "minigames": "Auto-resolve skips the arcade parts, no penalty.",
+      "reducedMotion": "No drifting stars, blinking or typewriter. The CRT stays off.",
+      "palette": "Reds and greens swapped for colors that stay apart.",
+      "difficulty": "Only Spacer is open. The rest of the Lane is still being surveyed.",
+      "back": "Back to the title. Everything here is already saved."
+    }
+  },
   "title": {
     "name": "THE PROXIMA TRAIL",
     "tagline": "You have died of space dysentery.",
