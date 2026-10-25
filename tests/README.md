@@ -65,3 +65,16 @@ resolve the `@/` alias, so the search lives in a vitest file that is skipped oth
 (`runPolicy`) for the Executive, Window 3, over the string seeds `SEED-0`..`SEED-999`, prints the matches and rewrites
 `tests/e2e/seeds.ts`. These are **policy-run seeds**: the UI turns `?seed=` into its Rng with the same
 `seedFromString`, but a human's shopping and intents differ from the policy's, so use them as "likely" outcomes.
+
+## E2E choreography helpers (`tests/e2e/helpers.ts`)
+| Helper | Does |
+|--------|------|
+| `startRun(page, seed, snapSteps?)` | Title -> Setup (defaults) -> Store; optional per-step screenshots |
+| `buy(page, row, qty)` | Store row number, type quantity, Enter (rows: 1 drives, 2 rations, 3 suits, 4 boxes, 5-7 parts) |
+| `leaveStore(page)` | Row 8, confirm, farewell; ends on Travel |
+| `autoTravelUntil(page, stop, opts?)` | Presses T on Travel and Enter on Waypoint/modals until `stop(state, scene)` or status leaves 'traveling'; skips input while `data-busy` |
+| `pressUntilScene(page, scene)` | Enter until `data-scene` matches |
+| `getState`, `sceneOf`, `idle`, `body` | Read `__PROXIMA__.state`, `data-scene`; wait out a day animation |
+Notes: canvas text cannot be asserted (score table, rating), so assert `state` and screenshot. `seeds.ts` `ALL_ALIVE` is tried in order by
+`journey.spec.ts`; with UI shopping (4 drives, 3000 rations...) SEED-20 arrives (day 140), SEED-9 dies (day 203). `DEATHSEED` + 1 drive and no rations dies fast.
+Screens: `screens.spec.ts` (all but Arrival) and `journey.spec.ts` (Arrival, Arrival-score) write to `test-results/screens/`.

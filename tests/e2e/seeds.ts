@@ -28,3 +28,6 @@ export const FULL_CREW_ARRIVAL_SEEDS: readonly string[] = ['SEED-9', 'SEED-20', 
 //   {"seed":"SEED-3","day":6}
 //   {"seed":"SEED-5","day":6}
 export const FAST_FIRST_WAYPOINT_SEEDS: readonly string[] = ['SEED-1', 'SEED-3', 'SEED-5'];
+
+/** Seeds to try first for UI arrival runs (policy-alive). The UI's shopping differs, so the journey spec tries them in order. */
+export const ALL_ALIVE: readonly string[] = ['SEED-20', 'SEED-9', 'SEED-48'];
