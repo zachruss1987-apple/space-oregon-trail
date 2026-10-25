@@ -5,6 +5,7 @@ import { debugLoadState } from './game/debugLoad';
 import { initA11y } from './game/a11y';
 import { session } from './game/session';
 import { audioBoot } from './audio/boot';
+import { bindMuteKey } from './game/muteKey';
 import { SCENES } from './scenes';
 import { GfxPreviewScene } from './gfx/previewScene';
 
@@ -12,6 +13,8 @@ import { GfxPreviewScene } from './gfx/previewScene';
 session.init(window.location.search);
 // Hidden live region + listbox mirroring the canvas for screen readers (src/game/a11y.ts).
 initA11y();
+// `M` mutes anywhere except the Title (its `M` toggles mini-game auto-resolve) and while a text field takes input.
+bindMuteKey();
 
 // The game is rendered at a fixed retro resolution and scaled to fit.
 const config: Phaser.Types.Core.GameConfig = {

@@ -28,9 +28,6 @@ const SOUND: Partial<Record<SalvageEvent, string>> = {
   hot: 'hull.hit', wrecked: 'crash', collect: 'store.buy', scrap: 'event.ding',
 };
 
-/** Steps between `grapple.reel` retriggers (0.5 s at 60 Hz). */
-const REEL_STEPS = 30;
-
 /** Sprite name and frame for a debris piece at step `steps`. */
 function debrisSprite(p: Debris, steps: number): [string, number] {
   const type: DebrisId = p.type;
@@ -53,7 +50,8 @@ export class SalvageRunScene extends MiniGameScene<SalvageResult> {
   private pool!: SpritePool;
   private drone!: Phaser.GameObjects.Image;
   private hookImg!: Phaser.GameObjects.Image;
-  private reelAt = 0;
+  /** True while the `grapple.reel` loop is sounding. */
+  private reeling = false;
 
   constructor() {
     super('Salvage');
@@ -67,13 +65,18 @@ export class SalvageRunScene extends MiniGameScene<SalvageResult> {
     return ['ui.icon.charge', 'ui.icon.hp', 'ui.icon.haul'];
   }
 
+  protected override silence(): void {
+    this.reeling = false;
+    audio().stopSfx('grapple.reel');
+  }
+
   protected override isClean(r: SalvageResult): boolean {
     return haulUnits(r) >= 100;
   }
 
   protected setup(state: GameState): void {
     this.world = createSalvageWorld(state);
-    this.reelAt = 0;
+    this.reeling = false;
     const f = SALVAGE_RUN.field;
     const pal = activeNumbers();
     const g = this.add.graphics();
@@ -94,10 +97,11 @@ export class SalvageRunScene extends MiniGameScene<SalvageResult> {
       if (sound) audio().sfx(sound);
     }
     const gr = this.world.grapple;
-    if (gr?.phase === 'reeling' && this.world.steps >= this.reelAt) {
-      audio().sfx('grapple.reel');
-      this.reelAt = this.world.steps + REEL_STEPS;
-    } else if (!gr || gr.phase !== 'reeling') this.reelAt = 0;
+    // The reel loops while the hook hauls something in (audio.md "grapple.reel"), and stops when it lands or snaps.
+    const reeling = gr?.phase === 'reeling';
+    if (reeling && !this.reeling) audio().sfx('grapple.reel');
+    else if (!reeling && this.reeling) audio().stopSfx('grapple.reel');
+    this.reeling = reeling;
     return salvageOver(this.world);
   }
 

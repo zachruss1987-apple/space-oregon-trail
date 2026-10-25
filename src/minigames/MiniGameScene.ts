@@ -74,7 +74,12 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   protected hudIcons(): (string | null)[] {
     return [];
   }
-  /** A clean run plays `jingle.clean` when the result panel opens. */
+  /** Stop any looping SFX the game started (pause, run end, skip, scene shutdown). */
+  protected silence(): void {
+    // games with loops override
+  }
+
+  /** A clean run plays the `jingle.clean` sting when the result panel opens. */
   protected isClean(_result: R): boolean {
     return false;
   }
@@ -106,9 +111,15 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
     const buttons = session.settings.touchControls;
     const regions = touchButtons(this, MINIGAME_SCENE.pauseIcon, buttons && this.actionKey ? mt(this.actionKey) : null);
     this.touch = new TouchLayer(this, regions, { live: () => !this.paused, pause: () => this.pause(), tap: (at) => this.onTap(at) });
-    this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.held.delete(e.key.toLowerCase()) });
+    // `?` pauses a running game before the controls overlay opens (the clock never runs behind it).
+    this.router.push({
+      onKey: (e) => this.onKey(e),
+      onKeyUp: (e) => this.held.delete(e.key.toLowerCase()),
+      onHelp: () => (this.phase === 'play' || this.phase === 'countdown') && this.pause(),
+    });
     this.installHook();
     this.events.once('shutdown', () => {
+      this.silence();
       if (window.__PROXIMA__) window.__PROXIMA__.minigame = null;
       delete document.body.dataset['minigame'];
     });
@@ -199,6 +210,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   private pause(): void {
     if (this.paused || this.phase === 'done') return;
     this.paused = true;
+    this.silence();
     this.held.clear();
     this.fireEdge = null;
     this.touch.clear();
@@ -216,6 +228,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   private end(forced?: R): void {
     if (this.phase === 'done') return;
     this.phase = 'done';
+    this.silence();
     this.doneAt = this.time.now;
     this.panel?.destroy();
     this.panel = null;
@@ -229,7 +242,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
       this.hook.result = final;
       const error = dispatchOutcome(this.kind, { result: final });
       this.panel = resultPanel(this, [...this.resultLines(final), ...notes], error);
-      if (!error && this.isClean(final)) audio().playMusic('jingle.clean');
+      if (!error && this.isClean(final)) audio().playSting('jingle.clean');
     };
     if (forced) finish(forced);
     else this.finalize(result, finish);
@@ -238,6 +251,7 @@ export abstract class MiniGameScene<R extends MiniGameResult> extends BaseScene 
   /** Skip from the pause menu: no result, the sim's penalty auto-resolve, straight back. */
   private skip(): void {
     this.phase = 'done';
+    this.silence();
     this.settled = true;
     this.hook.skipped = true;
     const error = dispatchOutcome(this.kind, { skipped: true });

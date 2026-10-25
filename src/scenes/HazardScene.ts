@@ -6,6 +6,7 @@
  * returns here with `session.pendingDay`, which is replayed like a crossing.
  */
 import type Phaser from 'phaser';
+import { audio } from '@/audio/AudioManager';
 import { REST, WAYPOINTS } from '@/content';
 import { session } from '@/game/session';
 import { mt } from '@/minigames/copy';
@@ -21,6 +22,7 @@ import { COLORS } from '@/ui/theme';
 import { artBand } from './artBand';
 import { BaseScene } from './BaseScene';
 import { atFlareBelt, optionKey, optionRows, outcomeLines, readoutLines, type HazardRow } from './hazardView';
+import { dangerSting } from './stings';
 import { MODAL_KINDS } from './travelView';
 
 const MENU_Y = 150;
@@ -120,6 +122,7 @@ export class HazardScene extends BaseScene {
   private after(entries: LogEntry[], crossed: boolean): void {
     const s = session.state!;
     const lines = crossed ? outcomeLines(entries) : entries.filter((e) => MODAL_KINDS.has(e.kind)).map((e) => e.text);
+    if (dangerSting(entries)) audio().playSting('danger');
     const next = (): void => {
       if (s.status !== 'traveling') this.ending();
       else if (s.crossing) this.scene.restart();

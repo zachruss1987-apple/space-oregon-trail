@@ -1,7 +1,7 @@
 /**
  * The travel loop: status panel, log, the eight actions. Continue/auto-travel advance days through applyAction.
  * Routing by sim state: arrival -> Waypoint; a refused Continue with a pending crossing -> Hazard, or stranded at a
- * station -> Station; endings -> Death/Arrival.
+ * station -> Station; endings -> Death/Arrival. `drive.hum` loops while a day runs; danger days play the `danger` sting.
  */
 import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
@@ -15,6 +15,7 @@ import { promptBeacon } from '@/ui/BeaconPrompt';
 import { saveBeacon } from '@/ui/beaconStore';
 import { t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
+import { muteIcon, type MuteIcon } from '@/ui/muteIcon';
 import { promptNumber } from '@/ui/NumberPrompt';
 import { StatusBar } from '@/ui/StatusBar';
 import { TextBox } from '@/ui/TextBox';
@@ -22,6 +23,7 @@ import { panel } from '@/ui/chrome';
 import { addText, setText } from '@/ui/text';
 import { COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
+import { dangerSting, hazardArrival } from './stings';
 import { TravelBand } from './travelBand';
 import { actionItems, MODAL_KINDS, rationOptions, recentLog, repairOptions, statusRows, STOP_KINDS, thrustOptions, type Option } from './travelView';
 
@@ -43,7 +45,7 @@ export class TravelScene extends BaseScene {
   private bandLabel!: Phaser.GameObjects.BitmapText;
   private hint!: Phaser.GameObjects.BitmapText;
   private band!: TravelBand;
-  private humAt = 0;
+  private mute: MuteIcon | null = null;
   private busy = false;
   private auto = false;
   /** Auto-travel started by holding Enter (stops on key up). */
@@ -70,7 +72,14 @@ export class TravelScene extends BaseScene {
     this.log = new TextBox(this, LOG_X, MENU_Y + 2, LOG_W, '');
     this.menu = new Menu(this, actionItems(s), { x: 10, y: MENU_Y + 2, numbered: true, lineHeight: MENU_LH, onSelect: (i) => this.act(i) });
     this.hint = addText(this, 12, GAME_HEIGHT - 18, t('travel.auto'), { color: COLORS.dim });
-    this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e) });
+    this.mute = muteIcon(this, 6, 6, 9);
+    // `?` (controls overlay) stops auto-travel first: nothing outside the mini-games runs on a timer behind an overlay.
+    this.router.push({ onKey: (e) => this.onKey(e), onKeyUp: (e) => this.onKeyUp(e), onHelp: () => this.auto && this.setAuto(false) });
+    this.events.off('sleep', this.stopHum, this).on('sleep', this.stopHum, this);
+    this.events.once('shutdown', () => {
+      this.stopHum();
+      this.mute = null;
+    });
     this.render();
     const back = session.pendingDay;
     if (back) {
@@ -89,16 +98,16 @@ export class TravelScene extends BaseScene {
     return 'travel';
   }
 
-  override update(time: number, delta: number): void {
+  override update(_time: number, delta: number): void {
     const s = session.state;
     if (!s || !this.band) return;
-    const moving = this.busy || this.auto;
-    this.band.update(delta, s, moving);
-    // Drive hum bed (audio.md): retriggered once a second while a day animates.
-    if (moving && time - this.humAt >= 1000) {
-      this.humAt = time;
-      audio().sfx('drive.hum');
-    }
+    this.band.update(delta, s, this.busy || this.auto);
+    this.mute?.update();
+  }
+
+  /** End the drive-hum bed (day over, scene asleep or gone). */
+  private stopHum(): void {
+    audio().stopSfx('drive.hum');
   }
 
   private onKey(e: KeyboardEvent): void {
@@ -186,12 +195,14 @@ export class TravelScene extends BaseScene {
   /** One Continue: short "rolling" delay, then a day. */
   private travelDay(): void {
     this.setBusy(true);
+    audio().sfx('drive.hum'); // loops until stopSfx (audio.md "drive.hum"); already looping = no restart
     this.time.delayedCall(session.settings.dayDelayMs, () => this.dispatch({ type: 'continue' }, true));
   }
 
   private setBusy(on: boolean): void {
     this.busy = on;
     markFlag('busy', on);
+    if (!on) this.stopHum();
   }
 
   private dispatch(intent: Intent, takesDay: boolean): void {
@@ -225,6 +236,8 @@ export class TravelScene extends BaseScene {
     if (s.status !== 'traveling') {
       this.setAuto(false);
       this.setBusy(true);
+      this.stopHum();
+      if (dangerSting(entries)) audio().playSting('danger');
       this.time.delayedCall(900, () => this.ending());
       return;
     }
@@ -233,13 +246,15 @@ export class TravelScene extends BaseScene {
     const next = (): void => this.beaconsThen(dead, proceed);
     const proceed = (): void => {
       if (arrived) {
+        this.stopHum();
         session.shownWaypoint = s.arrivedAt;
         this.go('Waypoint');
       } else if (this.auto) this.travelDay();
       else this.setBusy(false);
     };
     const shown = entries.filter((e) => MODAL_KINDS.has(e.kind));
-    if (entries.some((e) => ALARM_KINDS.has(e.kind))) audio().sfx('alarm');
+    if (dangerSting(entries) || (arrived && hazardArrival(s.arrivedAt))) audio().playSting('danger');
+    else if (entries.some((e) => ALARM_KINDS.has(e.kind))) audio().sfx('alarm');
     else if (entries.some((e) => !QUIET_KINDS.has(e.kind))) audio().sfx('event.ding');
     if (shown.length > 0) {
       this.setBusy(false);

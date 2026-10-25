@@ -2,8 +2,6 @@
  * Title screen (art.md "Title hero"): hero band, x4 logo, tagline, x2 menu with the cursor ship, seed line, title theme.
  * With a valid autosave the menu starts with "Continue journey" and its `describeSave` line shows under the menu.
  */
-import type Phaser from 'phaser';
-import { audio } from '@/audio/AudioManager';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
 import { readAutosave, resumeScene } from '@/game/saveStore';
 import { session } from '@/game/session';
@@ -12,6 +10,7 @@ import { mt } from '@/minigames/copy';
 import { describeSave } from '@/sim';
 import { list, t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
+import { muteIcon, type MuteIcon } from '@/ui/muteIcon';
 import { addText, setText } from '@/ui/text';
 import { CHAR_W, COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
@@ -24,7 +23,7 @@ const BASE_ACTIONS: readonly TitleAction[] = ['travel', 'guide', 'topTen', 'opti
 
 export class TitleScene extends BaseScene {
   private hero: TitleHero | null = null;
-  private mute: Phaser.GameObjects.Image | null = null;
+  private mute: MuteIcon | null = null;
 
   constructor() {
     super('Title');
@@ -79,8 +78,8 @@ export class TitleScene extends BaseScene {
     addText(this, centerX(hint, 1), GAME_HEIGHT - 36, hint, { color: COLORS.dim });
     const seed = t('title.seed', { seed: session.seedLabel });
     addText(this, centerX(seed, 1), GAME_HEIGHT - 20, seed, { color: COLORS.dim });
-    // Muted-speaker icon until the first gesture unlocks audio (audio.md "Autoplay unlock").
-    this.mute = this.add.image(GAME_WIDTH - 12, 6, 'ui.icon.mute', 0).setOrigin(0, 0).setDepth(10);
+    // Muted speaker until the first gesture unlocks audio (audio.md "Autoplay unlock") and while muted.
+    this.mute = muteIcon(this, GAME_WIDTH - 12, 6);
     this.events.once('shutdown', () => {
       this.hero = null;
       this.mute = null;
@@ -89,7 +88,7 @@ export class TitleScene extends BaseScene {
 
   override update(_time: number, delta: number): void {
     this.hero?.update(delta);
-    this.mute?.setVisible(audio().state === 'locked');
+    this.mute?.update();
   }
 
   private choose(action: TitleAction | undefined): void {
