@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:49:29.752Z",
+  "updated": "2026-10-25T01:49:30.796Z",
   "milestones": [
     {
       "id": "M0",
@@ -271,11 +271,11 @@
       "desc": "Per docs/design/travel.md and health.md. Arrival detection, death, game over. Unit tests incl. invariants over many seeds.",
       "milestone": "M1",
       "role": "developer",
-      "status": "doing",
+      "status": "review",
       "assignee": "developer",
       "issue": 11,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:49:11.269Z",
+      "updated": "2026-10-25T01:49:30.796Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.451Z",
@@ -286,6 +286,16 @@
           "ts": "2026-10-25T01:49:11.269Z",
           "by": "developer",
           "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:49:30.338Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:49:30.795Z",
+          "by": "developer",
+          "text": "tick.ts (11-step order), weather Markov, travel formulas, actions.ts intents, policy.ts reference auto-play, sim README; invariants over 2x200 seeds + playthrough (200 runs: 49.5% win, 177 mean days); 143 unit tests total, suite 4.3 s, sim coverage 99.3% stmts"
         }
       ],
       "issueClosed": false
