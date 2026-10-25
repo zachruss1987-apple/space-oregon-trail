@@ -26,5 +26,5 @@ export { fromJSON, toJSON } from './serialize';
 export { dailyDistance, daysOfRations, rationNeed, remainingInSegment } from './travel';
 export { averageHealth, generalHealth, healthLabel, isFlareSeason, presentCrew, workingDrives } from './util';
 export { isSuited } from './health';
-export { policyCross, policyIntent, policyShop, runPolicy, type RunSummary } from './policy';
+export { DEFAULT_POLICY, policyCross, policyIntent, policyShop, runPolicy, type PolicyOptions, type RunSummary } from './policy';
 export { resolveText, textLine } from './text';

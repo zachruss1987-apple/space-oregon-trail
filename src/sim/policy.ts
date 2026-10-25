@@ -1,5 +1,5 @@
 /** Auto-play reference policy: travel.md (M1) plus the hazards.md crossing policy (M2), for the playthrough test and balance harness. */
-import { FINAL_WAYPOINT, ITEMS, PROFESSION_ORDER, WAYPOINTS, WINDOW_ORDER, type ProfessionId, type SupplyKey, type WindowId } from '@/content';
+import { FINAL_WAYPOINT, ITEMS, PROFESSION_ORDER, WAYPOINTS, WINDOW_ORDER, type ProfessionId, type RationId, type SupplyKey, type ThrustId, type WindowId } from '@/content';
 import { applyAction, intentBlocker } from './actions';
 import { crossBlocker, tugPrice } from './crossing';
 import { createGame } from './game';
@@ -15,15 +15,36 @@ import { averageHealth } from './util';
 /** Policy thresholds. */
 export const POLICY = { restBelowHealth: 50, lowRationDays: 10, maxDays: 1000 } as const;
 
+/** Tunable policy knobs; the defaults ARE the reference policy (the policy-50 snapshot pins them). */
+export interface PolicyOptions {
+  /** Ration setting when food is fine (default half); low food always drops to paste. */
+  rations: RationId;
+  /** Thrust setting held while traveling (default cruise). */
+  thrust: ThrustId;
+  /** Rest a day when average health is below this (default POLICY.restBelowHealth). */
+  restBelowHealth: number;
+  /** Switch to paste and scan when fewer ration-days than this remain (default POLICY.lowRationDays). */
+  lowRationDays: number;
+  /** Packs added to the reference kit per item (default none). */
+  extraKit: Partial<Record<SupplyKey, number>>;
+}
+
+/** The reference policy's options. */
+export const DEFAULT_POLICY: PolicyOptions = {
+  rations: 'half', thrust: 'cruise', restBelowHealth: POLICY.restBelowHealth, lowRationDays: POLICY.lowRationDays, extraKit: {},
+};
+
 /** The reference shopping list in packs (rations: the remainder, capped by the buy limit). */
-export function policyKit(profession: ProfessionId): Partial<Record<SupplyKey, number>> {
-  return { drives: 3, suits: profession === 'farmer' ? 5 : 10, plates: 1, pumps: 1, gyros: 1, charges: 5 };
+export function policyKit(profession: ProfessionId, extra: Partial<Record<SupplyKey, number>> = {}): Partial<Record<SupplyKey, number>> {
+  const kit: Partial<Record<SupplyKey, number>> = { drives: 3, suits: profession === 'farmer' ? 5 : 10, plates: 1, pumps: 1, gyros: 1, charges: 5 };
+  for (const [k, n] of Object.entries(extra) as [SupplyKey, number][]) kit[k] = (kit[k] ?? 0) + n;
+  return kit;
 }
 
 /** Buy the reference kit, then rations with what is left. */
-export function policyShop(state: GameState): GameState {
+export function policyShop(state: GameState, opts: Partial<PolicyOptions> = {}): GameState {
   let s = state;
-  for (const [item, packs] of Object.entries(policyKit(s.profession)) as [SupplyKey, number][]) {
+  for (const [item, packs] of Object.entries(policyKit(s.profession, opts.extraKit)) as [SupplyKey, number][]) {
     const n = Math.min(packs, maxBuyable(s, item));
     if (n > 0) s = buy(s, item, n).state;
   }
@@ -47,15 +68,16 @@ export function policyCross(state: GameState): Intent {
 }
 
 /** Next intent: repair if possible, set rations, cross a pending hazard, rest when weak, scan when low, else continue. */
-export function policyIntent(state: GameState): Intent {
+export function policyIntent(state: GameState, opts: Partial<PolicyOptions> = {}): Intent {
+  const o = { ...DEFAULT_POLICY, ...opts };
   const fixable = brokenParts(state).find((p) => sparesFor(state, p) > 0);
   if (fixable) return { type: 'repair', part: fixable };
-  const low = daysOfRations(state, 'half') < POLICY.lowRationDays;
-  const want = low ? 'paste' : 'half';
+  const low = daysOfRations(state, o.rations) < o.lowRationDays;
+  const want = low ? 'paste' : o.rations;
   if (state.rations !== want) return { type: 'setRations', rations: want };
-  if (state.thrust !== 'cruise') return { type: 'setThrust', thrust: 'cruise' };
+  if (state.thrust !== o.thrust) return { type: 'setThrust', thrust: o.thrust };
   if (state.crossing) return policyCross(state);
-  if (averageHealth(state) < POLICY.restBelowHealth) return { type: 'rest', days: 1 };
+  if (averageHealth(state) < o.restBelowHealth) return { type: 'rest', days: 1 };
   if (low && canScan(state) && state.arrivedAt !== FINAL_WAYPOINT) return { type: 'scan' };
   const go: Intent = { type: 'continue' };
   if (intentBlocker(state, go) === null) return go;
@@ -78,14 +100,14 @@ export interface RunSummary {
 }
 
 /** Auto-play one run. Profession/window are uniform random unless given. */
-export function runPolicy(seed: number, opts: { profession?: ProfessionId; window?: WindowId } = {}): RunSummary {
+export function runPolicy(seed: number, opts: { profession?: ProfessionId; window?: WindowId; policy?: Partial<PolicyOptions> } = {}): RunSummary {
   const rng: Rng = createRng(seed);
   const profession = opts.profession ?? rng.pick(PROFESSION_ORDER);
   const window = opts.window ?? rng.pick(WINDOW_ORDER);
-  let s = policyShop(createGame({ profession, window }, rng));
+  let s = policyShop(createGame({ profession, window }, rng), opts.policy);
   s = depart(s, rng).state;
   while (s.status === 'traveling' && s.day < POLICY.maxDays) {
-    const r = applyAction(s, policyIntent(s), rng);
+    const r = applyAction(s, policyIntent(s, opts.policy), rng);
     if (r.error) throw new Error(`Policy intent refused on day ${s.day}: ${r.error}`);
     s = r.state;
   }

@@ -17,6 +17,7 @@
     "kanban": "node scripts/kanban.mjs",
     "kanban:build": "node scripts/kanban.mjs build",
     "kanban:open": "node scripts/kanban.mjs open",
+    "balance": "node scripts/balance.mjs",
     "brainstorm": "node scripts/brainstorm.mjs"
   },
   "dependencies": {
