@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:50:31.423Z",
+  "updated": "2026-10-25T02:12:56.568Z",
   "milestones": [
     {
       "id": "M0",
@@ -268,7 +268,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-011",
@@ -308,7 +308,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-012",
@@ -348,7 +348,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-013",
@@ -388,7 +388,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-014",
@@ -433,7 +433,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-015",
@@ -481,18 +481,39 @@
       "desc": "Keyboard + mouse menus; data-scene markers; ?seed= support in main.ts.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 16,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:50:31.252Z",
+      "updated": "2026-10-25T02:10:20.402Z",
       "notes": [
         {
           "ts": "2026-10-25T01:50:31.252Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:51:52.751Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:08:08.005Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:08:08.464Z",
+          "by": "developer",
+          "text": "Title (seed shown, Travel live, Learn shows guide copy, others coming-soon modal) + Setup (profession -> 5 names w/ Tab random -> window, Esc back); src/ui components, session.ts, contract.ts (__PROXIMA__.state, data-scene/modal/busy); smoke e2e updated; 588 unit + 1 e2e green"
+        },
+        {
+          "ts": "2026-10-25T02:10:20.403Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-017",
@@ -500,18 +521,39 @@
       "desc": "Quantity inputs, running total, Mattie advice lines, cannot overspend.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 17,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:50:31.310Z",
+      "updated": "2026-10-25T02:10:20.460Z",
       "notes": [
         {
           "ts": "2026-10-25T01:50:31.311Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:08:08.930Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:08:31.864Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:08:32.336Z",
+          "by": "developer",
+          "text": "StoreScene: 7 item rows + Leave; Enter/number key opens NumberInput (type digits, arrows +-1/+-10, max = maxBuyable given rest of basket); basket folded through buy() so state.credits is live; warnings mapped fewSuits->lowSuits, broke->noCredits; leave blocked via depart() probe (throwaway rng), confirm modal then thanks -> Travel; tests green"
+        },
+        {
+          "ts": "2026-10-25T02:10:20.460Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-018",
@@ -519,18 +561,39 @@
       "desc": "Layout per docs/design/ui.md; auto-advance travel; actions wired to sim.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 18,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:50:31.369Z",
+      "updated": "2026-10-25T02:10:20.508Z",
       "notes": [
         {
           "ts": "2026-10-25T01:50:31.369Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:08:32.793Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:09:41.151Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:09:41.630Z",
+          "by": "developer",
+          "text": "Travel (status via sim helpers, last 6 log lines, 8 actions + thrust/rations/rest/repair/scan sub-menus, disabled reasons from intentBlocker, Continue w/ 220ms delay, hold Enter or T = auto until event/condition/death/arrival/hazard/gameover, event modal), Supplies/Map tables, Waypoint (blurb+bulletin, hazard outcome modal from the crossing log entry, Enter station placeholder), Death (epitaph -> localStorage proxima.beacons), Arrival (computeScore table + rating line). e2e flow.spec (TESTSEED keyboard-only to day 5). 2 e2e green; UI contract in src/sim/README.md"
+        },
+        {
+          "ts": "2026-10-25T02:10:20.508Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-019",
@@ -538,18 +601,39 @@
       "desc": "Independent of developer tests. Win-rate band assertion, no NaN/negatives, date monotonic.",
       "milestone": "M1",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "tester",
+      "issue": 19,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:50:31.423Z",
+      "updated": "2026-10-25T02:12:56.513Z",
       "notes": [
         {
           "ts": "2026-10-25T01:50:31.423Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:52:23.847Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:12:10.855Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:12:11.324Z",
+          "by": "tester",
+          "text": "Added 446 spec tests in tests/unit/spec (travel 104, repairs 27, health 60, events 62, hazards 57, store 43, scoring 45, world 39, invariants 10) + find-seed util; no src bugs found, 0 bug cards; 3 decisions logged (tester); unit suite ~8 s. Seeds in tests/e2e/seeds.ts (policy-run). Note: tests/unit/content/text.test.ts currently fails from another agent's uncommitted ui.json edit (not T-019)."
+        },
+        {
+          "ts": "2026-10-25T02:12:56.513Z",
+          "by": "tester",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-020",
@@ -557,12 +641,18 @@
       "desc": "scripts/find-seed.mjs to discover seeds; tests/e2e/seeds.ts; screenshots to test-results/screens.",
       "milestone": "M1",
       "role": "tester",
-      "status": "backlog",
+      "status": "todo",
       "assignee": null,
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T02:12:56.567Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:12:56.568Z",
+          "by": "pm",
+          "text": "backlog -> todo"
+        }
+      ]
     },
     {
       "id": "T-021",
@@ -882,12 +972,34 @@
       "desc": "See src/sim/text.ts and src/sim/README.md for the key list; add to events.json/ui.json; extend content test to cover them.",
       "milestone": "M1",
       "role": "writer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "writer",
+      "issue": 20,
       "created": "2026-10-25T01:50:31.140Z",
-      "updated": "2026-10-25T01:50:31.141Z",
-      "notes": []
+      "updated": "2026-10-25T01:55:05.299Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T01:52:41.160Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:54:45.733Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:54:46.167Z",
+          "by": "writer",
+          "text": "Added 38 events.json keys (scan x3, repair x3, help x2, weather x6 (4 each), recover x8, rejoin, delay, stuck, starving, suit_wear, rest; 2-4 variants) and ui arrival.reached/final, log.departure/launch (3 each). Test required-keys extended; 145 tests pass."
+        },
+        {
+          "ts": "2026-10-25T01:55:05.300Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-046",
@@ -900,6 +1012,53 @@
       "issue": null,
       "created": "2026-10-25T01:50:31.196Z",
       "updated": "2026-10-25T01:50:31.197Z",
+      "notes": []
+    },
+    {
+      "id": "T-047",
+      "title": "Writer: ui.json keys currently served from FALLBACK table in src/ui/copy.ts",
+      "desc": "title.seed/comingSoon, store.*, travel.* sub-menu text, supplies.*, map.*, waypoint.*, score.labels.*, arrival.returnTitle, death.beaconSaved, common.*. Extend content test to require them.",
+      "milestone": "M1",
+      "role": "writer",
+      "status": "done",
+      "assignee": "writer",
+      "issue": null,
+      "created": "2026-10-25T02:10:20.280Z",
+      "updated": "2026-10-25T02:12:11.281Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:10:44.195Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T02:11:54.228Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T02:11:54.745Z",
+          "by": "writer",
+          "text": "Added 72 ui.json keys (all FALLBACK keys, same strings/placeholders, none in conflict); text.test.ts now asserts each resolves with matching placeholders. 592 passed, 1 skipped."
+        },
+        {
+          "ts": "2026-10-25T02:12:11.281Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ]
+    },
+    {
+      "id": "T-048",
+      "title": "Dev cleanup: align storeWarnings ids (fewSuits/broke) with ui.json keys (lowSuits/noCredits); remove mapping in StoreScene",
+      "desc": "",
+      "milestone": "M2",
+      "role": "developer",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T02:10:20.343Z",
+      "updated": "2026-10-25T02:10:20.344Z",
       "notes": []
     }
   ]
