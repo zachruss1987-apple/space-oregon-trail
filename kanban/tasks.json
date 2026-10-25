@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T04:49:57.255Z",
+  "updated": "2026-10-25T05:02:49.807Z",
   "milestones": [
     {
       "id": "M0",
@@ -30,7 +30,7 @@
     {
       "id": "M5",
       "title": "Balance and release",
-      "status": "planned"
+      "status": "active"
     }
   ],
   "tasks": [
@@ -1081,7 +1081,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-032",
@@ -1981,7 +1981,41 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
+    },
+    {
+      "id": "T-060",
+      "title": "Sim: difficulty levels (Greenhorn/Spacer/Pathfinder) scaling event weights and prices; pure high-score module; autosave/save-slot helpers",
+      "desc": "",
+      "milestone": "M5",
+      "role": "developer",
+      "status": "done",
+      "assignee": "developer",
+      "issue": null,
+      "created": "2026-10-25T04:50:23.970Z",
+      "updated": "2026-10-25T05:02:49.806Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T04:50:58.460Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T05:02:21.698Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T05:02:22.136Z",
+          "by": "developer",
+          "text": "Difficulty table (src/content/difficulty.ts) applied via event chance, loss weights, buy prices, credits, condition death chance, score 'difficulty' line; state v4 (v3 -> spacer); runPolicy/balance --difficulty. New pure src/sim/highscores.ts (proxima.highscores) and src/sim/saves.ts (proxima.autosave, PROXIMA1 checksummed export). README UI contract updated. policy-50 snapshot unchanged; 1337 unit tests pass (+39), sim coverage 95.5% stmts. Balanced policy 100 seeds: greenhorn 62.4%, spacer 41.5%, pathfinder 20.0% win. Full typecheck currently fails only in other agent's in-progress scenes/ui files."
+        },
+        {
+          "ts": "2026-10-25T05:02:49.807Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }

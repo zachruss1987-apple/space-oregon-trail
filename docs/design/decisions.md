@@ -137,3 +137,9 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - `__PROXIMA__.loadState(json)` exists only with `?debug=1` or in dev builds, for tests that must start mid-trail.
 - Skip-with-penalty for crossings: incident `min(95, T+10)`; rock gap rule enforced by redraw (≤ 12 tries).
 - Playwright runs with 4 workers locally (2 in CI); more caused cold-boot timeouts on a 32-core machine.
+
+## 2026-10-25 (M5 sim features, developer, logged by PM)
+- Difficulty multipliers live in `src/content/difficulty.ts`; spacer is byte-identical to the pre-difficulty game. Not scaled: sell-back, tug/pilot fees, trade asks, crossing odds.
+- Difficulty score line: greenhorn ×0.75, pathfinder ×1.25, shown after the profession multiplier when non-zero.
+- Saves (v4) do not store the RNG position; a resumed run is re-seeded from seed + day, so it will not replay the original run exactly. Accepted for v1.0.
+- Balance by difficulty (balanced policy): greenhorn 62% win, spacer 42%, pathfinder 20%. Farmer remains the M5 tuning target.
