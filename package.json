@@ -1,6 +1,6 @@
 {
   "name": "space-oregon-trail",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "description": "The Proxima Trail: a space reimagining of The Oregon Trail, built by a team of AI agents.",
   "type": "module",

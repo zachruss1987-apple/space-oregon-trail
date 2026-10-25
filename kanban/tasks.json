@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T06:30:18.748Z",
+  "updated": "2026-10-25T07:14:52.746Z",
   "milestones": [
     {
       "id": "M0",
@@ -1544,16 +1544,36 @@
       "desc": "",
       "milestone": "M5",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "tester",
       "issue": 61,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T06:06:49.640Z",
+      "updated": "2026-10-25T07:14:52.705Z",
       "notes": [
         {
           "ts": "2026-10-25T06:06:49.640Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T06:30:47.073Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T07:13:51.136Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T07:13:51.593Z",
+          "by": "tester",
+          "text": "verified: unit 1577 pass/2 skip (63 files, ~13s with coverage; balance bands run in CI), e2e 67 pass (58 functional + 9 visual) in 3.5m, visual stable x2. Fixed journey arrival seeds (T-039: UI autopilot needs Half rations; SEED-9/20/8). Added keyboard-only full run, mid-hazard reload, v1-v3 fixtures. Follow-up T-068 Linux baselines."
+        },
+        {
+          "ts": "2026-10-25T07:14:52.705Z",
+          "by": "tester",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
@@ -1564,12 +1584,18 @@
       "desc": "",
       "milestone": "M5",
       "role": "program-manager",
-      "status": "backlog",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "pm",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T07:14:52.746Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T07:14:52.746Z",
+          "by": "pm",
+          "text": "backlog -> doing"
+        }
+      ]
     },
     {
       "id": "T-045",
@@ -2357,6 +2383,19 @@
       "issue": null,
       "created": "2026-10-25T06:26:38.222Z",
       "updated": "2026-10-25T06:26:38.222Z",
+      "notes": []
+    },
+    {
+      "id": "T-068",
+      "title": "CI: generate Linux visual baselines and enable visual suite in CI",
+      "desc": "",
+      "milestone": "M5",
+      "role": "tester",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T07:08:03.207Z",
+      "updated": "2026-10-25T07:08:03.208Z",
       "notes": []
     }
   ]

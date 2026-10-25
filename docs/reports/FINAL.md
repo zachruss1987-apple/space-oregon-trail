@@ -6,14 +6,14 @@ A complete, playable reimagining of The Oregon Trail in space, live at https://z
 ## Metrics (at tag v1.0.0)
 | Metric | Value |
 |--------|-------|
-| Unit tests | see `npm test` output recorded in M5 close-out: 1,570+ passing, ~15–20 s |
-| E2E tests | 60+ Playwright specs (functional) + 14 visual baselines, ~3 min at 4 workers |
-| Sim + content coverage | ≥ 95% statements |
+| Unit tests | 1,577 passing (63 files), 12.8 s with coverage |
+| E2E tests | 67 Playwright tests (58 functional + 9 visual over 14 baselines), ~3.8 min at 4 workers |
+| Sim + content coverage | 97.95% lines |
 | Bundle | ~443 KB gzip (124 app + 318 Phaser); loads in < 1 s locally |
 | Balance (balanced policy, 300 seeds × 5 windows, Spacer) | Executive 63%, Engineer 51%, Farmer 32%; mean 170 days; top death cause 30% |
 | Content | 28 event families, 13 death causes, 17 waypoints with bulletins, 84 talk lines, 22 trade personas, 45 beacons, 10 guide pages, ~600 UI strings |
 | Art / audio | 94 sprites, 2 bitmap fonts, CRT pipeline; 11 songs, 27 SFX |
-| Kanban | 66 cards, all mirrored to GitHub Issues |
+| Kanban | 68 cards, all non-backlog mirrored to GitHub Issues |
 | Commits | ~90 on `main`, every one green in CI |
 
 ## Roster
