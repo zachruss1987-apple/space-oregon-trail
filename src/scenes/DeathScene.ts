@@ -1,35 +1,13 @@
-/** Death endings: the last words from the log, a beacon epitaph saved to localStorage, return to title. */
+/** Death endings: the last words from the log, a beacon epitaph saved via makeBeacon/appendBeacon, return to title. */
 import { session } from '@/game/session';
+import { BEACONS, makeBeacon } from '@/sim';
+import { saveBeacon } from '@/ui/beaconStore';
 import { t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { NameInput } from '@/ui/NameInput';
 import { TextBox } from '@/ui/TextBox';
 import { COLORS, textStyle } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
-
-/** localStorage key for beacon epitaphs. */
-export const BEACONS_KEY = 'proxima.beacons';
-const EPITAPH_MAX = 40;
-
-/** One beacon left on the Lane. */
-export interface Beacon {
-  segment: number;
-  name: string;
-  text: string;
-  date: string;
-}
-
-function saveBeacon(b: Beacon): void {
-  try {
-    const raw = window.localStorage.getItem(BEACONS_KEY);
-    const all: unknown = raw ? JSON.parse(raw) : [];
-    const list = Array.isArray(all) ? (all as Beacon[]) : [];
-    list.push(b);
-    window.localStorage.setItem(BEACONS_KEY, JSON.stringify(list));
-  } catch {
-    // Storage blocked or full: the beacon is lost to the void, which is thematically fine.
-  }
-}
 
 export class DeathScene extends BaseScene {
   constructor() {
@@ -46,10 +24,10 @@ export class DeathScene extends BaseScene {
     new TextBox(this, 40, 70, 560, [...deaths, ending].join('\n\n'), { typewriter: true });
     this.add.text(40, 260, t('death.epitaphPrompt'), textStyle(COLORS.dim));
     const input = new NameInput(this, 40, 284, {
-      maxLength: EPITAPH_MAX,
+      maxLength: BEACONS.textMax,
       onCommit: (text) => {
         if (text.trim()) {
-          saveBeacon({ segment: s.segment, name: s.crew[0]?.name ?? '', text: text.trim(), date: s.date });
+          saveBeacon(makeBeacon(s, s.crew[0]?.name ?? '', text));
           this.add.text(40, 308, t('death.beaconSaved'), textStyle(COLORS.dim));
         }
         this.finish();

@@ -83,6 +83,34 @@ export const FALLBACK: Readonly<Record<string, string>> = {
   'score.rating': 'Rating: {rating}',
 };
 
+/**
+ * T-025 keys not yet in ui.json (writer follow-up: add them there, then delete this table). Kept apart from FALLBACK
+ * because tests/unit/content/text.test.ts requires every FALLBACK key to exist in ui.json.
+ */
+export const PENDING: Readonly<Record<string, string>> = {
+  'waypoint.cross': 'Approach the crossing',
+  'waypoint.beacons': 'Memorial beacons',
+  'hazard.densityLine': '{label}: {n} of {max} ({trend})  [{bar}]',
+  'hazard.fundsLine': '{label}: {n} cr',
+  'hazard.tugTerms': '{label} ({n} cr)',
+  'hazard.pilotTerms': '{label} ({n} days, {fee} cr)',
+  'hazard.pilotPending': '{label} (pilot due in {n} days)',
+  'hazard.rest': 'Rest here a while',
+  'hazard.other': 'Other actions (travel menu)',
+  'station.creditsLine': 'Credits: {n} cr',
+  'station.outfitters.title': 'OUTFITTERS',
+  'station.outfitters.buy': 'Buy',
+  'station.outfitters.sell': 'Sell',
+  'station.outfitters.back': 'Back to the station',
+  'station.outfitters.perBox': '(box of {n})',
+  'station.trade.line': '{give} for {get}',
+  'station.trade.terms': 'You give: {give}  You get: {get}',
+  'route.directLabel': 'direct',
+  'route.oortLabel': 'via Oort Beacon',
+  'map.skipped': 'skipped',
+  'map.branch': 'At Titan Refinery: {oortLabel} {oort} Mk / {directLabel} {direct} Mk',
+};
+
 /** Cosmetic rng for picking text variants; never the run rng, so UI copy cannot change outcomes. */
 function uiRng(): Rng {
   return session.uiRng;
@@ -90,7 +118,7 @@ function uiRng(): Rng {
 
 /** One line of UI copy by dotted key, with {placeholders} filled. */
 export function t(key: string, vars: Readonly<Record<string, string | number>> = {}): string {
-  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key]);
+  return resolveText(uiRng(), 'ui', key, vars, FALLBACK[key] ?? PENDING[key]);
 }
 
 /** A string list from ui.json (menus, advice). */
