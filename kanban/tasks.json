@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T07:14:52.746Z",
+  "updated": "2026-10-25T08:04:11.259Z",
   "milestones": [
     {
       "id": "M0",
@@ -30,7 +30,7 @@
     {
       "id": "M5",
       "title": "Balance and release",
-      "status": "active"
+      "status": "done"
     }
   ],
   "tasks": [
@@ -1584,16 +1584,26 @@
       "desc": "",
       "milestone": "M5",
       "role": "program-manager",
-      "status": "doing",
+      "status": "done",
       "assignee": "pm",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T07:14:52.746Z",
+      "updated": "2026-10-25T08:04:11.201Z",
       "notes": [
         {
           "ts": "2026-10-25T07:14:52.746Z",
           "by": "pm",
           "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T08:04:11.144Z",
+          "by": "pm",
+          "text": "doing -> done"
+        },
+        {
+          "ts": "2026-10-25T08:04:11.200Z",
+          "by": "pm",
+          "text": "v1.0.0 tagged and released; CI and Pages green."
         }
       ]
     },
