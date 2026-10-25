@@ -80,3 +80,7 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 - Refusals: "They don't buy that here.", "You don't have that many.", "No such offer." Continue with 0 drives is refused only while parked at a station.
 - Reference policy does not shop or trade on the road; at a station with 0 drives it buys one if affordable, else rests.
 - Playthrough after M2 (1,000 seeds): 43.3% win, mean 182 days; Executive 62%, Engineer 64%, Farmer 3%. Top deaths: radiation, starvation, cryo-fever. M5 target bands unchanged.
+
+## 2026-10-24 (tester, M2)
+- `trades.json` personas name the pitch lines `offer` (economy.md schema says `pitch`); `tradeLine` reads `offer` and falls back to `pitch`, so the code is fine. `trades.spec.test.ts` accepts either key; the doc schema should be updated to `offer` when the writer next touches it.
+- Trade offers are drawn after the rest of the arrival tick, so an event earlier that day (drive_failure, pirates) can lower a holding before the cap/holdings checks; spec tests of "never offers a get item at cap" therefore only count arrivals where the holdings were unchanged.
