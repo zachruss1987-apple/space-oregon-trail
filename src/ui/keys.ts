@@ -10,6 +10,12 @@ export interface KeyHandler {
   onKeyUp?(e: KeyboardEvent): void;
 }
 
+/** A key typed into a DOM text field (TextArea): leave Backspace, Space and arrows to the field. */
+const inTextField = (e: KeyboardEvent): boolean => {
+  const el = e.target as HTMLElement | null;
+  return !!el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT');
+};
+
 const NO_SCROLL = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Tab', 'Backspace', 'PageUp', 'PageDown']);
 
 export class KeyRouter {
@@ -18,7 +24,7 @@ export class KeyRouter {
   constructor(scene: Phaser.Scene) {
     const down = (e: KeyboardEvent): void => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      if (NO_SCROLL.has(e.key)) e.preventDefault();
+      if (NO_SCROLL.has(e.key) && !inTextField(e)) e.preventDefault();
       this.stack[this.stack.length - 1]?.onKey(e);
     };
     const up = (e: KeyboardEvent): void => this.stack[this.stack.length - 1]?.onKeyUp?.(e);

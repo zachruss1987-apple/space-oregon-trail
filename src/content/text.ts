@@ -3,6 +3,7 @@ import bulletinsJson from './text/bulletins.json';
 import deathsJson from './text/deaths.json';
 import epitaphsJson from './text/epitaphs.json';
 import eventsJson from './text/events.json';
+import guideJson from './text/guide.json';
 import highscoresJson from './text/highscores.json';
 import stationsJson from './text/stations.json';
 import tradesJson from './text/trades.json';
@@ -24,3 +25,10 @@ export const TRADE_TEXT = tradesJson as unknown as Readonly<Record<string, unkno
 export const EPITAPH_TEXT = epitaphsJson as unknown as Readonly<Record<string, unknown>>;
 /** Seeded high scores: `{ defaults: [{ name, profession, score, days, date }] }`. */
 export const HIGHSCORE_TEXT = highscoresJson as unknown as Readonly<Record<string, unknown>>;
+/** One guidebook page (M5 "Learn about the Trail"): a title and short lines ("  >" lines are tips). */
+export interface GuidePage {
+  title: string;
+  body: string[];
+}
+/** The in-fiction guidebook, paged in GuideScene. */
+export const GUIDE_PAGES = (guideJson as unknown as { pages: GuidePage[] }).pages;

@@ -16,7 +16,7 @@ import { CHAR_W, COLORS, fmt } from '@/ui/theme';
 /** Scene keys (the `data-scene` values). */
 export type SceneKey =
   | 'Title' | 'Setup' | 'Store' | 'Travel' | 'Supplies' | 'Map' | 'Waypoint' | 'Hazard' | 'Station' | 'Death' | 'Arrival'
-  | 'Salvage' | 'Threading' | 'Flare' | 'Options';
+  | 'Salvage' | 'Threading' | 'Flare' | 'Options' | 'TopTen' | 'Guide';
 
 /** Mk from the Kuiper Gate (branch + 1) to the Heliopause on a route, for the route prompt. */
 function gateToHeliopause(route: RouteId): number {

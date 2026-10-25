@@ -22,7 +22,7 @@ export function outfitterRows(s: GameState, wp: number): MenuItem[] {
   const none = t('station.outfitters.none');
   return ITEM_ORDER.map((id) => {
     const def = ITEMS[id];
-    const buy = localPrice(id, wp);
+    const buy = localPrice(id, wp, s.difficulty);
     const sell = sellPrice(id, wp);
     const held = s.supplies[id];
     const room = def.cap === null ? none : fmt(Math.max(0, def.cap - held));

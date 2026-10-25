@@ -5,8 +5,10 @@
  */
 import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
+import { DIFFICULTY_ORDER } from '@/content';
 import { applyCrt, applyPalette, applyVolumes, crtAvailable, crtShown } from '@/game/display';
 import { cycle, TEXT_SPEEDS, TRI_STATES, type Options } from '@/game/options';
+import { readAutosave } from '@/game/saveStore';
 import { session } from '@/game/session';
 import { toggle } from '@/ui/chrome';
 import { t } from '@/ui/copy';
@@ -14,13 +16,16 @@ import { Menu, type MenuItem } from '@/ui/Menu';
 import { addText, setText } from '@/ui/text';
 import { COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
+import { openExport, openImport } from './saveTransfer';
 
-type RowId = 'crt' | 'music' | 'sfx' | 'textSpeed' | 'touch' | 'minigames' | 'reducedMotion' | 'palette' | 'difficulty' | 'back';
-const ROWS: readonly RowId[] = ['crt', 'music', 'sfx', 'textSpeed', 'touch', 'minigames', 'reducedMotion', 'palette', 'difficulty', 'back'];
+type RowId = 'crt' | 'music' | 'sfx' | 'textSpeed' | 'touch' | 'minigames' | 'reducedMotion' | 'palette' | 'difficulty' | 'export' | 'import' | 'back';
+const ROWS: readonly RowId[] = ['crt', 'music', 'sfx', 'textSpeed', 'touch', 'minigames', 'reducedMotion', 'palette', 'difficulty', 'export', 'import', 'back'];
+/** Rows that are actions, not values (no dotted leader). */
+const ACTIONS = new Set<RowId>(['export', 'import', 'back']);
 const LABEL_W = 19;
 const MENU_X = 24;
-const MENU_Y = 64;
-const ROW_H = 26;
+const MENU_Y = 56;
+const ROW_H = 22;
 
 /** "6 ###..": the step and a 5-cell bar (one cell per two steps). */
 const bar = (n: number): string => `${String(n).padStart(2)} ${'#'.repeat(Math.round(n / 2))}${'.'.repeat(5 - Math.round(n / 2))}`;
@@ -72,7 +77,7 @@ export class OptionsScene extends BaseScene {
       case 'minigames': return v(o.autoResolveMiniGames ? 'autoResolve' : 'play');
       case 'reducedMotion': return v(o.reducedMotion);
       case 'palette': return v(o.palette === 'cb' ? 'on' : 'off');
-      case 'difficulty': return v('spacer');
+      case 'difficulty': return v(o.difficulty);
       default: return '';
     }
   }
@@ -80,7 +85,8 @@ export class OptionsScene extends BaseScene {
   private items(): MenuItem[] {
     return ROWS.map((id) => {
       const label = t(`options.${id}`);
-      return { label: id === 'back' ? label : `${`${label} `.padEnd(LABEL_W, '.')} ${this.value(id)}` };
+      if (id === 'export' && !readAutosave().ok) return { label, disabled: t('save.none') };
+      return { label: ACTIONS.has(id) ? label : `${`${label} `.padEnd(LABEL_W, '.')} ${this.value(id)}` };
     });
   }
 
@@ -138,7 +144,13 @@ export class OptionsScene extends BaseScene {
         applyPalette(this);
         this.scene.restart({ row: i });
         return;
-      case 'difficulty': return this.menu.say(t('options.hint.difficulty'));
+      case 'difficulty': this.set('difficulty', cycle(DIFFICULTY_ORDER, o.difficulty, dir)); break;
+      case 'export':
+        if (dir < 0) return;
+        return openExport(this, this.router, () => this.describe(i));
+      case 'import':
+        if (dir < 0) return;
+        return openImport(this, this.router, (ok) => (ok ? this.scene.start('Title', { imported: true }) : this.describe(i)));
       default: return this.go('Title');
     }
     this.menu.setItems(this.items());

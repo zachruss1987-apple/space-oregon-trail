@@ -66,7 +66,12 @@ export class StoreScene extends BaseScene {
   }
 
   private total(): number {
-    return ITEM_ORDER.reduce((sum, id) => sum + costOf(id, this.basket[id]), 0);
+    return ITEM_ORDER.reduce((sum, id) => sum + this.cost(id, this.basket[id]), 0);
+  }
+
+  /** Basket line cost at Independence on this run's difficulty (the same price `buy` charges). */
+  private cost(id: SupplyKey, packs: number): number {
+    return costOf(id, packs, 0, this.base.difficulty);
   }
 
   private rows(): MenuItem[] {
@@ -74,7 +79,7 @@ export class StoreScene extends BaseScene {
       const def = ITEMS[id];
       const name = def.packSize > 1 ? `${def.name} (${t('store.perBox', { n: def.packSize })})` : def.name;
       const qty = this.basket[id];
-      return { label: [col(name, NAME_W), col(`${money(priceAt(id))} cr`, 8, true), col(String(qty), 6, true), col(`${money(costOf(id, qty))} cr`, 11, true)].join(' ') };
+      return { label: [col(name, NAME_W), col(`${money(priceAt(id, 0, this.base.difficulty))} cr`, 8, true), col(String(qty), 6, true), col(`${money(this.cost(id, qty))} cr`, 11, true)].join(' ') };
     });
     return [...items, { label: t('store.leave') }];
   }
@@ -121,7 +126,7 @@ export class StoreScene extends BaseScene {
       min: 0,
       max,
       value: before,
-      onChange: (v) => this.totals.setText(t('store.total', { total: money(this.total() - costOf(id, before) + costOf(id, v)), left: money(this.preview({ ...others, [id]: v }).credits) })),
+      onChange: (v) => this.totals.setText(t('store.total', { total: money(this.total() - this.cost(id, before) + this.cost(id, v)), left: money(this.preview({ ...others, [id]: v }).credits) })),
       onCommit: done,
       onCancel: () => done(before),
     });

@@ -1,5 +1,5 @@
 /** New run setup: profession → five crew names → launch window. Esc steps back. */
-import { CREW_SIZE, NAME_MAX_LENGTH, PROFESSION_ORDER, PROFESSIONS, WINDOW_ORDER, WINDOWS } from '@/content';
+import { CREW_SIZE, DIFFICULTIES, NAME_MAX_LENGTH, PROFESSION_ORDER, PROFESSIONS, WINDOW_ORDER, WINDOWS } from '@/content';
 import { session } from '@/game/session';
 import { createGame, randomCrewNames } from '@/sim';
 import { list, t } from '@/ui/copy';
@@ -59,6 +59,7 @@ export class SetupScene extends BaseScene {
       onBack: () => this.go('Title'),
     });
     describe(menu.cursor);
+    addText(this, LEFT, 352, t('setup.difficulty', { name: DIFFICULTIES[session.options.difficulty].name }), { color: COLORS.dim });
     this.hint();
     this.router.set(menu);
   }
@@ -121,7 +122,7 @@ export class SetupScene extends BaseScene {
 
   private startRun(): void {
     const { profession, names, window } = session.draft;
-    session.state = createGame({ profession, crewNames: names, window, seed: session.seedLabel }, session.rng);
+    session.state = createGame({ profession, crewNames: names, window, seed: session.seedLabel, difficulty: session.options.difficulty }, session.rng);
     this.go('Store');
   }
 

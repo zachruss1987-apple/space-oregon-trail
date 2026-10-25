@@ -2,6 +2,7 @@
  * Player options (ui.md "Options screen"), persisted as JSON in `localStorage['proxima.options']`. Pure: parsing,
  * defaults and the derived values; no Phaser, no DOM beyond the optional storage passed in.
  */
+import { DEFAULT_DIFFICULTY, DIFFICULTY_ORDER, type DifficultyId } from '@/content';
 
 export type TextSpeed = 'slow' | 'normal' | 'fast' | 'instant';
 export type TriState = 'auto' | 'on' | 'off';
@@ -21,12 +22,14 @@ export interface Options {
   /** Auto follows `prefers-reduced-motion`. */
   reducedMotion: TriState;
   palette: PaletteId;
+  /** Difficulty for new runs (a run keeps its own `state.difficulty`). */
+  difficulty: DifficultyId;
 }
 
 export const OPTIONS_KEY = 'proxima.options';
 
 export const DEFAULT_OPTIONS: Readonly<Options> = {
-  crt: null, music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard',
+  crt: null, music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard', difficulty: DEFAULT_DIFFICULTY,
 };
 
 /** ms per character for each text speed (Instant = no typewriter). */
@@ -57,6 +60,7 @@ export function parseOptions(raw: string | null | undefined): Options {
     autoResolveMiniGames: typeof o['autoResolveMiniGames'] === 'boolean' ? o['autoResolveMiniGames'] : d.autoResolveMiniGames,
     reducedMotion: pick(o['reducedMotion'], TRI_STATES, d.reducedMotion),
     palette: pick(o['palette'], ['standard', 'cb'] as const, d.palette),
+    difficulty: pick(o['difficulty'], DIFFICULTY_ORDER, d.difficulty),
   };
 }
 

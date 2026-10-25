@@ -50,3 +50,13 @@ describe('derived options', () => {
     expect(cycle(TEXT_SPEEDS, 'slow', -1)).toBe('instant');
   });
 });
+
+describe('difficulty option (T-040)', () => {
+  it('defaults to spacer, reads a valid level, rejects junk, round-trips', () => {
+    expect(DEFAULT_OPTIONS.difficulty).toBe('spacer');
+    expect(parseOptions('{"difficulty":"pathfinder"}').difficulty).toBe('pathfinder');
+    expect(parseOptions('{"difficulty":"nightmare"}').difficulty).toBe('spacer');
+    const o = { ...DEFAULT_OPTIONS, difficulty: 'greenhorn' as const };
+    expect(parseOptions(serializeOptions(o))).toEqual(o);
+  });
+});

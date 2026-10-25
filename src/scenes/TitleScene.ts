@@ -1,10 +1,15 @@
-/** Title screen (art.md "Title hero"): hero band, x4 logo, tagline, x2 menu with the cursor ship, seed line, title theme. */
+/**
+ * Title screen (art.md "Title hero"): hero band, x4 logo, tagline, x2 menu with the cursor ship, seed line, title theme.
+ * With a valid autosave the menu starts with "Continue journey" and its `describeSave` line shows under the menu.
+ */
 import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
+import { readAutosave, resumeScene } from '@/game/saveStore';
 import { session } from '@/game/session';
 import { drawTitleHero, type TitleHero } from '@/gfx/travelArt';
 import { mt } from '@/minigames/copy';
+import { describeSave } from '@/sim';
 import { list, t } from '@/ui/copy';
 import { Menu } from '@/ui/Menu';
 import { addText, setText } from '@/ui/text';
@@ -12,6 +17,10 @@ import { CHAR_W, COLORS } from '@/ui/theme';
 import { BaseScene } from './BaseScene';
 
 const centerX = (s: string, scale: number): number => Math.floor((GAME_WIDTH - s.length * CHAR_W * scale) / 2);
+
+/** Title menu actions, in `title.menu` order after the optional Continue. */
+type TitleAction = 'continue' | 'travel' | 'guide' | 'topTen' | 'options';
+const BASE_ACTIONS: readonly TitleAction[] = ['travel', 'guide', 'topTen', 'options'];
 
 export class TitleScene extends BaseScene {
   private hero: TitleHero | null = null;
@@ -25,7 +34,7 @@ export class TitleScene extends BaseScene {
     return 'title';
   }
 
-  create(): void {
+  create(data?: { imported?: boolean }): void {
     this.begin();
     session.reset();
     this.hero = drawTitleHero(this, 0, 20, session.settings.reducedMotion);
@@ -34,18 +43,30 @@ export class TitleScene extends BaseScene {
     addText(this, centerX(name, 4), 168, name, { color: COLORS.warn, scale: 4 });
     const tagline = t('title.tagline');
     addText(this, centerX(tagline, 1), 210, tagline, { color: COLORS.text });
-    const labels = list('title.menu');
+    const saved = readAutosave();
+    const actions: TitleAction[] = saved.ok ? ['continue', ...BASE_ACTIONS] : [...BASE_ACTIONS];
+    const labels = saved.ok ? [t('title.continue'), ...list('title.menu')] : list('title.menu');
     const widest = Math.max(...labels.map((l) => l.length)) + 5;
+    const lineHeight = saved.ok ? 18 : 22;
     const menu = new Menu(this, labels.map((label) => ({ label })), {
       x: centerX(' '.repeat(widest), 2),
-      y: 232,
+      y: saved.ok ? 228 : 232,
       numbered: true,
-      lineHeight: 22,
+      lineHeight,
       scale: 2,
-      onSelect: (i) => this.choose(i),
+      onSelect: (i) => this.choose(actions[i]),
     });
     // Hidden key M toggles mini-game auto-resolve (also a row in Options).
     const note = addText(this, 0, 326, '', { color: COLORS.warn });
+    if (saved.ok) {
+      const line = describeSave(saved.slot);
+      addText(this, centerX(line, 1), 228 + labels.length * lineHeight + 2, line, { color: COLORS.dim });
+      note.setY(340);
+    }
+    if (data?.imported) {
+      const msg = t('save.imported');
+      setText(note, msg).setX(centerX(msg, 1));
+    }
     this.router.push({
       onKey: (e) => {
         if (e.key !== 'm' && e.key !== 'M') return menu.onKey(e);
@@ -71,10 +92,25 @@ export class TitleScene extends BaseScene {
     this.mute?.setVisible(audio().state === 'locked');
   }
 
-  private choose(i: number): void {
-    if (i === 0) this.go('Setup');
-    else if (i === 1) this.modal(`${t('guide.title')}\n\n${t('guide.body')}`);
-    else if (i === 3) this.go('Options');
-    else this.modal(t('title.comingSoon'));
+  private choose(action: TitleAction | undefined): void {
+    switch (action) {
+      case 'continue': return this.resume();
+      case 'travel': return this.go('Setup');
+      case 'guide': return this.go('Guide');
+      case 'topTen': return this.go('TopTen');
+      case 'options': return this.go('Options');
+    }
+  }
+
+  /** Continue journey: re-read the autosave (it may have changed in another tab), restore the run, open its scene. */
+  private resume(): void {
+    const saved = readAutosave();
+    if (!saved.ok) {
+      this.scene.restart();
+      return;
+    }
+    session.resume(saved.slot, saved.state);
+    if (window.__PROXIMA__) window.__PROXIMA__.seed = session.seedLabel;
+    this.go(resumeScene(saved.state));
   }
 }

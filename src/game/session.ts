@@ -3,10 +3,11 @@
  * through the sim, and write the new state back. No rules live here.
  */
 import { DEFAULT_CREW_NAMES, type ProfessionId, type WindowId } from '@/content';
-import { createRng, seedFromString, type GameState, type LogEntry, type Rng } from '@/sim';
+import { createRng, resumeSeed, seedFromString, type GameState, type LogEntry, type Rng, type SaveSlot } from '@/sim';
 import {
   DEFAULT_OPTIONS, OPTIONS_KEY, parseOptions, reducedMotionOn, serializeOptions, TEXT_SPEED_MS, touchUiOn, type Options,
 } from './options';
+import { syncAutosave } from './saveStore';
 
 /** Player-adjustable UI settings (derived from the persisted Options plus fixed timings). */
 export interface Settings {
@@ -71,8 +72,15 @@ class Session {
   rng: Rng = createRng(0);
   /** Cosmetic rng for text variants and bulletins. */
   uiRng: Rng = createRng(1);
-  /** Current run, or null on the title screen. */
-  state: GameState | null = null;
+  private current: GameState | null = null;
+  /** Current run, or null on the title screen. Setting it keeps `localStorage['proxima.autosave']` in step (saveStore). */
+  get state(): GameState | null {
+    return this.current;
+  }
+  set state(s: GameState | null) {
+    this.current = s;
+    syncAutosave(s, this.seedLabel, Date.now());
+  }
   /** Setup choices. */
   draft: SetupDraft = { profession: 'executive', names: [...DEFAULT_CREW_NAMES], window: 1 };
   /** Waypoint index whose scene was already shown (so returning to Travel does not re-open it). */
@@ -130,12 +138,24 @@ class Session {
     this.reset();
   }
 
+  /**
+   * Continue a saved journey: the slot's seed label, a main Rng re-seeded with `resumeSeed` (the Rng position is not
+   * saved), the waypoint already shown (no repeat Waypoint scene). The caller opens `resumeScene(state)`.
+   */
+  resume(slot: SaveSlot, state: GameState): void {
+    this.reset();
+    if (slot.seed) this.seedLabel = slot.seed;
+    this.rng = createRng(resumeSeed(slot));
+    this.state = state;
+    this.shownWaypoint = state.arrivedAt;
+  }
+
   /** Fresh rngs from the seed and no state (same seed + same inputs = same run). */
   reset(): void {
     const seed = parseSeed(this.seedLabel);
     this.rng = createRng(seed);
     this.uiRng = createRng((seed ^ 0x9e3779b9) >>> 0);
-    this.state = null;
+    this.current = null;
     this.shownWaypoint = null;
     this.departOnTravel = false;
     this.pendingDay = null;

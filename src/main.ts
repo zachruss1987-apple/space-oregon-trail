@@ -44,7 +44,9 @@ game.events.once(Phaser.Core.Events.READY, () => {
   game.canvas.setAttribute('tabindex', '0');
   game.canvas.focus();
 });
-document.addEventListener('pointerdown', () => {
+document.addEventListener('pointerdown', (e) => {
+  // A save-string TextArea keeps focus so the player can select and paste.
+  if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
   window.focus();
   game.canvas?.focus();
 });
