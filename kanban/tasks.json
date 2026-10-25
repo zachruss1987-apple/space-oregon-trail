@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T01:28:33.808Z",
+  "updated": "2026-10-25T01:35:01.929Z",
   "milestones": [
     {
       "id": "M0",
@@ -236,16 +236,21 @@
       "desc": "src/sim/types.ts, game.ts (createGame with profession, crew, window, supplies), serialize.ts round-trip. Unit tests.",
       "milestone": "M1",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "doing",
+      "assignee": "developer",
       "issue": 10,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.399Z",
+      "updated": "2026-10-25T01:30:01.626Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.400Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:30:01.626Z",
+          "by": "developer",
+          "text": "todo -> doing"
         }
       ],
       "issueClosed": false
@@ -341,16 +346,36 @@
       "desc": ">= 25 events x 2 variants, 8 conditions x 3 death lines, bulletins per landmark, title/store/status copy. Content tests for length and uniqueness.",
       "milestone": "M1",
       "role": "writer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "writer",
       "issue": 15,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T01:28:05.666Z",
+      "updated": "2026-10-25T01:35:01.929Z",
       "notes": [
         {
           "ts": "2026-10-25T01:28:05.667Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T01:30:10.840Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T01:34:01.138Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T01:34:01.563Z",
+          "by": "writer",
+          "text": "events.json 24 quiet_day + 33 keys (~110 strings), deaths 13 keys x3, bulletins 17 x3 lines, ui.json full; 20 unit tests pass"
+        },
+        {
+          "ts": "2026-10-25T01:35:01.929Z",
+          "by": "writer",
+          "text": "review -> done"
         }
       ],
       "issueClosed": false
