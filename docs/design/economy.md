@@ -127,4 +127,4 @@ Rules: `keeper` ≤ 24 chars; `greeting` ≥ 2; `talk` ≥ 10; every line ≤ 14
   }
 }
 ```
-Rules: `name` ≤ 32 chars, lowercase article form ("a ...") for mid-sentence use; `pitch` ≥ 2 and each contains both `{give}` and `{get}`; `accept` ≥ 1; `decline` ≥ 1; ≤ 140 chars. Item nouns the sim formats: ion drive(s), ration(s), EVA suit(s), drone charge(s), hull plate(s), coolant pump(s), nav gyro(s), cr.
+Rules: `name` ≤ 32 chars, lowercase article form ("a ...") for mid-sentence use; `offer` ≥ 2 and each contains both `{give}` and `{get}`; `accept` ≥ 1; `decline` ≥ 1; ≤ 140 chars. Item nouns the sim formats: ion drive(s), ration(s), EVA suit(s), drone charge(s), hull plate(s), coolant pump(s), nav gyro(s), cr.

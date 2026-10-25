@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T02:56:34.536Z",
+  "updated": "2026-10-25T03:14:18.155Z",
   "milestones": [
     {
       "id": "M0",
@@ -766,7 +766,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-024",
@@ -814,18 +814,39 @@
       "desc": "Menus per M2.md; beacons persisted in localStorage.",
       "milestone": "M2",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "developer",
+      "issue": 30,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:56:34.368Z",
+      "updated": "2026-10-25T03:14:18.155Z",
       "notes": [
         {
           "ts": "2026-10-25T02:56:34.368Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:57:24.978Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:11:31.281Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:11:31.730Z",
+          "by": "developer",
+          "text": "HazardScene + StationScene (Outfitters/Trade/Talk/Rest/Continue+route prompt), Waypoint beacons + routing, Death makeBeacon, route-aware Map; new copy keys in copy.ts PENDING (writer to add to ui.json). test:all green: 910 unit, 8 e2e (hazard updated, station added)."
+        },
+        {
+          "ts": "2026-10-25T03:14:18.155Z",
+          "by": "developer",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-026",
@@ -833,18 +854,39 @@
       "desc": "",
       "milestone": "M2",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "done",
+      "assignee": "tester",
+      "issue": 31,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-25T02:56:34.432Z",
+      "updated": "2026-10-25T03:06:09.597Z",
       "notes": [
         {
           "ts": "2026-10-25T02:56:34.433Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T02:57:56.303Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:05:56.037Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:05:56.560Z",
+          "by": "tester",
+          "text": "Added 6 spec files in tests/unit/spec: economy 109, trades 21, crossing 67, route 14, beacons 27, migration 6 = 244 tests. No sim bugs found; 2 decisions logged (trades.json uses 'offer' key; offers drawn after earlier arrival-tick events). Suite 910 pass, ~10-19s."
+        },
+        {
+          "ts": "2026-10-25T03:06:09.598Z",
+          "by": "tester",
+          "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-027",
@@ -1298,7 +1340,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-051",
@@ -1319,11 +1361,59 @@
       "desc": "",
       "milestone": "M2",
       "role": "writer",
+      "status": "done",
+      "assignee": "writer",
+      "issue": 32,
+      "created": "2026-10-25T02:56:34.535Z",
+      "updated": "2026-10-25T03:01:27.577Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T02:58:10.524Z",
+          "by": "writer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:01:07.235Z",
+          "by": "writer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:01:07.669Z",
+          "by": "writer",
+          "text": "stations.json: keeper + 3 greetings x7; ui.json: station.log.bought/sold, log.thrustSet/rationsSet/repairStart, hazard.option.rest; +5 tests; hard-coded English call sites listed in report. Unrelated failures: uncommitted dev FALLBACK keys in src/ui/copy.ts lack ui.json entries; spec/trades."
+        },
+        {
+          "ts": "2026-10-25T03:01:27.577Z",
+          "by": "writer",
+          "text": "review -> done"
+        }
+      ],
+      "issueClosed": false
+    },
+    {
+      "id": "T-053",
+      "title": "Dev: move hard-coded English log lines to text keys (market.ts bought/sold, actions.ts thrust/rations/repair, WaypointScene rest label)",
+      "desc": "Keys exist: station.log.bought/sold ({item},{cr}), log.thrustSet/rationsSet ({name}), log.repairStart ({part}), hazard.option.rest. Refusal strings may stay.",
+      "milestone": "M2",
+      "role": "developer",
       "status": "todo",
       "assignee": null,
       "issue": null,
-      "created": "2026-10-25T02:56:34.535Z",
-      "updated": "2026-10-25T02:56:34.536Z",
+      "created": "2026-10-25T03:01:27.631Z",
+      "updated": "2026-10-25T03:01:27.631Z",
+      "notes": []
+    },
+    {
+      "id": "T-054",
+      "title": "Writer: ui.json entries for FALLBACK keys added by the M2 scenes developer",
+      "desc": "",
+      "milestone": "M2",
+      "role": "writer",
+      "status": "backlog",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-25T03:01:27.684Z",
+      "updated": "2026-10-25T03:01:27.685Z",
       "notes": []
     }
   ]
