@@ -6,7 +6,7 @@ import ui from '../../../src/content/text/ui.json';
 import stations from '../../../src/content/text/stations.json';
 import trades from '../../../src/content/text/trades.json';
 import epitaphs from '../../../src/content/text/epitaphs.json';
-import { FALLBACK } from '../../../src/ui/copy';
+import { FALLBACK, PENDING } from '../../../src/ui/copy';
 
 const ALLOWED = new Set([
   '{name}', '{n}', '{item}',
@@ -207,7 +207,7 @@ describe('ui.json', () => {
     const rest = structuredClone(u) as Obj;
     delete rest.status;
     delete rest.guide;
-    for (const k of Object.keys(FALLBACK)) {
+    for (const k of [...Object.keys(FALLBACK), ...Object.keys(PENDING)]) {
       const parts = k.split('.');
       const parent = parts.slice(0, -1).reduce<Obj | undefined>((a, p) => a?.[p] as Obj | undefined, rest);
       if (parent) delete parent[parts[parts.length - 1] as string];
@@ -228,6 +228,18 @@ describe('ui.json vs FALLBACK', () => {
       expect(typeof v, k).toBe('string');
       const ph = (s: string) => (s.match(/{[^}]*}/g) ?? []).sort();
       expect(ph(v as string), k).toEqual(ph(fallback));
+    }
+  });
+});
+
+describe('ui.json vs PENDING (T-054)', () => {
+  it('resolves every PENDING key as a string with the same placeholders', () => {
+    const ph = (x: string) => (x.match(/{[^}]*}/g) ?? []).sort();
+    for (const [k, pending] of Object.entries(PENDING)) {
+      const v = k.split('.').reduce<unknown>((a, p) => (a as Obj | undefined)?.[p], ui);
+      expect(typeof v, k).toBe('string');
+      expect(ph(v as string), k).toEqual(ph(pending));
+      expect((v as string).length, k).toBeLessThanOrEqual(90);
     }
   });
 });

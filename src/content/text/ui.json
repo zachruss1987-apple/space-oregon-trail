@@ -275,13 +275,17 @@
     },
     "passed": "passed",
     "next": "next: {n} Mk",
-    "here": "here"
+    "here": "here",
+    "skipped": "skipped",
+    "branch": "At Titan Refinery: {oortLabel} {oort} Mk / {directLabel} {direct} Mk"
   },
   "waypoint": {
     "continue": "Continue on the Lane",
     "enter": "Enter station",
     "storeLater": "The station store opens in a later milestone. Mattie sends her regards.",
-    "bulletin": "Bulletin board:"
+    "bulletin": "Bulletin board:",
+    "cross": "Make the crossing",
+    "beacons": "Read the beacons"
   },
   "score": {
     "title": "SCORE",
@@ -385,7 +389,14 @@
       "notHere": "Not in this weather.",
       "chooseFirst": "Choose how to cross first.",
       "pilotSent": "You already sent for a pilot."
-    }
+    },
+    "densityLine": "{label}: {n} of {max} ({trend})  [{bar}]",
+    "fundsLine": "{label}: {n} cr, and counting",
+    "tugTerms": "{label} ({n} cr)",
+    "pilotTerms": "{label} ({n} days, {fee} cr)",
+    "pilotPending": "{label} (pilot due in {n} days)",
+    "rest": "Sit tight a while",
+    "other": "Other actions (travel menu)"
   },
   "route": {
     "prompt": "Titan Refinery is a fork. Which way past the Kuiper Gate?",
@@ -405,7 +416,9 @@
     },
     "confirm": "Lock in this route?",
     "behind": "The branch is behind you.",
-    "notYet": "You have not reached the fork yet."
+    "notYet": "You have not reached the fork yet.",
+    "directLabel": "direct",
+    "oortLabel": "via Oort Beacon"
   },
   "station": {
     "title": "STATION",
@@ -424,7 +437,12 @@
       "noSell": "They don't buy that here.",
       "sellHeader": "They buy back at these prices:",
       "buyPrompt": "Buy how many? (max {n})",
-      "sellPrompt": "Sell how many? (max {n})"
+      "sellPrompt": "Sell how many? (max {n})",
+      "title": "OUTFITTERS",
+      "buy": "Buy",
+      "sell": "Sell",
+      "back": "Back to the station",
+      "perBox": "(box of {n})"
     },
     "trade": {
       "title": "TRADERS",
@@ -437,7 +455,9 @@
       "already": "That deal is done.",
       "nobody": "Nobody here wants to trade.",
       "gone": "You don't have that anymore.",
-      "back": "Leave the traders"
+      "back": "Leave the traders",
+      "line": "{give} for {get}",
+      "terms": "You give: {give}  You get: {get}"
     },
     "talk": {
       "empty": "The station is quiet. Nobody has anything to say."
@@ -460,6 +480,7 @@
         "Sold {item} for {cr} cr.",
         "Handed over {item} and took {cr} cr. A poor rate, as promised."
       ]
-    }
+    },
+    "creditsLine": "Credits: {n} cr"
   }
 }
