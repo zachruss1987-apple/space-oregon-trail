@@ -1,4 +1,161 @@
 {
-  "$schema": "Each key is an event id from docs/design/events.md (plus quiet_day). Value: array of text variants. Placeholders: {name} crew member, {n} number, {item} supply name.",
-  "quiet_day": ["Nothing happened today. The crew found this suspicious."]
+  "$schema": "Each key is an event id from docs/design/events.md (plus quiet_day, illness.<condition-id>, and derelict_* outcome variants). Value: array of text variants. Placeholders: {name} crew member, {n} number, {item} supply name.",
+  "quiet_day": [
+    "Nothing happened today. The crew found this suspicious.",
+    "The stars held still. So did everything else.",
+    "A quiet day. Somebody wrote it down in case it never happens again.",
+    "The drives hummed. Nobody complained, which was a first.",
+    "The crew played cards for rations they already owned.",
+    "Dull day aboard. The ship's cat, if there is one, was not consulted.",
+    "The coffee was bad in the usual way. Morale held.",
+    "Hours of empty space went by, as scheduled.",
+    "Someone counted the rations twice. The number did not improve.",
+    "The hull ticked and creaked, then thought better of it.",
+    "A buoy blinked in the distance and was not heard from again.",
+    "The crew debated whether it was Tuesday. It was not settled.",
+    "The ship's clock lost four minutes. It was returned.",
+    "The view was stars. They were the same stars as yesterday, mostly.",
+    "Somebody hummed a hymn through the whole afternoon shift.",
+    "The recycler gurgled once, with feeling, and went quiet.",
+    "The crew mended socks. In space this counts as a hobby.",
+    "Not a single alarm sounded. The captain checked the alarms.",
+    "The Lane stayed where it was. A small mercy.",
+    "A dull glow on the horizon turned out to be a dull glow.",
+    "Everyone agreed the day was fine. Nobody trusted it.",
+    "The ship drifted through nothing at a respectable pace.",
+    "A long, level watch. The log entry is one word: fine.",
+    "The captain read the manual again. It was no more helpful."
+  ],
+  "illness": [
+    "{name} is not feeling well. The medical locker has opinions.",
+    "{name} took to a bunk with a look nobody liked.",
+    "{name} has come down with something. The manual calls it a condition."
+  ],
+  "illness.space-dysentery": [
+    "{name} has caught space dysentery. The recycler is being blamed.",
+    "{name} has space dysentery. The bunks nearest the head have been reassigned.",
+    "{name} has space dysentery. Nobody is sure how, and nobody asked."
+  ],
+  "illness.hull-mold-fever": [
+    "{name} has hull mold fever. The walls look smug about it.",
+    "{name} has hull mold fever. The mold has been asked to leave.",
+    "{name} has come down with hull mold fever and a green cough."
+  ],
+  "illness.cryo-fever": [
+    "{name} has cryo-fever. They are cold, then colder, then confusing.",
+    "{name} has caught cryo-fever. Blankets have been requisitioned.",
+    "{name} has cryo-fever. The thermostat is innocent, officially."
+  ],
+  "illness.scurvy": [
+    "{name} has scurvy. Yes, still.",
+    "{name} has scurvy. It is 2184 and the gums have not heard.",
+    "{name} has scurvy. The crew suggests fruit, of which there is none."
+  ],
+  "illness.radiation-sickness": [
+    "{name} has radiation sickness. The suit was, regrettably, in the locker.",
+    "{name} has radiation sickness and a mild glow. This is not a joke.",
+    "{name} has radiation sickness. The manual said this would not happen."
+  ],
+  "illness.exhaustion": [
+    "{name} is exhausted. The drives have been running longer than anyone.",
+    "{name} has fallen asleep on watch, upright. The crew is worn thin.",
+    "The crew is exhausted, {name} most of all. The ship, strangely, is not."
+  ],
+  "illness.decompression-injury": [
+    "{name} has a decompression injury. It is mostly the bruise that talks.",
+    "{name} came through the crossing with a decompression injury and a story.",
+    "{name} has a decompression injury. They will tell it at every station."
+  ],
+  "illness.micrometeorite-puncture": [
+    "{name} was punctured by a micrometeorite. The suit would have helped, had it been worn.",
+    "A micrometeorite pierced {name}. It was very small and very sure of itself.",
+    "{name} has a micrometeorite puncture. The pebble has not been found."
+  ],
+  "pirates": [
+    "Pirates boarded while you slept. They took {n} {item} and left a note complimenting the coffee.",
+    "Pirates took {n} {item} and apologized for the inconvenience. The apology was on a form.",
+    "Raiders came aboard politely and left with {n} {item}. They signed the manifest.",
+    "Pirates relieved you of {n} {item}. They said it was nothing personal."
+  ],
+  "lost_lane": [
+    "You lost the Lane. It took {n} days to find a buoy that would admit to being one.",
+    "The buoys went quiet and the ship went sideways. You lost {n} days finding the Lane.",
+    "You drifted off the Lane. The cost was {n} days and some dignity."
+  ],
+  "drive_failure": [
+    "An ion drive has died. It made a small sound and then no more sound.",
+    "An ion drive has failed for good. The crew stood about with hats off, metaphorically.",
+    "One of your drives has given up. It had a long run and a bad attitude."
+  ],
+  "drive_stall": [
+    "An ion drive has stalled. It needs {n} days of rest and a stern word.",
+    "A drive went offline for {n} days. Coaxing was attempted and ignored.",
+    "A drive sulked and shut itself down for {n} days. Nobody asked it why."
+  ],
+  "hull_puncture": [
+    "A hull plate has cracked. The crew applied tape, which is not in the manual.",
+    "The hull took a hit and a plate gave out. It is, strictly, a leak.",
+    "A hull plate has broken. You can hear the cold from the corridor."
+  ],
+  "pump_failure": [
+    "The coolant pump has failed. The ship will not move until it is mended.",
+    "The coolant pump coughed twice and stopped. The drives are waiting, politely.",
+    "The pump is broken. Everything else is fine, which is no help."
+  ],
+  "gyro_failure": [
+    "The nav gyro has failed. North is now a matter of opinion.",
+    "The nav gyro is broken. It has been pointing at nothing for an hour.",
+    "The gyro gave out. The crew navigates by feel, and feel is not good."
+  ],
+  "hull_fire": [
+    "A fire in the galley burned {n} rations. {name} was scorched putting it out.",
+    "Fire broke out aft. It cost {n} rations, and {name} came out singed.",
+    "A small fire became a large one. {n} rations burned, and {name} is sore."
+  ],
+  "crew_eva_drift": [
+    "{name} went out on a spacewalk and drifted off. They should be back in {n} days.",
+    "{name} is adrift on a tether that is no longer tethered. Expect {n} days.",
+    "{name} stepped outside for air, of which there is none. Back in {n} days."
+  ],
+  "bad_recycler": [
+    "The water recycler has gone bad. The crew drank before anyone noticed.",
+    "The recycler is running brown. Everyone is a little worse for it.",
+    "Bad water. The recycler is sorry, and so is everyone who drank it."
+  ],
+  "derelict": [
+    "You came upon a derelict. It was empty, and it was clearly there first.",
+    "A dark hull drifted past. The crew searched it and found only dust and a calendar.",
+    "A wreck hung off the starboard side. It was already picked clean, by the look."
+  ],
+  "derelict_nothing": [
+    "You searched a derelict and found nothing but a calendar from 2149.",
+    "The derelict had been picked clean. Someone had left a polite note saying so."
+  ],
+  "derelict_rations": [
+    "You found a derelict with {n} rations still in the locker. Nobody asked who the previous owner was.",
+    "The wreck held {n} rations, mostly sealed. You took them without a speech."
+  ],
+  "derelict_part": [
+    "A derelict gave up a spare: one {item}, in good order. The ship was grateful.",
+    "You salvaged a spare {item} from a drifting hulk. It was warm and strangely welcome."
+  ],
+  "derelict_suits": [
+    "A derelict held {n} EVA suits, used but sealed. The crew is better dressed.",
+    "You found {n} suits in a wreck. They smell of someone else, which is acceptable."
+  ],
+  "algae_bloom": [
+    "An algae bloom in the tank yielded {n} rations. It tastes like pond, but it is food.",
+    "The hydroponics bay bloomed overnight. You gained {n} rations and a green smell.",
+    "A wild algae bloom turned up in the tanks. {n} rations were harvested, thankfully."
+  ],
+  "belter_help": [
+    "A passing Belter pointed to a cache and left. You gained {n} rations and thanked the dark.",
+    "Belters shared {n} rations and no conversation. It was a good trade.",
+    "A Belter tossed over {n} rations and a grunt. The grunt was friendly."
+  ],
+  "cargo_shift": [
+    "The cargo shifted coming out of the crossing. {n} {item} went missing in the hold.",
+    "Loose lashing. You lost {n} {item} to the crossing and a bad knot.",
+    "The crossing shook the hold, and {n} {item} did not survive the shaking."
+  ]
 }

@@ -20,3 +20,12 @@
 | Salvage scan | Spending a day and 5 drone charges to pick through wreckage for rations or parts. |
 | Ion fog | Weather that slows the ship and makes it easy to lose the Lane. |
 | Lost the Lane | Drifting off the buoy line; costs days. |
+| Mattie Ostrander | Proprietor of Mattie's Outfitters; gives advice in the store, which is worth heeding. |
+| Lane Authority bulletin | A buoy-posted notice at a waypoint; the game's "talk to people" pool (`bulletins.json`). |
+| Shoals | Drifting gravel tides at the Lagrange Shoals, where Earth and Luna pull equally. |
+| Spire | Ceres Approach Spire; a surveyor's needle used as a landmark. |
+| Pathfinder / Spacer / Groundling | Arrival ratings, best to worst (score >= 6,000 / >= 3,000 / below). |
+| Recycler | The ship's water recycler; blamed first for any illness (`bad_recycler`). |
+| EVA drift | A crew member lost outside the ship on a spacewalk (`crew_eva_drift`, death cause `drift`). |
+| Hull mold fever | The Lane's version of cholera; walls are suspected. |
+| Derelict | An abandoned wreck that may hold rations, a spare, or suits. |

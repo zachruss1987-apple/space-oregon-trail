@@ -1,4 +1,68 @@
 {
-  "$schema": "Each key is a death cause id (condition id or starvation, exhaustion, hazard, drift, hull_fire). Value: array of variants using {name}.",
-  "starvation": ["{name} has died of starvation."]
+  "$schema": "Each key is a death cause id (condition id or starvation, hazard, drift, hull_fire, adrift). Value: array of variants using {name}; adrift has no {name}.",
+  "space-dysentery": [
+    "{name} has died of space dysentery. Nobody is sure how.",
+    "{name} has died of space dysentery. The recycler has been asked to explain itself.",
+    "{name} has died of space dysentery. It was a long week and a short goodbye."
+  ],
+  "hull-mold-fever": [
+    "{name} has died of hull mold fever. The mold declined to comment.",
+    "{name} has died of hull mold fever. The walls are, somehow, thriving.",
+    "{name} has died of hull mold fever. The ship has been scrubbed in their honor."
+  ],
+  "cryo-fever": [
+    "{name} has died of cryo-fever. The blankets were not enough.",
+    "{name} has died of cryo-fever. It was quiet and cold, as expected.",
+    "{name} has died of cryo-fever. The thermostat was set to its highest."
+  ],
+  "scurvy": [
+    "{name} has died of scurvy. Yes, still.",
+    "{name} has died of scurvy. A single orange would have embarrassed the disease.",
+    "{name} has died of scurvy, in the twenty-second century, aboard a ship with a pantry."
+  ],
+  "radiation-sickness": [
+    "{name} has died of radiation sickness. The manual said this would not happen.",
+    "{name} has died of radiation sickness. The suit is still in the locker.",
+    "{name} has died of radiation sickness. The storm was brief. The aftermath was not."
+  ],
+  "exhaustion": [
+    "{name} has died of exhaustion. The drives did not even blink.",
+    "{name} has died of exhaustion. They asked for one more hour of sleep.",
+    "{name} has died of exhaustion. The log says the pace was reasonable."
+  ],
+  "decompression-injury": [
+    "{name} has died of a decompression injury. The crossing took its toll.",
+    "{name} has died of a decompression injury. It looked like a bruise at first.",
+    "{name} has died of a decompression injury. The suit seals were checked afterward."
+  ],
+  "micrometeorite-puncture": [
+    "{name} has died of a micrometeorite puncture. It was a very small thing.",
+    "{name} has died of a micrometeorite puncture. The pebble kept going.",
+    "{name} has died of a micrometeorite puncture. Space is mostly empty, but not there."
+  ],
+  "starvation": [
+    "{name} has died of starvation. The rations ran out before the Lane did.",
+    "{name} has died of starvation. The ledger shows a very clear zero.",
+    "{name} has died of hunger. The paste was long gone."
+  ],
+  "hazard": [
+    "{name} was lost in the crossing. The ship made it. They did not.",
+    "{name} has been lost in the hazard. The buoy bulletin called it an incident.",
+    "{name} did not come through the crossing. The crew held a moment of quiet."
+  ],
+  "drift": [
+    "{name} drifted off and did not come back.",
+    "{name} floated out of sight and out of range. The tether was found, loose.",
+    "{name} stepped out for a look and kept going. No one saw where."
+  ],
+  "hull_fire": [
+    "{name} was lost in the galley fire. The extinguishers were not enough.",
+    "{name} has died in the fire aft. The hull held, which is something.",
+    "{name} did not come out of the burning compartment. The crew did what it could."
+  ],
+  "adrift": [
+    "The drives are gone and the Lane is far. The ship drifts on, and so does the crew.",
+    "No drives, no hope of tow. The ship coasts toward a long and quiet end.",
+    "The last drive is dead. The ship will be found, in time, by someone."
+  ]
 }

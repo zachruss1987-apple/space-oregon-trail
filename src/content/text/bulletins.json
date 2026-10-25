@@ -1,4 +1,139 @@
 {
   "$schema": "Each key is a waypoint id from src/content/waypoints.ts (kebab-case of the name). Value: { blurb: string, lines: string[] }.",
-  "independence-station": { "blurb": "Independence Station. Everyone here is either leaving or selling something to people who are leaving.", "lines": ["Lane Authority bulletin: the Lane is open."] }
+  "independence-station": {
+    "blurb": "Independence Station. Everyone here is either leaving or selling something to people who are leaving.",
+    "lines": [
+      "Lane Authority bulletin: the Lane is open. Please do not test this.",
+      "Overheard at the dock: 'Five months, they say. They said four last year.'",
+      "Lane Authority bulletin: outbound ships must carry a working drive. This is a recommendation."
+    ]
+  },
+  "lunar-debris-ring": {
+    "blurb": "The Lunar Debris Ring. A slow belt of old hulls and older bolts that circles Earth's neighbor like a rumor.",
+    "lines": [
+      "Lane Authority bulletin: debris density is low. 'Low' is a relative term.",
+      "Overheard: 'The ring has been here longer than the Lane. It is not impressed by the Lane.'",
+      "Lane Authority bulletin: do not salvage the debris. The debris is not salvage."
+    ]
+  },
+  "lagrange-shoals": {
+    "blurb": "The Lagrange Shoals. Tides of drifting gravel pile up where Earth and Luna pull equally and agree on nothing.",
+    "lines": [
+      "Lane Authority bulletin: shoal gravel is moving. Please move around it.",
+      "Overheard: 'My uncle hit a shoal in '79. He still wears the dent.'",
+      "Lane Authority bulletin: ships stuck on the shoals are asked to wave."
+    ]
+  },
+  "mars-relay": {
+    "blurb": "Mars Relay. A red-lit station with a post office, a chandler, and a long line for both.",
+    "lines": [
+      "Lane Authority bulletin: relay staff are on break. The break is ongoing.",
+      "Overheard: 'Everything on Mars is red. Even the coffee. Especially the coffee.'",
+      "Lane Authority bulletin: mail for New Willamette will be forwarded when possible."
+    ]
+  },
+  "ceres-approach-spire": {
+    "blurb": "Ceres Approach Spire. A long metal needle, left by the first surveyors, visible for a hundred megaklicks.",
+    "lines": [
+      "Lane Authority bulletin: the Spire marks the route. Do not ask what it marks.",
+      "Overheard: 'First to see the Spire gets the good bunk. This has never been tested.'",
+      "Lane Authority bulletin: the Spire is not a mooring post. We have asked."
+    ]
+  },
+  "ceres-depot": {
+    "blurb": "Ceres Depot. A busy dwarf-planet stop with fuel, parts, and a notice board of people who owe each other money.",
+    "lines": [
+      "Lane Authority bulletin: depot prices are posted. Haggling is a hobby here.",
+      "Overheard: 'Ceres has the best rations on the Lane. This is a low bar.'",
+      "Lane Authority bulletin: the depot is out of coffee. Please be patient."
+    ]
+  },
+  "jupiters-eye": {
+    "blurb": "Jupiter's Eye. The Great Red Spot, seen from a safe and respectful distance, like a storm in a very large cup.",
+    "lines": [
+      "Lane Authority bulletin: the Eye has been watching since 1665. Please do not stare back.",
+      "Overheard: 'It is bigger than Earth. The ship feels very small today.'",
+      "Lane Authority bulletin: flyby photographs are free. The memories are not."
+    ]
+  },
+  "the-belt-crossing": {
+    "blurb": "The Belt Crossing. A broad lane of tumbling rock where ships hire Belters or hold their breath.",
+    "lines": [
+      "Lane Authority bulletin: Belter pilots are available for a fee. They will not discuss the fee.",
+      "Overheard: 'A Belter looked at my ship and said nothing. That is the worst review.'",
+      "Lane Authority bulletin: the Belt is mostly empty. The rest is the problem."
+    ]
+  },
+  "europa-outpost": {
+    "blurb": "Europa Outpost. A cold station above the ice, warm inside, and proud of its one real window.",
+    "lines": [
+      "Lane Authority bulletin: do not drill the ice. The ice is occupied.",
+      "Overheard: 'There is an ocean under us. They say it is friendly. They have not asked it.'",
+      "Lane Authority bulletin: the outpost window is open to visitors from noon to one."
+    ]
+  },
+  "saturn-ring-plane": {
+    "blurb": "The Saturn Ring Plane. A bright disk of ice and dust that must be crossed at a careful angle.",
+    "lines": [
+      "Lane Authority bulletin: cross the ring plane at right angles. The ring has opinions.",
+      "Overheard: 'It is beautiful until something the size of a house goes by.'",
+      "Lane Authority bulletin: ring ice is not for drinking. Several crews learned this."
+    ]
+  },
+  "titan-refinery": {
+    "blurb": "Titan Refinery. An orange-skied station that makes fuel from air and sells everything else at a markup.",
+    "lines": [
+      "Lane Authority bulletin: the refinery smells of orange and regret. This is normal.",
+      "Overheard: 'You pay by the liter. The liter is not what it used to be.'",
+      "Lane Authority bulletin: the Gate is ahead. Please check your drives."
+    ]
+  },
+  "kuiper-gate": {
+    "blurb": "The Kuiper Gate. A ring of cold metal where the Lane steps across the dark in a single, unceremonious jump.",
+    "lines": [
+      "Lane Authority bulletin: the Gate is working. Please remain seated.",
+      "Overheard: 'You will feel nothing. Several people have said this afterward.'",
+      "Lane Authority bulletin: gate transit is one-way. Please have your luggage."
+    ]
+  },
+  "oort-beacon": {
+    "blurb": "Oort Beacon. A lonely station at the edge of Proxima's outer shell, with one light and a very long guest book.",
+    "lines": [
+      "Lane Authority bulletin: the beacon is lit. The beacon has always been lit.",
+      "Overheard: 'Quiet out here. Quiet enough to hear your own thinking. Not recommended.'",
+      "Lane Authority bulletin: guest book entries are reviewed by no one."
+    ]
+  },
+  "proxima-heliopause-shock": {
+    "blurb": "The Proxima Heliopause Shock. A rough edge where Proxima's wind meets the dark, and ships meet a bad idea.",
+    "lines": [
+      "Lane Authority bulletin: shock front is active. Please expect shaking.",
+      "Overheard: 'The shock is a wall of wind. Hold on to something that is bolted down.'",
+      "Lane Authority bulletin: a ship that passes through the shock is a ship that has passed."
+    ]
+  },
+  "lane-terminus-station": {
+    "blurb": "Lane Terminus Station. The last stop before the colony, with the last store and the first look at the red sun.",
+    "lines": [
+      "Lane Authority bulletin: the colony is close. Please do not arrive in a hurry.",
+      "Overheard: 'You can see New Willamette from the east window. It is the small blue one.'",
+      "Lane Authority bulletin: terminus rations are at colony prices. We are sorry."
+    ]
+  },
+  "the-flare-belt": {
+    "blurb": "The Flare Belt. A last wall of Proxima's temper, crossed in a single run with a suit on and a prayer ready.",
+    "lines": [
+      "Lane Authority bulletin: flare activity is high. Suits are not optional.",
+      "Overheard: 'It is the last stretch. It is also the loudest.'",
+      "Lane Authority bulletin: ships that cross the Belt are counted. Ships that do not are also counted."
+    ]
+  },
+  "new-willamette": {
+    "blurb": "New Willamette. A green-blue world under a red sun, with a small town, a large sky, and no store.",
+    "lines": [
+      "Colony bulletin: welcome. Please wipe your boots. We have mud.",
+      "Overheard: 'The sky is the wrong color. You get used to it.'",
+      "Colony bulletin: new arrivals will be assigned land. The land is also new."
+    ]
+  }
 }

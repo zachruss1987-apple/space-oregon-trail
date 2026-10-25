@@ -1,6 +1,117 @@
 {
-  "$schema": "UI copy. Keys are stable identifiers used by scenes; see docs/design/ui.md for canonical menu labels.",
+  "$schema": "UI copy. Keys are stable identifiers used by scenes; see docs/design/ui.md for canonical menu labels. Placeholders: {name} crew member, {n} number, {item} supply name.",
   "title": { "name": "THE PROXIMA TRAIL", "tagline": "You have died of space dysentery.", "menu": ["Travel the Trail", "Learn about the Trail", "See the Top Ten", "Options"] },
   "travel": { "menu": ["Continue on the Lane", "Check supplies", "Look at the map", "Change thrust", "Change rations", "Rest", "Attempt repair", "Scan for salvage"] },
-  "mattie": { "advice": ["Two suits per crew. Space is mostly empty, but the parts that aren't are sharp."] }
+  "setup": {
+    "professionPrompt": "Many kinds of people travel the Lane. What will you be?",
+    "professions": {
+      "Corporate Executive": "A comfortable salary and no useful skills. Money solves most problems, if you have enough.",
+      "Ship Engineer": "Modest funds and steady hands. Repairs hold, spare parts last, and the drives rarely quit.",
+      "Hydroponics Farmer": "Little cash, a green thumb, and rations that go further. Algae likes you."
+    },
+    "namePrompt": "What are the names of your crew? You are the captain.",
+    "nameHint": "Type a name, up to 12 letters. Leave blank for the default.",
+    "randomNames": "Random names",
+    "windowPrompt": "When do you want to leave Independence Station?",
+    "windows": [
+      "1 March. Stormy start near Earth, but you beat the flare season.",
+      "1 April. Unsettled skies at first. Plenty of margin before the flares.",
+      "1 May. Fair skies. Flare season is a coin flip on arrival.",
+      "1 June. Fair skies early. You will likely meet the flares at the end.",
+      "1 July. Calm start. Flare season will be waiting for you."
+    ]
+  },
+  "mattie": {
+    "advice": [
+      "Two suits per crew. Space is mostly empty, but the parts that aren't are sharp.",
+      "Three drives, four if you like sleeping. One drive is a wish.",
+      "Rations: 450 per crew member, if you like eating every day.",
+      "Boxes of drone charges are cheap. Five boxes will see you through a scare.",
+      "Buy a spare plate, a spare pump, and a spare gyro. Two of each if you can.",
+      "Nobody ever came back and said they brought too many rations.",
+      "A hull plate is ten credits. A new hull is the rest of your life.",
+      "Coolant pumps break on the worst day. The worst day is any day.",
+      "A nav gyro keeps you on the Lane. Without one, you are only on a route.",
+      "Credits do not eat. Spend them before they spoil, which is never. Spend them anyway.",
+      "The Executive can buy it all. The Farmer should buy sense.",
+      "The Engineer fixes things. I would still buy spares, if it were me.",
+      "I sell what you need. What you want, I sell cheaper at the station farther out.",
+      "Skimp on suits and the storms will skimp on you."
+    ],
+    "greeting": "Welcome to Mattie's Outfitters. I'm Mattie Ostrander. What can I fit you with for the Lane?",
+    "greetingAgain": "Back again. Fine. What else do you need before you go?",
+    "items": {
+      "drives": "Ion drives are forty credits each. Three or four, and you won't regret it.",
+      "rations": "Rations are thirty cents a day. Buy more than you think, then a little more.",
+      "suits": "EVA suits are ten credits. Two per crew member is the sensible number.",
+      "charges": "Drone charges come in boxes of twenty. A scan uses five. Five boxes is a start.",
+      "plates": "Hull plates are ten credits. I recommend at least one spare.",
+      "pumps": "Coolant pumps are ten credits. If one fails, nothing moves.",
+      "gyros": "Nav gyros are ten credits. A lost ship is a long story."
+    },
+    "warnings": {
+      "noDrives": "You will not get far. Buy at least one drive.",
+      "lowRations": "That is not a lot of rations. The Lane is long.",
+      "lowSuits": "You have fewer suits than crew. I would not leave like that.",
+      "noCredits": "You've spent every credit you own. Brave, in a way."
+    },
+    "confirm": "That comes to {n} cr. Shall we call it a deal?",
+    "confirmPrompt": "Leave the store and launch?",
+    "thanks": "Pleasure. Mind the hazards, and write if you can.",
+    "cantAfford": "You haven't the credits for that. I don't run a charity, though I have been tempted."
+  },
+  "status": {
+    "thrust": { "Cruise": "Cruise", "Hard burn": "Hard burn", "Overburn": "Overburn" },
+    "rations": { "Full": "Full", "Half": "Half", "Paste": "Paste" },
+    "weather": { "Calm": "Calm", "Fair": "Fair", "Unsettled": "Unsettled", "Solar storm": "Solar storm", "Ion fog": "Ion fog", "Flare": "Flare" },
+    "health": { "Good": "Good", "Fair": "Fair", "Poor": "Poor", "Very poor": "Very poor" },
+    "labels": { "date": "Date", "weather": "Weather", "health": "Health", "thrust": "Thrust", "rations": "Rations", "credits": "Credits", "next": "Next", "traveled": "Traveled" }
+  },
+  "crossing": {
+    "clear": [
+      "You made it across without incident. The ship, for once, is not even dented.",
+      "The crossing was clean. You are slightly disappointed to have nothing to report."
+    ],
+    "scraped": [
+      "You scraped through, and the ship needs a day to catch its breath.",
+      "Close call. The hull sang the whole way through, and you will lose a day."
+    ],
+    "cargo": [
+      "The crossing shook loose {n} {item}. They were last seen floating behind you.",
+      "You lost {n} {item} in the crossing. The rest of the cargo has opinions."
+    ],
+    "damage": [
+      "The crossing damaged your ship. Your {item} is broken.",
+      "Something big went by too close. The {item} did not take it well."
+    ],
+    "injury": [
+      "{name} was hurt in the crossing. The suit held, but {name} did not entirely.",
+      "{name} took a bad knock coming through. It will take some time to mend."
+    ],
+    "lost": [
+      "{name} was lost in the crossing. Nobody saw it happen.",
+      "The crossing took {name}. The crew made it through. They are not celebrating."
+    ]
+  },
+  "arrival": {
+    "title": "New Willamette",
+    "intro": "You have reached New Willamette. The sky is the wrong color and the ground is the right kind.",
+    "ratings": {
+      "Pathfinder": { "title": "Pathfinder", "line": "You crossed the Lane with skill and luck in equal parts. The colony will name a street after you." },
+      "Spacer": { "title": "Spacer", "line": "You made it, and you did it competently. The Lane Authority has stamped your papers." },
+      "Groundling": { "title": "Groundling", "line": "You made it, which is more than the odds suggested. The colony has a place for you." }
+    },
+    "continue": "See your score"
+  },
+  "death": {
+    "title": "Your journey ends here.",
+    "allDead": "The last of the crew is gone. The Lane keeps going, without you.",
+    "adrift": "Your ship is adrift with no drives. The Lane Authority will log it as a recovery.",
+    "epitaphPrompt": "Write a message for the beacon.",
+    "continue": "Return to title"
+  },
+  "guide": {
+    "title": "Learn about the Trail",
+    "body": "The Lane runs from Independence Station to New Willamette, two thousand megaklicks of buoys, rock, and weather. Pack carefully. Fly sensibly. Keep your suits close."
+  }
 }
