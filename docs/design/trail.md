@@ -42,7 +42,7 @@ Weather phases by segment (`travel.md`): early 1–5, mid 6–13, late 14–16 (
 | The Belt Crossing | 4 | 35% | 80 | 4 |
 | Saturn Ring Plane | 3 | 25% | 60 | 3 |
 | Proxima Heliopause Shock | 4 | 35% (45% on the direct route) | 90 | n/a |
-| The Flare Belt | 5 | 45% (ride) | 120 (M2 only; M3 removes it) | n/a |
+| The Flare Belt | 5 | 45% (ride) | 120 ("Pay the tug" in M3) | n/a |
 
 ## M1 crossing roll (single, no choices; in M2 only the Flare Belt's "Thread it")
 Resolved on the arrival tick; costs no extra day except as below. Sets the "just crossed" flag for `cargo_shift`.

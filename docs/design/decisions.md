@@ -84,3 +84,20 @@ Append-only. One line per decision: what was decided, then why. Newest at the bo
 ## 2026-10-24 (tester, M2)
 - `trades.json` personas name the pitch lines `offer` (economy.md schema says `pitch`); `tradeLine` reads `offer` and falls back to `pitch`, so the code is fine. `trades.spec.test.ts` accepts either key; the doc schema should be updated to `offer` when the writer next touches it.
 - Trade offers are drawn after the rest of the arrival tick, so an event earlier that day (drive_failure, pirates) can lower a holding before the cap/holdings checks; spec tests of "never offers a get item at cap" therefore only count arrivals where the holdings were unchanged.
+
+## 2026-10-24 (T-027, M3 mini-games spec)
+- Every mini-game hands the sim a counts-only result (`SalvageResult`, `ThreadingResult`, `FlareResult`) through an intent; the sim picks victims and rolls with the main Rng, so results stay small, validatable and scriptable, and runs without a result (policy, auto-resolve) are exactly M1/M2.
+- Mini-game RNG `seedFromString(seed + ':' + kind + ':' + day)` never touches the main Rng; a fixed 60 Hz step makes play frame-rate independent. Needs `state.seed` (STATE_VERSION 3) so loaded saves replay the same fields.
+- Salvage: 40 s, 1 charge per shot, max 20 charges per run, 100-unit tow (rations 1, parts 10), parts kept first in the clamp; diminishing returns shared with `scan` via `scansThisSegment`. Average target ~40 rations (~1.5× the 27-ration auto scan per day, ~1× per charge): skill pays in days, not in a broken economy. Needs only 1 charge (auto still 5).
+- Hot chunks hurt one random crew −5 each (max 3); a wrecked drone halves the haul instead of costing anything else, since drones are abstract.
+- Threading: rock count `R = round(T/3)` with an assumed 3% average hit rate makes expected severity rolls equal the statistical `T/100`. Hits 1–2 can never kill (cap 95); the 3rd–4th rolls are uncapped; max 4 rolls. Deaths therefore come from repeated hits (skill), not one unlucky roll. Ship state enters only via `T`.
+- Clean threading bonus: player picks +2 health all or +10 rations (worth ~7 rations per average crossing).
+- Flare Belt: two options, "Ride the solar wind" (intent method stays `thread` so `policyCross` is unchanged) and "Pay the tug" (kept, overriding trail.md/hazards.md's "M3 removes it"). Without a cheap way out, Farmers would have no choice at all at the finale; the tug is the Barlow Road.
+- Flare hits use their own crew/supply table (scorch, burn, damage, radiation) instead of severity bands; only a crash (5 hits) kills. Arc counts tuned so an average player's crash rate (~1.9% / 12%) sits near the statistical death rate (4.5% / 12%).
+- "Rode the wind" +200 only from a clean mini-game (a skill line, like the original's hunting); auto-resolve never earns it (open question for accessibility parity).
+- Skip = auto-resolve with a penalty (+10 incident, or −10 on the salvage d100); the Options auto-resolve has no penalty.
+
+## 2026-10-24 (M3 design, PM rulings)
+- "Pay the tug" remains available at the Flare Belt in M3 (consistent with the M2 build); riding the solar wind is the mini-game alternative.
+- Auto-resolve players cannot earn the "Rode the wind" +200 bonus; it rewards the real-time run only.
+- Average-player hit rates (3%/5%/7%) are provisional until M5 playtests.

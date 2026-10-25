@@ -36,7 +36,7 @@ Rounding is half up. Severity bands and their effects are the `trail.md` table (
 |--------|-----------|-------------------------------------|
 | Thread it | all 5 hazards + Flare Belt | ≥ 1 working drive and pump not broken: `"Your ship cannot move."` |
 | Shields up and push | all 5 hazards (not Flare Belt in M2) | same as Thread |
-| Hire a tug | all 5 hazards + Flare Belt (M2 only; M3 removes it there) | credits ≥ price: `"You cannot afford a tug."` |
+| Hire a tug | all 5 hazards + Flare Belt (M3: the Flare Belt lists it as "Pay the tug", `minigames.md`) | credits ≥ price: `"You cannot afford a tug."` |
 | Wait for a Belter pilot | **The Belt Crossing (4 days), Saturn Ring Plane (3 days)** only | credits ≥ 10: `"You cannot afford a pilot."`; elsewhere `"No Belters work this stretch."` |
 
 The tug and the pilot tow or fly any ship, broken or not. If every offered option is blocked, the player can still Rest or Repair (passing help, `travel.md`), so a pending crossing never soft-locks.

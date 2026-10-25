@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T03:26:17.090Z",
+  "updated": "2026-10-25T03:32:47.770Z",
   "milestones": [
     {
       "id": "M0",
@@ -894,12 +894,33 @@
       "desc": "Salvage Run, Debris Threading, Flare Belt: rules, controls, result objects, auto-resolve.",
       "milestone": "M3",
       "role": "designer",
-      "status": "backlog",
-      "assignee": null,
+      "status": "done",
+      "assignee": "designer",
       "issue": null,
       "created": "2026-10-24T21:00:00.000Z",
-      "updated": "2026-10-24T21:00:00.000Z",
-      "notes": []
+      "updated": "2026-10-25T03:32:47.770Z",
+      "notes": [
+        {
+          "ts": "2026-10-25T03:27:40.585Z",
+          "by": "designer",
+          "text": "backlog -> doing"
+        },
+        {
+          "ts": "2026-10-25T03:32:21.246Z",
+          "by": "designer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-25T03:32:21.583Z",
+          "by": "designer",
+          "text": "minigames.md written (217 lines): Salvage Run 40s/1 charge per shot/max 20/100-unit tow (rations 1, parts 10), Threading 25s R=round(T/3) rocks, hits 1-2 capped at severity 95, 3rd-4th uncapped, Flare 45s 5 hits=crash, clean +200 Rode the wind. Result schemas, intents, RNG derivation, debug hooks, reference policy. Also updated scoring.md, ui.md, glossary.md, decisions.md, travel/hazards/trail one-liners (tug kept at Flare Belt). Dev needs state.seed + rodeTheWind (STATE_VERSION 3)."
+        },
+        {
+          "ts": "2026-10-25T03:32:47.770Z",
+          "by": "designer",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-028",
@@ -1348,18 +1369,24 @@
       "desc": "",
       "milestone": "M2",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
-      "issue": null,
+      "status": "doing",
+      "assignee": "tester",
+      "issue": 34,
       "created": "2026-10-25T02:56:34.493Z",
-      "updated": "2026-10-25T03:26:17.090Z",
+      "updated": "2026-10-25T03:27:08.703Z",
       "notes": [
         {
           "ts": "2026-10-25T03:26:17.090Z",
           "by": "pm",
           "text": "backlog -> todo"
+        },
+        {
+          "ts": "2026-10-25T03:27:08.703Z",
+          "by": "tester",
+          "text": "todo -> doing"
         }
-      ]
+      ],
+      "issueClosed": false
     },
     {
       "id": "T-052",
@@ -1429,7 +1456,7 @@
           "text": "review -> done"
         }
       ],
-      "issueClosed": false
+      "issueClosed": true
     },
     {
       "id": "T-054",
@@ -1439,7 +1466,7 @@
       "role": "writer",
       "status": "done",
       "assignee": "writer",
-      "issue": null,
+      "issue": 35,
       "created": "2026-10-25T03:01:27.684Z",
       "updated": "2026-10-25T03:15:52.598Z",
       "notes": [
@@ -1463,7 +1490,8 @@
           "by": "writer",
           "text": "review -> done"
         }
-      ]
+      ],
+      "issueClosed": true
     }
   ]
 }

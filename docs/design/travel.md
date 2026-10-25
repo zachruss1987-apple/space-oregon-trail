@@ -96,7 +96,7 @@ Available when drone charges ≥ 5 and the ship is not at New Willamette. Takes 
 | 71–95 | 40–80 rations |
 | 96–00 | 1 random spare part (plate/pump/gyro); if that type is at its cap of 3, 40–80 rations instead |
 
-Diminishing returns: the 3rd and later scans in the same segment halve ration yields (floor). Expected yield ≈ 27 rations per scan (first two per segment). M3 replaces this with the Salvage Run mini-game.
+Diminishing returns: the 3rd and later scans in the same segment halve ration yields (floor). Expected yield ≈ 27 rations per scan (first two per segment). M3: the Salvage Run mini-game (`minigames.md`) replaces this in play; this roll stays as its auto-resolve and the reference policy's scan.
 
 ## Worked example (typical budgets and day counts)
 Numbers from a rough design-side simulation of these rules (500 runs per cell, all windows); the developer's playthrough test is the authority once it exists.

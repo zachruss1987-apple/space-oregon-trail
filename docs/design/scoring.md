@@ -14,7 +14,7 @@ Computed on arrival at New Willamette (only with ≥ 1 living crew; death ending
 | Credits | 1 per 5 cr |
 | **(Subtotal + bonuses) × profession multiplier** | ×1 Executive, ×2 Engineer, ×3 Farmer |
 
-Bonus (ours), added before the multiplier: arrival date before 15 September 2184 (flare season) +200; zero crew deaths all trip (drift losses count as deaths) +300.
+Bonus (ours), added before the multiplier: arrival date before 15 September 2184 (flare season) +200; zero crew deaths all trip (drift losses count as deaths) +300; **Rode the wind** +200 (a clean Flare Belt mini-game, `state.rodeTheWind`; auto-resolve and the tug never earn it, `minigames.md`). Zero-value bonus lines stay hidden on the score screen.
 
 ## Worked example
 Engineer, 4 survivors (Good, Good, Fair, Poor) = 1,700; ship 50; 3 drives 12; 2 spares 4; 7 suits 14; 80 charges 1; 120 rations 4; 0 cr 0 → subtotal 1,785. Arrived 2 Sept: +200. (1,785 + 200) × 2 = **3,970, Spacer**. A careful Executive lands ~2,300–3,000 (Groundling/Spacer); Pathfinder needs a multiplier and a healthy crew.

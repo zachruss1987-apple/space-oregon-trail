@@ -27,7 +27,7 @@ Side screens from Title: Learn about the Trail (M5 guidebook), Top Ten (M5), Opt
 ```
 "Continue" advances one day at a time with a short animation; holding Enter (or a "Travel until something happens" toggle) auto-advances until an event, waypoint, or state change, like the original's wagon rolling.
 
-Menu labels above are canonical (M1.md's "Set thrust/rations" and "Look at map" mean these items). All eight items are in M1; "Scan for salvage" is the auto-resolve in `travel.md` until M3. Disabled items stay visible, dimmed, and explain why when chosen ("No drone charges." / "Nothing is broken.").
+Menu labels above are canonical (M1.md's "Set thrust/rations" and "Look at map" mean these items). All eight items are in M1; "Scan for salvage" is the auto-resolve in `travel.md` until M3; from M3 it launches the Salvage Run (`minigames.md`) unless `autoResolveMiniGames` is on. Disabled items stay visible, dimmed, and explain why when chosen ("No drone charges." / "Nothing is broken.").
 
 | Item | Opens | Result |
 |------|-------|--------|
@@ -35,7 +35,7 @@ Menu labels above are canonical (M1.md's "Set thrust/rations" and "Look at map" 
 | Change rations | Menu: Full / Half / Paste with "N days left at this setting" | Sets rations; no day passes |
 | Rest | NumberInput 1–9 | Runs that many ticks; log shows each day |
 | Attempt repair | Menu of broken parts + spare count | One tick; log shows success/failure |
-| Scan for salvage | Confirm "Spend 5 charges and a day?" | One tick; log shows yield |
+| Scan for salvage | M3: confirm "Launch the drone? It takes the day." → `Salvage` scene (needs ≥ 1 charge). Auto-resolve on: confirm "Spend 5 charges and a day?" (needs 5) | One tick; log shows the haul |
 
 ## Check supplies
 Full-screen `Table`, Esc/Enter returns. No day passes. Integers with thousands separators.
@@ -68,6 +68,16 @@ Progress bar: 34 cells, `#` per 1/34 of distance traveled, `>` at the ship. List
 
 ## Hazard outcome
 On arriving at a hazard (M1): a `Modal` with the hazard description, then one line for the roll result (`trail.md`) naming the loss in numbers, then "Continue". M2: HazardScene with the readout and four options (`hazards.md`); StationScene menu (`economy.md`); beacons on the Waypoint scene (`beacons.md`).
+
+## Mini-games (M3, `minigames.md`)
+| Where | Change |
+|-------|--------|
+| Travel menu | "Scan for salvage" opens the `Salvage` scene; returns to Travel with the haul in the log. |
+| Hazard scene (5 hazards) | "1 Thread it" opens the `Threading` scene; its result panel offers the clean bonus pick (+2 health all / +10 rations); then the outcome modal as M2. Shields / tug / pilot unchanged. |
+| Hazard scene (The Flare Belt) | Options: `1 Ride the solar wind   Risk: Severe` → `Flare` scene; `2 Pay the tug (120 cr)`; then Rest and travel menu as before. |
+| Pause (Esc in a mini-game) | Modal: Resume / Skip (auto-resolve, with penalty) / Controls. |
+| Options | "Mini-games: Play / Auto-resolve" (`autoResolveMiniGames`); auto-resolve skips the scenes with no penalty. |
+| Touch | Drag to steer, tap to fire (Salvage), pause icon top-right; no on-screen buttons needed. |
 
 ## Controls
 - Keyboard: arrows/WASD move selection, Enter/Space confirm, Esc back, number keys select menu items, `?` shows controls. Typing fields accept printable ASCII up to 12 chars.

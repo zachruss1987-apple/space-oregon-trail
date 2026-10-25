@@ -53,3 +53,14 @@
 | Fork | Titan Refinery's route choice: Via Oort Beacon or Direct to the Shock. |
 | Dome gardener / ice diver / algae farmer | Trader personas at Mars Relay, Europa Outpost and the vats (`trades.json`). |
 | Station keepers | Ottoline Varga (Mars Relay), Bram Okonkwo-Hale (Ceres Depot), Sister Maren Voss (Europa Outpost), Dutch Halloran (Titan Refinery), Quill Anand (Oort Beacon), Imogen Pike (Lane Terminus); Mattie Ostrander keeps Independence. |
+| Salvage Run | The drone mini-game behind "Scan for salvage": grapple drifting debris for 40 s, tow back at most 100 units. |
+| Grapple | The drone's cable; one drone charge per shot, hit or miss. |
+| Haul | What the drone reels in during a Salvage Run; rations weigh 1 unit, spare parts 10. |
+| Tumbler | A spinning debris chunk; dents the drone (3 dents and it limps home with half the haul). |
+| Hot chunk | Radioactive debris; touching or hauling it costs a crew member 5 health. |
+| Debris Threading | The playable "Thread it": 25 s dodging rocks; hits become severity rolls. |
+| Ride the solar wind | Flying the Flare Belt yourself (45 s of dodging flare arcs); five hits is a crash. |
+| Pay the tug | The Flare Belt tug: 120 cr, 180 in flare season. |
+| Flare arc | A telegraphed band of plasma across the Flare Belt; glows dim, then burns. |
+| Rode the wind | Score bonus (+200) for a clean Flare Belt ride. |
+| Auto-resolve | The Options setting (and skip) that settles a mini-game by the statistical roll instead. |
