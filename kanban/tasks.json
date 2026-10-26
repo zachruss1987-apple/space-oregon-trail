@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-25T15:16:47.227Z",
+  "updated": "2026-10-26T21:25:29.693Z",
   "milestones": [
     {
       "id": "M0",
@@ -2505,6 +2505,32 @@
         }
       ],
       "issueClosed": true
+    },
+    {
+      "id": "T-071",
+      "title": "UI: tappable on-screen keys in the hints band on touch platforms (iPhone/iPad Safari), 24 px touch band, iOS viewport fix",
+      "desc": "Spec: docs/design/keyhints.md 'Touch platform: on-screen keys'. Key hints option becomes On/Off; data-hintmode keys|touch; taps dispatch KeyboardEvents; TouchLayer/Guide/TopTen/Help ignore y>=400; index.html 100dvh + touch-action.",
+      "milestone": "M5",
+      "role": "developer",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-26T21:25:29.645Z",
+      "updated": "2026-10-26T21:25:29.645Z",
+      "notes": []
+    },
+    {
+      "id": "T-072",
+      "title": "Test: touch on-screen keys in Playwright WebKit iPhone profile (tap Back/OK/Travel/Help/number adjust), data-hintmode, viewport",
+      "desc": "From keyhints.md 'Touch platform'. Depends on T-071. Add a webkit touch project to playwright.config limited to the touch spec.",
+      "milestone": "M5",
+      "role": "tester",
+      "status": "todo",
+      "assignee": null,
+      "issue": null,
+      "created": "2026-10-26T21:25:29.693Z",
+      "updated": "2026-10-26T21:25:29.693Z",
+      "notes": []
     }
   ]
 }

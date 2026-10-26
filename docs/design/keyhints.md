@@ -43,14 +43,46 @@ Input: `{ userAgent, uaPlatform (navigator.userAgentData?.platform or ''), coars
 A `?platform=mac|windows|linux|touch` query parameter overrides detection (debug and tests only).
 
 ## Visibility
-Options row **Key hints**: `Auto / On / Off` (`keyHints`, `TriState`, default `auto`, persisted like the others).
-- `auto`: shown unless the platform is `touch` (a phone showing keyboard keys is noise).
-- `on`: always shown (an iPad with a keyboard). `off`: band stays, empty except the rule.
-The band itself is always 16 px so the layout never jumps when hints toggle.
+Options row **Key hints**: `On / Off` (`keyHints`, default `on`, persisted like the others; a stored legacy `auto` reads as `on`).
+- `on`: desktop platforms show key names; the `touch` platform shows tappable on-screen keys (next section).
+- `off`: band stays, empty except the rule. The band is always present so the layout never jumps.
 
 The row goes right after **Touch controls** (row 6); every later row shifts down one. Options therefore has 13 rows, so
 `numberRow` gains Shift+3 → row 13 (`Digit3`), and the `?` overlay line becomes "Rows 10-13: 0, Shift+1, Shift+2, Shift+3."
 Update `ui.md` ("Controls" and the Options table) and `help.lines` accordingly.
+
+## Touch platform: on-screen keys (T-071)
+A phone has no keyboard, so on the `touch` platform the band is a row of **tappable keys** built from the same hint set.
+`body[data-hintmode]` is `keys` (desktop names) or `touch` (buttons); `data-hints` still carries the set id in both modes.
+- Band height: `HINT_BAR_H` is 16 on desktop and **24 on touch** (`hintBarHeight(platform)`, decided once at boot before
+  `new Phaser.Game`; `CANVAS_HEIGHT` and `CRT_LOGICAL.h` follow it). Buttons are 20 px tall, text centred, so a tap target
+  is ≥ 40 device px at ×2. Visual baselines are desktop-only and unchanged.
+- Each button is `[ Label ]` on a `COLORS.panel` fill with a `COLORS.borderDim` 1 px frame, label in `COLORS.bright`,
+  8 px gaps, left-aligned from x = 8; `[ Help ]` sits at the right as before. Overflow drops from the end as on desktop.
+- A tap dispatches the key to the game exactly as a keyboard would: `window.dispatchEvent(new KeyboardEvent('keydown', { key, code, bubbles: true }))`
+  followed by the matching `keyup`, so every `KeyRouter` handler works untouched. Nothing new is added to `window`.
+- Mapping from the set (`touchButtons(set)` in `keyHints.ts`, pure). Pairs not listed are omitted on touch:
+
+| Canonical key | Button label | Dispatches |
+|---------------|--------------|------------|
+| `Enter` | the pair's label (OK, Choose, Start, Continue, Next, Change) | `Enter` |
+| `Esc` | the pair's label (Back, Cancel, Pause) | `Escape` |
+| `T` | Travel on | `t` |
+| `M` | the pair's label (Mute, Auto-resolve) | `m` |
+| `Tab` | Random | `Tab` |
+| `Any key` | the pair's label (Stop, Close) | `Escape` |
+| `?` | Help | `?` |
+| `Left/Right` (guide) | two buttons `<` and `>` | `ArrowLeft` / `ArrowRight` |
+| `Arrows` in `number` | four buttons `-10` `-1` `+1` `+10` | `ArrowLeft` `ArrowDown` `ArrowUp` `ArrowRight` |
+| `Arrows`, `Up/Down`, `Space`, digits, `A-Z`, `Backspace`, `Shift+…` | omitted (rows are tappable; mini-games have their own touch controls; no soft keyboard exists) | — |
+
+- The `name` set on touch therefore shows `[ Random ] [ OK ]`: a crew name that is left empty commits the placeholder, as today.
+- Taps in the band must not reach the scene: the mini-game `TouchLayer`, `GuideScene` page tap, `TopTenScene` and
+  `HelpOverlay` ignore pointers with `worldY >= GAME_HEIGHT`. The band's buttons are the only interactive objects below y 400.
+- `index.html`: `#game` uses `height: 100dvh` (with the `100vh` fallback first) so iOS Safari's toolbar never hides the band,
+  and the canvas gets `touch-action: manipulation` so a tap is not delayed or zoomed.
+- `?platform=touch` still forces the platform for tests; the tester runs the touch suite in Playwright WebKit with an
+  iPhone device profile (`hasTouch`), where `pointer: coarse` is real.
 
 ## Which hints show (the context)
 The `KeyRouter` decides: the top `KeyHandler` may expose `hints?: string | (() => string | null)` naming a set in
@@ -93,4 +125,4 @@ every stopping point** (a tester walks every scene and asserts `data-hints`).
 the table exists, every entry has exactly one `|`, labels ≤ 12 chars, keys from the canonical list.
 
 ## Out of scope (follow-ups)
-Touch-specific hint sets (tap/drag wording) for the `touch` platform; gamepad labels.
+Gamepad labels; a soft keyboard for typing names on touch (placeholders and Random cover it).
