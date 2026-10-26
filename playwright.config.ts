@@ -11,7 +11,7 @@ export default defineConfig({
   projects: [
     // Desktop Chromium runs everything except the touch spec, so suite time is unchanged.
     { name: 'chromium', testIgnore: /touch\.spec\.ts$/ },
-    // Real touch (T-072): WebKit with the iPhone 13 profile (hasTouch, isMobile, pointer: coarse). Windows-local until CI installs webkit.
+    // Real touch (T-072): WebKit with the iPhone 13 profile (hasTouch, isMobile, pointer: coarse). CI installs webkit too (ci.yml).
     { name: 'touch', testMatch: /touch\.spec\.ts$/, use: { ...devices['iPhone 13'] } },
   ],
   use: {

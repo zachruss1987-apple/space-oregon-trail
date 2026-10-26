@@ -1,6 +1,6 @@
 {
   "repo": "zachruss1987-apple/space-oregon-trail",
-  "updated": "2026-10-26T21:25:29.693Z",
+  "updated": "2026-10-26T21:46:16.921Z",
   "milestones": [
     {
       "id": "M0",
@@ -2512,12 +2512,38 @@
       "desc": "Spec: docs/design/keyhints.md 'Touch platform: on-screen keys'. Key hints option becomes On/Off; data-hintmode keys|touch; taps dispatch KeyboardEvents; TouchLayer/Guide/TopTen/Help ignore y>=400; index.html 100dvh + touch-action.",
       "milestone": "M5",
       "role": "developer",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "developer",
       "issue": null,
       "created": "2026-10-26T21:25:29.645Z",
-      "updated": "2026-10-26T21:25:29.645Z",
-      "notes": []
+      "updated": "2026-10-26T21:45:17.772Z",
+      "notes": [
+        {
+          "ts": "2026-10-26T21:26:01.095Z",
+          "by": "developer",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-26T21:35:36.495Z",
+          "by": "developer",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-26T21:35:36.941Z",
+          "by": "developer",
+          "text": "Touch band: 24 px tappable keys from the hint set (touchButtons/fitTouchButtons/hintBarHeight/hintMode in keyHints.ts), taps dispatch keydown+keyup on window; Key hints On/Off (auto->on); inHintBand guard in TouchLayer, Guide, TopTen, HelpOverlay, pause Controls; 100dvh + touch-action. Unit 1667 pass; e2e 76/76 (desktop baselines unchanged). Verified ?platform=touch in Chromium: Title, Setup name, Store number, modal, Travel/auto/Stop, Help/Close, Supplies Back, Salvage Start/Pause (no grapple fired)/Continue, Guide < > Back."
+        },
+        {
+          "ts": "2026-10-26T21:45:17.321Z",
+          "by": "developer",
+          "text": "verified: tester T-072. Touch mapping and band geometry match spec + logged deviations (70 spec unit tests, 8 WebKit iPhone 13 touch e2e x3 runs stable); real touch detected without override (platform/hintmode touch, canvas 424/640, bottom <= innerHeight); taps on Help/Close, Random/OK, +1/+10/-1/OK, Travel on/Stop, Back (single on Supplies), < > Back, Start/Pause (drone not fired)/Continue all work; dvh + touch-action present; guards in Guide/TopTen/Help/minigames; test:all green (1695 unit, 84 e2e)."
+        },
+        {
+          "ts": "2026-10-26T21:45:17.773Z",
+          "by": "developer",
+          "text": "review -> done"
+        }
+      ]
     },
     {
       "id": "T-072",
@@ -2525,12 +2551,33 @@
       "desc": "From keyhints.md 'Touch platform'. Depends on T-071. Add a webkit touch project to playwright.config limited to the touch spec.",
       "milestone": "M5",
       "role": "tester",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "pm",
       "issue": null,
       "created": "2026-10-26T21:25:29.693Z",
-      "updated": "2026-10-26T21:25:29.693Z",
-      "notes": []
+      "updated": "2026-10-26T21:46:16.921Z",
+      "notes": [
+        {
+          "ts": "2026-10-26T21:36:30.229Z",
+          "by": "tester",
+          "text": "todo -> doing"
+        },
+        {
+          "ts": "2026-10-26T21:45:24.593Z",
+          "by": "tester",
+          "text": "Added 28 spec unit tests (tests/unit/spec/keyhints.spec.test.ts), 8 WebKit touch e2e (tests/e2e/touch.spec.ts, project touch, iPhone 13); 3 repeats = 24/24 pass; test:all green (1695 unit, 84 e2e). T-071 verified. touch project omitted on CI unless PW_TOUCH=1; testing.md updated."
+        },
+        {
+          "ts": "2026-10-26T21:45:25.044Z",
+          "by": "tester",
+          "text": "doing -> review"
+        },
+        {
+          "ts": "2026-10-26T21:46:16.921Z",
+          "by": "pm",
+          "text": "review -> done"
+        }
+      ]
     }
   ]
 }

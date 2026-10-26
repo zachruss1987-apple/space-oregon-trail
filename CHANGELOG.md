@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-10-26
+- Touch devices (iPhone/iPad Safari, Android): the key hints band becomes a 24 px row of tappable on-screen keys built from
+  the current context (Back, OK, Travel on, Stop, Help, Random, `<` `>` guide paging, `-10 -1 +1 +10` number adjust).
+  Taps dispatch the same keys the keyboard would. Key hints option is now On / Off. iOS Safari viewport fix (`100dvh`).
+  Playwright gains a WebKit iPhone 13 `touch` project (8 tests); 28 new spec tests.
+
 ## 1.1.0 — 2026-10-25
 - Key hints bar: a 16 px band under the game view (canvas 640×416) that always lists the keys that work right now, with
   platform-aware names (Return/Delete on a Mac), hidden on touch devices, and an Options row Key hints (Auto / On / Off).
