@@ -3,7 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { UI_TEXT } from '@/content';
 import { DEFAULT_OPTIONS, parseOptions, serializeOptions } from '@/game/options';
 import { numberRow } from '@/ui/Menu';
-import { detectPlatform, fitHints, groupText, hintsShown, keyLabel, parseHint, type Hint, type Platform } from '@/ui/keyHints';
+import {
+  detectPlatform, fitHints, fitTouchButtons, groupText, hintBarHeight, hintMode, hintsShown, keyLabel, parseHint, parseHintSet, touchButtons,
+  touchButtonW, type Hint, type Platform,
+} from '@/ui/keyHints';
+import { GAME_HEIGHT, inHintBand } from '@/config';
 
 const hints = (UI_TEXT as unknown as { hints: Record<string, string[] | string> }).hints;
 const WIN_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124.0';
@@ -143,5 +147,97 @@ describe('keyhints.md "Visibility": numberRow gains Shift+3 -> row 13', () => {
   it('0 is row 10 and 1-9 are rows 1-9', () => {
     expect(k('0', 'Digit0', false)).toBe(9);
     expect(k('3', 'Digit3', false)).toBe(2);
+  });
+});
+
+// ---- T-072: keyhints.md "Touch platform: on-screen keys" (deviations: T-071 entry in decisions.md) ----
+describe('keyhints.md touch mapping table (per set, with the logged deviations)', () => {
+  const buttons = (id: string) => touchButtons(parseHintSet(hints[id]), id).map((b) => b.label);
+  it.each([
+    ['menu', ['Choose']],
+    ['menuBack', ['Choose', 'Back']],
+    ['modal', ['OK']],
+    ['modalChoice', ['Choose', 'Cancel']],
+    ['number', ['-10', '-1', '+1', '+10', 'OK', 'Cancel']],
+    ['name', ['Random', 'OK']],
+    ['nameEntry', ['OK']],
+    ['title', ['Choose', 'Auto-resolve']],
+    ['travel', ['Choose', 'Travel on', 'Mute']],
+    ['travelAuto', ['Stop']],
+    ['table', ['Back']], // Enter Back + Esc Back: a repeated label shows once
+    ['guide', ['<', '>', 'Next', 'Back']],
+    ['options', ['Change', 'Back']], // Left/Right Change is omitted outside guide
+    ['minigameIntro', ['Start', 'Pause']],
+    ['minigamePlay', ['Pause']],
+    ['minigameFire', ['Pause']], // Arrows, Space omitted
+    ['minigameDone', ['Continue']],
+    ['help', ['Close']],
+    ['none', []],
+  ] as const)('%s -> %j', (id, want) => expect(buttons(id)).toEqual(want));
+
+  const one = (key: string, label: string, id = '') => touchButtons([{ key, label }], id);
+  it('each mapped key dispatches the spec key/code', () => {
+    expect(one('Enter', 'OK')[0]).toMatchObject({ key: 'Enter' });
+    expect(one('Esc', 'Back')[0]).toMatchObject({ key: 'Escape' });
+    expect(one('T', 'Travel on')[0]).toMatchObject({ label: 'Travel on', key: 't' });
+    expect(one('M', 'Mute')[0]).toMatchObject({ key: 'm' });
+    expect(one('Tab', 'Random')[0]).toMatchObject({ label: 'Random', key: 'Tab' });
+    expect(one('Any key', 'Stop')[0]).toMatchObject({ key: 'Escape' });
+    expect(one('?', 'Help')[0]).toMatchObject({ label: 'Help', key: '?' });
+  });
+  it('number arrows dispatch Left, Down, Up, Right; guide arrows Left, Right', () => {
+    expect(touchButtons([{ key: 'Arrows', label: 'Adjust' }], 'number').map((b) => [b.label, b.key])).toEqual([
+      ['-10', 'ArrowLeft'], ['-1', 'ArrowDown'], ['+1', 'ArrowUp'], ['+10', 'ArrowRight'],
+    ]);
+    expect(touchButtons([{ key: 'Arrows', label: 'Page' }], 'guide').map((b) => [b.label, b.key])).toEqual([['<', 'ArrowLeft'], ['>', 'ArrowRight']]);
+  });
+  it('omitted keys produce no button', () => {
+    for (const key of ['Arrows', 'Up/Down', 'Space', '1-9', '0-9', 'A-Z', 'Backspace', 'Shift+1', 'Left/Right']) {
+      expect(one(key, 'X'), key).toEqual([]);
+    }
+  });
+});
+
+describe('keyhints.md touch band: height, mode, layout', () => {
+  it('band height is 24 on touch and 16 elsewhere', () => {
+    expect(hintBarHeight('touch')).toBe(24);
+    for (const p of ['mac', 'windows', 'linux'] as const) expect(hintBarHeight(p)).toBe(16);
+  });
+  it('hintMode is touch on touch, keys elsewhere', () => {
+    expect(hintMode('touch')).toBe('touch');
+    for (const p of ['mac', 'windows', 'linux'] as const) expect(hintMode(p)).toBe('keys');
+  });
+  it('buttons start at x 8 with 8 px gaps and Help flush right in the 624 px budget', () => {
+    const help = touchButtons([{ key: '?', label: 'Help' }])[0]!;
+    const fit = fitTouchButtons(touchButtons(parseHintSet(hints['number']), 'number'), help);
+    expect(fit.left[0]!.x).toBe(8);
+    for (let i = 1; i < fit.left.length; i++) expect(fit.left[i]!.x).toBe(fit.left[i - 1]!.x + fit.left[i - 1]!.w + 8);
+    expect(fit.help!.x + fit.help!.w).toBe(8 + 624);
+    expect(fit.help!.w).toBe(touchButtonW(help));
+  });
+  it('overflow drops from the end and never Help', () => {
+    const help = touchButtons([{ key: '?', label: 'Help' }])[0]!;
+    const many = Array.from({ length: 30 }, (_, i) => ({ label: `B${i}`, key: 'x', code: 'x' }));
+    const fit = fitTouchButtons(many, help);
+    expect(fit.left.length).toBeLessThan(30);
+    expect(fit.left.map((b) => b.label)).toEqual(many.slice(0, fit.left.length).map((b) => b.label));
+    expect(fit.help).not.toBeNull();
+    const last = fit.left[fit.left.length - 1]!;
+    expect(last.x + last.w).toBeLessThanOrEqual(fit.help!.x);
+  });
+});
+
+describe('keyhints.md touch: Options Key hints On/Off and the hint band boundary', () => {
+  it('default on; off persists; legacy auto reads as on; junk falls back to on', () => {
+    expect(DEFAULT_OPTIONS.keyHints).toBe('on');
+    expect(parseOptions(serializeOptions({ ...DEFAULT_OPTIONS, keyHints: 'off' })).keyHints).toBe('off');
+    expect(parseOptions(JSON.stringify({ keyHints: 'auto' })).keyHints).toBe('on');
+    expect(parseOptions(JSON.stringify({ keyHints: 'maybe' })).keyHints).toBe('on');
+  });
+  it('inHintBand is false above y 400 and true from y 400 down', () => {
+    expect(GAME_HEIGHT).toBe(400);
+    expect(inHintBand({ worldY: 399.9 })).toBe(false);
+    expect(inHintBand({ worldY: 400 })).toBe(true);
+    expect(inHintBand({ worldY: 423 })).toBe(true);
   });
 });

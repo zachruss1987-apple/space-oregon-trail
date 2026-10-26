@@ -39,3 +39,6 @@ Playwright builds to `dist/`, serves on :4173 and writes `test-results/`. Two ag
 container matching the pinned Playwright version) run `npm run test:visual:update`; the PNGs land in
 `tests/e2e/__screenshots__/linux/visual.spec.ts/`. Review and commit them, drop the `process.platform !== 'win32'` skip in
 `tests/e2e/visual.spec.ts`, and add `npm run test:visual` to `.github/workflows/ci.yml`. Regenerate whenever art or copy changes.
+
+## Touch project (WebKit)
+`playwright.config.ts` has a second project, `touch`: WebKit with `devices['iPhone 13']` (`hasTouch`, `isMobile`, real `pointer: coarse`, no `?platform=` override), running only `tests/e2e/touch.spec.ts`; the `chromium` project ignores that file. Setup once: `npx playwright install webkit`. Run: `PW_OUT=test-results/<card> npx playwright test --project=touch` (also part of `npm run test:e2e` locally). Taps use `page.touchscreen.tap` on band buttons located from the scene graph (see the spec header). It is Windows-local for now: CI installs only chromium (`npx playwright install --with-deps chromium`), so the config leaves the `touch` project out when `CI` is set unless `PW_TOUCH=1`; add `webkit` to the install step to enable it there.

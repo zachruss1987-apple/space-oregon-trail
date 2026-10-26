@@ -8,6 +8,12 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : 4, // 16+ parallel Chromium boots time out on big machines
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
+  projects: [
+    // Desktop Chromium runs everything except the touch spec, so suite time is unchanged.
+    { name: 'chromium', testIgnore: /touch\.spec\.ts$/ },
+    // Real touch (T-072): WebKit with the iPhone 13 profile (hasTouch, isMobile, pointer: coarse). Windows-local until CI installs webkit.
+    { name: 'touch', testMatch: /touch\.spec\.ts$/, use: { ...devices['iPhone 13'] } },
+  ],
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'retain-on-failure',
