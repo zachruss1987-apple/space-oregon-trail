@@ -11,11 +11,12 @@ describe('parseOptions (ui.md "Options screen")', () => {
     expect(parseOptions('{"music":"loud","textSpeed":"warp","palette":7,"crt":"yes"}')).toEqual(DEFAULT_OPTIONS);
   });
   it('defaults match ui.md: music 6, sfx 8, Normal, Auto, Play, Auto, Off', () => {
-    expect(DEFAULT_OPTIONS).toMatchObject({ music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', keyHints: 'auto', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard', crt: null });
+    expect(DEFAULT_OPTIONS).toMatchObject({ music: 6, sfx: 8, textSpeed: 'normal', touch: 'auto', keyHints: 'on', autoResolveMiniGames: false, reducedMotion: 'auto', palette: 'standard', crt: null });
   });
-  it('keyHints is a TriState, default Auto, garbage falls back (keyhints.md "Visibility")', () => {
+  it('keyHints is On / Off, default On, legacy auto and garbage read as On (keyhints.md "Visibility", T-071)', () => {
     expect(parseOptions('{"keyHints":"off"}').keyHints).toBe('off');
-    expect(parseOptions('{"keyHints":"maybe"}').keyHints).toBe('auto');
+    expect(parseOptions('{"keyHints":"auto"}').keyHints).toBe('on');
+    expect(parseOptions('{"keyHints":"maybe"}').keyHints).toBe('on');
     expect(parseOptions(serializeOptions({ ...DEFAULT_OPTIONS, keyHints: 'on' })).keyHints).toBe('on');
   });
   it('clamps volume steps to 0..10 integers', () => {

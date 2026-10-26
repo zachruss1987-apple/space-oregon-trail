@@ -4,7 +4,7 @@
  * and reads its text into the live region.
  */
 import type Phaser from 'phaser';
-import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
+import { GAME_HEIGHT, GAME_WIDTH, inHintBand } from '@/config';
 import { announce } from '@/game/a11y';
 import { markFlag } from '@/game/contract';
 import { panel } from './chrome';
@@ -37,8 +37,10 @@ export function openHelp(scene: Phaser.Scene, onClickClose: () => void): HelpOve
     addText(scene, x + 20, y + h - 22, close, { color: COLORS.dim, depth: DEPTH + 2 }),
   ];
   // Registered next tick so the click that opened nothing else does not close it at once.
-  const click = (): void => onClickClose();
-  scene.time.delayedCall(50, () => objects[0]?.active && scene.input.once('pointerdown', click));
+  const click = (p: Phaser.Input.Pointer): void => {
+    if (!inHintBand(p)) onClickClose();
+  };
+  scene.time.delayedCall(50, () => objects[0]?.active && scene.input.on('pointerdown', click));
   markFlag('help', true);
   announce([title, ...lines, close].join('\n\n'));
   return {

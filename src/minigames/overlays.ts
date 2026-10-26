@@ -1,7 +1,7 @@
 /** Mini-game overlays: centered bitmap-text panels (instructions, result) and the pause menu. Presentation only. */
 import Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
-import { GAME_HEIGHT, GAME_WIDTH } from '@/config';
+import { GAME_HEIGHT, GAME_WIDTH, inHintBand } from '@/config';
 import { announce } from '@/game/a11y';
 import { markFlag } from '@/game/contract';
 import { session } from '@/game/session';
@@ -107,14 +107,18 @@ export class PauseMenu {
     this.controls = new Panel(this.scene, [{ text: t('minigame.controls'), color: COLORS.bright }, { text: t('minigame.common.controlsBody') }, { text: t('minigame.common.continue'), color: COLORS.dim }]);
     const back = (): void => {
       this.router.remove(handler);
-      this.scene.input.off('pointerdown', back);
+      this.scene.input.off('pointerdown', tap);
       this.controls?.destroy();
       this.controls = null;
     };
     const handler = { onKey: back, hints: 'help' };
+    // A tap on the hints band is its Close key (a keydown), not a second close that would leave Esc for the menu.
+    const tap = (p: Phaser.Input.Pointer): void => {
+      if (!inHintBand(p)) back();
+    };
     this.router.push(handler);
     // Registered next tick so the tap that chose "Controls" does not close it at once.
-    this.scene.time.delayedCall(50, () => this.controls && this.scene.input.once('pointerdown', back));
+    this.scene.time.delayedCall(50, () => this.controls && this.scene.input.on('pointerdown', tap));
   }
 
   private close(then: () => void): void {

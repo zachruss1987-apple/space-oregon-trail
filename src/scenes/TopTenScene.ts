@@ -1,4 +1,6 @@
 /** The Top Ten (scoring.md "High scores"): stored rows merged with the writer's defaults; Esc/Enter back to Title. */
+import type Phaser from 'phaser';
+import { inHintBand } from '@/config';
 import { announceScreen } from '@/game/a11y';
 import { readHighScores } from '@/game/saveStore';
 import { t } from '@/ui/copy';
@@ -40,6 +42,12 @@ export class TopTenScene extends BaseScene {
         if (isBack(e) || isConfirm(e)) this.go('Title');
       },
     });
-    this.input.once('pointerdown', () => this.go('Title'));
+    // A tap anywhere above the key hints band leaves (the band's own buttons are keys).
+    const leave = (p: Phaser.Input.Pointer): void => {
+      if (inHintBand(p)) return;
+      this.input.off('pointerdown', leave);
+      this.go('Title');
+    };
+    this.input.on('pointerdown', leave);
   }
 }

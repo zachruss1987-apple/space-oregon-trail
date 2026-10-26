@@ -7,7 +7,7 @@ import type Phaser from 'phaser';
 import { audio } from '@/audio/AudioManager';
 import { DIFFICULTY_ORDER } from '@/content';
 import { applyCrt, applyPalette, applyVolumes, crtAvailable, crtShown } from '@/game/display';
-import { cycle, TEXT_SPEEDS, TRI_STATES, type Options } from '@/game/options';
+import { cycle, KEY_HINTS_VALUES, TEXT_SPEEDS, TRI_STATES, type Options } from '@/game/options';
 import { readAutosave } from '@/game/saveStore';
 import { session } from '@/game/session';
 import { toggle } from '@/ui/chrome';
@@ -139,7 +139,7 @@ export class OptionsScene extends BaseScene {
       case 'textSpeed': this.set('textSpeed', cycle(TEXT_SPEEDS, o.textSpeed, dir)); break;
       case 'touch': this.set('touch', cycle(TRI_STATES, o.touch, dir)); break;
       case 'keyHints':
-        this.set('keyHints', cycle(TRI_STATES, o.keyHints, dir));
+        this.set('keyHints', cycle(KEY_HINTS_VALUES, o.keyHints, dir));
         this.router.refreshHints();
         break;
       case 'minigames': this.set('autoResolveMiniGames', !o.autoResolveMiniGames); break;

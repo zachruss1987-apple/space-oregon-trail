@@ -3,6 +3,7 @@
  * finger; a tap (< 200 ms, < 10 px) acts at the tap point; the pause icon and the optional action button are regions.
  */
 import type Phaser from 'phaser';
+import { inHintBand } from '@/config';
 import { MINIGAME_SCENE } from '@/content';
 
 export interface TouchPoint { x: number; y: number }
@@ -39,7 +40,8 @@ export class TouchLayer {
   }
 
   private press(p: Phaser.Input.Pointer): void {
-    if (!this.on.live()) return;
+    // The key hints band's buttons (Pause, Start, ...) are keys, not taps on the playfield (keyhints.md).
+    if (!this.on.live() || inHintBand(p)) return;
     if (this.regions.pause.contains(p.worldX, p.worldY)) return this.on.pause();
     if (this.regions.action?.contains(p.worldX, p.worldY)) return this.on.tap(null);
     this.down = { x: p.worldX, y: p.worldY, at: p.downTime, moved: false };

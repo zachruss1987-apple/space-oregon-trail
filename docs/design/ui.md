@@ -100,7 +100,7 @@ From Title "4. Options". Up/Down choose a row, Left/Right (or Enter, or tap) cha
 | 3 | Sound effects | 0–10 | 8 | `sfx` | SFX bus gain step/10; a `ui.select` plays at the new level |
 | 4 | Text speed | Slow / Normal / Fast / Instant | Normal | `textSpeed` | 24 / 12 / 6 ms per char; Instant turns the typewriter off |
 | 5 | Touch controls | Auto / On / Off | Auto | `touch` | Auto = on when `pointer: coarse`; shows the pause icon and drag steering hints |
-| 6 | Key hints | Auto / On / Off | Auto | `keyHints` | The hints bar under the view (`keyhints.md`); Auto = hidden on touch platforms, Off leaves the band empty |
+| 6 | Key hints | On / Off | On | `keyHints` | The hints band under the view (`keyhints.md`): key names on desktop, tappable keys on touch; Off leaves the band empty (a stored `auto` reads as On) |
 | 7 | Mini-games | Play / Auto-resolve | Play | `autoResolveMiniGames` | As in the Mini-games section |
 | 8 | Reduced motion | Auto / On / Off | Auto | `reducedMotion` | Auto follows `prefers-reduced-motion`. On: no parallax, no bob, no typewriter, no cursor blink, overlays frozen, CRT forced off |
 | 9 | Colorblind palette | Off / On | Off | `palette` (`standard` / `cb`) | Swaps to the colorblind-safe table (`art.md`) |

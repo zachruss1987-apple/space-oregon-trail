@@ -3,9 +3,9 @@
  * drawn at RENDER_SCALE on the backing canvas.
  */
 import type Phaser from 'phaser';
-import { CANVAS_HEIGHT, GAME_WIDTH, RENDER_SCALE } from '@/config';
+import { canvasHeight, GAME_WIDTH, RENDER_SCALE } from '@/config';
 
-/** Zoom the main camera so world (0..640, 0..416) fills the canvas; scenes draw in 0..400. Call first in create(). */
+/** Zoom the main camera so world (0..640, 0..400 + band) fills the canvas; scenes draw in 0..400. Call first in create(). */
 export function fitCamera(scene: Phaser.Scene): Phaser.Cameras.Scene2D.Camera {
-  return scene.cameras.main.setZoom(RENDER_SCALE).centerOn(GAME_WIDTH / 2, CANVAS_HEIGHT / 2);
+  return scene.cameras.main.setZoom(RENDER_SCALE).centerOn(GAME_WIDTH / 2, canvasHeight() / 2);
 }

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { CANVAS_HEIGHT, GAME_WIDTH, RENDER_SCALE } from './config';
+import { canvasHeight, GAME_WIDTH, RENDER_SCALE, setHintBarH } from './config';
 import './game/contract';
 import { debugLoadState } from './game/debugLoad';
 import { initA11y } from './game/a11y';
@@ -8,6 +8,8 @@ import { audioBoot } from './audio/boot';
 import { bindMuteKey } from './game/muteKey';
 import { SCENES } from './scenes';
 import { GfxPreviewScene } from './gfx/previewScene';
+import { browserPlatform } from './ui/KeyHintsBand';
+import { hintBarHeight } from './ui/keyHints';
 
 // `?seed=` (string or number) makes runs reproducible; without it a random seed is shown on the title.
 session.init(window.location.search);
@@ -16,12 +18,15 @@ initA11y();
 // `M` mutes anywhere except the Title (its `M` toggles mini-game auto-resolve) and while a text field takes input.
 bindMuteKey();
 
+// Key hints band: 16 px of key names, or 24 px of tappable keys on touch (keyhints.md), fixed for this page load.
+setHintBarH(hintBarHeight(browserPlatform()));
+
 // The game is rendered at a fixed retro resolution and scaled to fit.
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
   width: GAME_WIDTH * RENDER_SCALE,
-  height: CANVAS_HEIGHT * RENDER_SCALE,
+  height: canvasHeight() * RENDER_SCALE,
   backgroundColor: '#000000',
   pixelArt: true,
   roundPixels: true,

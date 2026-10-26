@@ -104,9 +104,81 @@ export function fitHints(set: readonly Hint[], help: Hint | null, platform: Plat
   return { left, help: placedHelp };
 }
 
-/** Key hints option (Options row "Key hints"): Auto hides them on touch platforms. */
-export function hintsShown(option: 'auto' | 'on' | 'off', platform: Platform): boolean {
-  return option === 'on' || (option === 'auto' && platform !== 'touch');
+/** Key hints option (Options row "Key hints", keyhints.md "Visibility"): On shows the band's content on every platform. */
+export function hintsShown(option: 'on' | 'off'): boolean {
+  return option === 'on';
+}
+
+/** Band height in logical px: 16 for key names, 24 on touch for 20 px tap targets (keyhints.md "Touch platform"). */
+export function hintBarHeight(platform: Platform): 16 | 24 {
+  return platform === 'touch' ? 24 : 16;
+}
+
+/** `body[data-hintmode]`: key names on desktop, tappable buttons on touch. */
+export const hintMode = (platform: Platform): 'keys' | 'touch' => (platform === 'touch' ? 'touch' : 'keys');
+
+/** One on-screen key: its label and the KeyboardEvent `key` / `code` a tap dispatches. */
+export interface TouchButton {
+  label: string;
+  key: string;
+  code: string;
+}
+
+const KEYS: Readonly<Record<string, { key: string; code: string }>> = {
+  Enter: { key: 'Enter', code: 'Enter' },
+  Esc: { key: 'Escape', code: 'Escape' },
+  T: { key: 't', code: 'KeyT' },
+  M: { key: 'm', code: 'KeyM' },
+  Tab: { key: 'Tab', code: 'Tab' },
+  'Any key': { key: 'Escape', code: 'Escape' },
+  '?': { key: '?', code: 'Slash' },
+};
+const ARROW = (dir: 'Left' | 'Right' | 'Up' | 'Down'): { key: string; code: string } => ({ key: `Arrow${dir}`, code: `Arrow${dir}` });
+const NUMBER_ARROWS: TouchButton[] = [
+  { label: '-10', ...ARROW('Left') }, { label: '-1', ...ARROW('Down') }, { label: '+1', ...ARROW('Up') }, { label: '+10', ...ARROW('Right') },
+];
+const PAGE_ARROWS: TouchButton[] = [{ label: '<', ...ARROW('Left') }, { label: '>', ...ARROW('Right') }];
+
+/**
+ * The buttons a set shows on touch (keyhints.md mapping table). `id` picks the arrow buttons of `number` and `guide`;
+ * every other unmapped key is omitted. A label already shown (Enter Back + Esc Back in `table`) is not repeated.
+ */
+export function touchButtons(set: readonly Hint[], id = ''): TouchButton[] {
+  const out: TouchButton[] = [];
+  for (const h of set) {
+    if (id === 'number' && h.key === 'Arrows') out.push(...NUMBER_ARROWS);
+    else if (id === 'guide' && (h.key === 'Arrows' || h.key === 'Left/Right')) out.push(...PAGE_ARROWS);
+    else if (h.key === '?') out.push({ label: 'Help', ...KEYS['?']! });
+    else if (h.key === 'Tab') out.push({ label: 'Random', ...KEYS['Tab']! });
+    else if (h.key === 'T') out.push({ label: 'Travel on', ...KEYS['T']! });
+    else if (KEYS[h.key]) out.push({ label: h.label, ...KEYS[h.key]! });
+  }
+  return out.filter((b, i) => out.findIndex((o) => o.label === b.label) === i);
+}
+
+/** Button gap and padding (one glyph each side) in px. */
+export const TOUCH_GAP = 8;
+export const touchButtonW = (b: TouchButton): number => (b.label.length + 2) * HINT_GLYPH_W;
+
+export interface PlacedButton extends TouchButton {
+  x: number;
+  w: number;
+}
+
+/** Lay buttons left from x = 8 with 8 px gaps, `help` flush right; drop from the end until everything fits. */
+export function fitTouchButtons(buttons: readonly TouchButton[], help: TouchButton | null, budget = HINT_BUDGET_PX): { left: PlacedButton[]; help: PlacedButton | null } {
+  const reserve = help ? touchButtonW(help) + TOUCH_GAP : 0;
+  const widthOf = (k: number): number => buttons.slice(0, k).reduce((sum, b, i) => sum + touchButtonW(b) + (i > 0 ? TOUCH_GAP : 0), 0);
+  let n = buttons.length;
+  while (n > 0 && widthOf(n) + reserve > budget) n -= 1;
+  const left: PlacedButton[] = [];
+  let x = HINT_LEFT_X;
+  for (const b of buttons.slice(0, n)) {
+    left.push({ ...b, x, w: touchButtonW(b) });
+    x += touchButtonW(b) + TOUCH_GAP;
+  }
+  const placedHelp = help ? { ...help, x: HINT_LEFT_X + budget - touchButtonW(help), w: touchButtonW(help) } : null;
+  return { left, help: placedHelp };
 }
 
 /** What the router last published: the set id and whether a typing field has focus. */

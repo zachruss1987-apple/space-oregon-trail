@@ -1,5 +1,6 @@
 /** Learn about the Trail (M5): the writer's guidebook (guide.json), one page at a time. Left/Right page, Esc back. */
 import type Phaser from 'phaser';
+import { inHintBand } from '@/config';
 import { GUIDE_PAGES } from '@/content';
 import { announceScreen } from '@/game/a11y';
 import { t } from '@/ui/copy';
@@ -37,7 +38,7 @@ export class GuideScene extends BaseScene {
         else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' || e.key === 'PageDown' || e.key === 'Enter' || e.key === ' ') this.turn(1);
       },
     });
-    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => this.turn(p.worldX < 320 ? -1 : 1));
+    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => !inHintBand(p) && this.turn(p.worldX < 320 ? -1 : 1));
     this.paint();
   }
 

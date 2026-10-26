@@ -37,7 +37,7 @@
       "sfx": "Sound effects volume, 0 to 10.",
       "textSpeed": "How fast the prose types out. Instant skips the typewriter.",
       "touch": "Pause icon and FIRE button in mini-games. Auto: touch screens.",
-      "keyHints": "Keys that work now, in a strip under the screen. Auto: not on touch.",
+      "keyHints": "The keys that work now, under the screen. Tap them on a touch screen.",
       "minigames": "Auto-resolve skips the arcade parts, no penalty.",
       "reducedMotion": "No drifting stars, blinking or typewriter. The CRT stays off.",
       "palette": "Reds and greens swapped for colors that stay apart.",

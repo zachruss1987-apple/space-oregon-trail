@@ -222,38 +222,38 @@ test('Death scene itself shows a non-empty set', async ({ page }) => {
   await someHints(page, 'Death scene');
 });
 
-test('?platform=touch removes data-hints, ?platform=mac keeps it and reports the platform', async ({ page }) => {
+// T-071: touch shows tappable keys instead of hiding the band (keyhints.md "Touch platform: on-screen keys").
+test('?platform=touch shows the set as touch keys, ?platform=mac keeps key names and reports the platform', async ({ page }) => {
   await page.goto(`/?seed=${SEED}&platform=touch`);
   await scene(page, 'Title');
   await expect(body(page)).toHaveAttribute('data-platform', 'touch');
-  await expect(body(page)).not.toHaveAttribute('data-hints', /.*/);
+  await expect(body(page)).toHaveAttribute('data-hintmode', 'touch');
+  await hints(page, 'title');
   await page.goto(`/?seed=${SEED}&platform=mac`);
   await scene(page, 'Title');
   await expect(body(page)).toHaveAttribute('data-platform', 'mac');
   await hints(page, 'title');
 });
 
-test('Options Key hints row cycles Auto/On/Off, persists, and Off removes data-hints; On shows on touch', async ({ page }) => {
+// T-071: the row is On / Off and a stored legacy auto reads as On (keyhints.md "Visibility").
+test('Options Key hints row cycles On/Off, persists, and Off removes data-hints; legacy auto shows on touch', async ({ page }) => {
   await gotoScene(page, 'Title', SEED, '&minigames=auto');
   await page.keyboard.press('4');
   await scene(page, 'Options');
   for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowDown'); // row 6
-  await page.keyboard.press('ArrowRight'); // Auto -> On
-  await expect.poll(() => storedHints(page)).toBe('on');
-  await hints(page, 'options');
   await page.keyboard.press('ArrowRight'); // On -> Off
   await expect.poll(() => storedHints(page)).toBe('off');
   await expect(body(page)).not.toHaveAttribute('data-hints', /.*/);
-  await page.keyboard.press('ArrowRight'); // Off -> Auto
-  await expect.poll(() => storedHints(page)).toBe('auto');
+  await page.keyboard.press('ArrowRight'); // Off -> On
+  await expect.poll(() => storedHints(page)).toBe('on');
   await hints(page, 'options');
-  await page.keyboard.press('ArrowLeft'); // Auto -> Off
+  await page.keyboard.press('ArrowLeft'); // On -> Off
   await expect.poll(() => storedHints(page)).toBe('off');
   await page.reload();
   await scene(page, 'Title');
   await expect(body(page)).not.toHaveAttribute('data-hints', /.*/); // Off survives a reload
-  // On overrides touch (an iPad with a keyboard).
-  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({ v: 1, keyHints: 'on' })), OPTS_KEY);
+  // A stored T-069 `auto` reads as On, on touch too.
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({ v: 1, keyHints: 'auto' })), OPTS_KEY);
   await page.goto(`/?seed=${SEED}&platform=touch`);
   await scene(page, 'Title');
   await hints(page, 'title');

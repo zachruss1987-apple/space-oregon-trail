@@ -63,7 +63,10 @@ export const CRT_UNIFORMS: Readonly<Record<keyof CrtParams, string>> = {
   flicker: 'uFlicker',
 };
 
-/** Logical canvas the tube covers: the 640x400 view plus the 16 px key hints band (keyhints.md). */
+/**
+ * Logical canvas the tube covers on desktop: the 640x400 view plus the 16 px key hints band (keyhints.md). The shader's
+ * `uLogical` reads the runtime `canvasHeight()` (424 on touch); the scanline scale keeps this constant.
+ */
 export const CRT_LOGICAL = { w: 640, h: 416 } as const;
 
 /** Device rows per logical row for the scanline (1 = no room for a scanline). */

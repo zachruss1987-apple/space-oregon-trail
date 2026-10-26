@@ -2,8 +2,8 @@
 import { describe, expect, it } from 'vitest';
 import { UI_TEXT } from '@/content';
 import {
-  currentHints, detectPlatform, fitHints, groupText, HINT_BUDGET_PX, hintsShown, isCanonicalKey, keyLabel, onHints, parseHint,
-  parseHintSet, platformOverride, publishHints, type Hint, type Platform,
+  currentHints, detectPlatform, fitHints, fitTouchButtons, groupText, HINT_BUDGET_PX, hintBarHeight, hintMode, hintsShown, isCanonicalKey,
+  keyLabel, onHints, parseHint, parseHintSet, platformOverride, publishHints, touchButtons, type Hint, type Platform,
 } from '@/ui/keyHints';
 
 const UA = {
@@ -103,12 +103,68 @@ describe('fitHints (keyhints.md "Content and layout")', () => {
   it('an empty set gives an empty bar', () => expect(fitHints([], null, 'linux')).toEqual({ left: [], help: null }));
 });
 
-describe('visibility option (keyhints.md "Visibility")', () => {
-  it('Auto hides on touch only; On always; Off never', () => {
-    expect(hintsShown('auto', 'windows')).toBe(true);
-    expect(hintsShown('auto', 'touch')).toBe(false);
-    expect(hintsShown('on', 'touch')).toBe(true);
-    expect(hintsShown('off', 'mac')).toBe(false);
+describe('visibility option (keyhints.md "Visibility", On / Off since T-071)', () => {
+  it('On shows, Off hides', () => {
+    expect(hintsShown('on')).toBe(true);
+    expect(hintsShown('off')).toBe(false);
+  });
+});
+
+describe('touch platform (keyhints.md "Touch platform: on-screen keys")', () => {
+  const set = (id: string): Hint[] => parseHintSet((UI_TEXT as unknown as { hints: Record<string, unknown> }).hints[id]);
+  const buttons = (id: string): string[] => touchButtons(set(id), id).map((b) => `${b.label}=${b.key}/${b.code}`);
+
+  it('band is 16 px on desktop and 24 px on touch; hint mode follows', () => {
+    for (const p of ['mac', 'windows', 'linux'] as Platform[]) {
+      expect(hintBarHeight(p)).toBe(16);
+      expect(hintMode(p)).toBe('keys');
+    }
+    expect(hintBarHeight('touch')).toBe(24);
+    expect(hintMode('touch')).toBe('touch');
+  });
+  it('Enter and Esc keep the pair label and dispatch Enter / Escape', () => {
+    expect(buttons('modalChoice')).toEqual(['Choose=Enter/Enter', 'Cancel=Escape/Escape']);
+    expect(buttons('modal')).toEqual(['OK=Enter/Enter']);
+    expect(buttons('minigameIntro')).toEqual(['Start=Enter/Enter', 'Pause=Escape/Escape']);
+    expect(buttons('minigameDone')).toEqual(['Continue=Enter/Enter']);
+  });
+  it('T is "Travel on" (t / KeyT), M keeps its label (m / KeyM)', () => {
+    expect(buttons('travel')).toEqual(['Choose=Enter/Enter', 'Travel on=t/KeyT', 'Mute=m/KeyM']);
+    expect(buttons('title')).toEqual(['Choose=Enter/Enter', 'Auto-resolve=m/KeyM']);
+  });
+  it('Tab is Random; A-Z and Backspace are omitted (no soft keyboard)', () => {
+    expect(buttons('name')).toEqual(['Random=Tab/Tab', 'OK=Enter/Enter']);
+    expect(buttons('nameEntry')).toEqual(['OK=Enter/Enter']);
+  });
+  it('Any key keeps its label and dispatches Escape', () => {
+    expect(buttons('travelAuto')).toEqual(['Stop=Escape/Escape']);
+    expect(buttons('help')).toEqual(['Close=Escape/Escape']);
+  });
+  it('? is Help', () => expect(touchButtons([{ key: '?', label: 'Help' }])).toEqual([{ label: 'Help', key: '?', code: 'Slash' }]));
+  it('guide arrows become < and > (ArrowLeft / ArrowRight)', () => {
+    expect(buttons('guide')).toEqual(['<=ArrowLeft/ArrowLeft', '>=ArrowRight/ArrowRight', 'Next=Enter/Enter', 'Back=Escape/Escape']);
+  });
+  it('number arrows become -10 -1 +1 +10; digits are omitted', () => {
+    expect(touchButtons(set('number'), 'number').map((b) => b.label)).toEqual(['-10', '-1', '+1', '+10', 'OK', 'Cancel']);
+    expect(touchButtons(set('number'), 'number').slice(0, 4).map((b) => b.key)).toEqual(['ArrowLeft', 'ArrowDown', 'ArrowUp', 'ArrowRight']);
+  });
+  it('Arrows, Up/Down, Left/Right outside guide, Space and digits are omitted; a repeated label shows once', () => {
+    expect(buttons('menuBack')).toEqual(['Choose=Enter/Enter', 'Back=Escape/Escape']);
+    expect(buttons('options')).toEqual(['Change=Enter/Enter', 'Back=Escape/Escape']);
+    expect(buttons('minigameFire')).toEqual(['Pause=Escape/Escape']);
+    expect(buttons('table')).toEqual(['Back=Enter/Enter']);
+    expect(buttons('none')).toEqual([]);
+  });
+  it('buttons lay out from x = 8 with 8 px gaps, Help flush right, overflow drops from the end', () => {
+    const help = { label: 'Help', key: '?', code: 'Slash' };
+    const fit = fitTouchButtons(touchButtons(set('number'), 'number'), help);
+    expect(fit.left.map((b) => b.x)).toEqual([8, 56, 96, 136, 184, 224]); // widths (label + 2 glyphs): 40 32 32 40 32 64
+    expect(fit.help).toMatchObject({ x: 8 + 624 - 48, w: 48 });
+    const many = Array.from({ length: 20 }, (_, i) => ({ label: `Key${i}`, key: 'Enter', code: 'Enter' }));
+    const tight = fitTouchButtons(many, help);
+    expect(tight.left.length).toBeLessThan(20);
+    const last = tight.left[tight.left.length - 1]!;
+    expect(last.x + last.w + 8).toBeLessThanOrEqual(tight.help!.x);
   });
 });
 

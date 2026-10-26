@@ -166,3 +166,11 @@ Measured with `npm run balance` (balanced policy, 300 seeds × 5 windows per pro
 - KeyHints also sets `body[data-platform]` (the detected platform) for tests; nothing new on `window`.
 - Options rows are 20 px apart (was 22) so 13 x2 rows, the reason line and the hint still fit above the band. `help.lines` gains a line: "Rows 10-13: 0, Shift+1, Shift+2, Shift+3." plus the disabled-row note on its own line (both did not fit the 60-column limit on one).
 - Later the same day (PM follow-up): the persistent KeyHints scene is replaced by a per-scene `KeyHintsBand` created in `BaseScene.begin()`, and the shader output is back to opaque `vec4(col, 1.0)`. The overlay scene's camera added a second full-screen CRT pass every frame, which slowed CI's software-WebGL e2e from 13 to 20-27 minutes. One camera means one post pass. The alpha passthrough noted above is gone.
+
+## 2026-10-26 (T-071 touch keys, developer)
+- `touchButtons(set, id)` takes the set id as a second argument: the `<` `>` and `-10 -1 +1 +10` buttons depend on the set (`guide`, `number`), not on the key alone. The `guide` set's key is `Arrows` (the spec table names `Left/Right`); both map to `<` `>` in `guide` only, so `options`' `Left/Right Change` stays omitted.
+- A label already on the band is not repeated: `table` (Enter Back · Esc Back) shows one `[ Back ]` (Enter).
+- Buttons are a framed box with one glyph of padding each side (width = (label + 2) × 8); the spec's `[ Label ]` is read as the frame, not literal brackets.
+- `hintBarH()` / `canvasHeight()` in `src/config.ts` replace the T-069 constants: main.ts sets the height from `hintBarHeight(browserPlatform())` before `new Phaser.Game`. `CRT_LOGICAL` keeps h 416 for `crtRowScale`; the shader's `uLogical` reads `canvasHeight()` (424 on touch).
+- A band tap dispatches its keydown/keyup on the next task (`setTimeout 0`) so the key cannot repaint or end the scene inside the button's own pointer event.
+- The pointer guard (`inHintBand`, `worldY >= 400`) also covers the mini-game pause menu's "Controls" panel: its tap-to-close would otherwise close the panel and leave the band's Close key (Escape) to resume the game.

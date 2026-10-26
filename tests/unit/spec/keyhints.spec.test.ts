@@ -115,22 +115,21 @@ describe('keyhints.md "Which hints show" / "ui.json"', () => {
 });
 
 describe('keyhints.md "Visibility"', () => {
-  it('Options default keyHints is auto', () => expect(DEFAULT_OPTIONS.keyHints).toBe('auto'));
-  it('keyHints parses, serializes and round-trips for every value; garbage falls back to auto', () => {
-    for (const v of ['auto', 'on', 'off'] as const) {
+  // T-071 changed "Visibility" to On / Off (default on, legacy auto reads as on); keyhints.md "Visibility".
+  it('Options default keyHints is on', () => expect(DEFAULT_OPTIONS.keyHints).toBe('on'));
+  it('keyHints parses, serializes and round-trips for on and off; legacy auto and garbage read as on', () => {
+    for (const v of ['on', 'off'] as const) {
       const o = { ...DEFAULT_OPTIONS, keyHints: v };
       expect(parseOptions(serializeOptions(o)).keyHints).toBe(v);
       expect(JSON.parse(serializeOptions(o)).keyHints).toBe(v);
     }
-    expect(parseOptions('{"keyHints":"maybe"}').keyHints).toBe('auto');
-    expect(parseOptions(null).keyHints).toBe('auto');
+    expect(parseOptions('{"keyHints":"auto"}').keyHints).toBe('on');
+    expect(parseOptions('{"keyHints":"maybe"}').keyHints).toBe('on');
+    expect(parseOptions(null).keyHints).toBe('on');
   });
-  it('auto hides on touch and shows elsewhere; on shows everywhere; off hides everywhere', () => {
-    for (const p of ['touch', 'mac', 'windows', 'linux'] as Platform[]) {
-      expect(hintsShown('auto', p)).toBe(p !== 'touch');
-      expect(hintsShown('on', p)).toBe(true);
-      expect(hintsShown('off', p)).toBe(false);
-    }
+  it('on shows the band content on every platform (touch gets buttons); off hides it', () => {
+    expect(hintsShown('on')).toBe(true);
+    expect(hintsShown('off')).toBe(false);
   });
 });
 
